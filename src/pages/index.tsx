@@ -130,7 +130,7 @@ export default function Home() {
               to strategic discussions.
             </p>
             
-            <Link className={styles.btnPrimary} style={{ marginTop: '1.5rem' }} to="mailto:business@Graviton5.dev">
+            <Link className={styles.btnPrimary} style={{ marginTop: '1.5rem' }} to="mailto:graviton5@outlook.it">
               Contact us
             </Link>
           </div>
