@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Gear5',
+  title: 'Graviton5',
   tagline: 'The production-ready TypeScript accelerator',
   favicon: 'img/favicon.ico',
 
@@ -15,15 +15,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://gear5.github.io',
+  url: 'https://Graviton5.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'gear5/core', // Usually your GitHub org/user name.
-  projectName: 'gear5', // Usually your repo name.
+  organizationName: 'mattia-carcione', // Usually your GitHub org/user name.
+  projectName: 'Graviton5', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -45,7 +45,7 @@ const config: Config = {
           path: '../docs',
           routeBasePath: 'docs', // Il percorso URL sarà tuo-sito.com/docs/...
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/Mattia-Carcione/gear5/tree/main/',
+          editUrl: 'https://github.com/Mattia-Carcione/Graviton5/tree/main/',
         },
         // Disabilita completamente il blog come richiesto
         blog: false,
@@ -64,69 +64,37 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Gear5/core',
       logo: {
-        alt: 'Gear5/core Logo',
-        src: 'img/logo.svg',
+        alt: 'Graviton5 Logo',
+        src: 'img/logo.png',
+        className: 'header-logo',
       },
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Documentation',
+          label: 'Docs',
         },
         {
-          href: 'https://github.com/Mattia-Carcione/gear5',
-          label: 'GitHub',
+          href: 'https://github.com/Mattia-Carcione/Graviton5',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
           position: 'right',
         },
       ],
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Documentation',
-              to: '../docs/README.md',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      links: [],
+      copyright: `
+      <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+        <a href="https://github.com/Mattia-Carcione/Graviton5" target="_blank" rel="noreferrer" aria-label="GitHub">
+          <img src="/img/github.svg" alt="GitHub" width="24" height="24" style="filter: brightness(0) invert(1);" />
+        </a>
+      </div>
+      Copyright © 2025 - ${new Date().getFullYear()} By <a href="https://github.com/Mattia-Carcione">Mattia Carcione</a>.
+      `,
     },
     prism: {
       theme: prismThemes.github,

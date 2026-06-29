@@ -1,30 +1,87 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --Graviton5-primary: #a4d600;
+
+  --Graviton5-bg-main: #ffffff;
+  --Graviton5-bg-secondary: #f3f4f6;
+  --Graviton5-text-main: #1a1a1a;
+
+  --Graviton5-btn-secondary-bg: #ebedf0;
+  --Graviton5-btn-secondary-border: #000000;
+  --Graviton5-link-footer: #d3d5d8;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --Graviton5-bg-main: #000000;
+  --Graviton5-bg-secondary: #121212;
+  --Graviton5-text-main: #ffffff;
+
+  --Graviton5-btn-secondary-bg: #8e9197;
+  --Graviton5-btn-secondary-border: #ffffff;
+}
+
+body {
+  background-color: var(--Graviton5-bg-main);
+  color: var(--Graviton5-text-main);
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+.divider {
+  border-color: var(--Graviton5-btn-secondary-bg);
+  height: 1px;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.header-logo {
+  width: 32px;
+  height: auto;
+  border-radius: 50%;
+}
+
+footer a {
+  color: var(--Graviton5-link-footer);
+  text-decoration: underline;
+}
+
+a:hover {
+  color: var(--Graviton5-primary);
+  text-decoration: none;
+}
+
+.header-github-link {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-image: url('/img/github.svg');
+  /* Assicurati di avere questo file in static/img */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.header-github-link:hover {
+  opacity: 1;
+}
+
+.header-github-link:hover {
+  opacity: 1;
+}
+
+[data-theme='dark'] .header-github-link {
+  filter: invert(1);
+}
+
+#__docusaurus {
+  background-color: var(--Graviton5-bg-main);
+  color: var(--Graviton5-text-main);
 }
