@@ -2,6 +2,7 @@
 
 :root {
   --Graviton5-primary: #a4d600;
+  --Graviton5-headings: #1a1a1a;
 
   --Graviton5-bg-main: #ffffff;
   --Graviton5-bg-secondary: #f3f4f6;
@@ -13,6 +14,8 @@
 }
 
 [data-theme='dark'] {
+  --Graviton5-headings: var(--Graviton5-primary);
+
   --Graviton5-bg-main: #000000;
   --Graviton5-bg-secondary: #121212;
   --Graviton5-text-main: #ffffff;
@@ -31,6 +34,15 @@ body {
     'Segoe UI',
     Roboto,
     sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--Graviton5-headings);
 }
 
 .divider {

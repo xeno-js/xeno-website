@@ -146,6 +146,10 @@
   text-align: center;
 }
 
+.supportSection h2 {
+  color: #000;
+}
+
 .contactSection {
   display: flex;
   flex-direction: column;

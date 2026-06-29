@@ -32,7 +32,7 @@ const services = [
   { title: 'DI with Injection Tokens', description: 'Maintain a clean dependency graph using unique tokens, ensuring stability and testability.', icon: <Container size={32} /> },
   { title: 'Fluent API', description: 'Configure your architecture with an elegant, readable, and strongly-typed AppBuilder.', icon: <Code size={32} /> },
   { title: 'Install what you need', description: 'Keep your bundle lean with optional peer dependencies. Only pay for what you use.', icon: <Package size={32} /> },
-  { title: 'Microservices Ready', description: 'Architected for modularity. Split your domain into lightweight, scalable services.', icon: <Boxes size={32} /> },
+  { title: 'Microservices/ Web Apps', description: 'Engineered for flexibility. Seamlessly scale from high-performance APIs and Web Apps to complex Microservice ecosystems.', icon: <Boxes size={32} /> },
   { title: 'CLI Scaffolding', description: 'Boost productivity with our CLI. Generate pre-configured, production-ready templates.', icon: <Terminal size={32} /> },
 ];
 
