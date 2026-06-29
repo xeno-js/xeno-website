@@ -41,13 +41,11 @@ const config: Config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          // CAMBIAMENTO CRUCIALE: Punta alla cartella docs nella root del framework
           path: '../docs',
           routeBasePath: 'docs', // Il percorso URL sarà tuo-sito.com/docs/...
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/Mattia-Carcione/Graviton5/tree/main/',
         },
-        // Disabilita completamente il blog come richiesto
         blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
