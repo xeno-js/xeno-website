@@ -1,32 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
-  --Graviton5-primary: #a4d600;
-  --Graviton5-headings: #1a1a1a;
+  --Gantry5-primary: #a4d600;
+  --Gantry5-headings: #1a1a1a;
 
-  --Graviton5-bg-main: #ffffff;
-  --Graviton5-bg-secondary: #f3f4f6;
-  --Graviton5-text-main: #1a1a1a;
+  --Gantry5-bg-main: #ffffff;
+  --Gantry5-bg-secondary: #f3f4f6;
+  --Gantry5-text-main: #1a1a1a;
 
-  --Graviton5-btn-secondary-bg: #ebedf0;
-  --Graviton5-btn-secondary-border: #000000;
-  --Graviton5-link-footer: #d3d5d8;
+  --Gantry5-btn-secondary-bg: #ebedf0;
+  --Gantry5-btn-secondary-border: #000000;
+  --Gantry5-link-footer: #d3d5d8;
 }
 
 [data-theme='dark'] {
-  --Graviton5-headings: var(--Graviton5-primary);
+  --Gantry5-headings: var(--Gantry5-primary);
 
-  --Graviton5-bg-main: #000000;
-  --Graviton5-bg-secondary: #121212;
-  --Graviton5-text-main: #ffffff;
+  --Gantry5-bg-main: #000000;
+  --Gantry5-bg-secondary: #121212;
+  --Gantry5-text-main: #ffffff;
 
-  --Graviton5-btn-secondary-bg: #8e9197;
-  --Graviton5-btn-secondary-border: #ffffff;
+  --Gantry5-btn-secondary-bg: #8e9197;
+  --Gantry5-btn-secondary-border: #ffffff;
 }
 
 body {
-  background-color: var(--Graviton5-bg-main);
-  color: var(--Graviton5-text-main);
+  background-color: var(--Gantry5-bg-main);
+  color: var(--Gantry5-text-main);
   font-family:
     'Inter',
     -apple-system,
@@ -42,11 +42,11 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--Graviton5-headings);
+  color: var(--Gantry5-headings);
 }
 
 .divider {
-  border-color: var(--Graviton5-btn-secondary-bg);
+  border-color: var(--Gantry5-btn-secondary-bg);
   height: 1px;
   width: 100%;
   margin: 2rem 0;
@@ -59,12 +59,12 @@ h6 {
 }
 
 footer a {
-  color: var(--Graviton5-link-footer);
+  color: var(--Gantry5-link-footer);
   text-decoration: underline;
 }
 
 a:hover {
-  color: var(--Graviton5-primary);
+  color: var(--Gantry5-primary);
   text-decoration: none;
 }
 
@@ -94,6 +94,6 @@ a:hover {
 }
 
 #__docusaurus {
-  background-color: var(--Graviton5-bg-main);
-  color: var(--Graviton5-text-main);
+  background-color: var(--Gantry5-bg-main);
+  color: var(--Gantry5-text-main);
 }

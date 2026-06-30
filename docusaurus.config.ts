@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Graviton5',
+  title: 'Gantry5',
   tagline: 'The production-ready TypeScript accelerator',
   favicon: 'img/favicon.ico',
 
@@ -15,7 +15,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://Graviton5.github.io',
+  url: 'https://Gantry5.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -23,7 +23,7 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'mattia-carcione', // Usually your GitHub org/user name.
-  projectName: 'Graviton5', // Usually your repo name.
+  projectName: 'Gantry5', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -41,10 +41,10 @@ const config: Config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          path: '../docs',
-          routeBasePath: 'docs', // Il percorso URL sarà tuo-sito.com/docs/...
+          path: '../documentation',
+          routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/Mattia-Carcione/Graviton5/tree/main/',
+          editUrl: 'https://github.com/Mattia-Carcione/Gantry5/tree/main/',
         },
         blog: false,
         theme: {
@@ -63,7 +63,7 @@ const config: Config = {
     },
     navbar: {
       logo: {
-        alt: 'Graviton5 Logo',
+        alt: 'Gantry5 Logo',
         src: 'img/logo.png',
         className: 'header-logo',
       },
@@ -75,7 +75,7 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          href: 'https://github.com/Mattia-Carcione/Graviton5',
+          href: 'https://github.com/Mattia-Carcione/Gantry5',
           className: 'header-github-link',
           'aria-label': 'GitHub repository',
           position: 'right',
@@ -87,7 +87,7 @@ const config: Config = {
       links: [],
       copyright: `
       <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-        <a href="https://github.com/Mattia-Carcione/Graviton5" target="_blank" rel="noreferrer" aria-label="GitHub">
+        <a href="https://github.com/Mattia-Carcione/Gantry5" target="_blank" rel="noreferrer" aria-label="GitHub">
           <img src="/img/github.svg" alt="GitHub" width="24" height="24" style="filter: brightness(0) invert(1);" />
         </a>
       </div>

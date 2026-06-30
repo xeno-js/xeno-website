@@ -1,7 +1,7 @@
 .heroBanner {
   padding: 5rem 2rem;
   text-align: center;
-  background-color: var(--Graviton5-bg-main);
+  background-color: var(--Gantry5-bg-main);
 }
 
 .buttons {
@@ -25,12 +25,12 @@
 .btnPrimary {
   composes: buttonBase;
   background-color: #000;
-  color: var(--Graviton5-primary);
-  border-color: var(--Graviton5-primary);
+  color: var(--Gantry5-primary);
+  border-color: var(--Gantry5-primary);
 }
 
 .btnPrimary:hover {
-  background-color: var(--Graviton5-primary);
+  background-color: var(--Gantry5-primary);
   color: #000;
   border-color: #000;
 }
@@ -38,9 +38,9 @@
 /* Secondary Button (Persistent Black/Grey) */
 .btnSecondary {
   composes: buttonBase;
-  background-color: var(--Graviton5-btn-secondary-bg);
+  background-color: var(--Gantry5-btn-secondary-bg);
   color: #000;
-  border-color: var(--Graviton5-btn-secondary-border);
+  border-color: var(--Gantry5-btn-secondary-border);
 }
 
 .btnSecondary:hover {
@@ -59,7 +59,7 @@
   align-items: center;
   text-align: center;
   padding: 2.5rem;
-  background: var(--Graviton5-bg-secondary);
+  background: var(--Gantry5-bg-secondary);
   border-radius: 16px;
   height: 100%;
   transition:
@@ -70,12 +70,12 @@
 
 .featureCard:hover {
   transform: translateY(-5px);
-  border-color: var(--Graviton5-primary);
+  border-color: var(--Gantry5-primary);
 }
 
 .iconWrapper {
   margin-bottom: 1.5rem;
-  color: var(--Graviton5-primary);
+  color: var(--Gantry5-primary);
   width: 40px;
   height: 40px;
   display: flex;
@@ -111,7 +111,7 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background: var(--Graviton5-bg-secondary);
+  background: var(--Gantry5-bg-secondary);
   border-radius: 16px;
   height: 100%;
   border: 1px solid transparent;
@@ -120,8 +120,8 @@
 
 .serviceCard:hover {
   transform: translateY(-5px);
-  border-color: var(--Graviton5-primary);
-  background: var(--Graviton5-bg-main);
+  border-color: var(--Gantry5-primary);
+  background: var(--Gantry5-bg-main);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -139,7 +139,7 @@
 }
 
 .supportSection {
-  background: var(--Graviton5-primary);
+  background: var(--Gantry5-primary);
   color: #000;
   padding: 3rem;
   border-radius: 16px;

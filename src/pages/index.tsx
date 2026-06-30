@@ -38,16 +38,16 @@ const services = [
 
 export default function Home() {
   return (
-    <Layout title="Graviton5" description="Enterprise-grade TypeScript accelerator">
+    <Layout title="Gantry5" description="Enterprise-grade TypeScript accelerator">
       
       {/* Hero Section */}
       <header className={styles.heroBanner}>
         <div className="container">
-          <h1>Graviton5</h1>
+          <h1>Gantry5</h1>
           <p>The production-ready TypeScript accelerator for high-performance enterprise APIs.</p>
           <div className={styles.buttons}>
-            <Link className={styles.btnPrimary} to="/docs/introduction">Documentation</Link>
-            <Link className={styles.btnSecondary} to="https://github.com/Mattia-Carcione/Graviton5">Repository</Link>
+            <Link className={styles.btnPrimary} to="/docs/getting-started">Documentation</Link>
+            <Link className={styles.btnSecondary} to="https://github.com/Mattia-Carcione/Gantry5">Repository</Link>
           </div>
         </div>
       </header>
@@ -59,21 +59,21 @@ export default function Home() {
             <div className="row">
               <Feature 
                 title="Flexibility" 
-                description="Customization is the core. Graviton5 acts as a flexible kernel, empowering you to shape the architecture to your specific needs, rather than being forced to adapt to the framework."
+                description="Customization is the core. Gantry5 acts as a flexible kernel, empowering you to shape the architecture to your specific needs, rather than being forced to adapt to the framework."
                 icon={
                   <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 }
               />
               <Feature 
                 title="Versatility" 
-                description="Perfectly suited for any server environment. From Fastify to Edge runtimes, Graviton5 provides the execution pipelines while leaving you free to choose your preferred transport layer."
+                description="Perfectly suited for any server environment. From Fastify to Edge runtimes, Gantry5 provides the execution pipelines while leaving you free to choose your preferred transport layer."
                 icon={
                   <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                 }
               />
               <Feature 
                 title="Zero Magic" 
-                description="Forget heavy decorators and hidden reflection logic. Graviton5 uses explicit, type-safe builders for transparent performance and a codebase that is straightforward to debug."
+                description="Forget heavy decorators and hidden reflection logic. Gantry5 uses explicit, type-safe builders for transparent performance and a codebase that is straightforward to debug."
                 icon={
                   <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 }
@@ -88,7 +88,7 @@ export default function Home() {
             <div className="text--center margin-bottom--xl">
               <h2>Enterprise-ready, without reinventing the wheel</h2>
               <p style={{ maxWidth: '600px', margin: '0 auto', color: '#6b7280' }}>
-                Graviton5 provides the essential infrastructure to build scalable, robust systems. 
+                Gantry5 provides the essential infrastructure to build scalable, robust systems. 
                 Leverage enterprise-grade patterns while keeping your domain logic pure and portable.
               </p>
             </div>
@@ -111,9 +111,9 @@ export default function Home() {
         {/* Support Section */}
         <section className={styles.sectionPadding}>
           <div className={styles.supportSection}>
-            <h2>Support Graviton5</h2>
-            <p>Graviton5 is built in my spare time. Your support helps keep this project independent and actively maintained.</p>
-            <Link className={styles.btnPrimary} style={{ backgroundColor: '#fff', color: '#000', borderColor: '#fff' }} to="https://buymeacoffee.com/graviton5">
+            <h2>Support Gantry5</h2>
+            <p>Gantry5 is built in my spare time. Your support helps keep this project independent and actively maintained.</p>
+            <Link className={styles.btnPrimary} style={{ backgroundColor: '#fff', color: '#000', borderColor: '#fff' }} to="https://buymeacoffee.com/gantry5">
               Support
             </Link>
           </div>
@@ -127,11 +127,11 @@ export default function Home() {
             <h2>Get in Touch</h2>
             <p style={{ maxWidth: '600px', margin: '0 auto', color: '#6b7280' }}>
               Have an idea for a partnership, need enterprise-grade support for your team, 
-              or want to discuss integrating Graviton5 into your architecture? I'm always open 
+              or want to discuss integrating Gantry5 into your architecture? I'm always open 
               to strategic discussions.
             </p>
             
-            <Link className={styles.btnPrimary} style={{ marginTop: '1.5rem' }} to="mailto:graviton5@outlook.it">
+            <Link className={styles.btnPrimary} style={{ marginTop: '1.5rem' }} to="mailto:gantry5@outlook.it">
               Contact us
             </Link>
           </div>
