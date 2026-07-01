@@ -1,32 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
-  --Gantry5-primary: #a4d600;
-  --Gantry5-headings: #1a1a1a;
+  --XenoJS-primary: #a4d600;
+  --XenoJS-headings: #1a1a1a;
 
-  --Gantry5-bg-main: #ffffff;
-  --Gantry5-bg-secondary: #f3f4f6;
-  --Gantry5-text-main: #1a1a1a;
+  --XenoJS-bg-main: #ffffff;
+  --XenoJS-bg-secondary: #f3f4f6;
+  --XenoJS-text-main: #1a1a1a;
 
-  --Gantry5-btn-secondary-bg: #ebedf0;
-  --Gantry5-btn-secondary-border: #000000;
-  --Gantry5-link-footer: #d3d5d8;
+  --XenoJS-btn-secondary-bg: #ebedf0;
+  --XenoJS-btn-secondary-border: #000000;
+  --XenoJS-link-footer: #d3d5d8;
 }
 
 [data-theme='dark'] {
-  --Gantry5-headings: var(--Gantry5-primary);
+  --XenoJS-headings: var(--XenoJS-primary);
 
-  --Gantry5-bg-main: #000000;
-  --Gantry5-bg-secondary: #121212;
-  --Gantry5-text-main: #ffffff;
+  --XenoJS-bg-main: #000000;
+  --XenoJS-bg-secondary: #121212;
+  --XenoJS-text-main: #ffffff;
 
-  --Gantry5-btn-secondary-bg: #8e9197;
-  --Gantry5-btn-secondary-border: #ffffff;
+  --XenoJS-btn-secondary-bg: #8e9197;
+  --XenoJS-btn-secondary-border: #ffffff;
 }
 
 body {
-  background-color: var(--Gantry5-bg-main);
-  color: var(--Gantry5-text-main);
+  background-color: var(--XenoJS-bg-main);
+  color: var(--XenoJS-text-main);
   font-family:
     'Inter',
     -apple-system,
@@ -42,11 +42,11 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--Gantry5-headings);
+  color: var(--XenoJS-headings);
 }
 
 .divider {
-  border-color: var(--Gantry5-btn-secondary-bg);
+  border-color: var(--XenoJS-btn-secondary-bg);
   height: 1px;
   width: 100%;
   margin: 2rem 0;
@@ -59,12 +59,12 @@ h6 {
 }
 
 footer a {
-  color: var(--Gantry5-link-footer);
+  color: var(--XenoJS-link-footer);
   text-decoration: underline;
 }
 
 a:hover {
-  color: var(--Gantry5-primary);
+  color: var(--XenoJS-primary);
   text-decoration: none;
 }
 
@@ -94,6 +94,6 @@ a:hover {
 }
 
 #__docusaurus {
-  background-color: var(--Gantry5-bg-main);
-  color: var(--Gantry5-text-main);
+  background-color: var(--XenoJS-bg-main);
+  color: var(--XenoJS-text-main);
 }
