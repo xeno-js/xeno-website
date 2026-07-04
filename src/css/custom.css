@@ -1,32 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
-  --XenoJS-primary: #a4d600;
-  --XenoJS-headings: #1a1a1a;
+  --Xeno-primary: #a4d600;
+  --Xeno-headings: #1a1a1a;
 
-  --XenoJS-bg-main: #ffffff;
-  --XenoJS-bg-secondary: #f3f4f6;
-  --XenoJS-text-main: #1a1a1a;
+  --Xeno-bg-main: #ffffff;
+  --Xeno-bg-secondary: #f3f4f6;
+  --Xeno-text-main: #1a1a1a;
 
-  --XenoJS-btn-secondary-bg: #ebedf0;
-  --XenoJS-btn-secondary-border: #000000;
-  --XenoJS-link-footer: #d3d5d8;
+  --Xeno-btn-secondary-bg: #ebedf0;
+  --Xeno-btn-secondary-border: #000000;
+  --Xeno-link-footer: #d3d5d8;
 }
 
 [data-theme='dark'] {
-  --XenoJS-headings: var(--XenoJS-primary);
+  --Xeno-headings: var(--Xeno-primary);
 
-  --XenoJS-bg-main: #000000;
-  --XenoJS-bg-secondary: #121212;
-  --XenoJS-text-main: #ffffff;
+  --Xeno-bg-main: #000000;
+  --Xeno-bg-secondary: #121212;
+  --Xeno-text-main: #ffffff;
 
-  --XenoJS-btn-secondary-bg: #8e9197;
-  --XenoJS-btn-secondary-border: #ffffff;
+  --Xeno-btn-secondary-bg: #8e9197;
+  --Xeno-btn-secondary-border: #ffffff;
 }
 
 body {
-  background-color: var(--XenoJS-bg-main);
-  color: var(--XenoJS-text-main);
+  background-color: var(--Xeno-bg-main);
+  color: var(--Xeno-text-main);
   font-family:
     'Inter',
     -apple-system,
@@ -42,29 +42,29 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--XenoJS-headings);
+  color: var(--Xeno-headings);
 }
 
 .divider {
-  border-color: var(--XenoJS-btn-secondary-bg);
+  border-color: var(--Xeno-btn-secondary-bg);
   height: 1px;
   width: 100%;
   margin: 2rem 0;
 }
 
 .header-logo {
-  width: 32px;
+  width: 56px;
   height: auto;
   border-radius: 50%;
 }
 
 footer a {
-  color: var(--XenoJS-link-footer);
+  color: var(--Xeno-link-footer);
   text-decoration: underline;
 }
 
 a:hover {
-  color: var(--XenoJS-primary);
+  color: var(--Xeno-primary);
   text-decoration: none;
 }
 
@@ -94,6 +94,6 @@ a:hover {
 }
 
 #__docusaurus {
-  background-color: var(--XenoJS-bg-main);
-  color: var(--XenoJS-text-main);
+  background-color: var(--Xeno-bg-main);
+  color: var(--Xeno-text-main);
 }

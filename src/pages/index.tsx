@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import styles from './index.module.css';
@@ -10,14 +10,38 @@ import {
   Code, 
   Package, 
   Boxes, 
-  Terminal 
+  Terminal,
+  Cpu,
+  Layers,
+  Zap
 } from 'lucide-react'; 
 
-function Feature({ title, description, icon }) {
+/**
+ * @description Invarianti di interfaccia per le proprietà dei componenti Feature.
+ */
+interface FeatureProps {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+}
+
+/**
+ * @description Invarianti di interfaccia per i blocchi dei servizi architetturali core.
+ */
+interface CoreService {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+}
+
+/**
+ * @description Componente atomico autocontenuto per la renderizzazione dei pilastri tecnologici.
+ */
+function HighLevelFeature({ title, description, icon }: FeatureProps): JSX.Element {
   return (
-    <div className="col" style={{ padding: '1rem' }}>
+    <div className="col col--4" style={{ padding: '1rem' }}>
       <div className={styles.featureCard}>
-        <div className={styles.iconWrapper}>{icon}</div>
+        <div className={styles.iconWrapper} aria-hidden="true">{icon}</div>
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
@@ -25,95 +49,159 @@ function Feature({ title, description, icon }) {
   );
 }
 
-const services = [
-  { title: '100% Agnostic', description: 'Business logic independent from transport layers. Swap infrastructure, not your core domain.', icon: <LinkIcon size={32} /> },
-  { title: 'Type Safety', description: 'Built with TypeScript from the ground up. Enjoy full autocompletion and robust type inference.', icon: <ShieldCheck size={32} /> },
-  { title: 'Enterprise Patterns', description: 'Native support for CQRS, resilience, and idempotency patterns out of the box.', icon: <Settings size={32} /> },
-  { title: 'DI with Injection Tokens', description: 'Maintain a clean dependency graph using unique tokens, ensuring stability and testability.', icon: <Container size={32} /> },
-  { title: 'Fluent API', description: 'Configure your architecture with an elegant, readable, and strongly-typed AppBuilder.', icon: <Code size={32} /> },
-  { title: 'Install what you need', description: 'Keep your bundle lean with optional peer dependencies. Only pay for what you use.', icon: <Package size={32} /> },
-  { title: 'Microservices/ Web Apps', description: 'Engineered for flexibility. Seamlessly scale from high-performance APIs and Web Apps to complex Microservice ecosystems.', icon: <Boxes size={32} /> },
-  { title: 'CLI Scaffolding', description: 'Boost productivity with our CLI. Generate pre-configured, production-ready templates.', icon: <Terminal size={32} /> },
+/**
+ * @description Componente atomico riutilizzabile per la griglia delle funzionalità enterprise.
+ */
+function ServiceGridItem({ title, description, icon }: CoreService): JSX.Element {
+  return (
+    <div className="col col--3 margin-bottom--lg">
+      <div className={styles.serviceCard}>
+        <div className={styles.iconWrapper} aria-hidden="true">{icon}</div>
+        <h4>{title}</h4>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * @description Matrice dei dati dei servizi core allineata alla consistenza terminologica del framework.
+ */
+const coreServices: CoreService[] = [
+  { 
+    title: '100% Agnostic', 
+    description: 'Core application use cases communicate with external delivery mechanisms solely via standard input/output mapping models.', 
+    icon: <LinkIcon size={24} /> 
+  },
+  { 
+    title: 'Precision Type Safety', 
+    description: 'Enforces strict nominal typing via branded tokens to completely eliminate structural inversion-of-control resolution mismatches.', 
+    icon: <ShieldCheck size={24} /> 
+  },
+  { 
+    title: 'Enterprise Pattern', 
+    description: 'Native support for CQRS, resilience, and idempotency patterns out of the box.', 
+    icon: <Settings size={24} /> 
+  },
+  { 
+    title: 'Zero-Decorator', 
+    description: 'Compiles the application dependency graph linearly during boot phase with zero reliance on reflection metadata or runtime scanning.', 
+    icon: <Container size={24} /> 
+  },
+  { 
+    title: 'Fluent AppBuilder API', 
+    description: 'Orchestrates system configurations and modules programmatically using an explicit, strongly-typed fluent interface.', 
+    icon: <Code size={24} /> 
+  },
+  { 
+    title: 'Install what you need', 
+    description: 'External utility drivers are lazy-loaded on demand via dynamic imports, keeping the runtime memory footprint lightweight.', 
+    icon: <Package size={24} /> 
+  },
+  { 
+    title: 'Distributed System Scale', 
+    description: 'Engineered interchangeably to host high-concurrency cloud environments, distributed microservices, and monolithic topologies.', 
+    icon: <Boxes size={24} /> 
+  },
+  { 
+    title: 'CLI Scaffolding', 
+    description: 'Automates directory topology generation and compile-time lint rules ensuring structural boundary enforcement across the workspace.', 
+    icon: <Terminal size={24} /> 
+  },
 ];
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
-    <Layout title="XenoJS" description="Enterprise-grade TypeScript accelerator">
+    <Layout 
+      title="Xeno — Multi-Tenant DDD & CQRS Accelerator" 
+      description="Architectural accelerator and agnostically decoupled TypeScript execution kernel for high-performance applications."
+    >
       
-      {/* Hero Section */}
+      {/* 1. Hero Section */}
       <header className={styles.heroBanner}>
         <div className="container">
-          <h1>XenoJS</h1>
-          <p>The production-ready TypeScript accelerator for high-performance enterprise APIs.</p>
+          <img src="/img/logo.png" alt="Xeno Logo" style={{ borderRadius: '50%', width: '10rem' }} />
+          <h1 className={styles.heroTitle}>Xeno</h1>
+          <p className={styles.heroSubtitle}>
+            A Backend Framework for Node.js and TypeScript.
+          </p>
           <div className={styles.buttons}>
-            <Link className={styles.btnPrimary} to="/docs/getting-started">Documentation</Link>
-            <Link className={styles.btnSecondary} to="https://github.com/Mattia-Carcione/XenoJS">Repository</Link>
+            <Link className={styles.btnPrimary} to="/docs/getting-started">
+              Getting Started
+            </Link>
+            <Link className={styles.btnSecondary} to="https://github.com/Mattia-Carcione/xeno-js" rel="noopener noreferrer" target="_blank">
+              Github
+            </Link>
           </div>
         </div>
       </header>
 
       <main className="container">
-        {/* 3 Columns Section */}
+        
+        {/* 2. Problem Statement & Structural Drivers */}
         <section className={styles.sectionPadding}>
           <div className="container">
+            <div className="text--center margin-bottom--xl">
+              <h2>Engineered to Eliminate Structural Decay</h2>
+              <p style={{ maxWidth: '750px', margin: '0 auto', color: '#6b7280' }}>
+                Traditional runtime frameworks introduce ambient side effects, severe serverless cold-start latency, and boundary erosion. Xeno substitutes implicit meta-programming with concrete compile-time guardrails and deterministic request lifecycles.
+              </p>
+            </div>
             <div className="row">
-              <Feature 
-                title="Flexibility" 
-                description="Customization is the core. XenoJS acts as a flexible kernel, empowering you to shape the architecture to your specific needs, rather than being forced to adapt to the framework."
-                icon={
-                  <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                }
+              <HighLevelFeature 
+                title="Concentric Layer Isolation" 
+                description="Implements strict Layered Clean Architecture boundaries (Domain, Application, Infrastructure, Presentation). Data flow constraints are validated statically at compile time to decouple corporate policies from platform code."
+                icon={<Layers size={28} />}
               />
-              <Feature 
-                title="Versatility" 
-                description="Perfectly suited for any server environment. From Fastify to Edge runtimes, XenoJS provides the execution pipelines while leaving you free to choose your preferred transport layer."
-                icon={
-                  <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
-                }
+              <HighLevelFeature 
+                title="Zero-Magic Performance" 
+                description="Completely rejects runtime annotations, module proxies, and metadata reflection. The code written by the engineer is exactly the code that executes, optimizing cold starts for serverless and edge environments."
+                icon={<Zap size={28} />}
               />
-              <Feature 
-                title="Zero Magic" 
-                description="Forget heavy decorators and hidden reflection logic. XenoJS uses explicit, type-safe builders for transparent performance and a codebase that is straightforward to debug."
-                icon={
-                  <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                }
+              <HighLevelFeature 
+                title="Deterministic Failure Handling" 
+                description="Strips the codebase of unpredictable runtime exception throwing by routing all operational outcomes across software layers through an explicit, strongly typed functional Result monad pattern."
+                icon={<Cpu size={28} />}
               />
             </div>
           </div>
         </section>
 
-        {/* Services Section */}
+        {/* 3. Core Architectural Subsystems Overview */}
         <section className={styles.servicesSection}>
           <div className="container">
             <div className="text--center margin-bottom--xl">
-              <h2>Enterprise-ready, without reinventing the wheel</h2>
-              <p style={{ maxWidth: '600px', margin: '0 auto', color: '#6b7280' }}>
-                XenoJS provides the essential infrastructure to build scalable, robust systems. 
-                Leverage enterprise-grade patterns while keeping your domain logic pure and portable.
+              <h2>Distributed Infrastructure</h2>
+              <p style={{ maxWidth: '650px', margin: '0 auto', color: '#6b7280' }}>
+                Xeno provides the essential infrastructure to build scalable, robust systems. Leverage software engineering while keeping your domain logic pure and portable.
               </p>
             </div>
     
             <div className="row">
-              {services.map((service, idx) => (
-                <div key={idx} className="col col--3 margin-bottom--lg">
-                  <div className={styles.serviceCard}>
-                    <div className={styles.iconWrapper}>{service.icon}</div>
-                    <h4>{service.title}</h4>
-                    <p>{service.description}</p>
-                  </div>
-                </div>
+              {coreServices.map((service, idx) => (
+                <ServiceGridItem 
+                  key={idx} 
+                  title={service.title} 
+                  description={service.description} 
+                  icon={service.icon} 
+                />
               ))}
             </div>
           </div>
         </section>
 
-
-        {/* Support Section */}
+        {/* 4. Open Source & Project Maintenance */}
         <section className={styles.sectionPadding}>
           <div className={styles.supportSection}>
-            <h2>Support XenoJS</h2>
-            <p>XenoJS is built in my spare time. Your support helps keep this project independent and actively maintained.</p>
-            <Link className={styles.btnPrimary} style={{ backgroundColor: '#fff', color: '#000', borderColor: '#fff' }} to="https://buymeacoffee.com/xeno">
+            <h2>Support Xeno</h2>
+            <p>Xeno is an open-source, MIT-licensed project developed independently. Financial support helps guarantee active development, routine maintenance, and long-term project stability.</p>
+            <Link 
+              className={styles.btnPrimary} 
+              style={{ backgroundColor: '#fff', color: '#000', borderColor: '#fff' }} 
+              to="https://buymeacoffee.com/xenojs"
+              rel="noopener noreferrer" 
+              target="_blank"
+            >
               Support
             </Link>
           </div>
@@ -121,17 +209,17 @@ export default function Home() {
         
         <hr className={styles.divider} />
 
-        {/* Contact Section */}
+        {/* 5. Strategic Context & Technical Inquiries */}
         <section className={styles.contactSection}>
           <div className="container">
-            <h2>Get in Touch</h2>
-            <p style={{ maxWidth: '600px', margin: '0 auto', color: '#6b7280' }}>
-              Have an idea for a partnership, need enterprise-grade support for your team, 
-              or want to discuss integrating XenoJS into your architecture? I'm always open 
+            <h2>Get in touch!</h2>
+            <p style={{ maxWidth: '650px', margin: '0 auto', color: '#6b7280' }}>
+              Have an idea for a partnership, need support for your team, 
+              or want to discuss integrating Xeno into your architecture? I'm always open 
               to strategic discussions.
             </p>
             
-            <Link className={styles.btnPrimary} style={{ marginTop: '1.5rem' }} to="mailto:xeno@outlook.it">
+            <Link className={styles.btnPrimary} style={{ marginTop: '1.5rem' }} to="mailto:xeno-js@outlook.it">
               Contact us
             </Link>
           </div>

@@ -1,7 +1,7 @@
 .heroBanner {
   padding: 5rem 2rem;
   text-align: center;
-  background-color: var(--XenoJS-bg-main);
+  background-color: var(--Xeno-bg-main);
 }
 
 .buttons {
@@ -25,12 +25,12 @@
 .btnPrimary {
   composes: buttonBase;
   background-color: #000;
-  color: var(--XenoJS-primary);
-  border-color: var(--XenoJS-primary);
+  color: var(--Xeno-primary);
+  border-color: var(--Xeno-primary);
 }
 
 .btnPrimary:hover {
-  background-color: var(--XenoJS-primary);
+  background-color: var(--Xeno-primary);
   color: #000;
   border-color: #000;
 }
@@ -38,9 +38,9 @@
 /* Secondary Button (Persistent Black/Grey) */
 .btnSecondary {
   composes: buttonBase;
-  background-color: var(--XenoJS-btn-secondary-bg);
+  background-color: var(--Xeno-btn-secondary-bg);
   color: #000;
-  border-color: var(--XenoJS-btn-secondary-border);
+  border-color: var(--Xeno-btn-secondary-border);
 }
 
 .btnSecondary:hover {
@@ -59,7 +59,7 @@
   align-items: center;
   text-align: center;
   padding: 2.5rem;
-  background: var(--XenoJS-bg-secondary);
+  background: var(--Xeno-bg-secondary);
   border-radius: 16px;
   height: 100%;
   transition:
@@ -70,12 +70,12 @@
 
 .featureCard:hover {
   transform: translateY(-5px);
-  border-color: var(--XenoJS-primary);
+  border-color: var(--Xeno-primary);
 }
 
 .iconWrapper {
   margin-bottom: 1.5rem;
-  color: var(--XenoJS-primary);
+  color: var(--Xeno-primary);
   width: 40px;
   height: 40px;
   display: flex;
@@ -111,7 +111,7 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background: var(--XenoJS-bg-secondary);
+  background: var(--Xeno-bg-secondary);
   border-radius: 16px;
   height: 100%;
   border: 1px solid transparent;
@@ -120,8 +120,8 @@
 
 .serviceCard:hover {
   transform: translateY(-5px);
-  border-color: var(--XenoJS-primary);
-  background: var(--XenoJS-bg-main);
+  border-color: var(--Xeno-primary);
+  background: var(--Xeno-bg-main);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -139,7 +139,7 @@
 }
 
 .supportSection {
-  background: var(--XenoJS-primary);
+  background: var(--Xeno-primary);
   color: #000;
   padding: 3rem;
   border-radius: 16px;
