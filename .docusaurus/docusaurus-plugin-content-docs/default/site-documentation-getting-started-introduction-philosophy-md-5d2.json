@@ -1,0 +1,35 @@
+{
+  "id": "getting-started/introduction-philosophy",
+  "title": "Introduction & Philosophy",
+  "description": "Technical overview of the architectural design principles, execution lifecycle, and core engineering philosophy behind the Xeno framework kernel.",
+  "source": "@site/../documentation/getting-started/introduction-philosophy.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/introduction-philosophy",
+  "permalink": "/docs/getting-started/introduction-philosophy",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/introduction-philosophy.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Introduction & Philosophy",
+    "sidebar_position": 2,
+    "description": "Technical overview of the architectural design principles, execution lifecycle, and core engineering philosophy behind the Xeno framework kernel.",
+    "keywords": [
+      "xeno philosophy",
+      "clean architecture typescript",
+      "zero decorator di",
+      "typescript ddd cqrs"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/docs/getting-started/"
+  },
+  "next": {
+    "title": "Architectural Layers & Boundaries",
+    "permalink": "/docs/getting-started/architectural-layers-boundaries"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/standardize-http-response/http-helper",
+  "title": "http-helper",
+  "description": "",
+  "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/http-helper.md",
+  "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+  "slug": "/presentation-layer-response-contracts/standardize-http-response/http-helper",
+  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/http-helper",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/http-helper.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "error-response",
+    "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/error-response"
+  },
+  "next": {
+    "title": "paginated-response",
+    "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/paginated-response"
+  }
+}

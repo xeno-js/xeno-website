@@ -1,0 +1,38 @@
+{
+  "id": "execution-context-middleware/execution-context-composition",
+  "title": "ExecutionContext Composition",
+  "description": "Technical specification of Xeno ExecutionContext structure, documenting the composition of Identity, Network, Tracing, and Messaging sub-contexts.",
+  "source": "@site/../documentation/execution-context-middleware/execution-context-composition.md",
+  "sourceDirName": "execution-context-middleware",
+  "slug": "/execution-context-middleware/execution-context-composition",
+  "permalink": "/docs/execution-context-middleware/execution-context-composition",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/execution-context-composition.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "ExecutionContext Composition",
+    "sidebar_position": 3,
+    "description": "Technical specification of Xeno ExecutionContext structure, documenting the composition of Identity, Network, Tracing, and Messaging sub-contexts.",
+    "keywords": [
+      "executioncontext",
+      "identity context",
+      "network context",
+      "tracing context",
+      "messaging context",
+      "context anatomy",
+      "metadata tracking"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "The Request-Identity Storage Lifecycle",
+    "permalink": "/docs/execution-context-middleware/request-identity-storage-lifecycle"
+  },
+  "next": {
+    "title": "Transportation Contract Metadata & Headers Extraction",
+    "permalink": "/docs/execution-context-middleware/transportation-contract-metadata-headers"
+  }
+}

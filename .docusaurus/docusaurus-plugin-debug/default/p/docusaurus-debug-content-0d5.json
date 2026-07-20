@@ -1,0 +1,2396 @@
+{
+  "allContent": {
+    "docusaurus-plugin-css-cascade-layers": {},
+    "docusaurus-plugin-content-docs": {
+      "default": {
+        "loadedVersions": [
+          {
+            "versionName": "current",
+            "label": "Next",
+            "banner": null,
+            "badge": false,
+            "noIndex": false,
+            "className": "docs-version-current",
+            "path": "/docs",
+            "tagsPath": "/docs/tags",
+            "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation",
+            "isLast": true,
+            "routePriority": -1,
+            "sidebarFilePath": "C:\\Users\\Mattia\\Desktop\\development\\gear5\\website\\sidebars.ts",
+            "contentPath": "C:\\Users\\Mattia\\Desktop\\development\\gear5\\documentation",
+            "docs": [
+              {
+                "id": "authentication/how-works-gate-keeper",
+                "title": "How the Gatekeeper Operates",
+                "description": "Deep dive into the Xeno IGateKeeper request-filtering lifecycle, token parsing strategies, and the safe fallback Guest User pattern.",
+                "source": "@site/../documentation/authentication/how-works-gate-keeper.md",
+                "sourceDirName": "authentication",
+                "slug": "/authentication/how-works-gate-keeper",
+                "permalink": "/docs/authentication/how-works-gate-keeper",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/authentication/how-works-gate-keeper.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "How the Gatekeeper Operates",
+                  "sidebar_position": 2,
+                  "description": "Deep dive into the Xeno IGateKeeper request-filtering lifecycle, token parsing strategies, and the safe fallback Guest User pattern.",
+                  "keywords": [
+                    "gatekeeper",
+                    "identity resolution",
+                    "guest user",
+                    "token verification",
+                    "xeno core",
+                    "authentication flow"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Authentication & Identity Subsystem",
+                  "permalink": "/docs/authentication/"
+                },
+                "next": {
+                  "title": "Supabase Client & Auth Configuration",
+                  "permalink": "/docs/authentication/supabase-configuration"
+                }
+              },
+              {
+                "id": "authentication/README",
+                "title": "Authentication & Identity Subsystem",
+                "description": "Technical index and architectural overview of the identity layer, request gatekeepers, and Supabase authentication providers in Xeno.",
+                "source": "@site/../documentation/authentication/README.md",
+                "sourceDirName": "authentication",
+                "slug": "/authentication/",
+                "permalink": "/docs/authentication/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/authentication/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 5,
+                "frontMatter": {
+                  "title": "Authentication & Identity Subsystem",
+                  "sidebar_position": 5,
+                  "slug": "./",
+                  "description": "Technical index and architectural overview of the identity layer, request gatekeepers, and Supabase authentication providers in Xeno.",
+                  "keywords": [
+                    "authentication",
+                    "gatekeeper",
+                    "supabase auth",
+                    "identity profile",
+                    "guest user",
+                    "xeno core"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Transportation Contract Metadata & Headers Extraction",
+                  "permalink": "/docs/execution-context-middleware/transportation-contract-metadata-headers"
+                },
+                "next": {
+                  "title": "How the Gatekeeper Operates",
+                  "permalink": "/docs/authentication/how-works-gate-keeper"
+                }
+              },
+              {
+                "id": "authentication/supabase-configuration",
+                "title": "Supabase Client & Auth Configuration",
+                "description": "Technical developer manual on configuring the native Supabase identity provider and extending the framework using custom authentication services.",
+                "source": "@site/../documentation/authentication/supabase-configuration.md",
+                "sourceDirName": "authentication",
+                "slug": "/authentication/supabase-configuration",
+                "permalink": "/docs/authentication/supabase-configuration",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/authentication/supabase-configuration.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Supabase Client & Auth Configuration",
+                  "sidebar_position": 3,
+                  "description": "Technical developer manual on configuring the native Supabase identity provider and extending the framework using custom authentication services.",
+                  "keywords": [
+                    "supabase auth",
+                    "authclientconfig",
+                    "custom auth service",
+                    "identity provider",
+                    "gatekeeper token",
+                    "xeno core"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "How the Gatekeeper Operates",
+                  "permalink": "/docs/authentication/how-works-gate-keeper"
+                },
+                "next": {
+                  "title": "CQRS Pipeline Architecture",
+                  "permalink": "/docs/cqrs-pipeline-architecture/"
+                }
+              },
+              {
+                "id": "caching-idempotency-store/in-memory-provider",
+                "title": "In-Memory Cache Provider",
+                "description": "Technical developer manual explaining the Xeno native in-memory caching engine, lazy lifecycle pruning, and local process-memory metrics.",
+                "source": "@site/../documentation/caching-idempotency-store/in-memory-provider.md",
+                "sourceDirName": "caching-idempotency-store",
+                "slug": "/caching-idempotency-store/in-memory-provider",
+                "permalink": "/docs/caching-idempotency-store/in-memory-provider",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/caching-idempotency-store/in-memory-provider.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "In-Memory Cache Provider",
+                  "sidebar_position": 2,
+                  "description": "Technical developer manual explaining the Xeno native in-memory caching engine, lazy lifecycle pruning, and local process-memory metrics.",
+                  "keywords": [
+                    "in-memory cache",
+                    "xeno cache provider",
+                    "local process storage",
+                    "transient data caching",
+                    "heap memory allocation"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Caching & Idempotency Store Layer",
+                  "permalink": "/docs/caching-idempotency-store/"
+                },
+                "next": {
+                  "title": "Distributed Redis Cache Configuration",
+                  "permalink": "/docs/caching-idempotency-store/redis-provider"
+                }
+              },
+              {
+                "id": "caching-idempotency-store/README",
+                "title": "Caching & Idempotency Store Layer",
+                "description": "Technical index and architectural manual explaining the transient storage engines, cache providers, and idempotency tracking frameworks in Xeno.",
+                "source": "@site/../documentation/caching-idempotency-store/README.md",
+                "sourceDirName": "caching-idempotency-store",
+                "slug": "/caching-idempotency-store/",
+                "permalink": "/docs/caching-idempotency-store/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/caching-idempotency-store/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 9,
+                "frontMatter": {
+                  "title": "Caching & Idempotency Store Layer",
+                  "sidebar_position": 9,
+                  "slug": "./",
+                  "description": "Technical index and architectural manual explaining the transient storage engines, cache providers, and idempotency tracking frameworks in Xeno.",
+                  "keywords": [
+                    "caching layer",
+                    "idempotency store",
+                    "redis cache",
+                    "in-memory store",
+                    "xeno core",
+                    "query caching"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Remote Data Source Gateways",
+                  "permalink": "/docs/http-requests-resilience/remote-data-source-gateways"
+                },
+                "next": {
+                  "title": "In-Memory Cache Provider",
+                  "permalink": "/docs/caching-idempotency-store/in-memory-provider"
+                }
+              },
+              {
+                "id": "caching-idempotency-store/redis-provider",
+                "title": "Distributed Redis Cache Configuration",
+                "description": "Technical developer manual explaining the Xeno distributed Redis caching engine, connection pooling, and multi-node transaction synchronization.",
+                "source": "@site/../documentation/caching-idempotency-store/redis-provider.md",
+                "sourceDirName": "caching-idempotency-store",
+                "slug": "/caching-idempotency-store/redis-provider",
+                "permalink": "/docs/caching-idempotency-store/redis-provider",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/caching-idempotency-store/redis-provider.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Distributed Redis Cache Configuration",
+                  "sidebar_position": 3,
+                  "description": "Technical developer manual explaining the Xeno distributed Redis caching engine, connection pooling, and multi-node transaction synchronization.",
+                  "keywords": [
+                    "redis cache provider",
+                    "xeno distributed cache",
+                    "out-of-process storage",
+                    "cache key partitioning",
+                    "connection pooling"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "In-Memory Cache Provider",
+                  "permalink": "/docs/caching-idempotency-store/in-memory-provider"
+                },
+                "next": {
+                  "title": "Telemetry & Logging Layer",
+                  "permalink": "/docs/telemetry-logging/"
+                }
+              },
+              {
+                "id": "community-open-source/contributing-guide",
+                "title": "contributing-guide",
+                "description": "",
+                "source": "@site/../documentation/community-open-source/contributing-guide.md",
+                "sourceDirName": "community-open-source",
+                "slug": "/community-open-source/contributing-guide",
+                "permalink": "/docs/community-open-source/contributing-guide",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/community-open-source/contributing-guide.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": { "title": "README", "permalink": "/docs/community-open-source/" },
+                "next": {
+                  "title": "Supporting Xeno",
+                  "permalink": "/docs/community-open-source/support-appreciation"
+                }
+              },
+              {
+                "id": "community-open-source/README",
+                "title": "README",
+                "description": "",
+                "source": "@site/../documentation/community-open-source/README.md",
+                "sourceDirName": "community-open-source",
+                "slug": "/community-open-source/",
+                "permalink": "/docs/community-open-source/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/community-open-source/README.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "success-response",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/success-response"
+                },
+                "next": {
+                  "title": "contributing-guide",
+                  "permalink": "/docs/community-open-source/contributing-guide"
+                }
+              },
+              {
+                "id": "community-open-source/support-appreciation",
+                "title": "Supporting Xeno",
+                "description": "Xeno is an MIT-licensed, open-source framework.",
+                "source": "@site/../documentation/community-open-source/support-appreciation.md",
+                "sourceDirName": "community-open-source",
+                "slug": "/community-open-source/support-appreciation",
+                "permalink": "/docs/community-open-source/support-appreciation",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/community-open-source/support-appreciation.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "contributing-guide",
+                  "permalink": "/docs/community-open-source/contributing-guide"
+                },
+                "next": { "title": "README", "permalink": "/docs/defensive-toolkit-utilities/" }
+              },
+              {
+                "id": "core-architecture/application-hosting-bootstrap-engine",
+                "title": "Application Hosting & Bootstrap Engine",
+                "description": "Technical design manual detailing the high-performance, decorator-free initialization lifecycle of Xeno applications using the programmatic AppBuilder engine.",
+                "source": "@site/../documentation/core-architecture/application-hosting-bootstrap-engine.md",
+                "sourceDirName": "core-architecture",
+                "slug": "/core-architecture/application-hosting-bootstrap-engine",
+                "permalink": "/docs/core-architecture/application-hosting-bootstrap-engine",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/application-hosting-bootstrap-engine.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 1,
+                "frontMatter": {
+                  "title": "Application Hosting & Bootstrap Engine",
+                  "sidebar_position": 1,
+                  "description": "Technical design manual detailing the high-performance, decorator-free initialization lifecycle of Xeno applications using the programmatic AppBuilder engine.",
+                  "keywords": [
+                    "xeno appbuilder",
+                    "bootstrap lifecycle",
+                    "application hosting",
+                    "dependency container compilation",
+                    "runtime initialization"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Core Architecture & Lifecycle",
+                  "permalink": "/docs/core-architecture/"
+                },
+                "next": {
+                  "title": "The IoC Container & Service Lifetimes",
+                  "permalink": "/docs/core-architecture/ioc-container-service-lifetimes"
+                }
+              },
+              {
+                "id": "core-architecture/ioc-container-service-lifetimes",
+                "title": "The IoC Container & Service Lifetimes",
+                "description": "How Xeno manages dependency resolution with Singleton, Scoped, and Transient lifetimes, including scope creation and deterministic disposal.",
+                "source": "@site/../documentation/core-architecture/ioc-container-service-lifetimes.md",
+                "sourceDirName": "core-architecture",
+                "slug": "/core-architecture/ioc-container-service-lifetimes",
+                "permalink": "/docs/core-architecture/ioc-container-service-lifetimes",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/ioc-container-service-lifetimes.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "The IoC Container & Service Lifetimes",
+                  "sidebar_position": 2,
+                  "description": "How Xeno manages dependency resolution with Singleton, Scoped, and Transient lifetimes, including scope creation and deterministic disposal.",
+                  "keywords": [
+                    "ioc container",
+                    "dependency injection",
+                    "service lifetimes",
+                    "singleton",
+                    "scoped lifetime",
+                    "transient",
+                    "resource disposal"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Application Hosting & Bootstrap Engine",
+                  "permalink": "/docs/core-architecture/application-hosting-bootstrap-engine"
+                },
+                "next": {
+                  "title": "Module Composition Pattern",
+                  "permalink": "/docs/core-architecture/module-composition-pattern"
+                }
+              },
+              {
+                "id": "core-architecture/module-composition-pattern",
+                "title": "Module Composition Pattern",
+                "description": "How Xeno composes features with IModule, including service registration, options-driven configuration, and module boundary rules.",
+                "source": "@site/../documentation/core-architecture/module-composition-pattern.md",
+                "sourceDirName": "core-architecture",
+                "slug": "/core-architecture/module-composition-pattern",
+                "permalink": "/docs/core-architecture/module-composition-pattern",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/module-composition-pattern.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Module Composition Pattern",
+                  "sidebar_position": 3,
+                  "description": "How Xeno composes features with IModule, including service registration, options-driven configuration, and module boundary rules.",
+                  "keywords": [
+                    "imodule",
+                    "encapsulation",
+                    "micro-modules",
+                    "dependency injection",
+                    "structural wiring",
+                    "configuration segregation"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "The IoC Container & Service Lifetimes",
+                  "permalink": "/docs/core-architecture/ioc-container-service-lifetimes"
+                },
+                "next": {
+                  "title": "Domain-Driven Design (DDD) Core Building Blocks",
+                  "permalink": "/docs/domain-driven-design/"
+                }
+              },
+              {
+                "id": "core-architecture/README",
+                "title": "Core Architecture & Lifecycle",
+                "description": "Technical overview index and execution manual of the core runtime engine, application hosting lifecycles, and explicit inversion-of-control container mechanics of Xeno.",
+                "source": "@site/../documentation/core-architecture/README.md",
+                "sourceDirName": "core-architecture",
+                "slug": "/core-architecture/",
+                "permalink": "/docs/core-architecture/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "Core Architecture & Lifecycle",
+                  "sidebar_position": 2,
+                  "slug": "./",
+                  "description": "Technical overview index and execution manual of the core runtime engine, application hosting lifecycles, and explicit inversion-of-control container mechanics of Xeno.",
+                  "keywords": [
+                    "xeno core architecture",
+                    "container compilation trace",
+                    "dependency lifetimes validation",
+                    "programmatic bootstrap sequence"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Quick Start Guide",
+                  "permalink": "/docs/getting-started/quick-start-guide"
+                },
+                "next": {
+                  "title": "Application Hosting & Bootstrap Engine",
+                  "permalink": "/docs/core-architecture/application-hosting-bootstrap-engine"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/application-base-handler",
+                "title": "Application Base Handler",
+                "description": "Overview",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/application-base-handler.md",
+                "sourceDirName": "cqrs-pipeline-architecture",
+                "slug": "/cqrs-pipeline-architecture/application-base-handler",
+                "permalink": "/docs/cqrs-pipeline-architecture/application-base-handler",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/application-base-handler.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "The Mediator Dispatcher Engine",
+                  "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine"
+                },
+                "next": {
+                  "title": "Pipeline Behaviors Core Fundamentals",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+                "title": "Authorization Pipeline & Custom Security Strategies",
+                "description": "Technical developer manual on configuring the Xeno AuthorizationPipeline, creating custom access control strategies, and leveraging the BaseAuthorizationStrategy class.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 6,
+                "frontMatter": {
+                  "title": "Authorization Pipeline & Custom Security Strategies",
+                  "sidebar_position": 6,
+                  "description": "Technical developer manual on configuring the Xeno AuthorizationPipeline, creating custom access control strategies, and leveraging the BaseAuthorizationStrategy class.",
+                  "keywords": [
+                    "authorization pipeline",
+                    "xeno core security",
+                    "custom authorization strategy",
+                    "baseauthorizationstrategy",
+                    "rbac permissions",
+                    "zero trust pipeline"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Idempotency Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior"
+                },
+                "next": {
+                  "title": "Validation Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+                "title": "Concurrency & Retry Pipeline Behavior",
+                "description": "Technical developer manual explaining Xeno ConcurrencyRetryPipeline, exponential backoff with jitter, and handling race conditions.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 9,
+                "frontMatter": {
+                  "title": "Concurrency & Retry Pipeline Behavior",
+                  "sidebar_position": 9,
+                  "description": "Technical developer manual explaining Xeno ConcurrencyRetryPipeline, exponential backoff with jitter, and handling race conditions.",
+                  "keywords": [
+                    "concurrency retry",
+                    "xeno core",
+                    "exponential backoff",
+                    "jitter",
+                    "conflict resolution",
+                    "command bus"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Validation Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors"
+                },
+                "next": {
+                  "title": "Query Caching Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+                "title": "Exception Pipeline Behavior",
+                "description": "Technical developer manual explaining the Xeno ExceptionPipeline behavior, unhandled exception capturing, and error normalization mechanics.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 1,
+                "frontMatter": {
+                  "title": "Exception Pipeline Behavior",
+                  "sidebar_position": 1,
+                  "description": "Technical developer manual explaining the Xeno ExceptionPipeline behavior, unhandled exception capturing, and error normalization mechanics.",
+                  "keywords": [
+                    "exception pipeline",
+                    "error handling",
+                    "xeno core",
+                    "apperror normalization",
+                    "cqrs exception interceptor",
+                    "unhandled exceptions"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Pipeline Behaviors Core Fundamentals",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/"
+                },
+                "next": {
+                  "title": "Logging & Performance Pipeline Behaviors",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+                "title": "Idempotency Pipeline Behavior",
+                "description": "Technical developer manual explaining Xeno native command idempotency behavior, distributed locking, and result storage mechanics.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 5,
+                "frontMatter": {
+                  "title": "Idempotency Pipeline Behavior",
+                  "sidebar_position": 5,
+                  "description": "Technical developer manual explaining Xeno native command idempotency behavior, distributed locking, and result storage mechanics.",
+                  "keywords": [
+                    "idempotency pipeline",
+                    "xeno core",
+                    "distributed lock",
+                    "command bus",
+                    "concurrency conflict",
+                    "request duplication"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Logging & Performance Pipeline Behaviors",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior"
+                },
+                "next": {
+                  "title": "Authorization Pipeline & Custom Security Strategies",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+                "title": "Logging & Performance Pipeline Behaviors",
+                "description": "Technical developer manual explaining Xeno native observability pipeline behaviors for automatic request logging and execution performance profiling.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "Logging & Performance Pipeline Behaviors",
+                  "sidebar_position": 2,
+                  "description": "Technical developer manual explaining Xeno native observability pipeline behaviors for automatic request logging and execution performance profiling.",
+                  "keywords": [
+                    "logging pipeline",
+                    "performance pipeline",
+                    "xeno core",
+                    "observability",
+                    "request tracking",
+                    "runtime profiling"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Exception Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior"
+                },
+                "next": {
+                  "title": "Idempotency Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+                "title": "Query Caching Pipeline Behavior",
+                "description": "Technical developer manual explaining Xeno QueryCachingPipeline, transparent read-optimization, and fault-tolerant caching mechanics.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 10,
+                "frontMatter": {
+                  "title": "Query Caching Pipeline Behavior",
+                  "sidebar_position": 10,
+                  "description": "Technical developer manual explaining Xeno QueryCachingPipeline, transparent read-optimization, and fault-tolerant caching mechanics.",
+                  "keywords": [
+                    "query caching",
+                    "xeno core",
+                    "read optimization",
+                    "cache hit",
+                    "cache miss",
+                    "fault tolerance",
+                    "redis caching"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Concurrency & Retry Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior"
+                },
+                "next": {
+                  "title": "Database Persistence Layer",
+                  "permalink": "/docs/database-persistence/"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README",
+                "title": "Pipeline Behaviors Core Fundamentals",
+                "description": "Technical design manual explaining the Xeno native pipeline behavior architecture, the CompositePipeline engine, and configuration models via AppBuilder.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {
+                  "title": "Pipeline Behaviors Core Fundamentals",
+                  "slug": "./",
+                  "description": "Technical design manual explaining the Xeno native pipeline behavior architecture, the CompositePipeline engine, and configuration models via AppBuilder.",
+                  "keywords": [
+                    "pipeline behaviors",
+                    "xeno core",
+                    "composite pipeline",
+                    "cqrs middleware",
+                    "framework configuration",
+                    "appbuilder pipelines"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Application Base Handler",
+                  "permalink": "/docs/cqrs-pipeline-architecture/application-base-handler"
+                },
+                "next": {
+                  "title": "Exception Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+                "title": "Validation Pipeline Behavior",
+                "description": "Technical developer manual explaining how to configure the Xeno ValidationPipeline, build custom strategies using BaseValidationStrategy, and utilize the validator service.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors.md",
+                "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+                "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+                "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 7,
+                "frontMatter": {
+                  "title": "Validation Pipeline Behavior",
+                  "sidebar_position": 7,
+                  "description": "Technical developer manual explaining how to configure the Xeno ValidationPipeline, build custom strategies using BaseValidationStrategy, and utilize the validator service.",
+                  "keywords": [
+                    "validation pipeline",
+                    "xeno core",
+                    "custom validation strategy",
+                    "basevalidationstrategy",
+                    "ivalidatorservice",
+                    "input verification"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Authorization Pipeline & Custom Security Strategies",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior"
+                },
+                "next": {
+                  "title": "Concurrency & Retry Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/mediator-dispatcher-engine",
+                "title": "The Mediator Dispatcher Engine",
+                "description": "Technical design manual detailing the architecture, message routing mechanics, and execution lifecycles of the centralized IMediator bus in Xeno.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/mediator-dispatcher-engine.md",
+                "sourceDirName": "cqrs-pipeline-architecture",
+                "slug": "/cqrs-pipeline-architecture/mediator-dispatcher-engine",
+                "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/mediator-dispatcher-engine.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "The Mediator Dispatcher Engine",
+                  "sidebar_position": 2,
+                  "description": "Technical design manual detailing the architecture, message routing mechanics, and execution lifecycles of the centralized IMediator bus in Xeno.",
+                  "keywords": [
+                    "mediator",
+                    "cqrs dispatcher",
+                    "command bus",
+                    "query bus",
+                    "pipeline routing",
+                    "token lookup"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "CQRS Pipeline Architecture",
+                  "permalink": "/docs/cqrs-pipeline-architecture/"
+                },
+                "next": {
+                  "title": "Application Base Handler",
+                  "permalink": "/docs/cqrs-pipeline-architecture/application-base-handler"
+                }
+              },
+              {
+                "id": "cqrs-pipeline-architecture/README",
+                "title": "CQRS Pipeline Architecture",
+                "description": "Technical index and architectural overview of Command Query Responsibility Segregation (CQRS) and message execution pipelines in the Xeno framework core.",
+                "source": "@site/../documentation/cqrs-pipeline-architecture/README.md",
+                "sourceDirName": "cqrs-pipeline-architecture",
+                "slug": "/cqrs-pipeline-architecture/",
+                "permalink": "/docs/cqrs-pipeline-architecture/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 6,
+                "frontMatter": {
+                  "title": "CQRS Pipeline Architecture",
+                  "sidebar_position": 6,
+                  "slug": "./",
+                  "description": "Technical index and architectural overview of Command Query Responsibility Segregation (CQRS) and message execution pipelines in the Xeno framework core.",
+                  "keywords": [
+                    "cqrs",
+                    "mediator pattern",
+                    "pipeline behaviors",
+                    "cross-cutting concerns",
+                    "command bus",
+                    "query bus"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Supabase Client & Auth Configuration",
+                  "permalink": "/docs/authentication/supabase-configuration"
+                },
+                "next": {
+                  "title": "The Mediator Dispatcher Engine",
+                  "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine"
+                }
+              },
+              {
+                "id": "database-persistence/database-bootstrapping/README",
+                "title": "Database Client & Schema Bootstrapping",
+                "description": "Technical manual explaining Xeno flexible database bootstrapping options, connection pooling customization, and Drizzle ORM client schema configurations.",
+                "source": "@site/../documentation/database-persistence/database-bootstrapping/README.md",
+                "sourceDirName": "database-persistence/database-bootstrapping",
+                "slug": "/database-persistence/database-bootstrapping/",
+                "permalink": "/docs/database-persistence/database-bootstrapping/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/database-bootstrapping/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Database Client & Schema Bootstrapping",
+                  "sidebar_position": 3,
+                  "description": "Technical manual explaining Xeno flexible database bootstrapping options, connection pooling customization, and Drizzle ORM client schema configurations.",
+                  "keywords": [
+                    "database client",
+                    "schema bootstrap",
+                    "xeno core",
+                    "db_pool_client",
+                    "db_orm_client",
+                    "connection pooling",
+                    "framework customization"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Database Persistence Layer",
+                  "permalink": "/docs/database-persistence/"
+                },
+                "next": {
+                  "title": "Data Sources & Execution Topology",
+                  "permalink": "/docs/database-persistence/datasources-execution-topology"
+                }
+              },
+              {
+                "id": "database-persistence/datasources-execution-topology",
+                "title": "Data Sources & Execution Topology",
+                "description": "Developer documentation on how to register and use Xeno data sources, understand their differences, and wire custom data persistence layers using DB_POOL_CLIENT or DB_ORM_CLIENT.",
+                "source": "@site/../documentation/database-persistence/datasources-execution-topology.md",
+                "sourceDirName": "database-persistence",
+                "slug": "/database-persistence/datasources-execution-topology",
+                "permalink": "/docs/database-persistence/datasources-execution-topology",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/datasources-execution-topology.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Data Sources & Execution Topology",
+                  "sidebar_position": 4,
+                  "description": "Developer documentation on how to register and use Xeno data sources, understand their differences, and wire custom data persistence layers using DB_POOL_CLIENT or DB_ORM_CLIENT.",
+                  "keywords": [
+                    "data sources",
+                    "database topology",
+                    "xeno core",
+                    "soft delete",
+                    "hard delete",
+                    "db_pool_client",
+                    "db_orm_client"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Database Client & Schema Bootstrapping",
+                  "permalink": "/docs/database-persistence/database-bootstrapping/"
+                },
+                "next": {
+                  "title": "Fluent Query & Filter Compiler Grid",
+                  "permalink": "/docs/database-persistence/fluent-query-filter-compiler-grid"
+                }
+              },
+              {
+                "id": "database-persistence/fluent-query-filter-compiler-grid",
+                "title": "Fluent Query & Filter Compiler Grid",
+                "description": "Technical manual explaining how to implement, register, and utilize IFilterBuilder to compile ReadCriteria and WriteCriteria into Drizzle ORM conditions.",
+                "source": "@site/../documentation/database-persistence/fluent-query-filter-compiler-grid.md",
+                "sourceDirName": "database-persistence",
+                "slug": "/database-persistence/fluent-query-filter-compiler-grid",
+                "permalink": "/docs/database-persistence/fluent-query-filter-compiler-grid",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/fluent-query-filter-compiler-grid.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Fluent Query & Filter Compiler Grid",
+                  "sidebar_position": 4,
+                  "description": "Technical manual explaining how to implement, register, and utilize IFilterBuilder to compile ReadCriteria and WriteCriteria into Drizzle ORM conditions.",
+                  "keywords": [
+                    "filter builder",
+                    "readcriteria",
+                    "writecriteria",
+                    "drizzle orm filters",
+                    "projection compilation",
+                    "xeno core"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Data Sources & Execution Topology",
+                  "permalink": "/docs/database-persistence/datasources-execution-topology"
+                },
+                "next": {
+                  "title": "Repositories & DAOs Design Patterns",
+                  "permalink": "/docs/database-persistence/repositories-daos-design-patterns"
+                }
+              },
+              {
+                "id": "database-persistence/README",
+                "title": "Database Persistence Layer",
+                "description": "Technical index and architectural overview of the database module, transactional unit of work context, and structural repository pattern in Xeno.",
+                "source": "@site/../documentation/database-persistence/README.md",
+                "sourceDirName": "database-persistence",
+                "slug": "/database-persistence/",
+                "permalink": "/docs/database-persistence/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 7,
+                "frontMatter": {
+                  "title": "Database Persistence Layer",
+                  "sidebar_position": 7,
+                  "slug": "./",
+                  "description": "Technical index and architectural overview of the database module, transactional unit of work context, and structural repository pattern in Xeno.",
+                  "keywords": [
+                    "database persistence",
+                    "drizzle orm",
+                    "repository pattern",
+                    "db context",
+                    "transaction management",
+                    "xeno core"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Query Caching Pipeline Behavior",
+                  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior"
+                },
+                "next": {
+                  "title": "Database Client & Schema Bootstrapping",
+                  "permalink": "/docs/database-persistence/database-bootstrapping/"
+                }
+              },
+              {
+                "id": "database-persistence/repositories-daos-design-patterns",
+                "title": "Repositories & DAOs Design Patterns",
+                "description": "Technical developer manual on utilizing Xeno repositories and ReadDAOs to segregate read/write data access and map domain entities to persistence DTOs.",
+                "source": "@site/../documentation/database-persistence/repositories-daos-design-patterns.md",
+                "sourceDirName": "database-persistence",
+                "slug": "/database-persistence/repositories-daos-design-patterns",
+                "permalink": "/docs/database-persistence/repositories-daos-design-patterns",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/repositories-daos-design-patterns.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 13,
+                "frontMatter": {
+                  "title": "Repositories & DAOs Design Patterns",
+                  "sidebar_position": 13,
+                  "description": "Technical developer manual on utilizing Xeno repositories and ReadDAOs to segregate read/write data access and map domain entities to persistence DTOs.",
+                  "keywords": [
+                    "repository pattern",
+                    "read dao",
+                    "data access object",
+                    "domain entity mapping",
+                    "drizzle dto segregation",
+                    "cqrs data persistence"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Fluent Query & Filter Compiler Grid",
+                  "permalink": "/docs/database-persistence/fluent-query-filter-compiler-grid"
+                },
+                "next": {
+                  "title": "HTTP Requests & Resilience Subsystem",
+                  "permalink": "/docs/http-requests-resilience/"
+                }
+              },
+              {
+                "id": "defensive-toolkit-utilities/core-framework-utility-helpers",
+                "title": "core-framework-utility-helpers",
+                "description": "",
+                "source": "@site/../documentation/defensive-toolkit-utilities/core-framework-utility-helpers.md",
+                "sourceDirName": "defensive-toolkit-utilities",
+                "slug": "/defensive-toolkit-utilities/core-framework-utility-helpers",
+                "permalink": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/defensive-toolkit-utilities/core-framework-utility-helpers.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "README",
+                  "permalink": "/docs/defensive-toolkit-utilities/"
+                },
+                "next": {
+                  "title": "defensive-type-guards",
+                  "permalink": "/docs/defensive-toolkit-utilities/defensive-type-guards"
+                }
+              },
+              {
+                "id": "defensive-toolkit-utilities/defensive-type-guards",
+                "title": "defensive-type-guards",
+                "description": "",
+                "source": "@site/../documentation/defensive-toolkit-utilities/defensive-type-guards.md",
+                "sourceDirName": "defensive-toolkit-utilities",
+                "slug": "/defensive-toolkit-utilities/defensive-type-guards",
+                "permalink": "/docs/defensive-toolkit-utilities/defensive-type-guards",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/defensive-toolkit-utilities/defensive-type-guards.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "core-framework-utility-helpers",
+                  "permalink": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers"
+                },
+                "next": { "title": "README", "permalink": "/docs/developer-ecosystem/" }
+              },
+              {
+                "id": "defensive-toolkit-utilities/README",
+                "title": "README",
+                "description": "",
+                "source": "@site/../documentation/defensive-toolkit-utilities/README.md",
+                "sourceDirName": "defensive-toolkit-utilities",
+                "slug": "/defensive-toolkit-utilities/",
+                "permalink": "/docs/defensive-toolkit-utilities/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/defensive-toolkit-utilities/README.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Supporting Xeno",
+                  "permalink": "/docs/community-open-source/support-appreciation"
+                },
+                "next": {
+                  "title": "core-framework-utility-helpers",
+                  "permalink": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers"
+                }
+              },
+              {
+                "id": "developer-ecosystem/enterprise-project-scaffolding-cli",
+                "title": "enterprise-project-scaffolding-cli",
+                "description": "",
+                "source": "@site/../documentation/developer-ecosystem/enterprise-project-scaffolding-cli.md",
+                "sourceDirName": "developer-ecosystem",
+                "slug": "/developer-ecosystem/enterprise-project-scaffolding-cli",
+                "permalink": "/docs/developer-ecosystem/enterprise-project-scaffolding-cli",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/developer-ecosystem/enterprise-project-scaffolding-cli.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": { "title": "README", "permalink": "/docs/developer-ecosystem/" }
+              },
+              {
+                "id": "developer-ecosystem/README",
+                "title": "README",
+                "description": "",
+                "source": "@site/../documentation/developer-ecosystem/README.md",
+                "sourceDirName": "developer-ecosystem",
+                "slug": "/developer-ecosystem/",
+                "permalink": "/docs/developer-ecosystem/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/developer-ecosystem/README.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "defensive-type-guards",
+                  "permalink": "/docs/defensive-toolkit-utilities/defensive-type-guards"
+                },
+                "next": {
+                  "title": "enterprise-project-scaffolding-cli",
+                  "permalink": "/docs/developer-ecosystem/enterprise-project-scaffolding-cli"
+                }
+              },
+              {
+                "id": "domain-driven-design/entities-unique-identifiers",
+                "title": "Entities & Unique Identifiers",
+                "description": "Reference documentation for the Entity<T> abstract base class and the UniqueId type wrapper in Xeno. Covers identity management, immutability enforcement, state isolation, and implementation patterns for domain entities.",
+                "source": "@site/../documentation/domain-driven-design/entities-unique-identifiers.md",
+                "sourceDirName": "domain-driven-design",
+                "slug": "/domain-driven-design/entities-unique-identifiers",
+                "permalink": "/docs/domain-driven-design/entities-unique-identifiers",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/entities-unique-identifiers.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "Entities & Unique Identifiers",
+                  "sidebar_position": 2,
+                  "description": "Reference documentation for the Entity<T> abstract base class and the UniqueId type wrapper in Xeno. Covers identity management, immutability enforcement, state isolation, and implementation patterns for domain entities.",
+                  "keywords": [
+                    "domain entities",
+                    "aggregate root",
+                    "uniqueid",
+                    "immutability",
+                    "ddd building blocks",
+                    "type safety"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Domain-Driven Design (DDD) Core Building Blocks",
+                  "permalink": "/docs/domain-driven-design/"
+                },
+                "next": {
+                  "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+                  "permalink": "/docs/domain-driven-design/value-objects-defensive-immutability"
+                }
+              },
+              {
+                "id": "domain-driven-design/functional-monads-core-errors",
+                "title": "Functional Monads & Core Errors",
+                "description": "Practical developer manual for handling operational outcomes and domain errors using Xeno Result monad and AppError architecture.",
+                "source": "@site/../documentation/domain-driven-design/functional-monads-core-errors.md",
+                "sourceDirName": "domain-driven-design",
+                "slug": "/domain-driven-design/functional-monads-core-errors",
+                "permalink": "/docs/domain-driven-design/functional-monads-core-errors",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/functional-monads-core-errors.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Functional Monads & Core Errors",
+                  "sidebar_position": 4,
+                  "description": "Practical developer manual for handling operational outcomes and domain errors using Xeno Result monad and AppError architecture.",
+                  "keywords": [
+                    "result monad",
+                    "apperror",
+                    "functional programming",
+                    "error handling",
+                    "resulttype",
+                    "domain validations"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+                  "permalink": "/docs/domain-driven-design/value-objects-defensive-immutability"
+                },
+                "next": {
+                  "title": "Execution Context & Middleware Layer",
+                  "permalink": "/docs/execution-context-middleware/"
+                }
+              },
+              {
+                "id": "domain-driven-design/README",
+                "title": "Domain-Driven Design (DDD) Core Building Blocks",
+                "description": "Technical index and overview of the pure, framework-agnostic Domain-Driven Design (DDD) building blocks in Xeno.",
+                "source": "@site/../documentation/domain-driven-design/README.md",
+                "sourceDirName": "domain-driven-design",
+                "slug": "/domain-driven-design/",
+                "permalink": "/docs/domain-driven-design/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Domain-Driven Design (DDD) Core Building Blocks",
+                  "sidebar_position": 3,
+                  "slug": "./",
+                  "description": "Technical index and overview of the pure, framework-agnostic Domain-Driven Design (DDD) building blocks in Xeno.",
+                  "keywords": [
+                    "domain-driven design",
+                    "ddd",
+                    "entities",
+                    "value objects",
+                    "functional monads",
+                    "result monad",
+                    "apperror"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Module Composition Pattern",
+                  "permalink": "/docs/core-architecture/module-composition-pattern"
+                },
+                "next": {
+                  "title": "Entities & Unique Identifiers",
+                  "permalink": "/docs/domain-driven-design/entities-unique-identifiers"
+                }
+              },
+              {
+                "id": "domain-driven-design/value-objects-defensive-immutability",
+                "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+                "description": "Detailed guide on designing immutable, identity-less domain concepts using the Xeno ValueObject base class.",
+                "source": "@site/../documentation/domain-driven-design/value-objects-defensive-immutability.md",
+                "sourceDirName": "domain-driven-design",
+                "slug": "/domain-driven-design/value-objects-defensive-immutability",
+                "permalink": "/docs/domain-driven-design/value-objects-defensive-immutability",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/value-objects-defensive-immutability.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+                  "sidebar_position": 3,
+                  "description": "Detailed guide on designing immutable, identity-less domain concepts using the Xeno ValueObject base class.",
+                  "keywords": [
+                    "value object",
+                    "ddd primitives",
+                    "immutability",
+                    "object equality",
+                    "structural equality",
+                    "defensive coding"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Entities & Unique Identifiers",
+                  "permalink": "/docs/domain-driven-design/entities-unique-identifiers"
+                },
+                "next": {
+                  "title": "Functional Monads & Core Errors",
+                  "permalink": "/docs/domain-driven-design/functional-monads-core-errors"
+                }
+              },
+              {
+                "id": "execution-context-middleware/execution-context-composition",
+                "title": "ExecutionContext Composition",
+                "description": "Technical specification of Xeno ExecutionContext structure, documenting the composition of Identity, Network, Tracing, and Messaging sub-contexts.",
+                "source": "@site/../documentation/execution-context-middleware/execution-context-composition.md",
+                "sourceDirName": "execution-context-middleware",
+                "slug": "/execution-context-middleware/execution-context-composition",
+                "permalink": "/docs/execution-context-middleware/execution-context-composition",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/execution-context-composition.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "ExecutionContext Composition",
+                  "sidebar_position": 3,
+                  "description": "Technical specification of Xeno ExecutionContext structure, documenting the composition of Identity, Network, Tracing, and Messaging sub-contexts.",
+                  "keywords": [
+                    "executioncontext",
+                    "identity context",
+                    "network context",
+                    "tracing context",
+                    "messaging context",
+                    "context anatomy",
+                    "metadata tracking"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "The Request-Identity Storage Lifecycle",
+                  "permalink": "/docs/execution-context-middleware/request-identity-storage-lifecycle"
+                },
+                "next": {
+                  "title": "Transportation Contract Metadata & Headers Extraction",
+                  "permalink": "/docs/execution-context-middleware/transportation-contract-metadata-headers"
+                }
+              },
+              {
+                "id": "execution-context-middleware/README",
+                "title": "Execution Context & Middleware Layer",
+                "description": "Technical index and summary of Xeno execution context tracing, asynchronous storage isolation, and HTTP request metadata extraction.",
+                "source": "@site/../documentation/execution-context-middleware/README.md",
+                "sourceDirName": "execution-context-middleware",
+                "slug": "/execution-context-middleware/",
+                "permalink": "/docs/execution-context-middleware/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Execution Context & Middleware Layer",
+                  "sidebar_position": 4,
+                  "slug": "./",
+                  "description": "Technical index and summary of Xeno execution context tracing, asynchronous storage isolation, and HTTP request metadata extraction.",
+                  "keywords": [
+                    "execution context",
+                    "async hooks",
+                    "async local storage",
+                    "request context middleware",
+                    "correlation id",
+                    "metadata extraction"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Functional Monads & Core Errors",
+                  "permalink": "/docs/domain-driven-design/functional-monads-core-errors"
+                },
+                "next": {
+                  "title": "The Request-Identity Storage Lifecycle",
+                  "permalink": "/docs/execution-context-middleware/request-identity-storage-lifecycle"
+                }
+              },
+              {
+                "id": "execution-context-middleware/request-identity-storage-lifecycle",
+                "title": "The Request-Identity Storage Lifecycle",
+                "description": "In-depth execution guide on how RequestContextMiddleware initializes, isolates, and disposes of asynchronous execution storage and request metadata.",
+                "source": "@site/../documentation/execution-context-middleware/request-identity-storage-lifecycle.md",
+                "sourceDirName": "execution-context-middleware",
+                "slug": "/execution-context-middleware/request-identity-storage-lifecycle",
+                "permalink": "/docs/execution-context-middleware/request-identity-storage-lifecycle",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/request-identity-storage-lifecycle.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "The Request-Identity Storage Lifecycle",
+                  "sidebar_position": 2,
+                  "description": "In-depth execution guide on how RequestContextMiddleware initializes, isolates, and disposes of asynchronous execution storage and request metadata.",
+                  "keywords": [
+                    "execution context",
+                    "middleware",
+                    "async storage",
+                    "identity lifecycle",
+                    "multi-tenant isolation",
+                    "token extraction"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Execution Context & Middleware Layer",
+                  "permalink": "/docs/execution-context-middleware/"
+                },
+                "next": {
+                  "title": "ExecutionContext Composition",
+                  "permalink": "/docs/execution-context-middleware/execution-context-composition"
+                }
+              },
+              {
+                "id": "execution-context-middleware/transportation-contract-metadata-headers",
+                "title": "Transportation Contract Metadata & Headers Extraction",
+                "description": "Technical documentation on how Xeno normalizes incoming transport layer headers into typed application metadata via the IServiceExtractor contract.",
+                "source": "@site/../documentation/execution-context-middleware/transportation-contract-metadata-headers.md",
+                "sourceDirName": "execution-context-middleware",
+                "slug": "/execution-context-middleware/transportation-contract-metadata-headers",
+                "permalink": "/docs/execution-context-middleware/transportation-contract-metadata-headers",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/transportation-contract-metadata-headers.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Transportation Contract Metadata & Headers Extraction",
+                  "sidebar_position": 4,
+                  "description": "Technical documentation on how Xeno normalizes incoming transport layer headers into typed application metadata via the IServiceExtractor contract.",
+                  "keywords": [
+                    "header extraction",
+                    "iserviceextractor",
+                    "metadata normalization",
+                    "bearer token extractor",
+                    "http headers",
+                    "token parsing"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "ExecutionContext Composition",
+                  "permalink": "/docs/execution-context-middleware/execution-context-composition"
+                },
+                "next": {
+                  "title": "Authentication & Identity Subsystem",
+                  "permalink": "/docs/authentication/"
+                }
+              },
+              {
+                "id": "getting-started/architectural-layers-boundaries",
+                "title": "Architectural Layers & Boundaries",
+                "description": "Detailed technical specification of the strict Domain-Driven Design (DDD) and Clean Architecture structural rings enforced by compile-time rules in the Xeno framework.",
+                "source": "@site/../documentation/getting-started/architectural-layers-boundaries.md",
+                "sourceDirName": "getting-started",
+                "slug": "/getting-started/architectural-layers-boundaries",
+                "permalink": "/docs/getting-started/architectural-layers-boundaries",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/architectural-layers-boundaries.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Architectural Layers & Boundaries",
+                  "sidebar_position": 3,
+                  "description": "Detailed technical specification of the strict Domain-Driven Design (DDD) and Clean Architecture structural rings enforced by compile-time rules in the Xeno framework.",
+                  "keywords": [
+                    "clean architecture",
+                    "domain-driven design",
+                    "architectural boundaries",
+                    "eslint isolation",
+                    "dependency flow"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Introduction & Philosophy",
+                  "permalink": "/docs/getting-started/introduction-philosophy"
+                },
+                "next": {
+                  "title": "Why Choose Xeno? An Architectural Deep-Dive",
+                  "permalink": "/docs/getting-started/why-this-framework"
+                }
+              },
+              {
+                "id": "getting-started/introduction-philosophy",
+                "title": "Introduction & Philosophy",
+                "description": "Technical overview of the architectural design principles, execution lifecycle, and core engineering philosophy behind the Xeno framework kernel.",
+                "source": "@site/../documentation/getting-started/introduction-philosophy.md",
+                "sourceDirName": "getting-started",
+                "slug": "/getting-started/introduction-philosophy",
+                "permalink": "/docs/getting-started/introduction-philosophy",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/introduction-philosophy.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "Introduction & Philosophy",
+                  "sidebar_position": 2,
+                  "description": "Technical overview of the architectural design principles, execution lifecycle, and core engineering philosophy behind the Xeno framework kernel.",
+                  "keywords": [
+                    "xeno philosophy",
+                    "clean architecture typescript",
+                    "zero decorator di",
+                    "typescript ddd cqrs"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": { "title": "Getting Started", "permalink": "/docs/getting-started/" },
+                "next": {
+                  "title": "Architectural Layers & Boundaries",
+                  "permalink": "/docs/getting-started/architectural-layers-boundaries"
+                }
+              },
+              {
+                "id": "getting-started/quick-start-guide",
+                "title": "Quick Start Guide",
+                "description": "Step-by-step technical guide to bootstrapping a decorator-free Xeno application workspace using the AppBuilder configuration API and the CQRS Mediator.",
+                "source": "@site/../documentation/getting-started/quick-start-guide.md",
+                "sourceDirName": "getting-started",
+                "slug": "/getting-started/quick-start-guide",
+                "permalink": "/docs/getting-started/quick-start-guide",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/quick-start-guide.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 5,
+                "frontMatter": {
+                  "title": "Quick Start Guide",
+                  "sidebar_position": 5,
+                  "description": "Step-by-step technical guide to bootstrapping a decorator-free Xeno application workspace using the AppBuilder configuration API and the CQRS Mediator.",
+                  "keywords": [
+                    "xeno appbuilder configuration",
+                    "bootstrap cqrs typescript",
+                    "mediator dispatch execution",
+                    "clean architecture scaffolding",
+                    "typescript dependency injection"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Why Choose Xeno? An Architectural Deep-Dive",
+                  "permalink": "/docs/getting-started/why-this-framework"
+                },
+                "next": {
+                  "title": "Core Architecture & Lifecycle",
+                  "permalink": "/docs/core-architecture/"
+                }
+              },
+              {
+                "id": "getting-started/README",
+                "title": "Getting Started",
+                "description": "Introduction to the Xeno framework installation, core directory structure, and initial application bootstrapping.",
+                "source": "@site/../documentation/getting-started/README.md",
+                "sourceDirName": "getting-started",
+                "slug": "/getting-started/",
+                "permalink": "/docs/getting-started/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 1,
+                "frontMatter": {
+                  "title": "Getting Started",
+                  "sidebar_position": 1,
+                  "description": "Introduction to the Xeno framework installation, core directory structure, and initial application bootstrapping.",
+                  "keywords": [
+                    "xeno getting started",
+                    "introduction",
+                    "clean architecture",
+                    "quick start"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "next": {
+                  "title": "Introduction & Philosophy",
+                  "permalink": "/docs/getting-started/introduction-philosophy"
+                }
+              },
+              {
+                "id": "getting-started/why-this-framework",
+                "title": "Why Choose Xeno? An Architectural Deep-Dive",
+                "description": "Technical engineering analysis of the structural guardrails, distributed resilience subsystems, and compile-time type invariants provided by the Xeno framework core.",
+                "source": "@site/../documentation/getting-started/why-this-framework.md",
+                "sourceDirName": "getting-started",
+                "slug": "/getting-started/why-this-framework",
+                "permalink": "/docs/getting-started/why-this-framework",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/why-this-framework.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Why Choose Xeno? An Architectural Deep-Dive",
+                  "sidebar_position": 4,
+                  "description": "Technical engineering analysis of the structural guardrails, distributed resilience subsystems, and compile-time type invariants provided by the Xeno framework core.",
+                  "keywords": [
+                    "xeno framework advantages",
+                    "compile time architecture guardrails",
+                    "distributed system resilience typescript",
+                    "nominal typing dependency injection",
+                    "multi tenant isolation saas factory"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Architectural Layers & Boundaries",
+                  "permalink": "/docs/getting-started/architectural-layers-boundaries"
+                },
+                "next": {
+                  "title": "Quick Start Guide",
+                  "permalink": "/docs/getting-started/quick-start-guide"
+                }
+              },
+              {
+                "id": "http-requests-resilience/http-client-configuration",
+                "title": "HTTP Client Configuration",
+                "description": "Technical developer guide on configuring, initializing, and isolating outbound HTTP clients and custom injection tokens in the Xeno framework.",
+                "source": "@site/../documentation/http-requests-resilience/http-client-configuration.md",
+                "sourceDirName": "http-requests-resilience",
+                "slug": "/http-requests-resilience/http-client-configuration",
+                "permalink": "/docs/http-requests-resilience/http-client-configuration",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/http-client-configuration.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "HTTP Client Configuration",
+                  "sidebar_position": 2,
+                  "description": "Technical developer guide on configuring, initializing, and isolating outbound HTTP clients and custom injection tokens in the Xeno framework.",
+                  "keywords": [
+                    "http client",
+                    "xeno core",
+                    "httpconfig",
+                    "appbuilder http",
+                    "multi-tenant client",
+                    "dependency injection tokens"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "HTTP Requests & Resilience Subsystem",
+                  "permalink": "/docs/http-requests-resilience/"
+                },
+                "next": {
+                  "title": "Resilience & Fault-Tolerance Policies",
+                  "permalink": "/docs/http-requests-resilience/resilience-policies"
+                }
+              },
+              {
+                "id": "http-requests-resilience/README",
+                "title": "HTTP Requests & Resilience Subsystem",
+                "description": "Technical index and architectural overview of the Xeno out-of-process HTTP communication layer and self-healing resilience policies.",
+                "source": "@site/../documentation/http-requests-resilience/README.md",
+                "sourceDirName": "http-requests-resilience",
+                "slug": "/http-requests-resilience/",
+                "permalink": "/docs/http-requests-resilience/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 8,
+                "frontMatter": {
+                  "title": "HTTP Requests & Resilience Subsystem",
+                  "sidebar_position": 8,
+                  "slug": "./",
+                  "description": "Technical index and architectural overview of the Xeno out-of-process HTTP communication layer and self-healing resilience policies.",
+                  "keywords": [
+                    "http core",
+                    "service resilience",
+                    "remote data source",
+                    "circuit breaker",
+                    "retry policy",
+                    "bulkhead isolation",
+                    "xeno core"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Repositories & DAOs Design Patterns",
+                  "permalink": "/docs/database-persistence/repositories-daos-design-patterns"
+                },
+                "next": {
+                  "title": "HTTP Client Configuration",
+                  "permalink": "/docs/http-requests-resilience/http-client-configuration"
+                }
+              },
+              {
+                "id": "http-requests-resilience/remote-data-source-gateways",
+                "title": "Remote Data Source Gateways",
+                "description": "Technical developer manual on utilizing the Xeno IRemoteDataSource gateway to isolate outbound HTTP client calls behind fault-tolerant infrastructure abstractions.",
+                "source": "@site/../documentation/http-requests-resilience/remote-data-source-gateways.md",
+                "sourceDirName": "http-requests-resilience",
+                "slug": "/http-requests-resilience/remote-data-source-gateways",
+                "permalink": "/docs/http-requests-resilience/remote-data-source-gateways",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/remote-data-source-gateways.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Remote Data Source Gateways",
+                  "sidebar_position": 4,
+                  "description": "Technical developer manual on utilizing the Xeno IRemoteDataSource gateway to isolate outbound HTTP client calls behind fault-tolerant infrastructure abstractions.",
+                  "keywords": [
+                    "remote data source",
+                    "http gateway",
+                    "xeno core",
+                    "httprequest contract",
+                    "out-of-process communication",
+                    "appbuilder http core"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Resilience & Fault-Tolerance Policies",
+                  "permalink": "/docs/http-requests-resilience/resilience-policies"
+                },
+                "next": {
+                  "title": "Caching & Idempotency Store Layer",
+                  "permalink": "/docs/caching-idempotency-store/"
+                }
+              },
+              {
+                "id": "http-requests-resilience/resilience-policies",
+                "title": "Resilience & Fault-Tolerance Policies",
+                "description": "Technical developer manual explaining Xeno service resilience configurations, circuit breaker states, exponential backoff with jitter, and bulkhead isolation.",
+                "source": "@site/../documentation/http-requests-resilience/resilience-policies.md",
+                "sourceDirName": "http-requests-resilience",
+                "slug": "/http-requests-resilience/resilience-policies",
+                "permalink": "/docs/http-requests-resilience/resilience-policies",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/resilience-policies.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Resilience & Fault-Tolerance Policies",
+                  "sidebar_position": 3,
+                  "description": "Technical developer manual explaining Xeno service resilience configurations, circuit breaker states, exponential backoff with jitter, and bulkhead isolation.",
+                  "keywords": [
+                    "service resilience",
+                    "fault tolerance",
+                    "circuit breaker ddd",
+                    "bulkhead isolation",
+                    "exponential retry backoff",
+                    "cockatiel policies"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "HTTP Client Configuration",
+                  "permalink": "/docs/http-requests-resilience/http-client-configuration"
+                },
+                "next": {
+                  "title": "Remote Data Source Gateways",
+                  "permalink": "/docs/http-requests-resilience/remote-data-source-gateways"
+                }
+              },
+              {
+                "id": "presentation-layer-response-contracts/base-controller",
+                "title": "Base Controller",
+                "description": "Technical developer manual detailing the abstract BaseController class architecture, request ingress processing, and mediator execution routing in Xeno.",
+                "source": "@site/../documentation/presentation-layer-response-contracts/base-controller.md",
+                "sourceDirName": "presentation-layer-response-contracts",
+                "slug": "/presentation-layer-response-contracts/base-controller",
+                "permalink": "/docs/presentation-layer-response-contracts/base-controller",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/base-controller.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "Base Controller",
+                  "sidebar_position": 2,
+                  "description": "Technical developer manual detailing the abstract BaseController class architecture, request ingress processing, and mediator execution routing in Xeno.",
+                  "keywords": [
+                    "base controller",
+                    "request ingress",
+                    "xeno core",
+                    "response dto",
+                    "input mapping",
+                    "abstract controller"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Presentation Layer Overview",
+                  "permalink": "/docs/presentation-layer-response-contracts/"
+                },
+                "next": {
+                  "title": "README",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/"
+                }
+              },
+              {
+                "id": "presentation-layer-response-contracts/README",
+                "title": "Presentation Layer Overview",
+                "description": "Technical index and architectural overview of the Presentation Layer, agnostic ingress controllers, and HTTP response standardization structures in Xeno.",
+                "source": "@site/../documentation/presentation-layer-response-contracts/README.md",
+                "sourceDirName": "presentation-layer-response-contracts",
+                "slug": "/presentation-layer-response-contracts/",
+                "permalink": "/docs/presentation-layer-response-contracts/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 11,
+                "frontMatter": {
+                  "title": "Presentation Layer Overview",
+                  "sidebar_position": 11,
+                  "slug": "./",
+                  "description": "Technical index and architectural overview of the Presentation Layer, agnostic ingress controllers, and HTTP response standardization structures in Xeno.",
+                  "keywords": [
+                    "xeno presentation layer",
+                    "base controller",
+                    "http response standardization",
+                    "http helper dto",
+                    "cqrs request ingress"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Configuring Sentry Error Tracking",
+                  "permalink": "/docs/telemetry-logging/configure-sentry"
+                },
+                "next": {
+                  "title": "Base Controller",
+                  "permalink": "/docs/presentation-layer-response-contracts/base-controller"
+                }
+              },
+              {
+                "id": "presentation-layer-response-contracts/standardize-http-response/error-response",
+                "title": "error-response",
+                "description": "",
+                "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/error-response.md",
+                "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+                "slug": "/presentation-layer-response-contracts/standardize-http-response/error-response",
+                "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/error-response",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/error-response.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "README",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/"
+                },
+                "next": {
+                  "title": "http-helper",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/http-helper"
+                }
+              },
+              {
+                "id": "presentation-layer-response-contracts/standardize-http-response/http-helper",
+                "title": "http-helper",
+                "description": "",
+                "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/http-helper.md",
+                "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+                "slug": "/presentation-layer-response-contracts/standardize-http-response/http-helper",
+                "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/http-helper",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/http-helper.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "error-response",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/error-response"
+                },
+                "next": {
+                  "title": "paginated-response",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/paginated-response"
+                }
+              },
+              {
+                "id": "presentation-layer-response-contracts/standardize-http-response/paginated-response",
+                "title": "paginated-response",
+                "description": "",
+                "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/paginated-response.md",
+                "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+                "slug": "/presentation-layer-response-contracts/standardize-http-response/paginated-response",
+                "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/paginated-response",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/paginated-response.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "http-helper",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/http-helper"
+                },
+                "next": {
+                  "title": "success-response",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/success-response"
+                }
+              },
+              {
+                "id": "presentation-layer-response-contracts/standardize-http-response/README",
+                "title": "README",
+                "description": "",
+                "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/README.md",
+                "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+                "slug": "/presentation-layer-response-contracts/standardize-http-response/",
+                "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/README.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Base Controller",
+                  "permalink": "/docs/presentation-layer-response-contracts/base-controller"
+                },
+                "next": {
+                  "title": "error-response",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/error-response"
+                }
+              },
+              {
+                "id": "presentation-layer-response-contracts/standardize-http-response/success-response",
+                "title": "success-response",
+                "description": "",
+                "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/success-response.md",
+                "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+                "slug": "/presentation-layer-response-contracts/standardize-http-response/success-response",
+                "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/success-response",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/success-response.md",
+                "tags": [],
+                "version": "current",
+                "frontMatter": {},
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "paginated-response",
+                  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/paginated-response"
+                },
+                "next": { "title": "README", "permalink": "/docs/community-open-source/" }
+              },
+              {
+                "id": "telemetry-logging/configure-console",
+                "title": "Configuring Console Logging",
+                "description": "Technical developer manual on activating, tuning, and filtering local terminal stdout streams using the native Xeno Console Logger.",
+                "source": "@site/../documentation/telemetry-logging/configure-console.md",
+                "sourceDirName": "telemetry-logging",
+                "slug": "/telemetry-logging/configure-console",
+                "permalink": "/docs/telemetry-logging/configure-console",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/configure-console.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 2,
+                "frontMatter": {
+                  "title": "Configuring Console Logging",
+                  "sidebar_position": 2,
+                  "description": "Technical developer manual on activating, tuning, and filtering local terminal stdout streams using the native Xeno Console Logger.",
+                  "keywords": [
+                    "console logger",
+                    "telemetry logging",
+                    "stdout streams",
+                    "log levels",
+                    "xeno core",
+                    "appbuilder logger"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Telemetry & Logging Layer",
+                  "permalink": "/docs/telemetry-logging/"
+                },
+                "next": {
+                  "title": "Configuring Pino Structured Logging",
+                  "permalink": "/docs/telemetry-logging/configure-pino"
+                }
+              },
+              {
+                "id": "telemetry-logging/configure-pino",
+                "title": "Configuring Pino Structured Logging",
+                "description": "Technical developer manual on activating, configuring, and optimizing JSON structured log streams using the Pino logger in the Xeno framework.",
+                "source": "@site/../documentation/telemetry-logging/configure-pino.md",
+                "sourceDirName": "telemetry-logging",
+                "slug": "/telemetry-logging/configure-pino",
+                "permalink": "/docs/telemetry-logging/configure-pino",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/configure-pino.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 3,
+                "frontMatter": {
+                  "title": "Configuring Pino Structured Logging",
+                  "sidebar_position": 3,
+                  "description": "Technical developer manual on activating, configuring, and optimizing JSON structured log streams using the Pino logger in the Xeno framework.",
+                  "keywords": [
+                    "pino logger",
+                    "structured logging",
+                    "json logs",
+                    "log management",
+                    "xeno core",
+                    "telemetry logger"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Configuring Console Logging",
+                  "permalink": "/docs/telemetry-logging/configure-console"
+                },
+                "next": {
+                  "title": "Configuring Sentry Error Tracking",
+                  "permalink": "/docs/telemetry-logging/configure-sentry"
+                }
+              },
+              {
+                "id": "telemetry-logging/configure-sentry",
+                "title": "Configuring Sentry Error Tracking",
+                "description": "Technical developer manual on activating, configuring, and utilizing the Sentry exception logging client in Xeno to capture application crashes.",
+                "source": "@site/../documentation/telemetry-logging/configure-sentry.md",
+                "sourceDirName": "telemetry-logging",
+                "slug": "/telemetry-logging/configure-sentry",
+                "permalink": "/docs/telemetry-logging/configure-sentry",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/configure-sentry.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 4,
+                "frontMatter": {
+                  "title": "Configuring Sentry Error Tracking",
+                  "sidebar_position": 4,
+                  "description": "Technical developer manual on activating, configuring, and utilizing the Sentry exception logging client in Xeno to capture application crashes.",
+                  "keywords": [
+                    "sentry logging",
+                    "error tracking",
+                    "crash reporting",
+                    "cloud telemetry",
+                    "xeno core",
+                    "exception pipeline"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Configuring Pino Structured Logging",
+                  "permalink": "/docs/telemetry-logging/configure-pino"
+                },
+                "next": {
+                  "title": "Presentation Layer Overview",
+                  "permalink": "/docs/presentation-layer-response-contracts/"
+                }
+              },
+              {
+                "id": "telemetry-logging/README",
+                "title": "Telemetry & Logging Layer",
+                "description": "Technical index and architectural manual for configuring the logging infrastructure, monitoring providers, and cross-cutting performance pipelines in Xeno.",
+                "source": "@site/../documentation/telemetry-logging/README.md",
+                "sourceDirName": "telemetry-logging",
+                "slug": "/telemetry-logging/",
+                "permalink": "/docs/telemetry-logging/",
+                "draft": false,
+                "unlisted": false,
+                "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/README.md",
+                "tags": [],
+                "version": "current",
+                "sidebarPosition": 10,
+                "frontMatter": {
+                  "title": "Telemetry & Logging Layer",
+                  "sidebar_position": 10,
+                  "slug": "./",
+                  "description": "Technical index and architectural manual for configuring the logging infrastructure, monitoring providers, and cross-cutting performance pipelines in Xeno.",
+                  "keywords": [
+                    "telemetry logging",
+                    "pino logger",
+                    "sentry integration",
+                    "logging pipeline",
+                    "performance pipeline",
+                    "xeno core"
+                  ]
+                },
+                "sidebar": "tutorialSidebar",
+                "previous": {
+                  "title": "Distributed Redis Cache Configuration",
+                  "permalink": "/docs/caching-idempotency-store/redis-provider"
+                },
+                "next": {
+                  "title": "Configuring Console Logging",
+                  "permalink": "/docs/telemetry-logging/configure-console"
+                }
+              }
+            ],
+            "drafts": [],
+            "sidebars": {
+              "tutorialSidebar": [
+                {
+                  "type": "category",
+                  "label": "Getting Started",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    { "type": "doc", "id": "getting-started/introduction-philosophy" },
+                    { "type": "doc", "id": "getting-started/architectural-layers-boundaries" },
+                    { "type": "doc", "id": "getting-started/why-this-framework" },
+                    { "type": "doc", "id": "getting-started/quick-start-guide" }
+                  ],
+                  "link": { "type": "doc", "id": "getting-started/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Core Architecture & Lifecycle",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "core-architecture/application-hosting-bootstrap-engine"
+                    },
+                    { "type": "doc", "id": "core-architecture/ioc-container-service-lifetimes" },
+                    { "type": "doc", "id": "core-architecture/module-composition-pattern" }
+                  ],
+                  "link": { "type": "doc", "id": "core-architecture/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Domain-Driven Design (DDD) Core Building Blocks",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    { "type": "doc", "id": "domain-driven-design/entities-unique-identifiers" },
+                    {
+                      "type": "doc",
+                      "id": "domain-driven-design/value-objects-defensive-immutability"
+                    },
+                    { "type": "doc", "id": "domain-driven-design/functional-monads-core-errors" }
+                  ],
+                  "link": { "type": "doc", "id": "domain-driven-design/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Execution Context & Middleware Layer",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "execution-context-middleware/request-identity-storage-lifecycle"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "execution-context-middleware/execution-context-composition"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "execution-context-middleware/transportation-contract-metadata-headers"
+                    }
+                  ],
+                  "link": { "type": "doc", "id": "execution-context-middleware/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Authentication & Identity Subsystem",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    { "type": "doc", "id": "authentication/how-works-gate-keeper" },
+                    { "type": "doc", "id": "authentication/supabase-configuration" }
+                  ],
+                  "link": { "type": "doc", "id": "authentication/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "CQRS Pipeline Architecture",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "cqrs-pipeline-architecture/mediator-dispatcher-engine"
+                    },
+                    { "type": "doc", "id": "cqrs-pipeline-architecture/application-base-handler" },
+                    {
+                      "type": "category",
+                      "label": "Pipeline Behaviors Core Fundamentals",
+                      "collapsible": true,
+                      "collapsed": true,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior"
+                        }
+                      ],
+                      "link": {
+                        "type": "doc",
+                        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README"
+                      }
+                    }
+                  ],
+                  "link": { "type": "doc", "id": "cqrs-pipeline-architecture/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Database Persistence Layer",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "database-persistence/database-bootstrapping/README",
+                      "label": "Database Client & Schema Bootstrapping"
+                    },
+                    { "type": "doc", "id": "database-persistence/datasources-execution-topology" },
+                    {
+                      "type": "doc",
+                      "id": "database-persistence/fluent-query-filter-compiler-grid"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "database-persistence/repositories-daos-design-patterns"
+                    }
+                  ],
+                  "link": { "type": "doc", "id": "database-persistence/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "HTTP Requests & Resilience Subsystem",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    { "type": "doc", "id": "http-requests-resilience/http-client-configuration" },
+                    { "type": "doc", "id": "http-requests-resilience/resilience-policies" },
+                    { "type": "doc", "id": "http-requests-resilience/remote-data-source-gateways" }
+                  ],
+                  "link": { "type": "doc", "id": "http-requests-resilience/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Caching & Idempotency Store Layer",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    { "type": "doc", "id": "caching-idempotency-store/in-memory-provider" },
+                    { "type": "doc", "id": "caching-idempotency-store/redis-provider" }
+                  ],
+                  "link": { "type": "doc", "id": "caching-idempotency-store/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Telemetry & Logging Layer",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    { "type": "doc", "id": "telemetry-logging/configure-console" },
+                    { "type": "doc", "id": "telemetry-logging/configure-pino" },
+                    { "type": "doc", "id": "telemetry-logging/configure-sentry" }
+                  ],
+                  "link": { "type": "doc", "id": "telemetry-logging/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "Presentation Layer Overview",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "presentation-layer-response-contracts/base-controller"
+                    },
+                    {
+                      "type": "category",
+                      "label": "README",
+                      "collapsible": true,
+                      "collapsed": true,
+                      "items": [
+                        {
+                          "type": "doc",
+                          "id": "presentation-layer-response-contracts/standardize-http-response/error-response"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "presentation-layer-response-contracts/standardize-http-response/http-helper"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "presentation-layer-response-contracts/standardize-http-response/paginated-response"
+                        },
+                        {
+                          "type": "doc",
+                          "id": "presentation-layer-response-contracts/standardize-http-response/success-response"
+                        }
+                      ],
+                      "link": {
+                        "type": "doc",
+                        "id": "presentation-layer-response-contracts/standardize-http-response/README"
+                      }
+                    }
+                  ],
+                  "link": { "type": "doc", "id": "presentation-layer-response-contracts/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "README",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    { "type": "doc", "id": "community-open-source/contributing-guide" },
+                    { "type": "doc", "id": "community-open-source/support-appreciation" }
+                  ],
+                  "link": { "type": "doc", "id": "community-open-source/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "README",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "defensive-toolkit-utilities/core-framework-utility-helpers"
+                    },
+                    { "type": "doc", "id": "defensive-toolkit-utilities/defensive-type-guards" }
+                  ],
+                  "link": { "type": "doc", "id": "defensive-toolkit-utilities/README" }
+                },
+                {
+                  "type": "category",
+                  "label": "README",
+                  "collapsible": true,
+                  "collapsed": true,
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "developer-ecosystem/enterprise-project-scaffolding-cli"
+                    }
+                  ],
+                  "link": { "type": "doc", "id": "developer-ecosystem/README" }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "docusaurus-plugin-content-pages": {
+      "default": [{ "type": "jsx", "permalink": "/", "source": "@site/src/pages/index.tsx" }]
+    },
+    "docusaurus-plugin-debug": {},
+    "docusaurus-plugin-svgr": {},
+    "docusaurus-theme-classic": {},
+    "docusaurus-bootstrap-plugin": {},
+    "docusaurus-mdx-fallback-plugin": {}
+  }
+}

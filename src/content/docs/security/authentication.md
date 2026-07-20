@@ -129,6 +129,11 @@ failure to the framework's error serialization mechanism.
   the endpoint path, unique `correlationId` tracking flags, a `requestId`
   parameter, and an ISO 8601 server `timestamp`.
 
+- **Audit Logging Behavior**: Authentication failures do not trigger
+  server-level `error` hooks. The framework logs credentials rejections under
+  the `warn` log level to prevent distributed telemetry poisoning and false
+  alerts inside alerting systems like Sentry.
+
 ---
 
 ## Configuring Supabase Authentication via the AppBuilder Utility

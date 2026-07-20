@@ -1,0 +1,37 @@
+{
+  "id": "domain-driven-design/entities-unique-identifiers",
+  "title": "Entities & Unique Identifiers",
+  "description": "Reference documentation for the Entity<T> abstract base class and the UniqueId type wrapper in Xeno. Covers identity management, immutability enforcement, state isolation, and implementation patterns for domain entities.",
+  "source": "@site/../documentation/domain-driven-design/entities-unique-identifiers.md",
+  "sourceDirName": "domain-driven-design",
+  "slug": "/domain-driven-design/entities-unique-identifiers",
+  "permalink": "/docs/domain-driven-design/entities-unique-identifiers",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/entities-unique-identifiers.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Entities & Unique Identifiers",
+    "sidebar_position": 2,
+    "description": "Reference documentation for the Entity<T> abstract base class and the UniqueId type wrapper in Xeno. Covers identity management, immutability enforcement, state isolation, and implementation patterns for domain entities.",
+    "keywords": [
+      "domain entities",
+      "aggregate root",
+      "uniqueid",
+      "immutability",
+      "ddd building blocks",
+      "type safety"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Domain-Driven Design (DDD) Core Building Blocks",
+    "permalink": "/docs/domain-driven-design/"
+  },
+  "next": {
+    "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+    "permalink": "/docs/domain-driven-design/value-objects-defensive-immutability"
+  }
+}

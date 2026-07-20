@@ -1,0 +1,37 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+  "title": "Validation Pipeline Behavior",
+  "description": "Technical developer manual explaining how to configure the Xeno ValidationPipeline, build custom strategies using BaseValidationStrategy, and utilize the validator service.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "title": "Validation Pipeline Behavior",
+    "sidebar_position": 7,
+    "description": "Technical developer manual explaining how to configure the Xeno ValidationPipeline, build custom strategies using BaseValidationStrategy, and utilize the validator service.",
+    "keywords": [
+      "validation pipeline",
+      "xeno core",
+      "custom validation strategy",
+      "basevalidationstrategy",
+      "ivalidatorservice",
+      "input verification"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Authorization Pipeline & Custom Security Strategies",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior"
+  },
+  "next": {
+    "title": "Concurrency & Retry Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior"
+  }
+}

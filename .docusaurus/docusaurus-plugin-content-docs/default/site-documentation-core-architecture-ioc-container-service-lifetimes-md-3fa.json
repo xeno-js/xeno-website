@@ -1,0 +1,38 @@
+{
+  "id": "core-architecture/ioc-container-service-lifetimes",
+  "title": "The IoC Container & Service Lifetimes",
+  "description": "How Xeno manages dependency resolution with Singleton, Scoped, and Transient lifetimes, including scope creation and deterministic disposal.",
+  "source": "@site/../documentation/core-architecture/ioc-container-service-lifetimes.md",
+  "sourceDirName": "core-architecture",
+  "slug": "/core-architecture/ioc-container-service-lifetimes",
+  "permalink": "/docs/core-architecture/ioc-container-service-lifetimes",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/ioc-container-service-lifetimes.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "The IoC Container & Service Lifetimes",
+    "sidebar_position": 2,
+    "description": "How Xeno manages dependency resolution with Singleton, Scoped, and Transient lifetimes, including scope creation and deterministic disposal.",
+    "keywords": [
+      "ioc container",
+      "dependency injection",
+      "service lifetimes",
+      "singleton",
+      "scoped lifetime",
+      "transient",
+      "resource disposal"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Application Hosting & Bootstrap Engine",
+    "permalink": "/docs/core-architecture/application-hosting-bootstrap-engine"
+  },
+  "next": {
+    "title": "Module Composition Pattern",
+    "permalink": "/docs/core-architecture/module-composition-pattern"
+  }
+}

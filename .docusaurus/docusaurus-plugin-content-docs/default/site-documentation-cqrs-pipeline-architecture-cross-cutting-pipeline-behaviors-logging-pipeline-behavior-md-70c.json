@@ -1,0 +1,37 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+  "title": "Logging & Performance Pipeline Behaviors",
+  "description": "Technical developer manual explaining Xeno native observability pipeline behaviors for automatic request logging and execution performance profiling.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Logging & Performance Pipeline Behaviors",
+    "sidebar_position": 2,
+    "description": "Technical developer manual explaining Xeno native observability pipeline behaviors for automatic request logging and execution performance profiling.",
+    "keywords": [
+      "logging pipeline",
+      "performance pipeline",
+      "xeno core",
+      "observability",
+      "request tracking",
+      "runtime profiling"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Exception Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior"
+  },
+  "next": {
+    "title": "Idempotency Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior"
+  }
+}

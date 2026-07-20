@@ -1,0 +1,37 @@
+{
+  "id": "authentication/supabase-configuration",
+  "title": "Supabase Client & Auth Configuration",
+  "description": "Technical developer manual on configuring the native Supabase identity provider and extending the framework using custom authentication services.",
+  "source": "@site/../documentation/authentication/supabase-configuration.md",
+  "sourceDirName": "authentication",
+  "slug": "/authentication/supabase-configuration",
+  "permalink": "/docs/authentication/supabase-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/authentication/supabase-configuration.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Supabase Client & Auth Configuration",
+    "sidebar_position": 3,
+    "description": "Technical developer manual on configuring the native Supabase identity provider and extending the framework using custom authentication services.",
+    "keywords": [
+      "supabase auth",
+      "authclientconfig",
+      "custom auth service",
+      "identity provider",
+      "gatekeeper token",
+      "xeno core"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "How the Gatekeeper Operates",
+    "permalink": "/docs/authentication/how-works-gate-keeper"
+  },
+  "next": {
+    "title": "CQRS Pipeline Architecture",
+    "permalink": "/docs/cqrs-pipeline-architecture/"
+  }
+}

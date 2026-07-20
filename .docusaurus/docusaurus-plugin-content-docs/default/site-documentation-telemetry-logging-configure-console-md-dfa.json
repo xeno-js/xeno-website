@@ -1,0 +1,37 @@
+{
+  "id": "telemetry-logging/configure-console",
+  "title": "Configuring Console Logging",
+  "description": "Technical developer manual on activating, tuning, and filtering local terminal stdout streams using the native Xeno Console Logger.",
+  "source": "@site/../documentation/telemetry-logging/configure-console.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/configure-console",
+  "permalink": "/docs/telemetry-logging/configure-console",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/configure-console.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Configuring Console Logging",
+    "sidebar_position": 2,
+    "description": "Technical developer manual on activating, tuning, and filtering local terminal stdout streams using the native Xeno Console Logger.",
+    "keywords": [
+      "console logger",
+      "telemetry logging",
+      "stdout streams",
+      "log levels",
+      "xeno core",
+      "appbuilder logger"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Telemetry & Logging Layer",
+    "permalink": "/docs/telemetry-logging/"
+  },
+  "next": {
+    "title": "Configuring Pino Structured Logging",
+    "permalink": "/docs/telemetry-logging/configure-pino"
+  }
+}

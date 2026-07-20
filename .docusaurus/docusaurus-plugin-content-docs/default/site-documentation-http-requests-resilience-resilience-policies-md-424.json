@@ -1,0 +1,37 @@
+{
+  "id": "http-requests-resilience/resilience-policies",
+  "title": "Resilience & Fault-Tolerance Policies",
+  "description": "Technical developer manual explaining Xeno service resilience configurations, circuit breaker states, exponential backoff with jitter, and bulkhead isolation.",
+  "source": "@site/../documentation/http-requests-resilience/resilience-policies.md",
+  "sourceDirName": "http-requests-resilience",
+  "slug": "/http-requests-resilience/resilience-policies",
+  "permalink": "/docs/http-requests-resilience/resilience-policies",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/resilience-policies.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Resilience & Fault-Tolerance Policies",
+    "sidebar_position": 3,
+    "description": "Technical developer manual explaining Xeno service resilience configurations, circuit breaker states, exponential backoff with jitter, and bulkhead isolation.",
+    "keywords": [
+      "service resilience",
+      "fault tolerance",
+      "circuit breaker ddd",
+      "bulkhead isolation",
+      "exponential retry backoff",
+      "cockatiel policies"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "HTTP Client Configuration",
+    "permalink": "/docs/http-requests-resilience/http-client-configuration"
+  },
+  "next": {
+    "title": "Remote Data Source Gateways",
+    "permalink": "/docs/http-requests-resilience/remote-data-source-gateways"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "id": "database-persistence/README",
+  "title": "Database Persistence Layer",
+  "description": "Technical index and architectural overview of the database module, transactional unit of work context, and structural repository pattern in Xeno.",
+  "source": "@site/../documentation/database-persistence/README.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/",
+  "permalink": "/docs/database-persistence/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "title": "Database Persistence Layer",
+    "sidebar_position": 7,
+    "slug": "./",
+    "description": "Technical index and architectural overview of the database module, transactional unit of work context, and structural repository pattern in Xeno.",
+    "keywords": [
+      "database persistence",
+      "drizzle orm",
+      "repository pattern",
+      "db context",
+      "transaction management",
+      "xeno core"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Query Caching Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior"
+  },
+  "next": {
+    "title": "Database Client & Schema Bootstrapping",
+    "permalink": "/docs/database-persistence/database-bootstrapping/"
+  }
+}

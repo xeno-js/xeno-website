@@ -1,0 +1,37 @@
+{
+  "id": "http-requests-resilience/http-client-configuration",
+  "title": "HTTP Client Configuration",
+  "description": "Technical developer guide on configuring, initializing, and isolating outbound HTTP clients and custom injection tokens in the Xeno framework.",
+  "source": "@site/../documentation/http-requests-resilience/http-client-configuration.md",
+  "sourceDirName": "http-requests-resilience",
+  "slug": "/http-requests-resilience/http-client-configuration",
+  "permalink": "/docs/http-requests-resilience/http-client-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/http-client-configuration.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "HTTP Client Configuration",
+    "sidebar_position": 2,
+    "description": "Technical developer guide on configuring, initializing, and isolating outbound HTTP clients and custom injection tokens in the Xeno framework.",
+    "keywords": [
+      "http client",
+      "xeno core",
+      "httpconfig",
+      "appbuilder http",
+      "multi-tenant client",
+      "dependency injection tokens"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "HTTP Requests & Resilience Subsystem",
+    "permalink": "/docs/http-requests-resilience/"
+  },
+  "next": {
+    "title": "Resilience & Fault-Tolerance Policies",
+    "permalink": "/docs/http-requests-resilience/resilience-policies"
+  }
+}

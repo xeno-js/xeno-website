@@ -1,0 +1,36 @@
+{
+  "id": "getting-started/why-this-framework",
+  "title": "Why Choose Xeno? An Architectural Deep-Dive",
+  "description": "Technical engineering analysis of the structural guardrails, distributed resilience subsystems, and compile-time type invariants provided by the Xeno framework core.",
+  "source": "@site/../documentation/getting-started/why-this-framework.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/why-this-framework",
+  "permalink": "/docs/getting-started/why-this-framework",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/why-this-framework.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Why Choose Xeno? An Architectural Deep-Dive",
+    "sidebar_position": 4,
+    "description": "Technical engineering analysis of the structural guardrails, distributed resilience subsystems, and compile-time type invariants provided by the Xeno framework core.",
+    "keywords": [
+      "xeno framework advantages",
+      "compile time architecture guardrails",
+      "distributed system resilience typescript",
+      "nominal typing dependency injection",
+      "multi tenant isolation saas factory"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Architectural Layers & Boundaries",
+    "permalink": "/docs/getting-started/architectural-layers-boundaries"
+  },
+  "next": {
+    "title": "Quick Start Guide",
+    "permalink": "/docs/getting-started/quick-start-guide"
+  }
+}

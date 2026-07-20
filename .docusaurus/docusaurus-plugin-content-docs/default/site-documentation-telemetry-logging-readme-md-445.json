@@ -1,0 +1,38 @@
+{
+  "id": "telemetry-logging/README",
+  "title": "Telemetry & Logging Layer",
+  "description": "Technical index and architectural manual for configuring the logging infrastructure, monitoring providers, and cross-cutting performance pipelines in Xeno.",
+  "source": "@site/../documentation/telemetry-logging/README.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/",
+  "permalink": "/docs/telemetry-logging/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "title": "Telemetry & Logging Layer",
+    "sidebar_position": 10,
+    "slug": "./",
+    "description": "Technical index and architectural manual for configuring the logging infrastructure, monitoring providers, and cross-cutting performance pipelines in Xeno.",
+    "keywords": [
+      "telemetry logging",
+      "pino logger",
+      "sentry integration",
+      "logging pipeline",
+      "performance pipeline",
+      "xeno core"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Distributed Redis Cache Configuration",
+    "permalink": "/docs/caching-idempotency-store/redis-provider"
+  },
+  "next": {
+    "title": "Configuring Console Logging",
+    "permalink": "/docs/telemetry-logging/configure-console"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "telemetry-logging/configure-sentry",
+  "title": "Configuring Sentry Error Tracking",
+  "description": "Technical developer manual on activating, configuring, and utilizing the Sentry exception logging client in Xeno to capture application crashes.",
+  "source": "@site/../documentation/telemetry-logging/configure-sentry.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/configure-sentry",
+  "permalink": "/docs/telemetry-logging/configure-sentry",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/configure-sentry.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Configuring Sentry Error Tracking",
+    "sidebar_position": 4,
+    "description": "Technical developer manual on activating, configuring, and utilizing the Sentry exception logging client in Xeno to capture application crashes.",
+    "keywords": [
+      "sentry logging",
+      "error tracking",
+      "crash reporting",
+      "cloud telemetry",
+      "xeno core",
+      "exception pipeline"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Configuring Pino Structured Logging",
+    "permalink": "/docs/telemetry-logging/configure-pino"
+  },
+  "next": {
+    "title": "Presentation Layer Overview",
+    "permalink": "/docs/presentation-layer-response-contracts/"
+  }
+}

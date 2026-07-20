@@ -1,0 +1,36 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README",
+  "title": "Pipeline Behaviors Core Fundamentals",
+  "description": "Technical design manual explaining the Xeno native pipeline behavior architecture, the CompositePipeline engine, and configuration models via AppBuilder.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Pipeline Behaviors Core Fundamentals",
+    "slug": "./",
+    "description": "Technical design manual explaining the Xeno native pipeline behavior architecture, the CompositePipeline engine, and configuration models via AppBuilder.",
+    "keywords": [
+      "pipeline behaviors",
+      "xeno core",
+      "composite pipeline",
+      "cqrs middleware",
+      "framework configuration",
+      "appbuilder pipelines"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Application Base Handler",
+    "permalink": "/docs/cqrs-pipeline-architecture/application-base-handler"
+  },
+  "next": {
+    "title": "Exception Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior"
+  }
+}

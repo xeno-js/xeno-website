@@ -1,0 +1,37 @@
+{
+  "id": "http-requests-resilience/remote-data-source-gateways",
+  "title": "Remote Data Source Gateways",
+  "description": "Technical developer manual on utilizing the Xeno IRemoteDataSource gateway to isolate outbound HTTP client calls behind fault-tolerant infrastructure abstractions.",
+  "source": "@site/../documentation/http-requests-resilience/remote-data-source-gateways.md",
+  "sourceDirName": "http-requests-resilience",
+  "slug": "/http-requests-resilience/remote-data-source-gateways",
+  "permalink": "/docs/http-requests-resilience/remote-data-source-gateways",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/remote-data-source-gateways.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Remote Data Source Gateways",
+    "sidebar_position": 4,
+    "description": "Technical developer manual on utilizing the Xeno IRemoteDataSource gateway to isolate outbound HTTP client calls behind fault-tolerant infrastructure abstractions.",
+    "keywords": [
+      "remote data source",
+      "http gateway",
+      "xeno core",
+      "httprequest contract",
+      "out-of-process communication",
+      "appbuilder http core"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Resilience & Fault-Tolerance Policies",
+    "permalink": "/docs/http-requests-resilience/resilience-policies"
+  },
+  "next": {
+    "title": "Caching & Idempotency Store Layer",
+    "permalink": "/docs/caching-idempotency-store/"
+  }
+}

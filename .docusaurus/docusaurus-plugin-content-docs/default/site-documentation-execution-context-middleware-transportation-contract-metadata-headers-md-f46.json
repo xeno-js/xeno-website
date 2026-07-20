@@ -1,0 +1,37 @@
+{
+  "id": "execution-context-middleware/transportation-contract-metadata-headers",
+  "title": "Transportation Contract Metadata & Headers Extraction",
+  "description": "Technical documentation on how Xeno normalizes incoming transport layer headers into typed application metadata via the IServiceExtractor contract.",
+  "source": "@site/../documentation/execution-context-middleware/transportation-contract-metadata-headers.md",
+  "sourceDirName": "execution-context-middleware",
+  "slug": "/execution-context-middleware/transportation-contract-metadata-headers",
+  "permalink": "/docs/execution-context-middleware/transportation-contract-metadata-headers",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/transportation-contract-metadata-headers.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Transportation Contract Metadata & Headers Extraction",
+    "sidebar_position": 4,
+    "description": "Technical documentation on how Xeno normalizes incoming transport layer headers into typed application metadata via the IServiceExtractor contract.",
+    "keywords": [
+      "header extraction",
+      "iserviceextractor",
+      "metadata normalization",
+      "bearer token extractor",
+      "http headers",
+      "token parsing"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "ExecutionContext Composition",
+    "permalink": "/docs/execution-context-middleware/execution-context-composition"
+  },
+  "next": {
+    "title": "Authentication & Identity Subsystem",
+    "permalink": "/docs/authentication/"
+  }
+}

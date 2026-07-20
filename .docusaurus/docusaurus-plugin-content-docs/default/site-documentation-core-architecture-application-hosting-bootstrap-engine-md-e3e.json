@@ -1,0 +1,36 @@
+{
+  "id": "core-architecture/application-hosting-bootstrap-engine",
+  "title": "Application Hosting & Bootstrap Engine",
+  "description": "Technical design manual detailing the high-performance, decorator-free initialization lifecycle of Xeno applications using the programmatic AppBuilder engine.",
+  "source": "@site/../documentation/core-architecture/application-hosting-bootstrap-engine.md",
+  "sourceDirName": "core-architecture",
+  "slug": "/core-architecture/application-hosting-bootstrap-engine",
+  "permalink": "/docs/core-architecture/application-hosting-bootstrap-engine",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/application-hosting-bootstrap-engine.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Application Hosting & Bootstrap Engine",
+    "sidebar_position": 1,
+    "description": "Technical design manual detailing the high-performance, decorator-free initialization lifecycle of Xeno applications using the programmatic AppBuilder engine.",
+    "keywords": [
+      "xeno appbuilder",
+      "bootstrap lifecycle",
+      "application hosting",
+      "dependency container compilation",
+      "runtime initialization"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Core Architecture & Lifecycle",
+    "permalink": "/docs/core-architecture/"
+  },
+  "next": {
+    "title": "The IoC Container & Service Lifetimes",
+    "permalink": "/docs/core-architecture/ioc-container-service-lifetimes"
+  }
+}

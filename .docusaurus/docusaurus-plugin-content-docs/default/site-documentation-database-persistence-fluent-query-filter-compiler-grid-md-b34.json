@@ -1,0 +1,37 @@
+{
+  "id": "database-persistence/fluent-query-filter-compiler-grid",
+  "title": "Fluent Query & Filter Compiler Grid",
+  "description": "Technical manual explaining how to implement, register, and utilize IFilterBuilder to compile ReadCriteria and WriteCriteria into Drizzle ORM conditions.",
+  "source": "@site/../documentation/database-persistence/fluent-query-filter-compiler-grid.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/fluent-query-filter-compiler-grid",
+  "permalink": "/docs/database-persistence/fluent-query-filter-compiler-grid",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/fluent-query-filter-compiler-grid.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Fluent Query & Filter Compiler Grid",
+    "sidebar_position": 4,
+    "description": "Technical manual explaining how to implement, register, and utilize IFilterBuilder to compile ReadCriteria and WriteCriteria into Drizzle ORM conditions.",
+    "keywords": [
+      "filter builder",
+      "readcriteria",
+      "writecriteria",
+      "drizzle orm filters",
+      "projection compilation",
+      "xeno core"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Sources & Execution Topology",
+    "permalink": "/docs/database-persistence/datasources-execution-topology"
+  },
+  "next": {
+    "title": "Repositories & DAOs Design Patterns",
+    "permalink": "/docs/database-persistence/repositories-daos-design-patterns"
+  }
+}

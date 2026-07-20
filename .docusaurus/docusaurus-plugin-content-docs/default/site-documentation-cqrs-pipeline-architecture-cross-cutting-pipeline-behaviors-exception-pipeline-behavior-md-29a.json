@@ -1,0 +1,37 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+  "title": "Exception Pipeline Behavior",
+  "description": "Technical developer manual explaining the Xeno ExceptionPipeline behavior, unhandled exception capturing, and error normalization mechanics.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Exception Pipeline Behavior",
+    "sidebar_position": 1,
+    "description": "Technical developer manual explaining the Xeno ExceptionPipeline behavior, unhandled exception capturing, and error normalization mechanics.",
+    "keywords": [
+      "exception pipeline",
+      "error handling",
+      "xeno core",
+      "apperror normalization",
+      "cqrs exception interceptor",
+      "unhandled exceptions"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Pipeline Behaviors Core Fundamentals",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/"
+  },
+  "next": {
+    "title": "Logging & Performance Pipeline Behaviors",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior"
+  }
+}

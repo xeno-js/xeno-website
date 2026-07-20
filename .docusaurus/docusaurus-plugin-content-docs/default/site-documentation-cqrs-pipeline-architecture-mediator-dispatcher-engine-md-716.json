@@ -1,0 +1,37 @@
+{
+  "id": "cqrs-pipeline-architecture/mediator-dispatcher-engine",
+  "title": "The Mediator Dispatcher Engine",
+  "description": "Technical design manual detailing the architecture, message routing mechanics, and execution lifecycles of the centralized IMediator bus in Xeno.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/mediator-dispatcher-engine.md",
+  "sourceDirName": "cqrs-pipeline-architecture",
+  "slug": "/cqrs-pipeline-architecture/mediator-dispatcher-engine",
+  "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/mediator-dispatcher-engine.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "The Mediator Dispatcher Engine",
+    "sidebar_position": 2,
+    "description": "Technical design manual detailing the architecture, message routing mechanics, and execution lifecycles of the centralized IMediator bus in Xeno.",
+    "keywords": [
+      "mediator",
+      "cqrs dispatcher",
+      "command bus",
+      "query bus",
+      "pipeline routing",
+      "token lookup"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "CQRS Pipeline Architecture",
+    "permalink": "/docs/cqrs-pipeline-architecture/"
+  },
+  "next": {
+    "title": "Application Base Handler",
+    "permalink": "/docs/cqrs-pipeline-architecture/application-base-handler"
+  }
+}

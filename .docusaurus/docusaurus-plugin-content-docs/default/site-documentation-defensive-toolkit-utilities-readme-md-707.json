@@ -1,0 +1,24 @@
+{
+  "id": "defensive-toolkit-utilities/README",
+  "title": "README",
+  "description": "",
+  "source": "@site/../documentation/defensive-toolkit-utilities/README.md",
+  "sourceDirName": "defensive-toolkit-utilities",
+  "slug": "/defensive-toolkit-utilities/",
+  "permalink": "/docs/defensive-toolkit-utilities/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/defensive-toolkit-utilities/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Supporting Xeno",
+    "permalink": "/docs/community-open-source/support-appreciation"
+  },
+  "next": {
+    "title": "core-framework-utility-helpers",
+    "permalink": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers"
+  }
+}

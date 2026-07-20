@@ -1,0 +1,36 @@
+{
+  "id": "core-architecture/README",
+  "title": "Core Architecture & Lifecycle",
+  "description": "Technical overview index and execution manual of the core runtime engine, application hosting lifecycles, and explicit inversion-of-control container mechanics of Xeno.",
+  "source": "@site/../documentation/core-architecture/README.md",
+  "sourceDirName": "core-architecture",
+  "slug": "/core-architecture/",
+  "permalink": "/docs/core-architecture/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Core Architecture & Lifecycle",
+    "sidebar_position": 2,
+    "slug": "./",
+    "description": "Technical overview index and execution manual of the core runtime engine, application hosting lifecycles, and explicit inversion-of-control container mechanics of Xeno.",
+    "keywords": [
+      "xeno core architecture",
+      "container compilation trace",
+      "dependency lifetimes validation",
+      "programmatic bootstrap sequence"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Quick Start Guide",
+    "permalink": "/docs/getting-started/quick-start-guide"
+  },
+  "next": {
+    "title": "Application Hosting & Bootstrap Engine",
+    "permalink": "/docs/core-architecture/application-hosting-bootstrap-engine"
+  }
+}

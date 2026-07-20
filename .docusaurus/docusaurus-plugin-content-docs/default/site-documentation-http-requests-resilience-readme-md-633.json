@@ -1,0 +1,39 @@
+{
+  "id": "http-requests-resilience/README",
+  "title": "HTTP Requests & Resilience Subsystem",
+  "description": "Technical index and architectural overview of the Xeno out-of-process HTTP communication layer and self-healing resilience policies.",
+  "source": "@site/../documentation/http-requests-resilience/README.md",
+  "sourceDirName": "http-requests-resilience",
+  "slug": "/http-requests-resilience/",
+  "permalink": "/docs/http-requests-resilience/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/http-requests-resilience/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "title": "HTTP Requests & Resilience Subsystem",
+    "sidebar_position": 8,
+    "slug": "./",
+    "description": "Technical index and architectural overview of the Xeno out-of-process HTTP communication layer and self-healing resilience policies.",
+    "keywords": [
+      "http core",
+      "service resilience",
+      "remote data source",
+      "circuit breaker",
+      "retry policy",
+      "bulkhead isolation",
+      "xeno core"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Repositories & DAOs Design Patterns",
+    "permalink": "/docs/database-persistence/repositories-daos-design-patterns"
+  },
+  "next": {
+    "title": "HTTP Client Configuration",
+    "permalink": "/docs/http-requests-resilience/http-client-configuration"
+  }
+}

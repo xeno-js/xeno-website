@@ -1,0 +1,24 @@
+{
+  "id": "cqrs-pipeline-architecture/application-base-handler",
+  "title": "Application Base Handler",
+  "description": "Overview",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/application-base-handler.md",
+  "sourceDirName": "cqrs-pipeline-architecture",
+  "slug": "/cqrs-pipeline-architecture/application-base-handler",
+  "permalink": "/docs/cqrs-pipeline-architecture/application-base-handler",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/application-base-handler.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "The Mediator Dispatcher Engine",
+    "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine"
+  },
+  "next": {
+    "title": "Pipeline Behaviors Core Fundamentals",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/"
+  }
+}

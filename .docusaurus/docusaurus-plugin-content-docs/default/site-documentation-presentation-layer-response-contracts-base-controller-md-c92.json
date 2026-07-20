@@ -1,0 +1,37 @@
+{
+  "id": "presentation-layer-response-contracts/base-controller",
+  "title": "Base Controller",
+  "description": "Technical developer manual detailing the abstract BaseController class architecture, request ingress processing, and mediator execution routing in Xeno.",
+  "source": "@site/../documentation/presentation-layer-response-contracts/base-controller.md",
+  "sourceDirName": "presentation-layer-response-contracts",
+  "slug": "/presentation-layer-response-contracts/base-controller",
+  "permalink": "/docs/presentation-layer-response-contracts/base-controller",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/base-controller.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Base Controller",
+    "sidebar_position": 2,
+    "description": "Technical developer manual detailing the abstract BaseController class architecture, request ingress processing, and mediator execution routing in Xeno.",
+    "keywords": [
+      "base controller",
+      "request ingress",
+      "xeno core",
+      "response dto",
+      "input mapping",
+      "abstract controller"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Presentation Layer Overview",
+    "permalink": "/docs/presentation-layer-response-contracts/"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/"
+  }
+}

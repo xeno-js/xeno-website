@@ -1,0 +1,37 @@
+{
+  "id": "authentication/how-works-gate-keeper",
+  "title": "How the Gatekeeper Operates",
+  "description": "Deep dive into the Xeno IGateKeeper request-filtering lifecycle, token parsing strategies, and the safe fallback Guest User pattern.",
+  "source": "@site/../documentation/authentication/how-works-gate-keeper.md",
+  "sourceDirName": "authentication",
+  "slug": "/authentication/how-works-gate-keeper",
+  "permalink": "/docs/authentication/how-works-gate-keeper",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/authentication/how-works-gate-keeper.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "How the Gatekeeper Operates",
+    "sidebar_position": 2,
+    "description": "Deep dive into the Xeno IGateKeeper request-filtering lifecycle, token parsing strategies, and the safe fallback Guest User pattern.",
+    "keywords": [
+      "gatekeeper",
+      "identity resolution",
+      "guest user",
+      "token verification",
+      "xeno core",
+      "authentication flow"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Authentication & Identity Subsystem",
+    "permalink": "/docs/authentication/"
+  },
+  "next": {
+    "title": "Supabase Client & Auth Configuration",
+    "permalink": "/docs/authentication/supabase-configuration"
+  }
+}

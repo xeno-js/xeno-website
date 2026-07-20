@@ -1,0 +1,38 @@
+{
+  "id": "caching-idempotency-store/README",
+  "title": "Caching & Idempotency Store Layer",
+  "description": "Technical index and architectural manual explaining the transient storage engines, cache providers, and idempotency tracking frameworks in Xeno.",
+  "source": "@site/../documentation/caching-idempotency-store/README.md",
+  "sourceDirName": "caching-idempotency-store",
+  "slug": "/caching-idempotency-store/",
+  "permalink": "/docs/caching-idempotency-store/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/caching-idempotency-store/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "title": "Caching & Idempotency Store Layer",
+    "sidebar_position": 9,
+    "slug": "./",
+    "description": "Technical index and architectural manual explaining the transient storage engines, cache providers, and idempotency tracking frameworks in Xeno.",
+    "keywords": [
+      "caching layer",
+      "idempotency store",
+      "redis cache",
+      "in-memory store",
+      "xeno core",
+      "query caching"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Remote Data Source Gateways",
+    "permalink": "/docs/http-requests-resilience/remote-data-source-gateways"
+  },
+  "next": {
+    "title": "In-Memory Cache Provider",
+    "permalink": "/docs/caching-idempotency-store/in-memory-provider"
+  }
+}

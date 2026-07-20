@@ -1,0 +1,38 @@
+{
+  "id": "execution-context-middleware/README",
+  "title": "Execution Context & Middleware Layer",
+  "description": "Technical index and summary of Xeno execution context tracing, asynchronous storage isolation, and HTTP request metadata extraction.",
+  "source": "@site/../documentation/execution-context-middleware/README.md",
+  "sourceDirName": "execution-context-middleware",
+  "slug": "/execution-context-middleware/",
+  "permalink": "/docs/execution-context-middleware/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Execution Context & Middleware Layer",
+    "sidebar_position": 4,
+    "slug": "./",
+    "description": "Technical index and summary of Xeno execution context tracing, asynchronous storage isolation, and HTTP request metadata extraction.",
+    "keywords": [
+      "execution context",
+      "async hooks",
+      "async local storage",
+      "request context middleware",
+      "correlation id",
+      "metadata extraction"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Functional Monads & Core Errors",
+    "permalink": "/docs/domain-driven-design/functional-monads-core-errors"
+  },
+  "next": {
+    "title": "The Request-Identity Storage Lifecycle",
+    "permalink": "/docs/execution-context-middleware/request-identity-storage-lifecycle"
+  }
+}

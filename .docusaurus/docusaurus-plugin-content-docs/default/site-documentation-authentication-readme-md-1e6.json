@@ -1,0 +1,38 @@
+{
+  "id": "authentication/README",
+  "title": "Authentication & Identity Subsystem",
+  "description": "Technical index and architectural overview of the identity layer, request gatekeepers, and Supabase authentication providers in Xeno.",
+  "source": "@site/../documentation/authentication/README.md",
+  "sourceDirName": "authentication",
+  "slug": "/authentication/",
+  "permalink": "/docs/authentication/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/authentication/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Authentication & Identity Subsystem",
+    "sidebar_position": 5,
+    "slug": "./",
+    "description": "Technical index and architectural overview of the identity layer, request gatekeepers, and Supabase authentication providers in Xeno.",
+    "keywords": [
+      "authentication",
+      "gatekeeper",
+      "supabase auth",
+      "identity profile",
+      "guest user",
+      "xeno core"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Transportation Contract Metadata & Headers Extraction",
+    "permalink": "/docs/execution-context-middleware/transportation-contract-metadata-headers"
+  },
+  "next": {
+    "title": "How the Gatekeeper Operates",
+    "permalink": "/docs/authentication/how-works-gate-keeper"
+  }
+}

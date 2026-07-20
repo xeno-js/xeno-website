@@ -1,0 +1,24 @@
+{
+  "id": "defensive-toolkit-utilities/defensive-type-guards",
+  "title": "defensive-type-guards",
+  "description": "",
+  "source": "@site/../documentation/defensive-toolkit-utilities/defensive-type-guards.md",
+  "sourceDirName": "defensive-toolkit-utilities",
+  "slug": "/defensive-toolkit-utilities/defensive-type-guards",
+  "permalink": "/docs/defensive-toolkit-utilities/defensive-type-guards",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/defensive-toolkit-utilities/defensive-type-guards.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "core-framework-utility-helpers",
+    "permalink": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/developer-ecosystem/"
+  }
+}

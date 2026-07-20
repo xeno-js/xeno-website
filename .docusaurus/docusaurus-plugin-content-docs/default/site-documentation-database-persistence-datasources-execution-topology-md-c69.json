@@ -1,0 +1,38 @@
+{
+  "id": "database-persistence/datasources-execution-topology",
+  "title": "Data Sources & Execution Topology",
+  "description": "Developer documentation on how to register and use Xeno data sources, understand their differences, and wire custom data persistence layers using DB_POOL_CLIENT or DB_ORM_CLIENT.",
+  "source": "@site/../documentation/database-persistence/datasources-execution-topology.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/datasources-execution-topology",
+  "permalink": "/docs/database-persistence/datasources-execution-topology",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/datasources-execution-topology.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Data Sources & Execution Topology",
+    "sidebar_position": 4,
+    "description": "Developer documentation on how to register and use Xeno data sources, understand their differences, and wire custom data persistence layers using DB_POOL_CLIENT or DB_ORM_CLIENT.",
+    "keywords": [
+      "data sources",
+      "database topology",
+      "xeno core",
+      "soft delete",
+      "hard delete",
+      "db_pool_client",
+      "db_orm_client"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Database Client & Schema Bootstrapping",
+    "permalink": "/docs/database-persistence/database-bootstrapping/"
+  },
+  "next": {
+    "title": "Fluent Query & Filter Compiler Grid",
+    "permalink": "/docs/database-persistence/fluent-query-filter-compiler-grid"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "community-open-source/contributing-guide",
+  "title": "contributing-guide",
+  "description": "",
+  "source": "@site/../documentation/community-open-source/contributing-guide.md",
+  "sourceDirName": "community-open-source",
+  "slug": "/community-open-source/contributing-guide",
+  "permalink": "/docs/community-open-source/contributing-guide",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/community-open-source/contributing-guide.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/community-open-source/"
+  },
+  "next": {
+    "title": "Supporting Xeno",
+    "permalink": "/docs/community-open-source/support-appreciation"
+  }
+}

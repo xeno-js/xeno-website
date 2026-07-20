@@ -1,0 +1,338 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "getting-started/README",
+          "docs": [
+            {
+              "id": "authentication/how-works-gate-keeper",
+              "path": "/docs/authentication/how-works-gate-keeper",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "authentication/README",
+              "path": "/docs/authentication/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "authentication/supabase-configuration",
+              "path": "/docs/authentication/supabase-configuration",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "caching-idempotency-store/in-memory-provider",
+              "path": "/docs/caching-idempotency-store/in-memory-provider",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "caching-idempotency-store/README",
+              "path": "/docs/caching-idempotency-store/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "caching-idempotency-store/redis-provider",
+              "path": "/docs/caching-idempotency-store/redis-provider",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "community-open-source/contributing-guide",
+              "path": "/docs/community-open-source/contributing-guide",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "community-open-source/README",
+              "path": "/docs/community-open-source/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "community-open-source/support-appreciation",
+              "path": "/docs/community-open-source/support-appreciation",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "core-architecture/application-hosting-bootstrap-engine",
+              "path": "/docs/core-architecture/application-hosting-bootstrap-engine",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "core-architecture/ioc-container-service-lifetimes",
+              "path": "/docs/core-architecture/ioc-container-service-lifetimes",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "core-architecture/module-composition-pattern",
+              "path": "/docs/core-architecture/module-composition-pattern",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "core-architecture/README",
+              "path": "/docs/core-architecture/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/application-base-handler",
+              "path": "/docs/cqrs-pipeline-architecture/application-base-handler",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+              "path": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/mediator-dispatcher-engine",
+              "path": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cqrs-pipeline-architecture/README",
+              "path": "/docs/cqrs-pipeline-architecture/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "database-persistence/database-bootstrapping/README",
+              "path": "/docs/database-persistence/database-bootstrapping/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "database-persistence/datasources-execution-topology",
+              "path": "/docs/database-persistence/datasources-execution-topology",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "database-persistence/fluent-query-filter-compiler-grid",
+              "path": "/docs/database-persistence/fluent-query-filter-compiler-grid",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "database-persistence/README",
+              "path": "/docs/database-persistence/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "database-persistence/repositories-daos-design-patterns",
+              "path": "/docs/database-persistence/repositories-daos-design-patterns",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "defensive-toolkit-utilities/core-framework-utility-helpers",
+              "path": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "defensive-toolkit-utilities/defensive-type-guards",
+              "path": "/docs/defensive-toolkit-utilities/defensive-type-guards",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "defensive-toolkit-utilities/README",
+              "path": "/docs/defensive-toolkit-utilities/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "developer-ecosystem/enterprise-project-scaffolding-cli",
+              "path": "/docs/developer-ecosystem/enterprise-project-scaffolding-cli",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "developer-ecosystem/README",
+              "path": "/docs/developer-ecosystem/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "domain-driven-design/entities-unique-identifiers",
+              "path": "/docs/domain-driven-design/entities-unique-identifiers",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "domain-driven-design/functional-monads-core-errors",
+              "path": "/docs/domain-driven-design/functional-monads-core-errors",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "domain-driven-design/README",
+              "path": "/docs/domain-driven-design/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "domain-driven-design/value-objects-defensive-immutability",
+              "path": "/docs/domain-driven-design/value-objects-defensive-immutability",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "execution-context-middleware/execution-context-composition",
+              "path": "/docs/execution-context-middleware/execution-context-composition",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "execution-context-middleware/README",
+              "path": "/docs/execution-context-middleware/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "execution-context-middleware/request-identity-storage-lifecycle",
+              "path": "/docs/execution-context-middleware/request-identity-storage-lifecycle",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "execution-context-middleware/transportation-contract-metadata-headers",
+              "path": "/docs/execution-context-middleware/transportation-contract-metadata-headers",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started/architectural-layers-boundaries",
+              "path": "/docs/getting-started/architectural-layers-boundaries",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started/introduction-philosophy",
+              "path": "/docs/getting-started/introduction-philosophy",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started/quick-start-guide",
+              "path": "/docs/getting-started/quick-start-guide",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started/README",
+              "path": "/docs/getting-started/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started/why-this-framework",
+              "path": "/docs/getting-started/why-this-framework",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "http-requests-resilience/http-client-configuration",
+              "path": "/docs/http-requests-resilience/http-client-configuration",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "http-requests-resilience/README",
+              "path": "/docs/http-requests-resilience/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "http-requests-resilience/remote-data-source-gateways",
+              "path": "/docs/http-requests-resilience/remote-data-source-gateways",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "http-requests-resilience/resilience-policies",
+              "path": "/docs/http-requests-resilience/resilience-policies",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "presentation-layer-response-contracts/base-controller",
+              "path": "/docs/presentation-layer-response-contracts/base-controller",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "presentation-layer-response-contracts/README",
+              "path": "/docs/presentation-layer-response-contracts/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "presentation-layer-response-contracts/standardize-http-response/error-response",
+              "path": "/docs/presentation-layer-response-contracts/standardize-http-response/error-response",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "presentation-layer-response-contracts/standardize-http-response/http-helper",
+              "path": "/docs/presentation-layer-response-contracts/standardize-http-response/http-helper",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "presentation-layer-response-contracts/standardize-http-response/paginated-response",
+              "path": "/docs/presentation-layer-response-contracts/standardize-http-response/paginated-response",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "presentation-layer-response-contracts/standardize-http-response/README",
+              "path": "/docs/presentation-layer-response-contracts/standardize-http-response/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "presentation-layer-response-contracts/standardize-http-response/success-response",
+              "path": "/docs/presentation-layer-response-contracts/standardize-http-response/success-response",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "telemetry-logging/configure-console",
+              "path": "/docs/telemetry-logging/configure-console",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "telemetry-logging/configure-pino",
+              "path": "/docs/telemetry-logging/configure-pino",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "telemetry-logging/configure-sentry",
+              "path": "/docs/telemetry-logging/configure-sentry",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "telemetry-logging/README",
+              "path": "/docs/telemetry-logging/",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/docs/getting-started/",
+                "label": "Getting Started"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

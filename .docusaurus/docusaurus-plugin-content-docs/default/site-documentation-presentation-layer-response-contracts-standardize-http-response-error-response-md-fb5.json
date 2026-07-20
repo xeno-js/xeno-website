@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/standardize-http-response/error-response",
+  "title": "error-response",
+  "description": "",
+  "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/error-response.md",
+  "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+  "slug": "/presentation-layer-response-contracts/standardize-http-response/error-response",
+  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/error-response",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/error-response.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/"
+  },
+  "next": {
+    "title": "http-helper",
+    "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/http-helper"
+  }
+}

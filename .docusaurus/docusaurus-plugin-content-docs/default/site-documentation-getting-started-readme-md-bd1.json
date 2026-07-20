@@ -1,0 +1,26 @@
+{
+  "id": "getting-started/README",
+  "title": "Getting Started",
+  "description": "Introduction to the Xeno framework installation, core directory structure, and initial application bootstrapping.",
+  "source": "@site/../documentation/getting-started/README.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/",
+  "permalink": "/docs/getting-started/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Getting Started",
+    "sidebar_position": 1,
+    "description": "Introduction to the Xeno framework installation, core directory structure, and initial application bootstrapping.",
+    "keywords": ["xeno getting started", "introduction", "clean architecture", "quick start"]
+  },
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "Introduction & Philosophy",
+    "permalink": "/docs/getting-started/introduction-philosophy"
+  }
+}

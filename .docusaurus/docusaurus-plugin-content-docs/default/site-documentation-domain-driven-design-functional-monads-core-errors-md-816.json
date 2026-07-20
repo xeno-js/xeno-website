@@ -1,0 +1,37 @@
+{
+  "id": "domain-driven-design/functional-monads-core-errors",
+  "title": "Functional Monads & Core Errors",
+  "description": "Practical developer manual for handling operational outcomes and domain errors using Xeno Result monad and AppError architecture.",
+  "source": "@site/../documentation/domain-driven-design/functional-monads-core-errors.md",
+  "sourceDirName": "domain-driven-design",
+  "slug": "/domain-driven-design/functional-monads-core-errors",
+  "permalink": "/docs/domain-driven-design/functional-monads-core-errors",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/functional-monads-core-errors.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "title": "Functional Monads & Core Errors",
+    "sidebar_position": 4,
+    "description": "Practical developer manual for handling operational outcomes and domain errors using Xeno Result monad and AppError architecture.",
+    "keywords": [
+      "result monad",
+      "apperror",
+      "functional programming",
+      "error handling",
+      "resulttype",
+      "domain validations"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+    "permalink": "/docs/domain-driven-design/value-objects-defensive-immutability"
+  },
+  "next": {
+    "title": "Execution Context & Middleware Layer",
+    "permalink": "/docs/execution-context-middleware/"
+  }
+}

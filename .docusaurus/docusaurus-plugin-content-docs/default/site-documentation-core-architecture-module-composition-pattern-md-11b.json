@@ -1,0 +1,37 @@
+{
+  "id": "core-architecture/module-composition-pattern",
+  "title": "Module Composition Pattern",
+  "description": "How Xeno composes features with IModule, including service registration, options-driven configuration, and module boundary rules.",
+  "source": "@site/../documentation/core-architecture/module-composition-pattern.md",
+  "sourceDirName": "core-architecture",
+  "slug": "/core-architecture/module-composition-pattern",
+  "permalink": "/docs/core-architecture/module-composition-pattern",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/core-architecture/module-composition-pattern.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Module Composition Pattern",
+    "sidebar_position": 3,
+    "description": "How Xeno composes features with IModule, including service registration, options-driven configuration, and module boundary rules.",
+    "keywords": [
+      "imodule",
+      "encapsulation",
+      "micro-modules",
+      "dependency injection",
+      "structural wiring",
+      "configuration segregation"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "The IoC Container & Service Lifetimes",
+    "permalink": "/docs/core-architecture/ioc-container-service-lifetimes"
+  },
+  "next": {
+    "title": "Domain-Driven Design (DDD) Core Building Blocks",
+    "permalink": "/docs/domain-driven-design/"
+  }
+}

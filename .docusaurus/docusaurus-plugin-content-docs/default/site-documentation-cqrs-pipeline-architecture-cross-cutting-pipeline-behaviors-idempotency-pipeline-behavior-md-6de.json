@@ -1,0 +1,37 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+  "title": "Idempotency Pipeline Behavior",
+  "description": "Technical developer manual explaining Xeno native command idempotency behavior, distributed locking, and result storage mechanics.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Idempotency Pipeline Behavior",
+    "sidebar_position": 5,
+    "description": "Technical developer manual explaining Xeno native command idempotency behavior, distributed locking, and result storage mechanics.",
+    "keywords": [
+      "idempotency pipeline",
+      "xeno core",
+      "distributed lock",
+      "command bus",
+      "concurrency conflict",
+      "request duplication"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging & Performance Pipeline Behaviors",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior"
+  },
+  "next": {
+    "title": "Authorization Pipeline & Custom Security Strategies",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior"
+  }
+}

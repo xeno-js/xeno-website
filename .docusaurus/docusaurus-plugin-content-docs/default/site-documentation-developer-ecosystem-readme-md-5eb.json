@@ -1,0 +1,24 @@
+{
+  "id": "developer-ecosystem/README",
+  "title": "README",
+  "description": "",
+  "source": "@site/../documentation/developer-ecosystem/README.md",
+  "sourceDirName": "developer-ecosystem",
+  "slug": "/developer-ecosystem/",
+  "permalink": "/docs/developer-ecosystem/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/developer-ecosystem/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "defensive-type-guards",
+    "permalink": "/docs/defensive-toolkit-utilities/defensive-type-guards"
+  },
+  "next": {
+    "title": "enterprise-project-scaffolding-cli",
+    "permalink": "/docs/developer-ecosystem/enterprise-project-scaffolding-cli"
+  }
+}

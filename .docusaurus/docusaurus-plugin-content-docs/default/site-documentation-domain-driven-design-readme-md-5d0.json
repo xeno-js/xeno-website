@@ -1,0 +1,39 @@
+{
+  "id": "domain-driven-design/README",
+  "title": "Domain-Driven Design (DDD) Core Building Blocks",
+  "description": "Technical index and overview of the pure, framework-agnostic Domain-Driven Design (DDD) building blocks in Xeno.",
+  "source": "@site/../documentation/domain-driven-design/README.md",
+  "sourceDirName": "domain-driven-design",
+  "slug": "/domain-driven-design/",
+  "permalink": "/docs/domain-driven-design/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Domain-Driven Design (DDD) Core Building Blocks",
+    "sidebar_position": 3,
+    "slug": "./",
+    "description": "Technical index and overview of the pure, framework-agnostic Domain-Driven Design (DDD) building blocks in Xeno.",
+    "keywords": [
+      "domain-driven design",
+      "ddd",
+      "entities",
+      "value objects",
+      "functional monads",
+      "result monad",
+      "apperror"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Module Composition Pattern",
+    "permalink": "/docs/core-architecture/module-composition-pattern"
+  },
+  "next": {
+    "title": "Entities & Unique Identifiers",
+    "permalink": "/docs/domain-driven-design/entities-unique-identifiers"
+  }
+}

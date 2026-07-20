@@ -1,0 +1,24 @@
+{
+  "id": "defensive-toolkit-utilities/core-framework-utility-helpers",
+  "title": "core-framework-utility-helpers",
+  "description": "",
+  "source": "@site/../documentation/defensive-toolkit-utilities/core-framework-utility-helpers.md",
+  "sourceDirName": "defensive-toolkit-utilities",
+  "slug": "/defensive-toolkit-utilities/core-framework-utility-helpers",
+  "permalink": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/defensive-toolkit-utilities/core-framework-utility-helpers.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/defensive-toolkit-utilities/"
+  },
+  "next": {
+    "title": "defensive-type-guards",
+    "permalink": "/docs/defensive-toolkit-utilities/defensive-type-guards"
+  }
+}

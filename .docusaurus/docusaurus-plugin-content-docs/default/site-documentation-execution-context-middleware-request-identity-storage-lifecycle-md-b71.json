@@ -1,0 +1,37 @@
+{
+  "id": "execution-context-middleware/request-identity-storage-lifecycle",
+  "title": "The Request-Identity Storage Lifecycle",
+  "description": "In-depth execution guide on how RequestContextMiddleware initializes, isolates, and disposes of asynchronous execution storage and request metadata.",
+  "source": "@site/../documentation/execution-context-middleware/request-identity-storage-lifecycle.md",
+  "sourceDirName": "execution-context-middleware",
+  "slug": "/execution-context-middleware/request-identity-storage-lifecycle",
+  "permalink": "/docs/execution-context-middleware/request-identity-storage-lifecycle",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/execution-context-middleware/request-identity-storage-lifecycle.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "The Request-Identity Storage Lifecycle",
+    "sidebar_position": 2,
+    "description": "In-depth execution guide on how RequestContextMiddleware initializes, isolates, and disposes of asynchronous execution storage and request metadata.",
+    "keywords": [
+      "execution context",
+      "middleware",
+      "async storage",
+      "identity lifecycle",
+      "multi-tenant isolation",
+      "token extraction"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Execution Context & Middleware Layer",
+    "permalink": "/docs/execution-context-middleware/"
+  },
+  "next": {
+    "title": "ExecutionContext Composition",
+    "permalink": "/docs/execution-context-middleware/execution-context-composition"
+  }
+}

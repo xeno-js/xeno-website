@@ -1,0 +1,20 @@
+{
+  "id": "developer-ecosystem/enterprise-project-scaffolding-cli",
+  "title": "enterprise-project-scaffolding-cli",
+  "description": "",
+  "source": "@site/../documentation/developer-ecosystem/enterprise-project-scaffolding-cli.md",
+  "sourceDirName": "developer-ecosystem",
+  "slug": "/developer-ecosystem/enterprise-project-scaffolding-cli",
+  "permalink": "/docs/developer-ecosystem/enterprise-project-scaffolding-cli",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/developer-ecosystem/enterprise-project-scaffolding-cli.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/developer-ecosystem/"
+  }
+}

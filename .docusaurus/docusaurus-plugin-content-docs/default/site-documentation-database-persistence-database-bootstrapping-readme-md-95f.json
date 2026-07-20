@@ -1,0 +1,38 @@
+{
+  "id": "database-persistence/database-bootstrapping/README",
+  "title": "Database Client & Schema Bootstrapping",
+  "description": "Technical manual explaining Xeno flexible database bootstrapping options, connection pooling customization, and Drizzle ORM client schema configurations.",
+  "source": "@site/../documentation/database-persistence/database-bootstrapping/README.md",
+  "sourceDirName": "database-persistence/database-bootstrapping",
+  "slug": "/database-persistence/database-bootstrapping/",
+  "permalink": "/docs/database-persistence/database-bootstrapping/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/database-bootstrapping/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Database Client & Schema Bootstrapping",
+    "sidebar_position": 3,
+    "description": "Technical manual explaining Xeno flexible database bootstrapping options, connection pooling customization, and Drizzle ORM client schema configurations.",
+    "keywords": [
+      "database client",
+      "schema bootstrap",
+      "xeno core",
+      "db_pool_client",
+      "db_orm_client",
+      "connection pooling",
+      "framework customization"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Database Persistence Layer",
+    "permalink": "/docs/database-persistence/"
+  },
+  "next": {
+    "title": "Data Sources & Execution Topology",
+    "permalink": "/docs/database-persistence/datasources-execution-topology"
+  }
+}

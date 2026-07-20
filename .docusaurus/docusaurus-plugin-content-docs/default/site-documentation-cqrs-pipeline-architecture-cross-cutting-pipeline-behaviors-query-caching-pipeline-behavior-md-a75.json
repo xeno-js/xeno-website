@@ -1,0 +1,38 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+  "title": "Query Caching Pipeline Behavior",
+  "description": "Technical developer manual explaining Xeno QueryCachingPipeline, transparent read-optimization, and fault-tolerant caching mechanics.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "title": "Query Caching Pipeline Behavior",
+    "sidebar_position": 10,
+    "description": "Technical developer manual explaining Xeno QueryCachingPipeline, transparent read-optimization, and fault-tolerant caching mechanics.",
+    "keywords": [
+      "query caching",
+      "xeno core",
+      "read optimization",
+      "cache hit",
+      "cache miss",
+      "fault tolerance",
+      "redis caching"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Concurrency & Retry Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior"
+  },
+  "next": {
+    "title": "Database Persistence Layer",
+    "permalink": "/docs/database-persistence/"
+  }
+}

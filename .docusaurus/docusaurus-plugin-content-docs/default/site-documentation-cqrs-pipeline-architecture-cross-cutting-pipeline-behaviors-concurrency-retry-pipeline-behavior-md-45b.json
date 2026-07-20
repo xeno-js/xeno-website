@@ -1,0 +1,37 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+  "title": "Concurrency & Retry Pipeline Behavior",
+  "description": "Technical developer manual explaining Xeno ConcurrencyRetryPipeline, exponential backoff with jitter, and handling race conditions.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "title": "Concurrency & Retry Pipeline Behavior",
+    "sidebar_position": 9,
+    "description": "Technical developer manual explaining Xeno ConcurrencyRetryPipeline, exponential backoff with jitter, and handling race conditions.",
+    "keywords": [
+      "concurrency retry",
+      "xeno core",
+      "exponential backoff",
+      "jitter",
+      "conflict resolution",
+      "command bus"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Validation Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors"
+  },
+  "next": {
+    "title": "Query Caching Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior"
+  }
+}

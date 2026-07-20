@@ -1,0 +1,24 @@
+{
+  "id": "community-open-source/support-appreciation",
+  "title": "Supporting Xeno",
+  "description": "Xeno is an MIT-licensed, open-source framework.",
+  "source": "@site/../documentation/community-open-source/support-appreciation.md",
+  "sourceDirName": "community-open-source",
+  "slug": "/community-open-source/support-appreciation",
+  "permalink": "/docs/community-open-source/support-appreciation",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/community-open-source/support-appreciation.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "contributing-guide",
+    "permalink": "/docs/community-open-source/contributing-guide"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/defensive-toolkit-utilities/"
+  }
+}

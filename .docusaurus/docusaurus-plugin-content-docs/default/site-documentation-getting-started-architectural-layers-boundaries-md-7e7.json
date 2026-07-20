@@ -1,0 +1,36 @@
+{
+  "id": "getting-started/architectural-layers-boundaries",
+  "title": "Architectural Layers & Boundaries",
+  "description": "Detailed technical specification of the strict Domain-Driven Design (DDD) and Clean Architecture structural rings enforced by compile-time rules in the Xeno framework.",
+  "source": "@site/../documentation/getting-started/architectural-layers-boundaries.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/architectural-layers-boundaries",
+  "permalink": "/docs/getting-started/architectural-layers-boundaries",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/architectural-layers-boundaries.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Architectural Layers & Boundaries",
+    "sidebar_position": 3,
+    "description": "Detailed technical specification of the strict Domain-Driven Design (DDD) and Clean Architecture structural rings enforced by compile-time rules in the Xeno framework.",
+    "keywords": [
+      "clean architecture",
+      "domain-driven design",
+      "architectural boundaries",
+      "eslint isolation",
+      "dependency flow"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction & Philosophy",
+    "permalink": "/docs/getting-started/introduction-philosophy"
+  },
+  "next": {
+    "title": "Why Choose Xeno? An Architectural Deep-Dive",
+    "permalink": "/docs/getting-started/why-this-framework"
+  }
+}

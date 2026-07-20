@@ -1,0 +1,37 @@
+{
+  "id": "database-persistence/repositories-daos-design-patterns",
+  "title": "Repositories & DAOs Design Patterns",
+  "description": "Technical developer manual on utilizing Xeno repositories and ReadDAOs to segregate read/write data access and map domain entities to persistence DTOs.",
+  "source": "@site/../documentation/database-persistence/repositories-daos-design-patterns.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/repositories-daos-design-patterns",
+  "permalink": "/docs/database-persistence/repositories-daos-design-patterns",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/database-persistence/repositories-daos-design-patterns.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 13,
+  "frontMatter": {
+    "title": "Repositories & DAOs Design Patterns",
+    "sidebar_position": 13,
+    "description": "Technical developer manual on utilizing Xeno repositories and ReadDAOs to segregate read/write data access and map domain entities to persistence DTOs.",
+    "keywords": [
+      "repository pattern",
+      "read dao",
+      "data access object",
+      "domain entity mapping",
+      "drizzle dto segregation",
+      "cqrs data persistence"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Fluent Query & Filter Compiler Grid",
+    "permalink": "/docs/database-persistence/fluent-query-filter-compiler-grid"
+  },
+  "next": {
+    "title": "HTTP Requests & Resilience Subsystem",
+    "permalink": "/docs/http-requests-resilience/"
+  }
+}

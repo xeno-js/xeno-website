@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/standardize-http-response/success-response",
+  "title": "success-response",
+  "description": "",
+  "source": "@site/../documentation/presentation-layer-response-contracts/standardize-http-response/success-response.md",
+  "sourceDirName": "presentation-layer-response-contracts/standardize-http-response",
+  "slug": "/presentation-layer-response-contracts/standardize-http-response/success-response",
+  "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/success-response",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/standardize-http-response/success-response.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "paginated-response",
+    "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/paginated-response"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/community-open-source/"
+  }
+}

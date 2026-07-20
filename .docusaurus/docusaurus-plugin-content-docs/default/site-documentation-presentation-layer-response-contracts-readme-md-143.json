@@ -1,0 +1,37 @@
+{
+  "id": "presentation-layer-response-contracts/README",
+  "title": "Presentation Layer Overview",
+  "description": "Technical index and architectural overview of the Presentation Layer, agnostic ingress controllers, and HTTP response standardization structures in Xeno.",
+  "source": "@site/../documentation/presentation-layer-response-contracts/README.md",
+  "sourceDirName": "presentation-layer-response-contracts",
+  "slug": "/presentation-layer-response-contracts/",
+  "permalink": "/docs/presentation-layer-response-contracts/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/presentation-layer-response-contracts/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 11,
+  "frontMatter": {
+    "title": "Presentation Layer Overview",
+    "sidebar_position": 11,
+    "slug": "./",
+    "description": "Technical index and architectural overview of the Presentation Layer, agnostic ingress controllers, and HTTP response standardization structures in Xeno.",
+    "keywords": [
+      "xeno presentation layer",
+      "base controller",
+      "http response standardization",
+      "http helper dto",
+      "cqrs request ingress"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Configuring Sentry Error Tracking",
+    "permalink": "/docs/telemetry-logging/configure-sentry"
+  },
+  "next": {
+    "title": "Base Controller",
+    "permalink": "/docs/presentation-layer-response-contracts/base-controller"
+  }
+}

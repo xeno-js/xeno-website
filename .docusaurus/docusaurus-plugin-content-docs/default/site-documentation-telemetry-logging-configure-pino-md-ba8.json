@@ -1,0 +1,37 @@
+{
+  "id": "telemetry-logging/configure-pino",
+  "title": "Configuring Pino Structured Logging",
+  "description": "Technical developer manual on activating, configuring, and optimizing JSON structured log streams using the Pino logger in the Xeno framework.",
+  "source": "@site/../documentation/telemetry-logging/configure-pino.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/configure-pino",
+  "permalink": "/docs/telemetry-logging/configure-pino",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/telemetry-logging/configure-pino.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Configuring Pino Structured Logging",
+    "sidebar_position": 3,
+    "description": "Technical developer manual on activating, configuring, and optimizing JSON structured log streams using the Pino logger in the Xeno framework.",
+    "keywords": [
+      "pino logger",
+      "structured logging",
+      "json logs",
+      "log management",
+      "xeno core",
+      "telemetry logger"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Configuring Console Logging",
+    "permalink": "/docs/telemetry-logging/configure-console"
+  },
+  "next": {
+    "title": "Configuring Sentry Error Tracking",
+    "permalink": "/docs/telemetry-logging/configure-sentry"
+  }
+}

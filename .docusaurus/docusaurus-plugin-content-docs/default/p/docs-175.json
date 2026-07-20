@@ -1,0 +1,856 @@
+{
+  "version": {
+    "pluginId": "default",
+    "version": "current",
+    "label": "Next",
+    "banner": null,
+    "badge": false,
+    "noIndex": false,
+    "className": "docs-version-current",
+    "isLast": true,
+    "docsSidebars": {
+      "tutorialSidebar": [
+        {
+          "type": "category",
+          "label": "Getting Started",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/getting-started/introduction-philosophy",
+              "label": "Introduction & Philosophy",
+              "docId": "getting-started/introduction-philosophy",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/getting-started/architectural-layers-boundaries",
+              "label": "Architectural Layers & Boundaries",
+              "docId": "getting-started/architectural-layers-boundaries",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/getting-started/why-this-framework",
+              "label": "Why Choose Xeno? An Architectural Deep-Dive",
+              "docId": "getting-started/why-this-framework",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/getting-started/quick-start-guide",
+              "label": "Quick Start Guide",
+              "docId": "getting-started/quick-start-guide",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/getting-started/"
+        },
+        {
+          "type": "category",
+          "label": "Core Architecture & Lifecycle",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/core-architecture/application-hosting-bootstrap-engine",
+              "label": "Application Hosting & Bootstrap Engine",
+              "docId": "core-architecture/application-hosting-bootstrap-engine",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/core-architecture/ioc-container-service-lifetimes",
+              "label": "The IoC Container & Service Lifetimes",
+              "docId": "core-architecture/ioc-container-service-lifetimes",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/core-architecture/module-composition-pattern",
+              "label": "Module Composition Pattern",
+              "docId": "core-architecture/module-composition-pattern",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/core-architecture/"
+        },
+        {
+          "type": "category",
+          "label": "Domain-Driven Design (DDD) Core Building Blocks",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/domain-driven-design/entities-unique-identifiers",
+              "label": "Entities & Unique Identifiers",
+              "docId": "domain-driven-design/entities-unique-identifiers",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/domain-driven-design/value-objects-defensive-immutability",
+              "label": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+              "docId": "domain-driven-design/value-objects-defensive-immutability",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/domain-driven-design/functional-monads-core-errors",
+              "label": "Functional Monads & Core Errors",
+              "docId": "domain-driven-design/functional-monads-core-errors",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/domain-driven-design/"
+        },
+        {
+          "type": "category",
+          "label": "Execution Context & Middleware Layer",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/execution-context-middleware/request-identity-storage-lifecycle",
+              "label": "The Request-Identity Storage Lifecycle",
+              "docId": "execution-context-middleware/request-identity-storage-lifecycle",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/execution-context-middleware/execution-context-composition",
+              "label": "ExecutionContext Composition",
+              "docId": "execution-context-middleware/execution-context-composition",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/execution-context-middleware/transportation-contract-metadata-headers",
+              "label": "Transportation Contract Metadata & Headers Extraction",
+              "docId": "execution-context-middleware/transportation-contract-metadata-headers",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/execution-context-middleware/"
+        },
+        {
+          "type": "category",
+          "label": "Authentication & Identity Subsystem",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/authentication/how-works-gate-keeper",
+              "label": "How the Gatekeeper Operates",
+              "docId": "authentication/how-works-gate-keeper",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/authentication/supabase-configuration",
+              "label": "Supabase Client & Auth Configuration",
+              "docId": "authentication/supabase-configuration",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/authentication/"
+        },
+        {
+          "type": "category",
+          "label": "CQRS Pipeline Architecture",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine",
+              "label": "The Mediator Dispatcher Engine",
+              "docId": "cqrs-pipeline-architecture/mediator-dispatcher-engine",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/cqrs-pipeline-architecture/application-base-handler",
+              "label": "Application Base Handler",
+              "docId": "cqrs-pipeline-architecture/application-base-handler",
+              "unlisted": false
+            },
+            {
+              "type": "category",
+              "label": "Pipeline Behaviors Core Fundamentals",
+              "collapsible": true,
+              "collapsed": true,
+              "items": [
+                {
+                  "type": "link",
+                  "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+                  "label": "Exception Pipeline Behavior",
+                  "docId": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+                  "label": "Logging & Performance Pipeline Behaviors",
+                  "docId": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+                  "label": "Idempotency Pipeline Behavior",
+                  "docId": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+                  "label": "Authorization Pipeline & Custom Security Strategies",
+                  "docId": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+                  "label": "Validation Pipeline Behavior",
+                  "docId": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+                  "label": "Concurrency & Retry Pipeline Behavior",
+                  "docId": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+                  "label": "Query Caching Pipeline Behavior",
+                  "docId": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+                  "unlisted": false
+                }
+              ],
+              "href": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/"
+            }
+          ],
+          "href": "/docs/cqrs-pipeline-architecture/"
+        },
+        {
+          "type": "category",
+          "label": "Database Persistence Layer",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/database-persistence/database-bootstrapping/",
+              "label": "Database Client & Schema Bootstrapping",
+              "docId": "database-persistence/database-bootstrapping/README",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/database-persistence/datasources-execution-topology",
+              "label": "Data Sources & Execution Topology",
+              "docId": "database-persistence/datasources-execution-topology",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/database-persistence/fluent-query-filter-compiler-grid",
+              "label": "Fluent Query & Filter Compiler Grid",
+              "docId": "database-persistence/fluent-query-filter-compiler-grid",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/database-persistence/repositories-daos-design-patterns",
+              "label": "Repositories & DAOs Design Patterns",
+              "docId": "database-persistence/repositories-daos-design-patterns",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/database-persistence/"
+        },
+        {
+          "type": "category",
+          "label": "HTTP Requests & Resilience Subsystem",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/http-requests-resilience/http-client-configuration",
+              "label": "HTTP Client Configuration",
+              "docId": "http-requests-resilience/http-client-configuration",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/http-requests-resilience/resilience-policies",
+              "label": "Resilience & Fault-Tolerance Policies",
+              "docId": "http-requests-resilience/resilience-policies",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/http-requests-resilience/remote-data-source-gateways",
+              "label": "Remote Data Source Gateways",
+              "docId": "http-requests-resilience/remote-data-source-gateways",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/http-requests-resilience/"
+        },
+        {
+          "type": "category",
+          "label": "Caching & Idempotency Store Layer",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/caching-idempotency-store/in-memory-provider",
+              "label": "In-Memory Cache Provider",
+              "docId": "caching-idempotency-store/in-memory-provider",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/caching-idempotency-store/redis-provider",
+              "label": "Distributed Redis Cache Configuration",
+              "docId": "caching-idempotency-store/redis-provider",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/caching-idempotency-store/"
+        },
+        {
+          "type": "category",
+          "label": "Telemetry & Logging Layer",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/telemetry-logging/configure-console",
+              "label": "Configuring Console Logging",
+              "docId": "telemetry-logging/configure-console",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/telemetry-logging/configure-pino",
+              "label": "Configuring Pino Structured Logging",
+              "docId": "telemetry-logging/configure-pino",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/telemetry-logging/configure-sentry",
+              "label": "Configuring Sentry Error Tracking",
+              "docId": "telemetry-logging/configure-sentry",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/telemetry-logging/"
+        },
+        {
+          "type": "category",
+          "label": "Presentation Layer Overview",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/presentation-layer-response-contracts/base-controller",
+              "label": "Base Controller",
+              "docId": "presentation-layer-response-contracts/base-controller",
+              "unlisted": false
+            },
+            {
+              "type": "category",
+              "label": "README",
+              "collapsible": true,
+              "collapsed": true,
+              "items": [
+                {
+                  "type": "link",
+                  "href": "/docs/presentation-layer-response-contracts/standardize-http-response/error-response",
+                  "label": "error-response",
+                  "docId": "presentation-layer-response-contracts/standardize-http-response/error-response",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/presentation-layer-response-contracts/standardize-http-response/http-helper",
+                  "label": "http-helper",
+                  "docId": "presentation-layer-response-contracts/standardize-http-response/http-helper",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/presentation-layer-response-contracts/standardize-http-response/paginated-response",
+                  "label": "paginated-response",
+                  "docId": "presentation-layer-response-contracts/standardize-http-response/paginated-response",
+                  "unlisted": false
+                },
+                {
+                  "type": "link",
+                  "href": "/docs/presentation-layer-response-contracts/standardize-http-response/success-response",
+                  "label": "success-response",
+                  "docId": "presentation-layer-response-contracts/standardize-http-response/success-response",
+                  "unlisted": false
+                }
+              ],
+              "href": "/docs/presentation-layer-response-contracts/standardize-http-response/"
+            }
+          ],
+          "href": "/docs/presentation-layer-response-contracts/"
+        },
+        {
+          "type": "category",
+          "label": "README",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/community-open-source/contributing-guide",
+              "label": "contributing-guide",
+              "docId": "community-open-source/contributing-guide",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/community-open-source/support-appreciation",
+              "label": "Supporting Xeno",
+              "docId": "community-open-source/support-appreciation",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/community-open-source/"
+        },
+        {
+          "type": "category",
+          "label": "README",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/defensive-toolkit-utilities/core-framework-utility-helpers",
+              "label": "core-framework-utility-helpers",
+              "docId": "defensive-toolkit-utilities/core-framework-utility-helpers",
+              "unlisted": false
+            },
+            {
+              "type": "link",
+              "href": "/docs/defensive-toolkit-utilities/defensive-type-guards",
+              "label": "defensive-type-guards",
+              "docId": "defensive-toolkit-utilities/defensive-type-guards",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/defensive-toolkit-utilities/"
+        },
+        {
+          "type": "category",
+          "label": "README",
+          "collapsible": true,
+          "collapsed": true,
+          "items": [
+            {
+              "type": "link",
+              "href": "/docs/developer-ecosystem/enterprise-project-scaffolding-cli",
+              "label": "enterprise-project-scaffolding-cli",
+              "docId": "developer-ecosystem/enterprise-project-scaffolding-cli",
+              "unlisted": false
+            }
+          ],
+          "href": "/docs/developer-ecosystem/"
+        }
+      ]
+    },
+    "docs": {
+      "authentication/how-works-gate-keeper": {
+        "id": "authentication/how-works-gate-keeper",
+        "title": "How the Gatekeeper Operates",
+        "description": "Deep dive into the Xeno IGateKeeper request-filtering lifecycle, token parsing strategies, and the safe fallback Guest User pattern.",
+        "sidebar": "tutorialSidebar"
+      },
+      "authentication/README": {
+        "id": "authentication/README",
+        "title": "Authentication & Identity Subsystem",
+        "description": "Technical index and architectural overview of the identity layer, request gatekeepers, and Supabase authentication providers in Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "authentication/supabase-configuration": {
+        "id": "authentication/supabase-configuration",
+        "title": "Supabase Client & Auth Configuration",
+        "description": "Technical developer manual on configuring the native Supabase identity provider and extending the framework using custom authentication services.",
+        "sidebar": "tutorialSidebar"
+      },
+      "caching-idempotency-store/in-memory-provider": {
+        "id": "caching-idempotency-store/in-memory-provider",
+        "title": "In-Memory Cache Provider",
+        "description": "Technical developer manual explaining the Xeno native in-memory caching engine, lazy lifecycle pruning, and local process-memory metrics.",
+        "sidebar": "tutorialSidebar"
+      },
+      "caching-idempotency-store/README": {
+        "id": "caching-idempotency-store/README",
+        "title": "Caching & Idempotency Store Layer",
+        "description": "Technical index and architectural manual explaining the transient storage engines, cache providers, and idempotency tracking frameworks in Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "caching-idempotency-store/redis-provider": {
+        "id": "caching-idempotency-store/redis-provider",
+        "title": "Distributed Redis Cache Configuration",
+        "description": "Technical developer manual explaining the Xeno distributed Redis caching engine, connection pooling, and multi-node transaction synchronization.",
+        "sidebar": "tutorialSidebar"
+      },
+      "community-open-source/contributing-guide": {
+        "id": "community-open-source/contributing-guide",
+        "title": "contributing-guide",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "community-open-source/README": {
+        "id": "community-open-source/README",
+        "title": "README",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "community-open-source/support-appreciation": {
+        "id": "community-open-source/support-appreciation",
+        "title": "Supporting Xeno",
+        "description": "Xeno is an MIT-licensed, open-source framework.",
+        "sidebar": "tutorialSidebar"
+      },
+      "core-architecture/application-hosting-bootstrap-engine": {
+        "id": "core-architecture/application-hosting-bootstrap-engine",
+        "title": "Application Hosting & Bootstrap Engine",
+        "description": "Technical design manual detailing the high-performance, decorator-free initialization lifecycle of Xeno applications using the programmatic AppBuilder engine.",
+        "sidebar": "tutorialSidebar"
+      },
+      "core-architecture/ioc-container-service-lifetimes": {
+        "id": "core-architecture/ioc-container-service-lifetimes",
+        "title": "The IoC Container & Service Lifetimes",
+        "description": "How Xeno manages dependency resolution with Singleton, Scoped, and Transient lifetimes, including scope creation and deterministic disposal.",
+        "sidebar": "tutorialSidebar"
+      },
+      "core-architecture/module-composition-pattern": {
+        "id": "core-architecture/module-composition-pattern",
+        "title": "Module Composition Pattern",
+        "description": "How Xeno composes features with IModule, including service registration, options-driven configuration, and module boundary rules.",
+        "sidebar": "tutorialSidebar"
+      },
+      "core-architecture/README": {
+        "id": "core-architecture/README",
+        "title": "Core Architecture & Lifecycle",
+        "description": "Technical overview index and execution manual of the core runtime engine, application hosting lifecycles, and explicit inversion-of-control container mechanics of Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/application-base-handler": {
+        "id": "cqrs-pipeline-architecture/application-base-handler",
+        "title": "Application Base Handler",
+        "description": "Overview",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+        "title": "Authorization Pipeline & Custom Security Strategies",
+        "description": "Technical developer manual on configuring the Xeno AuthorizationPipeline, creating custom access control strategies, and leveraging the BaseAuthorizationStrategy class.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/concurrency-retry-pipeline-behavior",
+        "title": "Concurrency & Retry Pipeline Behavior",
+        "description": "Technical developer manual explaining Xeno ConcurrencyRetryPipeline, exponential backoff with jitter, and handling race conditions.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/exception-pipeline-behavior",
+        "title": "Exception Pipeline Behavior",
+        "description": "Technical developer manual explaining the Xeno ExceptionPipeline behavior, unhandled exception capturing, and error normalization mechanics.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior",
+        "title": "Idempotency Pipeline Behavior",
+        "description": "Technical developer manual explaining Xeno native command idempotency behavior, distributed locking, and result storage mechanics.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/logging-pipeline-behavior",
+        "title": "Logging & Performance Pipeline Behaviors",
+        "description": "Technical developer manual explaining Xeno native observability pipeline behaviors for automatic request logging and execution performance profiling.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/query-caching-pipeline-behavior",
+        "title": "Query Caching Pipeline Behavior",
+        "description": "Technical developer manual explaining Xeno QueryCachingPipeline, transparent read-optimization, and fault-tolerant caching mechanics.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/README",
+        "title": "Pipeline Behaviors Core Fundamentals",
+        "description": "Technical design manual explaining the Xeno native pipeline behavior architecture, the CompositePipeline engine, and configuration models via AppBuilder.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors": {
+        "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors",
+        "title": "Validation Pipeline Behavior",
+        "description": "Technical developer manual explaining how to configure the Xeno ValidationPipeline, build custom strategies using BaseValidationStrategy, and utilize the validator service.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/mediator-dispatcher-engine": {
+        "id": "cqrs-pipeline-architecture/mediator-dispatcher-engine",
+        "title": "The Mediator Dispatcher Engine",
+        "description": "Technical design manual detailing the architecture, message routing mechanics, and execution lifecycles of the centralized IMediator bus in Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "cqrs-pipeline-architecture/README": {
+        "id": "cqrs-pipeline-architecture/README",
+        "title": "CQRS Pipeline Architecture",
+        "description": "Technical index and architectural overview of Command Query Responsibility Segregation (CQRS) and message execution pipelines in the Xeno framework core.",
+        "sidebar": "tutorialSidebar"
+      },
+      "database-persistence/database-bootstrapping/README": {
+        "id": "database-persistence/database-bootstrapping/README",
+        "title": "Database Client & Schema Bootstrapping",
+        "description": "Technical manual explaining Xeno flexible database bootstrapping options, connection pooling customization, and Drizzle ORM client schema configurations.",
+        "sidebar": "tutorialSidebar"
+      },
+      "database-persistence/datasources-execution-topology": {
+        "id": "database-persistence/datasources-execution-topology",
+        "title": "Data Sources & Execution Topology",
+        "description": "Developer documentation on how to register and use Xeno data sources, understand their differences, and wire custom data persistence layers using DB_POOL_CLIENT or DB_ORM_CLIENT.",
+        "sidebar": "tutorialSidebar"
+      },
+      "database-persistence/fluent-query-filter-compiler-grid": {
+        "id": "database-persistence/fluent-query-filter-compiler-grid",
+        "title": "Fluent Query & Filter Compiler Grid",
+        "description": "Technical manual explaining how to implement, register, and utilize IFilterBuilder to compile ReadCriteria and WriteCriteria into Drizzle ORM conditions.",
+        "sidebar": "tutorialSidebar"
+      },
+      "database-persistence/README": {
+        "id": "database-persistence/README",
+        "title": "Database Persistence Layer",
+        "description": "Technical index and architectural overview of the database module, transactional unit of work context, and structural repository pattern in Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "database-persistence/repositories-daos-design-patterns": {
+        "id": "database-persistence/repositories-daos-design-patterns",
+        "title": "Repositories & DAOs Design Patterns",
+        "description": "Technical developer manual on utilizing Xeno repositories and ReadDAOs to segregate read/write data access and map domain entities to persistence DTOs.",
+        "sidebar": "tutorialSidebar"
+      },
+      "defensive-toolkit-utilities/core-framework-utility-helpers": {
+        "id": "defensive-toolkit-utilities/core-framework-utility-helpers",
+        "title": "core-framework-utility-helpers",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "defensive-toolkit-utilities/defensive-type-guards": {
+        "id": "defensive-toolkit-utilities/defensive-type-guards",
+        "title": "defensive-type-guards",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "defensive-toolkit-utilities/README": {
+        "id": "defensive-toolkit-utilities/README",
+        "title": "README",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "developer-ecosystem/enterprise-project-scaffolding-cli": {
+        "id": "developer-ecosystem/enterprise-project-scaffolding-cli",
+        "title": "enterprise-project-scaffolding-cli",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "developer-ecosystem/README": {
+        "id": "developer-ecosystem/README",
+        "title": "README",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "domain-driven-design/entities-unique-identifiers": {
+        "id": "domain-driven-design/entities-unique-identifiers",
+        "title": "Entities & Unique Identifiers",
+        "description": "Reference documentation for the Entity<T> abstract base class and the UniqueId type wrapper in Xeno. Covers identity management, immutability enforcement, state isolation, and implementation patterns for domain entities.",
+        "sidebar": "tutorialSidebar"
+      },
+      "domain-driven-design/functional-monads-core-errors": {
+        "id": "domain-driven-design/functional-monads-core-errors",
+        "title": "Functional Monads & Core Errors",
+        "description": "Practical developer manual for handling operational outcomes and domain errors using Xeno Result monad and AppError architecture.",
+        "sidebar": "tutorialSidebar"
+      },
+      "domain-driven-design/README": {
+        "id": "domain-driven-design/README",
+        "title": "Domain-Driven Design (DDD) Core Building Blocks",
+        "description": "Technical index and overview of the pure, framework-agnostic Domain-Driven Design (DDD) building blocks in Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "domain-driven-design/value-objects-defensive-immutability": {
+        "id": "domain-driven-design/value-objects-defensive-immutability",
+        "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+        "description": "Detailed guide on designing immutable, identity-less domain concepts using the Xeno ValueObject base class.",
+        "sidebar": "tutorialSidebar"
+      },
+      "execution-context-middleware/execution-context-composition": {
+        "id": "execution-context-middleware/execution-context-composition",
+        "title": "ExecutionContext Composition",
+        "description": "Technical specification of Xeno ExecutionContext structure, documenting the composition of Identity, Network, Tracing, and Messaging sub-contexts.",
+        "sidebar": "tutorialSidebar"
+      },
+      "execution-context-middleware/README": {
+        "id": "execution-context-middleware/README",
+        "title": "Execution Context & Middleware Layer",
+        "description": "Technical index and summary of Xeno execution context tracing, asynchronous storage isolation, and HTTP request metadata extraction.",
+        "sidebar": "tutorialSidebar"
+      },
+      "execution-context-middleware/request-identity-storage-lifecycle": {
+        "id": "execution-context-middleware/request-identity-storage-lifecycle",
+        "title": "The Request-Identity Storage Lifecycle",
+        "description": "In-depth execution guide on how RequestContextMiddleware initializes, isolates, and disposes of asynchronous execution storage and request metadata.",
+        "sidebar": "tutorialSidebar"
+      },
+      "execution-context-middleware/transportation-contract-metadata-headers": {
+        "id": "execution-context-middleware/transportation-contract-metadata-headers",
+        "title": "Transportation Contract Metadata & Headers Extraction",
+        "description": "Technical documentation on how Xeno normalizes incoming transport layer headers into typed application metadata via the IServiceExtractor contract.",
+        "sidebar": "tutorialSidebar"
+      },
+      "getting-started/architectural-layers-boundaries": {
+        "id": "getting-started/architectural-layers-boundaries",
+        "title": "Architectural Layers & Boundaries",
+        "description": "Detailed technical specification of the strict Domain-Driven Design (DDD) and Clean Architecture structural rings enforced by compile-time rules in the Xeno framework.",
+        "sidebar": "tutorialSidebar"
+      },
+      "getting-started/introduction-philosophy": {
+        "id": "getting-started/introduction-philosophy",
+        "title": "Introduction & Philosophy",
+        "description": "Technical overview of the architectural design principles, execution lifecycle, and core engineering philosophy behind the Xeno framework kernel.",
+        "sidebar": "tutorialSidebar"
+      },
+      "getting-started/quick-start-guide": {
+        "id": "getting-started/quick-start-guide",
+        "title": "Quick Start Guide",
+        "description": "Step-by-step technical guide to bootstrapping a decorator-free Xeno application workspace using the AppBuilder configuration API and the CQRS Mediator.",
+        "sidebar": "tutorialSidebar"
+      },
+      "getting-started/README": {
+        "id": "getting-started/README",
+        "title": "Getting Started",
+        "description": "Introduction to the Xeno framework installation, core directory structure, and initial application bootstrapping.",
+        "sidebar": "tutorialSidebar"
+      },
+      "getting-started/why-this-framework": {
+        "id": "getting-started/why-this-framework",
+        "title": "Why Choose Xeno? An Architectural Deep-Dive",
+        "description": "Technical engineering analysis of the structural guardrails, distributed resilience subsystems, and compile-time type invariants provided by the Xeno framework core.",
+        "sidebar": "tutorialSidebar"
+      },
+      "http-requests-resilience/http-client-configuration": {
+        "id": "http-requests-resilience/http-client-configuration",
+        "title": "HTTP Client Configuration",
+        "description": "Technical developer guide on configuring, initializing, and isolating outbound HTTP clients and custom injection tokens in the Xeno framework.",
+        "sidebar": "tutorialSidebar"
+      },
+      "http-requests-resilience/README": {
+        "id": "http-requests-resilience/README",
+        "title": "HTTP Requests & Resilience Subsystem",
+        "description": "Technical index and architectural overview of the Xeno out-of-process HTTP communication layer and self-healing resilience policies.",
+        "sidebar": "tutorialSidebar"
+      },
+      "http-requests-resilience/remote-data-source-gateways": {
+        "id": "http-requests-resilience/remote-data-source-gateways",
+        "title": "Remote Data Source Gateways",
+        "description": "Technical developer manual on utilizing the Xeno IRemoteDataSource gateway to isolate outbound HTTP client calls behind fault-tolerant infrastructure abstractions.",
+        "sidebar": "tutorialSidebar"
+      },
+      "http-requests-resilience/resilience-policies": {
+        "id": "http-requests-resilience/resilience-policies",
+        "title": "Resilience & Fault-Tolerance Policies",
+        "description": "Technical developer manual explaining Xeno service resilience configurations, circuit breaker states, exponential backoff with jitter, and bulkhead isolation.",
+        "sidebar": "tutorialSidebar"
+      },
+      "presentation-layer-response-contracts/base-controller": {
+        "id": "presentation-layer-response-contracts/base-controller",
+        "title": "Base Controller",
+        "description": "Technical developer manual detailing the abstract BaseController class architecture, request ingress processing, and mediator execution routing in Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "presentation-layer-response-contracts/README": {
+        "id": "presentation-layer-response-contracts/README",
+        "title": "Presentation Layer Overview",
+        "description": "Technical index and architectural overview of the Presentation Layer, agnostic ingress controllers, and HTTP response standardization structures in Xeno.",
+        "sidebar": "tutorialSidebar"
+      },
+      "presentation-layer-response-contracts/standardize-http-response/error-response": {
+        "id": "presentation-layer-response-contracts/standardize-http-response/error-response",
+        "title": "error-response",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "presentation-layer-response-contracts/standardize-http-response/http-helper": {
+        "id": "presentation-layer-response-contracts/standardize-http-response/http-helper",
+        "title": "http-helper",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "presentation-layer-response-contracts/standardize-http-response/paginated-response": {
+        "id": "presentation-layer-response-contracts/standardize-http-response/paginated-response",
+        "title": "paginated-response",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "presentation-layer-response-contracts/standardize-http-response/README": {
+        "id": "presentation-layer-response-contracts/standardize-http-response/README",
+        "title": "README",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "presentation-layer-response-contracts/standardize-http-response/success-response": {
+        "id": "presentation-layer-response-contracts/standardize-http-response/success-response",
+        "title": "success-response",
+        "description": "",
+        "sidebar": "tutorialSidebar"
+      },
+      "telemetry-logging/configure-console": {
+        "id": "telemetry-logging/configure-console",
+        "title": "Configuring Console Logging",
+        "description": "Technical developer manual on activating, tuning, and filtering local terminal stdout streams using the native Xeno Console Logger.",
+        "sidebar": "tutorialSidebar"
+      },
+      "telemetry-logging/configure-pino": {
+        "id": "telemetry-logging/configure-pino",
+        "title": "Configuring Pino Structured Logging",
+        "description": "Technical developer manual on activating, configuring, and optimizing JSON structured log streams using the Pino logger in the Xeno framework.",
+        "sidebar": "tutorialSidebar"
+      },
+      "telemetry-logging/configure-sentry": {
+        "id": "telemetry-logging/configure-sentry",
+        "title": "Configuring Sentry Error Tracking",
+        "description": "Technical developer manual on activating, configuring, and utilizing the Sentry exception logging client in Xeno to capture application crashes.",
+        "sidebar": "tutorialSidebar"
+      },
+      "telemetry-logging/README": {
+        "id": "telemetry-logging/README",
+        "title": "Telemetry & Logging Layer",
+        "description": "Technical index and architectural manual for configuring the logging infrastructure, monitoring providers, and cross-cutting performance pipelines in Xeno.",
+        "sidebar": "tutorialSidebar"
+      }
+    }
+  }
+}

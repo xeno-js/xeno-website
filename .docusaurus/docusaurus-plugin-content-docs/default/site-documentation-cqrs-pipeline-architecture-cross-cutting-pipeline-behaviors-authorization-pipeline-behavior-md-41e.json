@@ -1,0 +1,37 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+  "title": "Authorization Pipeline & Custom Security Strategies",
+  "description": "Technical developer manual on configuring the Xeno AuthorizationPipeline, creating custom access control strategies, and leveraging the BaseAuthorizationStrategy class.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior.md",
+  "sourceDirName": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/authorization-pipeline-behavior.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "Authorization Pipeline & Custom Security Strategies",
+    "sidebar_position": 6,
+    "description": "Technical developer manual on configuring the Xeno AuthorizationPipeline, creating custom access control strategies, and leveraging the BaseAuthorizationStrategy class.",
+    "keywords": [
+      "authorization pipeline",
+      "xeno core security",
+      "custom authorization strategy",
+      "baseauthorizationstrategy",
+      "rbac permissions",
+      "zero trust pipeline"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Idempotency Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/idempotency-pipeline-behavior"
+  },
+  "next": {
+    "title": "Validation Pipeline Behavior",
+    "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors/validation-pipeline-behaviors"
+  }
+}

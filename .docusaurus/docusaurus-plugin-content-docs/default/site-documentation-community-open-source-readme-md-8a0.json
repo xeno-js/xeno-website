@@ -1,0 +1,24 @@
+{
+  "id": "community-open-source/README",
+  "title": "README",
+  "description": "",
+  "source": "@site/../documentation/community-open-source/README.md",
+  "sourceDirName": "community-open-source",
+  "slug": "/community-open-source/",
+  "permalink": "/docs/community-open-source/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/community-open-source/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "success-response",
+    "permalink": "/docs/presentation-layer-response-contracts/standardize-http-response/success-response"
+  },
+  "next": {
+    "title": "contributing-guide",
+    "permalink": "/docs/community-open-source/contributing-guide"
+  }
+}

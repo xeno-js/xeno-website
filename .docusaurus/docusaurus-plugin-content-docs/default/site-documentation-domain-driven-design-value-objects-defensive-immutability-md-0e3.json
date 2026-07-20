@@ -1,0 +1,37 @@
+{
+  "id": "domain-driven-design/value-objects-defensive-immutability",
+  "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+  "description": "Detailed guide on designing immutable, identity-less domain concepts using the Xeno ValueObject base class.",
+  "source": "@site/../documentation/domain-driven-design/value-objects-defensive-immutability.md",
+  "sourceDirName": "domain-driven-design",
+  "slug": "/domain-driven-design/value-objects-defensive-immutability",
+  "permalink": "/docs/domain-driven-design/value-objects-defensive-immutability",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/domain-driven-design/value-objects-defensive-immutability.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Value Objects & Defensive Immutability in Domain Drive Desing (DDD)",
+    "sidebar_position": 3,
+    "description": "Detailed guide on designing immutable, identity-less domain concepts using the Xeno ValueObject base class.",
+    "keywords": [
+      "value object",
+      "ddd primitives",
+      "immutability",
+      "object equality",
+      "structural equality",
+      "defensive coding"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Entities & Unique Identifiers",
+    "permalink": "/docs/domain-driven-design/entities-unique-identifiers"
+  },
+  "next": {
+    "title": "Functional Monads & Core Errors",
+    "permalink": "/docs/domain-driven-design/functional-monads-core-errors"
+  }
+}

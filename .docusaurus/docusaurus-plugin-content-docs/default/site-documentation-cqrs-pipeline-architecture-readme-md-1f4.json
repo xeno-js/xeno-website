@@ -1,0 +1,38 @@
+{
+  "id": "cqrs-pipeline-architecture/README",
+  "title": "CQRS Pipeline Architecture",
+  "description": "Technical index and architectural overview of Command Query Responsibility Segregation (CQRS) and message execution pipelines in the Xeno framework core.",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/README.md",
+  "sourceDirName": "cqrs-pipeline-architecture",
+  "slug": "/cqrs-pipeline-architecture/",
+  "permalink": "/docs/cqrs-pipeline-architecture/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/cqrs-pipeline-architecture/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "CQRS Pipeline Architecture",
+    "sidebar_position": 6,
+    "slug": "./",
+    "description": "Technical index and architectural overview of Command Query Responsibility Segregation (CQRS) and message execution pipelines in the Xeno framework core.",
+    "keywords": [
+      "cqrs",
+      "mediator pattern",
+      "pipeline behaviors",
+      "cross-cutting concerns",
+      "command bus",
+      "query bus"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Supabase Client & Auth Configuration",
+    "permalink": "/docs/authentication/supabase-configuration"
+  },
+  "next": {
+    "title": "The Mediator Dispatcher Engine",
+    "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine"
+  }
+}

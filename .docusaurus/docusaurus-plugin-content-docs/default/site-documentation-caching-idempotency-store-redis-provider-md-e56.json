@@ -1,0 +1,36 @@
+{
+  "id": "caching-idempotency-store/redis-provider",
+  "title": "Distributed Redis Cache Configuration",
+  "description": "Technical developer manual explaining the Xeno distributed Redis caching engine, connection pooling, and multi-node transaction synchronization.",
+  "source": "@site/../documentation/caching-idempotency-store/redis-provider.md",
+  "sourceDirName": "caching-idempotency-store",
+  "slug": "/caching-idempotency-store/redis-provider",
+  "permalink": "/docs/caching-idempotency-store/redis-provider",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/caching-idempotency-store/redis-provider.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Distributed Redis Cache Configuration",
+    "sidebar_position": 3,
+    "description": "Technical developer manual explaining the Xeno distributed Redis caching engine, connection pooling, and multi-node transaction synchronization.",
+    "keywords": [
+      "redis cache provider",
+      "xeno distributed cache",
+      "out-of-process storage",
+      "cache key partitioning",
+      "connection pooling"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "In-Memory Cache Provider",
+    "permalink": "/docs/caching-idempotency-store/in-memory-provider"
+  },
+  "next": {
+    "title": "Telemetry & Logging Layer",
+    "permalink": "/docs/telemetry-logging/"
+  }
+}

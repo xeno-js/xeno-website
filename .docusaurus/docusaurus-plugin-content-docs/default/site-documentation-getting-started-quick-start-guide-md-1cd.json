@@ -1,0 +1,36 @@
+{
+  "id": "getting-started/quick-start-guide",
+  "title": "Quick Start Guide",
+  "description": "Step-by-step technical guide to bootstrapping a decorator-free Xeno application workspace using the AppBuilder configuration API and the CQRS Mediator.",
+  "source": "@site/../documentation/getting-started/quick-start-guide.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/quick-start-guide",
+  "permalink": "/docs/getting-started/quick-start-guide",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/xeno-js/tree/main/../documentation/getting-started/quick-start-guide.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Quick Start Guide",
+    "sidebar_position": 5,
+    "description": "Step-by-step technical guide to bootstrapping a decorator-free Xeno application workspace using the AppBuilder configuration API and the CQRS Mediator.",
+    "keywords": [
+      "xeno appbuilder configuration",
+      "bootstrap cqrs typescript",
+      "mediator dispatch execution",
+      "clean architecture scaffolding",
+      "typescript dependency injection"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Why Choose Xeno? An Architectural Deep-Dive",
+    "permalink": "/docs/getting-started/why-this-framework"
+  },
+  "next": {
+    "title": "Core Architecture & Lifecycle",
+    "permalink": "/docs/core-architecture/"
+  }
+}
