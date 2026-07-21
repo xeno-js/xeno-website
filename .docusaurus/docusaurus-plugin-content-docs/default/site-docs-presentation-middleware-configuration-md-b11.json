@@ -1,0 +1,24 @@
+{
+  "id": "presentation/middleware/configuration",
+  "title": "AppBuilder Registration Workflow",
+  "description": "The presentation middleware layer is activated and wired into your application's",
+  "source": "@site/../docs/presentation/middleware/configuration.md",
+  "sourceDirName": "presentation/middleware",
+  "slug": "/presentation/middleware/configuration",
+  "permalink": "/docs/presentation/middleware/configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/presentation/middleware/configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Middleware Overview",
+    "permalink": "/docs/presentation/middleware/"
+  },
+  "next": {
+    "title": "Transportation Contract Metadata",
+    "permalink": "/docs/presentation/middleware/http-header-extraction"
+  }
+}

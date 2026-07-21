@@ -1,0 +1,24 @@
+{
+  "id": "core/auth/how-to-use",
+  "title": "The Request-Identity Lifecycle",
+  "description": "When an incoming execution context triggers the presentation layer, identity",
+  "source": "@site/../docs/core/auth/how-to-use.md",
+  "sourceDirName": "core/auth",
+  "slug": "/core/auth/how-to-use",
+  "permalink": "/docs/core/auth/how-to-use",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/auth/how-to-use.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Identity & Access Control",
+    "permalink": "/docs/core/auth/"
+  },
+  "next": {
+    "title": "Infrastructure Provisioning",
+    "permalink": "/docs/core/auth/supabase-configuration"
+  }
+}

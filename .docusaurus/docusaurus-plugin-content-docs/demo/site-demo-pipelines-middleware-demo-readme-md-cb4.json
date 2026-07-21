@@ -1,0 +1,19 @@
+{
+  "id": "pipelines_middleware_demo/README",
+  "title": "CQRS Implementation Guide - Gear5 Framework",
+  "description": "This project demonstrates the implementation of the CQRS (Command Query",
+  "source": "@site/../demo/pipelines_middleware_demo/README.md",
+  "sourceDirName": "pipelines_middleware_demo",
+  "slug": "/pipelines_middleware_demo/",
+  "permalink": "/demo/pipelines_middleware_demo/",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "demoSidebar",
+  "previous": {
+    "title": "🚀 Gear5 Core Demo: HTTP Integration",
+    "permalink": "/demo/http_core_demo/"
+  }
+}

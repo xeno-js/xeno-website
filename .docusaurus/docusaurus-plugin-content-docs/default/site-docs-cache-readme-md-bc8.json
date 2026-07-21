@@ -1,0 +1,24 @@
+{
+  "id": "cache/README",
+  "title": "Cache Module",
+  "description": "The Graviton5 Cache module provides a unified and pluggable abstraction for",
+  "source": "@site/../docs/cache/README.md",
+  "sourceDirName": "cache",
+  "slug": "/cache/",
+  "permalink": "/docs/cache/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/cache/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Support",
+    "permalink": "/docs/support/"
+  },
+  "next": {
+    "title": "Idempotency and Cache Configuration Ordering",
+    "permalink": "/docs/cache/idempotency-and-ordering"
+  }
+}

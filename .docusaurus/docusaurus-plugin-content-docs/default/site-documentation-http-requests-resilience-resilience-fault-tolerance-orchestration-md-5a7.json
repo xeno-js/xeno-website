@@ -1,0 +1,24 @@
+{
+  "id": "http-requests-resilience/resilience-fault-tolerance-orchestration",
+  "title": "resilience-fault-tolerance-orchestration",
+  "description": "",
+  "source": "@site/../documentation/http-requests-resilience/resilience-fault-tolerance-orchestration.md",
+  "sourceDirName": "http-requests-resilience",
+  "slug": "/http-requests-resilience/resilience-fault-tolerance-orchestration",
+  "permalink": "/docs/http-requests-resilience/resilience-fault-tolerance-orchestration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/http-requests-resilience/resilience-fault-tolerance-orchestration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "agnostic-http-client-contract",
+    "permalink": "/docs/http-requests-resilience/agnostic-http-client-contract"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/identity-access-control/"
+  }
+}

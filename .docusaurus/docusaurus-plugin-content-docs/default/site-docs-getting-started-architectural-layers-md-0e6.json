@@ -1,0 +1,37 @@
+{
+  "id": "getting-started/architectural-layers",
+  "title": "Architectural Layers & Boundaries",
+  "description": "Deep dive into the strict Domain-Driven Design (DDD) and Clean Architecture layers enforced by compile-time rules in Graviton5.",
+  "source": "@site/../docs/getting-started/architectural-layers.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/architectural-layers",
+  "permalink": "/docs/getting-started/architectural-layers",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/getting-started/architectural-layers.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Architectural Layers & Boundaries",
+    "sidebar_position": 2,
+    "description": "Deep dive into the strict Domain-Driven Design (DDD) and Clean Architecture layers enforced by compile-time rules in Graviton5.",
+    "keywords": [
+      "clean architecture",
+      "domain-driven design",
+      "ddd",
+      "architectural boundaries",
+      "eslint rules",
+      "layer isolation"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction & Philosophy",
+    "permalink": "/docs/getting-started/introduction"
+  },
+  "next": {
+    "title": "Quick Start Guide",
+    "permalink": "/docs/getting-started/quick-start-guide"
+  }
+}

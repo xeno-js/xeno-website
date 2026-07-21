@@ -1,0 +1,24 @@
+{
+  "id": "identity-access-control/supabase-configuration",
+  "title": "Infrastructure Provisioning",
+  "description": "Integrating Supabase as the underlying identity provider can be fully automated",
+  "source": "@site/../docs/identity-access-control/supabase-configuration.md",
+  "sourceDirName": "identity-access-control",
+  "slug": "/identity-access-control/supabase-configuration",
+  "permalink": "/docs/identity-access-control/supabase-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/identity-access-control/supabase-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "The Request-Identity Lifecycle",
+    "permalink": "/docs/identity-access-control/how-to-use"
+  },
+  "next": {
+    "title": "CQRS Pipeline Behaviors",
+    "permalink": "/docs/pipelines/"
+  }
+}

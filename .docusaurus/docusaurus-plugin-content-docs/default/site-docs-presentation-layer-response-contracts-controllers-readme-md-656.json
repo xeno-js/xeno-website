@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/controllers/README",
+  "title": "BaseController & HTTP Response Contracts",
+  "description": "Overview",
+  "source": "@site/../docs/presentation-layer-response-contracts/controllers/README.md",
+  "sourceDirName": "presentation-layer-response-contracts/controllers",
+  "slug": "/presentation-layer-response-contracts/controllers/",
+  "permalink": "/docs/presentation-layer-response-contracts/controllers/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/presentation-layer-response-contracts/controllers/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Presentation Layer",
+    "permalink": "/docs/presentation-layer-response-contracts/"
+  },
+  "next": {
+    "title": "Middleware Overview",
+    "permalink": "/docs/presentation-layer-response-contracts/middleware/"
+  }
+}

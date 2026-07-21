@@ -1,0 +1,24 @@
+{
+  "id": "database/datasources",
+  "title": "Data Sources",
+  "description": "Graviton5 data sources sit between the low-level IDbClient and your",
+  "source": "@site/../docs/database/datasources.md",
+  "sourceDirName": "database",
+  "slug": "/database/datasources",
+  "permalink": "/docs/database/datasources",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/database/datasources.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Database",
+    "permalink": "/docs/database/"
+  },
+  "next": {
+    "title": "Filter Builder",
+    "permalink": "/docs/database/filter-builder"
+  }
+}

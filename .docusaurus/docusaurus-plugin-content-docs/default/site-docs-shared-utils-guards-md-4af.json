@@ -1,0 +1,24 @@
+{
+  "id": "shared/utils/guards",
+  "title": "Defensive Type Guards (Guards)",
+  "description": "Overview",
+  "source": "@site/../docs/shared/utils/guards.md",
+  "sourceDirName": "shared/utils",
+  "slug": "/shared/utils/guards",
+  "permalink": "/docs/shared/utils/guards",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/shared/utils/guards.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Shared Utilities & Defensive Toolkit",
+    "permalink": "/docs/shared/utils/"
+  },
+  "next": {
+    "title": "Core Framework Helpers",
+    "permalink": "/docs/shared/utils/helpers"
+  }
+}

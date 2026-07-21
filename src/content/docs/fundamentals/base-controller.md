@@ -169,7 +169,7 @@ import { AppBuilder, TOKENS } from '@xeno/core'
 import { CreateUserController } from '../presentation/controllers/create-user.controller'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const initializeHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder
@@ -215,11 +215,11 @@ controller business logic is evaluated.
 // src/main.ts
 import { TOKENS } from '@xeno/core'
 import fastify from 'fastify'
-import { initializeHost } from './infrastructure/bootstrap'
+import { bootstrap } from './infrastructure/bootstrap'
 import type { UserProps } from './domain/entities/user'
 
 async function startServer() {
-  const container = await initializeHost()
+  const container = await bootstrap()
   const server = fastify()
 
   // Resolve required presentation primitives from the compiled container

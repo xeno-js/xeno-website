@@ -1,0 +1,24 @@
+{
+  "id": "contributing/local-development",
+  "title": "Local Development",
+  "description": "This guide is for developers working on the Graviton5 repository.",
+  "source": "@site/../docs/contributing/local-development.md",
+  "sourceDirName": "contributing",
+  "slug": "/contributing/local-development",
+  "permalink": "/docs/contributing/local-development",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/contributing/local-development.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Contributing",
+    "permalink": "/docs/contributing/"
+  },
+  "next": {
+    "title": "Database",
+    "permalink": "/docs/database-persistence/"
+  }
+}

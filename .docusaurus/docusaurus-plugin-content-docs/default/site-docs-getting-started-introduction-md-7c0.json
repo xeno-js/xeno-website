@@ -1,0 +1,37 @@
+{
+  "id": "getting-started/introduction",
+  "title": "Introduction & Philosophy",
+  "description": "Enterprise-grade agnostic DDD and CQRS kernel accelerator for high-performance TypeScript applications.",
+  "source": "@site/../docs/getting-started/introduction.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/introduction",
+  "permalink": "/docs/getting-started/introduction",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/getting-started/introduction.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Introduction & Philosophy",
+    "sidebar_position": 1,
+    "description": "Enterprise-grade agnostic DDD and CQRS kernel accelerator for high-performance TypeScript applications.",
+    "keywords": [
+      "graviton5",
+      "ddd",
+      "cqrs",
+      "clean architecture",
+      "typescript framework",
+      "serverless optimized"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/docs/getting-started/"
+  },
+  "next": {
+    "title": "Architectural Layers & Boundaries",
+    "permalink": "/docs/getting-started/architectural-layers"
+  }
+}

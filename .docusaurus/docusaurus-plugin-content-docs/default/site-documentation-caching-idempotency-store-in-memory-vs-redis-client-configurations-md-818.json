@@ -1,0 +1,24 @@
+{
+  "id": "caching-idempotency-store/in-memory-vs-redis-client-configurations",
+  "title": "in-memory-vs-redis-client-configurations",
+  "description": "",
+  "source": "@site/../documentation/caching-idempotency-store/in-memory-vs-redis-client-configurations.md",
+  "sourceDirName": "caching-idempotency-store",
+  "slug": "/caching-idempotency-store/in-memory-vs-redis-client-configurations",
+  "permalink": "/docs/caching-idempotency-store/in-memory-vs-redis-client-configurations",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/caching-idempotency-store/in-memory-vs-redis-client-configurations.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "cache-module-abstraction",
+    "permalink": "/docs/caching-idempotency-store/cache-module-abstraction"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/community-open-source/"
+  }
+}

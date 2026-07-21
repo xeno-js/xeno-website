@@ -1,0 +1,23 @@
+{
+  "id": "http_core_demo/README",
+  "title": "🚀 Gear5 Core Demo: HTTP Integration",
+  "description": "Welcome to the Gear5 Core demo. This project demonstrates how to build a",
+  "source": "@site/../demo/http_core_demo/README.md",
+  "sourceDirName": "http_core_demo",
+  "slug": "/http_core_demo/",
+  "permalink": "/demo/http_core_demo/",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "demoSidebar",
+  "previous": {
+    "title": "Demo 01: Database, DataSource and Clean Architecture 🚀",
+    "permalink": "/demo/database_drizzle_demo/"
+  },
+  "next": {
+    "title": "CQRS Implementation Guide - Gear5 Framework",
+    "permalink": "/demo/pipelines_middleware_demo/"
+  }
+}

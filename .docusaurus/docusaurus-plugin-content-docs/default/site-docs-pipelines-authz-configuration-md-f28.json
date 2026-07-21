@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/authz/configuration",
+  "title": "Authorization Pipeline Configuration",
+  "description": "Programmatic Integration Mechanics",
+  "source": "@site/../docs/pipelines/authz/configuration.md",
+  "sourceDirName": "pipelines/authz",
+  "slug": "/pipelines/authz/configuration",
+  "permalink": "/docs/pipelines/authz/configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/authz/configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Identity Access & Authorization Subsystem (AuthZ)",
+    "permalink": "/docs/pipelines/authz/"
+  },
+  "next": {
+    "title": "Custom Authorization Strategy Integration",
+    "permalink": "/docs/pipelines/authz/custom-strategy-authz"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "telemetry-logging/sentry-configuration",
+  "title": "Sentry Production Logger Configuration",
+  "description": "The Sentry integration in Graviton5 handles production exception tracking, alert",
+  "source": "@site/../docs/telemetry-logging/sentry-configuration.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/sentry-configuration",
+  "permalink": "/docs/telemetry-logging/sentry-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/telemetry-logging/sentry-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Pino Production Logger Configuration",
+    "permalink": "/docs/telemetry-logging/pino-configuration"
+  }
+}

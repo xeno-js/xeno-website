@@ -1,0 +1,24 @@
+{
+  "id": "telemetry-logging/README",
+  "title": "Logging Architecture & Configuration",
+  "description": "The Graviton5 framework features a powerful, diagnostic-centric logging",
+  "source": "@site/../docs/telemetry-logging/README.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/",
+  "permalink": "/docs/telemetry-logging/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/telemetry-logging/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "The Execution Context Composition",
+    "permalink": "/docs/presentation-layer-response-contracts/middleware/request-context-execution"
+  },
+  "next": {
+    "title": "Logging overview",
+    "permalink": "/docs/telemetry-logging/configure-logger"
+  }
+}

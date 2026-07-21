@@ -1,0 +1,24 @@
+{
+  "id": "core/http/README",
+  "title": "HTTP Request and Resilience",
+  "description": "The Graviton5 HTTP & Fault-Tolerance subsystem delivers an isolated, resilient,",
+  "source": "@site/../docs/core/http/README.md",
+  "sourceDirName": "core/http",
+  "slug": "/core/http/",
+  "permalink": "/docs/core/http/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/http/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Value Objects & Immutability",
+    "permalink": "/docs/core/domain/value_objects/"
+  },
+  "next": {
+    "title": "Infrastructure Scaffolding",
+    "permalink": "/docs/core/http/http-client-configuration"
+  }
+}

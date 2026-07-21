@@ -1,0 +1,20 @@
+{
+  "id": "telemetry-logging/production-logging-provider-configurations",
+  "title": "production-logging-provider-configurations",
+  "description": "",
+  "source": "@site/../documentation/telemetry-logging/production-logging-provider-configurations.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/production-logging-provider-configurations",
+  "permalink": "/docs/telemetry-logging/production-logging-provider-configurations",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/telemetry-logging/production-logging-provider-configurations.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "logging-architecture-core-abstractions",
+    "permalink": "/docs/telemetry-logging/logging-architecture-core-abstractions"
+  }
+}

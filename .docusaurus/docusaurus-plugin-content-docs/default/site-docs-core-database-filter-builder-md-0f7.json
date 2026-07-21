@@ -1,0 +1,24 @@
+{
+  "id": "core/database/filter-builder",
+  "title": "Filter Builder",
+  "description": "Graviton5 criteria are framework-level objects. Drizzle expects SQL expressions",
+  "source": "@site/../docs/core/database/filter-builder.md",
+  "sourceDirName": "core/database",
+  "slug": "/core/database/filter-builder",
+  "permalink": "/docs/core/database/filter-builder",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/database/filter-builder.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Data Sources",
+    "permalink": "/docs/core/database/datasources"
+  },
+  "next": {
+    "title": "Repositories and DAOs",
+    "permalink": "/docs/core/database/repositories-and-daos"
+  }
+}

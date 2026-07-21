@@ -1,0 +1,24 @@
+{
+  "id": "http-requests-resilience/http-core-module",
+  "title": "The Orchestration Strategy via addHttpCore",
+  "description": "While utilizing .addHttp() and .addResilience() as independent",
+  "source": "@site/../docs/http-requests-resilience/http-core-module.md",
+  "sourceDirName": "http-requests-resilience",
+  "slug": "/http-requests-resilience/http-core-module",
+  "permalink": "/docs/http-requests-resilience/http-core-module",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/http-requests-resilience/http-core-module.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Infrastructure Scaffolding",
+    "permalink": "/docs/http-requests-resilience/http-client-configuration"
+  },
+  "next": {
+    "title": "Resilience & Fault Tolerance Configuration",
+    "permalink": "/docs/http-requests-resilience/resilience-configuration"
+  }
+}

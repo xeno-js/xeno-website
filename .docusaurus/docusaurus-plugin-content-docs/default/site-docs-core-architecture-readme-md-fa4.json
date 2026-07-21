@@ -1,0 +1,37 @@
+{
+  "id": "core-architecture/README",
+  "title": "Core Architecture & Lifecycle",
+  "description": "Technical index and summary of the core runtime engine, application hosting lifecycle, and IoC service container mechanics of Graviton5.",
+  "source": "@site/../docs/core-architecture/README.md",
+  "sourceDirName": "core-architecture",
+  "slug": "/core-architecture/",
+  "permalink": "/docs/core-architecture/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core-architecture/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Core Architecture & Lifecycle",
+    "sidebar_position": 1,
+    "slug": "./",
+    "description": "Technical index and summary of the core runtime engine, application hosting lifecycle, and IoC service container mechanics of Graviton5.",
+    "keywords": [
+      "core architecture",
+      "dependency injection lifetimes",
+      "application hosting",
+      "module composition",
+      "bootstrap engine"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Quick Start Guide",
+    "permalink": "/docs/getting-started/quick-start-guide"
+  },
+  "next": {
+    "title": "Modules and Dependencies",
+    "permalink": "/docs/core-architecture/modules-and-dependencies"
+  }
+}

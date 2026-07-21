@@ -1,0 +1,24 @@
+{
+  "id": "core/domain/README",
+  "title": "Domain-Driven Design (DDD) Core Building Blocks",
+  "description": "Overview",
+  "source": "@site/../docs/core/domain/README.md",
+  "sourceDirName": "core/domain",
+  "slug": "/core/domain/",
+  "permalink": "/docs/core/domain/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/domain/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Injection Tokens",
+    "permalink": "/docs/core/dependency-injection/tokens"
+  },
+  "next": {
+    "title": "Entities & Unique Identifiers",
+    "permalink": "/docs/core/domain/entities/"
+  }
+}

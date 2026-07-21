@@ -51,6 +51,22 @@ export default defineConfig({
             { label: 'Unit of Work Transaction', link: '/database/unit-of-work' },
           ],
         },
+        {
+          label: 'Loggers',
+          items: [
+            { label: 'Overview', link: '/loggers/overview' },
+            { label: 'Pino', link: '/loggers/pino-logger' },
+            { label: 'Sentry', link: '/loggers/sentry-logger' },
+          ],
+        },
+        {
+          label: 'Cache',
+          items: [
+            { label: 'Overview', link: '/cache/overview' },
+            { label: 'In-Memory', link: '/cache/in-memory' },
+            { label: 'Redis', link: '/cache/redis' },
+          ],
+        },
       ],
     }),
   ],

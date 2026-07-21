@@ -1,0 +1,24 @@
+{
+  "id": "cqrs-pipeline-architecture/pipeline-behaviors-fundamentals",
+  "title": "pipeline-behaviors-fundamentals",
+  "description": "",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/pipeline-behaviors-fundamentals.md",
+  "sourceDirName": "cqrs-pipeline-architecture",
+  "slug": "/cqrs-pipeline-architecture/pipeline-behaviors-fundamentals",
+  "permalink": "/docs/cqrs-pipeline-architecture/pipeline-behaviors-fundamentals",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/cqrs-pipeline-architecture/pipeline-behaviors-fundamentals.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "mediator-dispatcher-engine",
+    "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/database-persistence/"
+  }
+}

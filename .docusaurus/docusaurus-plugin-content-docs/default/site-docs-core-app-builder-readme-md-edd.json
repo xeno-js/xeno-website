@@ -1,0 +1,37 @@
+{
+  "id": "core/app_builder/README",
+  "title": "Application Hosting & Bootstrap Engine",
+  "description": "Deep dive into the initialization lifecycle of Graviton5 applications utilizing the fluent, decorator-free AppBuilder pattern.",
+  "source": "@site/../docs/core/app_builder/README.md",
+  "sourceDirName": "core/app_builder",
+  "slug": "/core/app_builder/",
+  "permalink": "/docs/core/app_builder/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/app_builder/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Application Hosting & Bootstrap Engine",
+    "sidebar_position": 1,
+    "description": "Deep dive into the initialization lifecycle of Graviton5 applications utilizing the fluent, decorator-free AppBuilder pattern.",
+    "keywords": [
+      "appbuilder",
+      "bootstrap",
+      "runtime lifecycle",
+      "software hosting",
+      "service container",
+      "container compilation"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Core",
+    "permalink": "/docs/core/"
+  },
+  "next": {
+    "title": "Dependency Injection Lifetimes Manual",
+    "permalink": "/docs/core/app_builder/dependency-injection-lifetimes"
+  }
+}

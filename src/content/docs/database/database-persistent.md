@@ -211,7 +211,7 @@ import { AppBuilder, TOKENS } from '@xeno/core';
 import type { AppRegistry } from './xeno-registry/app-registry';
 import { UserDataSource } from './datasources/user.datasource';
 
-export const configureDatabaseHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>();
 
   builder

@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/validation/zod-configuration",
+  "title": "Automated Infrastructure Scaffolding",
+  "description": "Declarative schema validation using Zod is integrated out of the box during the",
+  "source": "@site/../docs/pipelines/validation/zod-configuration.md",
+  "sourceDirName": "pipelines/validation",
+  "slug": "/pipelines/validation/zod-configuration",
+  "permalink": "/docs/pipelines/validation/zod-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/validation/zod-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Extending BaseValidationStrategy",
+    "permalink": "/docs/pipelines/validation/custom-validation"
+  },
+  "next": {
+    "title": "Presentation Layer",
+    "permalink": "/docs/presentation-layer-response-contracts/"
+  }
+}

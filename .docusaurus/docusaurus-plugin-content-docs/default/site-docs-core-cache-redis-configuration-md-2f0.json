@@ -1,0 +1,24 @@
+{
+  "id": "core/cache/redis-configuration",
+  "title": "Redis Configuration & CLI Integration",
+  "description": "When initializing a brand new project via the @Graviton5/create CLI—either",
+  "source": "@site/../docs/core/cache/redis-configuration.md",
+  "sourceDirName": "core/cache",
+  "slug": "/core/cache/redis-configuration",
+  "permalink": "/docs/core/cache/redis-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/cache/redis-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Idempotency and Cache Configuration Ordering",
+    "permalink": "/docs/core/cache/idempotency-and-ordering"
+  },
+  "next": {
+    "title": "Database",
+    "permalink": "/docs/core/database/"
+  }
+}

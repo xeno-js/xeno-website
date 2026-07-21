@@ -1,0 +1,24 @@
+{
+  "id": "identity-access-control/how-to-use",
+  "title": "The Request-Identity Lifecycle",
+  "description": "When an incoming execution context triggers the presentation layer, identity",
+  "source": "@site/../docs/identity-access-control/how-to-use.md",
+  "sourceDirName": "identity-access-control",
+  "slug": "/identity-access-control/how-to-use",
+  "permalink": "/docs/identity-access-control/how-to-use",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/identity-access-control/how-to-use.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Identity & Access Control",
+    "permalink": "/docs/identity-access-control/"
+  },
+  "next": {
+    "title": "Infrastructure Provisioning",
+    "permalink": "/docs/identity-access-control/supabase-configuration"
+  }
+}

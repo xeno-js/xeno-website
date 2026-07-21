@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/standardized-http-response-contracts",
+  "title": "standardized-http-response-contracts",
+  "description": "",
+  "source": "@site/../documentation/presentation-layer-response-contracts/standardized-http-response-contracts.md",
+  "sourceDirName": "presentation-layer-response-contracts",
+  "slug": "/presentation-layer-response-contracts/standardized-http-response-contracts",
+  "permalink": "/docs/presentation-layer-response-contracts/standardized-http-response-contracts",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/presentation-layer-response-contracts/standardized-http-response-contracts.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "base-controller-architecture",
+    "permalink": "/docs/presentation-layer-response-contracts/base-controller-architecture"
+  },
+  "next": {
+    "title": "README",
+    "permalink": "/docs/telemetry-logging/"
+  }
+}

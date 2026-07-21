@@ -1,0 +1,24 @@
+{
+  "id": "database-persistence/setup",
+  "title": "Database Setup",
+  "description": "The quickest way to start with database support is to scaffold the application",
+  "source": "@site/../docs/database-persistence/setup.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/setup",
+  "permalink": "/docs/database-persistence/setup",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/database-persistence/setup.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Schema and Bootstrap",
+    "permalink": "/docs/database-persistence/schema-and-bootstrap"
+  },
+  "next": {
+    "title": "Shared Kernel Layer",
+    "permalink": "/docs/defensive-toolkit-utilities/"
+  }
+}

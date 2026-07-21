@@ -1,0 +1,24 @@
+{
+  "id": "identity-access-control/role-based-access-control-manual",
+  "title": "role-based-access-control-manual",
+  "description": "",
+  "source": "@site/../documentation/identity-access-control/role-based-access-control-manual.md",
+  "sourceDirName": "identity-access-control",
+  "slug": "/identity-access-control/role-based-access-control-manual",
+  "permalink": "/docs/identity-access-control/role-based-access-control-manual",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/identity-access-control/role-based-access-control-manual.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "permission-based-access-control-manual",
+    "permalink": "/docs/identity-access-control/permission-based-access-control-manual"
+  },
+  "next": {
+    "title": "saas-multi-tenant-partitioning-blueprint",
+    "permalink": "/docs/identity-access-control/saas-multi-tenant-partitioning-blueprint"
+  }
+}

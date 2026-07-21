@@ -1,0 +1,24 @@
+{
+  "id": "identity-access-control/custom-authorization-strategy-integration",
+  "title": "custom-authorization-strategy-integration",
+  "description": "",
+  "source": "@site/../documentation/identity-access-control/custom-authorization-strategy-integration.md",
+  "sourceDirName": "identity-access-control",
+  "slug": "/identity-access-control/custom-authorization-strategy-integration",
+  "permalink": "/docs/identity-access-control/custom-authorization-strategy-integration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/identity-access-control/custom-authorization-strategy-integration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "built-in-authorization-strategies",
+    "permalink": "/docs/identity-access-control/built-in-authorization-strategies"
+  },
+  "next": {
+    "title": "permission-based-access-control-manual",
+    "permalink": "/docs/identity-access-control/permission-based-access-control-manual"
+  }
+}

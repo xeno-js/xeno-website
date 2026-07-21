@@ -1,0 +1,24 @@
+{
+  "id": "telemetry-logging/logging-architecture-core-abstractions",
+  "title": "logging-architecture-core-abstractions",
+  "description": "",
+  "source": "@site/../documentation/telemetry-logging/logging-architecture-core-abstractions.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/logging-architecture-core-abstractions",
+  "permalink": "/docs/telemetry-logging/logging-architecture-core-abstractions",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/telemetry-logging/logging-architecture-core-abstractions.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/telemetry-logging/"
+  },
+  "next": {
+    "title": "production-logging-provider-configurations",
+    "permalink": "/docs/telemetry-logging/production-logging-provider-configurations"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "core/shared/utils/helpers",
+  "title": "Core Framework Helpers",
+  "description": "Overview",
+  "source": "@site/../docs/core/shared/utils/helpers.md",
+  "sourceDirName": "core/shared/utils",
+  "slug": "/core/shared/utils/helpers",
+  "permalink": "/docs/core/shared/utils/helpers",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/shared/utils/helpers.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Defensive Type Guards (Guards)",
+    "permalink": "/docs/core/shared/utils/guards"
+  },
+  "next": {
+    "title": "Executable Demos",
+    "permalink": "/docs/demo"
+  }
+}

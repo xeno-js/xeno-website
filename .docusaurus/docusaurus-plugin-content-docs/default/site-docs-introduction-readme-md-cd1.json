@@ -1,0 +1,37 @@
+{
+  "id": "introduction/README",
+  "title": "Introduction & Philosophy",
+  "description": "Enterprise-grade agnostic DDD and CQRS kernel accelerator for high-performance TypeScript applications.",
+  "source": "@site/../docs/introduction/README.md",
+  "sourceDirName": "introduction",
+  "slug": "/introduction/",
+  "permalink": "/docs/introduction/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/introduction/README.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Introduction & Philosophy",
+    "sidebar_position": 1,
+    "description": "Enterprise-grade agnostic DDD and CQRS kernel accelerator for high-performance TypeScript applications.",
+    "keywords": [
+      "graviton5",
+      "ddd",
+      "cqrs",
+      "clean architecture",
+      "typescript framework",
+      "serverless optimized"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Quick Start Guide",
+    "permalink": "/docs/getting-started/quick-start-guide"
+  },
+  "next": {
+    "title": "Installation",
+    "permalink": "/docs/introduction/installation"
+  }
+}

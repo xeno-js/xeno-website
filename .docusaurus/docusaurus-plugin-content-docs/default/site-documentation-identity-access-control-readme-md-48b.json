@@ -1,0 +1,24 @@
+{
+  "id": "identity-access-control/README",
+  "title": "README",
+  "description": "",
+  "source": "@site/../documentation/identity-access-control/README.md",
+  "sourceDirName": "identity-access-control",
+  "slug": "/identity-access-control/",
+  "permalink": "/docs/identity-access-control/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/identity-access-control/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "resilience-fault-tolerance-orchestration",
+    "permalink": "/docs/http-requests-resilience/resilience-fault-tolerance-orchestration"
+  },
+  "next": {
+    "title": "authorization-pipeline-architecture",
+    "permalink": "/docs/identity-access-control/authorization-pipeline-architecture"
+  }
+}

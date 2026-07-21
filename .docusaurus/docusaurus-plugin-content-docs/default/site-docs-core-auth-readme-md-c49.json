@@ -1,0 +1,24 @@
+{
+  "id": "core/auth/README",
+  "title": "Identity & Access Control",
+  "description": "The Graviton5 Identity & Access Control subsystem delivers an enterprise-grade,",
+  "source": "@site/../docs/core/auth/README.md",
+  "sourceDirName": "core/auth",
+  "slug": "/core/auth/",
+  "permalink": "/docs/core/auth/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/auth/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Core",
+    "permalink": "/docs/core/"
+  },
+  "next": {
+    "title": "The Request-Identity Lifecycle",
+    "permalink": "/docs/core/auth/how-to-use"
+  }
+}

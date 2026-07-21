@@ -1,0 +1,19 @@
+{
+  "id": "database_drizzle_demo/README",
+  "title": "Demo 01: Database, DataSource and Clean Architecture 🚀",
+  "description": "This project is a practical demo illustrating how to use the @gear5/core",
+  "source": "@site/../demo/database_drizzle_demo/README.md",
+  "sourceDirName": "database_drizzle_demo",
+  "slug": "/database_drizzle_demo/",
+  "permalink": "/demo/database_drizzle_demo/",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "demoSidebar",
+  "next": {
+    "title": "🚀 Gear5 Core Demo: HTTP Integration",
+    "permalink": "/demo/http_core_demo/"
+  }
+}

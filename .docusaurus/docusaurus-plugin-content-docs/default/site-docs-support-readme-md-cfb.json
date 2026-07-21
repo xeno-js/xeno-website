@@ -1,0 +1,24 @@
+{
+  "id": "support/README",
+  "title": "Supporting Graviton5",
+  "description": "Graviton5 is an MIT-licensed, open-source framework.",
+  "source": "@site/../docs/support/README.md",
+  "sourceDirName": "support",
+  "slug": "/support/",
+  "permalink": "/docs/support/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/support/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Executable Demos",
+    "permalink": "/docs/demo"
+  },
+  "next": {
+    "title": "Cache Module",
+    "permalink": "/docs/caching-idempotency-store/"
+  }
+}

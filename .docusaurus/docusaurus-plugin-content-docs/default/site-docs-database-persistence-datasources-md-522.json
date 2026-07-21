@@ -1,0 +1,24 @@
+{
+  "id": "database-persistence/datasources",
+  "title": "Data Sources",
+  "description": "Graviton5 data sources sit between the low-level IDbClient and your",
+  "source": "@site/../docs/database-persistence/datasources.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/datasources",
+  "permalink": "/docs/database-persistence/datasources",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/database-persistence/datasources.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Database",
+    "permalink": "/docs/database-persistence/"
+  },
+  "next": {
+    "title": "Filter Builder",
+    "permalink": "/docs/database-persistence/filter-builder"
+  }
+}

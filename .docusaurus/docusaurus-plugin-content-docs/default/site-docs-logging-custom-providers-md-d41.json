@@ -1,0 +1,24 @@
+{
+  "id": "logging/custom-providers",
+  "title": "Custom Logging Providers",
+  "description": "When your enterprise ecosystem demands integration with custom log",
+  "source": "@site/../docs/logging/custom-providers.md",
+  "sourceDirName": "logging",
+  "slug": "/logging/custom-providers",
+  "permalink": "/docs/logging/custom-providers",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/logging/custom-providers.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging overview",
+    "permalink": "/docs/logging/configure-logger"
+  },
+  "next": {
+    "title": "Pino Production Logger Configuration",
+    "permalink": "/docs/logging/pino-configuration"
+  }
+}

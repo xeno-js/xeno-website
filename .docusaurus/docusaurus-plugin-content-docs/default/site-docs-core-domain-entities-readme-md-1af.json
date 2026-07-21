@@ -1,0 +1,24 @@
+{
+  "id": "core/domain/entities/README",
+  "title": "Entities & Unique Identifiers",
+  "description": "Overview",
+  "source": "@site/../docs/core/domain/entities/README.md",
+  "sourceDirName": "core/domain/entities",
+  "slug": "/core/domain/entities/",
+  "permalink": "/docs/core/domain/entities/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/domain/entities/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Domain-Driven Design (DDD) Core Building Blocks",
+    "permalink": "/docs/core/domain/"
+  },
+  "next": {
+    "title": "Functional Monads & Application Errors",
+    "permalink": "/docs/core/domain/functional/"
+  }
+}

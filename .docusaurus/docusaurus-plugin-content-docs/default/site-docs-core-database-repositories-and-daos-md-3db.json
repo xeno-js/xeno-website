@@ -1,0 +1,24 @@
+{
+  "id": "core/database/repositories-and-daos",
+  "title": "Repositories and DAOs",
+  "description": "Graviton5 provides two higher-level persistence helpers:",
+  "source": "@site/../docs/core/database/repositories-and-daos.md",
+  "sourceDirName": "core/database",
+  "slug": "/core/database/repositories-and-daos",
+  "permalink": "/docs/core/database/repositories-and-daos",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/database/repositories-and-daos.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Filter Builder",
+    "permalink": "/docs/core/database/filter-builder"
+  },
+  "next": {
+    "title": "Schema and Bootstrap",
+    "permalink": "/docs/core/database/schema-and-bootstrap"
+  }
+}

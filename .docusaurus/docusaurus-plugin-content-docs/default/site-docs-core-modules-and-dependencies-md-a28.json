@@ -1,0 +1,24 @@
+{
+  "id": "core/modules-and-dependencies",
+  "title": "Modules and Dependencies",
+  "description": "Graviton5 uses optional peer dependencies: you install only the libraries",
+  "source": "@site/../docs/core/modules-and-dependencies.md",
+  "sourceDirName": "core",
+  "slug": "/core/modules-and-dependencies",
+  "permalink": "/docs/core/modules-and-dependencies",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/modules-and-dependencies.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Core",
+    "permalink": "/docs/core/"
+  },
+  "next": {
+    "title": "Executable Demos",
+    "permalink": "/docs/demo"
+  }
+}

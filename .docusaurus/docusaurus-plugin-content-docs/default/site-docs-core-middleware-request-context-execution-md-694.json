@@ -1,0 +1,24 @@
+{
+  "id": "core/middleware/request-context-execution",
+  "title": "The Execution Context Composition",
+  "description": "When an external transaction triggers the middleware, the system encapsulates",
+  "source": "@site/../docs/core/middleware/request-context-execution.md",
+  "sourceDirName": "core/middleware",
+  "slug": "/core/middleware/request-context-execution",
+  "permalink": "/docs/core/middleware/request-context-execution",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/gear5/tree/main/../docs/core/middleware/request-context-execution.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Sentry Production Logger Configuration",
+    "permalink": "/docs/core/logging/sentry-configuration"
+  },
+  "next": {
+    "title": "Modules and Dependencies",
+    "permalink": "/docs/core/modules-and-dependencies"
+  }
+}

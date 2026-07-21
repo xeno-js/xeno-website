@@ -1,0 +1,24 @@
+{
+  "id": "database-persistence/database-client-schema-bootstrap",
+  "title": "database-client-schema-bootstrap",
+  "description": "",
+  "source": "@site/../documentation/database-persistence/database-client-schema-bootstrap.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/database-client-schema-bootstrap",
+  "permalink": "/docs/database-persistence/database-client-schema-bootstrap",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/database-persistence/database-client-schema-bootstrap.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/database-persistence/"
+  },
+  "next": {
+    "title": "datasources-execution-topology",
+    "permalink": "/docs/database-persistence/datasources-execution-topology"
+  }
+}

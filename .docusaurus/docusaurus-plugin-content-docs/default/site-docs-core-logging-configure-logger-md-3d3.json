@@ -1,0 +1,24 @@
+{
+  "id": "core/logging/configure-logger",
+  "title": "Logging overview",
+  "description": "The Graviton5 framework features a powerful, diagnostic-centric logging",
+  "source": "@site/../docs/core/logging/configure-logger.md",
+  "sourceDirName": "core/logging",
+  "slug": "/core/logging/configure-logger",
+  "permalink": "/docs/core/logging/configure-logger",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/logging/configure-logger.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging Architecture & Configuration",
+    "permalink": "/docs/core/logging/"
+  },
+  "next": {
+    "title": "Custom Logging Providers",
+    "permalink": "/docs/core/logging/custom-providers"
+  }
+}

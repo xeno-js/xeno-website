@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/middleware/http-header-extraction",
+  "title": "Transportation Contract Metadata",
+  "description": "The extraction of raw protocol data is managed by the unified",
+  "source": "@site/../docs/presentation-layer-response-contracts/middleware/http-header-extraction.md",
+  "sourceDirName": "presentation-layer-response-contracts/middleware",
+  "slug": "/presentation-layer-response-contracts/middleware/http-header-extraction",
+  "permalink": "/docs/presentation-layer-response-contracts/middleware/http-header-extraction",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/presentation-layer-response-contracts/middleware/http-header-extraction.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "AppBuilder Registration Workflow",
+    "permalink": "/docs/presentation-layer-response-contracts/middleware/configuration"
+  },
+  "next": {
+    "title": "The Execution Context Composition",
+    "permalink": "/docs/presentation-layer-response-contracts/middleware/request-context-execution"
+  }
+}

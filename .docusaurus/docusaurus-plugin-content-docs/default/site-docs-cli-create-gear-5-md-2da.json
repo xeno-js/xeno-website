@@ -1,0 +1,24 @@
+{
+  "id": "cli/create-gear5",
+  "title": "CLI create-gear5",
+  "description": "The packages/create-gear5 package contains the scaffolding CLI for new Gear5",
+  "source": "@site/../docs/cli/create-gear5.md",
+  "sourceDirName": "cli",
+  "slug": "/cli/create-gear5",
+  "permalink": "/docs/cli/create-gear5",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/gear5/tree/main/../docs/cli/create-gear5.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Gear5 CLI",
+    "permalink": "/docs/cli/"
+  },
+  "next": {
+    "title": "Core",
+    "permalink": "/docs/core/"
+  }
+}

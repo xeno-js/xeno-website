@@ -196,7 +196,7 @@ export class UpdateProfileCommandHandler extends BaseHandler<
     private readonly _profileRepository: IRepository<Profile>,
     identityFactory: IFactory<void, UserContext>,
   ) {
-    super(identityFactory) // Initializes user identity metrics in the base class[cite: 1]
+    super(identityFactory) // Initializes user identity metrics in the base class
   }
 
   public async handle(
@@ -220,7 +220,7 @@ import { AppBuilder, TOKENS } from '@xeno/core'
 import { UpdateProfileCommandHandler } from '../application/profile/handlers/update-profile.handler'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureHostApplication = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder
@@ -232,7 +232,7 @@ export const configureHostApplication = async () => {
       // Handlers utilizing transactions MUST be registered with a Scoped Lifetime
       services.addScoped('UPDATE_PROFILE_HANDLER', (container) => {
         return new UpdateProfileCommandHandler(
-          container.resolve(TOKENS.UNIT_OF_WORK), // Resolves the UnitOfWork instance[cite: 1]
+          container.resolve(TOKENS.UNIT_OF_WORK), // Resolves the UnitOfWork instance
           container.resolve('PROFILE_REPOSITORY'),
           container.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
@@ -293,13 +293,13 @@ export class UpdateProfileCommandHandler extends BaseHandler<
       `[CommandHandler] Initiating atomic transaction block for Profile: ${request.props.id}`,
     )
 
-    // 1. Enforce a cooperative cancellation barrier before starting transactional work[cite: 1]
+    // 1. Enforce a cooperative cancellation barrier before starting transactional work
     AppError.throwIfAborted(signal, 'UpdateProfileCommandHandler.handle')
 
     try {
-      // 2. Execute operations within the atomic transaction boundary[cite: 1]
+      // 2. Execute operations within the atomic transaction boundary
       await this._uow.runInTransaction(async () => {
-        const userContext = this._getCurrentContext() // Pull verified tenant configurations[cite: 1]
+        const userContext = this._getCurrentContext() // Pull verified tenant configurations
 
         // Operation 1: Fetch the target model inside the active transaction path
         const profileResult = await this._profileRepository.findById(
@@ -309,7 +309,7 @@ export class UpdateProfileCommandHandler extends BaseHandler<
         )
 
         if (!profileResult.isOk() || !profileResult.getValueOrThrow()) {
-          // Throwing an error inside the callback automatically triggers a database ROLLBACK[cite: 1]
+          // Throwing an error inside the callback automatically triggers a database ROLLBACK
           throw AppError.notFound(
             'UpdateProfileCommandHandler',
             'Target profile asset missing.',
@@ -332,7 +332,7 @@ export class UpdateProfileCommandHandler extends BaseHandler<
         )
       }, signal)
 
-      // 3. If execution reaches this point, all changes have been safely committed to disk[cite: 1]
+      // 3. If execution reaches this point, all changes have been safely committed to disk
       return Result.ok()
     } catch (error) {
       console.error(

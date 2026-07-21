@@ -1,0 +1,24 @@
+{
+  "id": "dependency-injection/tokens",
+  "title": "Injection Tokens",
+  "description": "An injection token is the stable key used by the Graviton5 service container to",
+  "source": "@site/../docs/dependency-injection/tokens.md",
+  "sourceDirName": "dependency-injection",
+  "slug": "/dependency-injection/tokens",
+  "permalink": "/docs/dependency-injection/tokens",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/dependency-injection/tokens.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Dependency Injection",
+    "permalink": "/docs/dependency-injection/"
+  },
+  "next": {
+    "title": "Domain-Driven Design (DDD) Core Building Blocks",
+    "permalink": "/docs/domain-driven-design/"
+  }
+}

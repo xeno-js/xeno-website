@@ -1,0 +1,24 @@
+{
+  "id": "logging/README",
+  "title": "Logging Architecture & Configuration",
+  "description": "The Graviton5 framework features a powerful, diagnostic-centric logging",
+  "source": "@site/../docs/logging/README.md",
+  "sourceDirName": "logging",
+  "slug": "/logging/",
+  "permalink": "/docs/logging/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/logging/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Infrastructure Provisioning",
+    "permalink": "/docs/identity-access-control/supabase-configuration"
+  },
+  "next": {
+    "title": "Logging overview",
+    "permalink": "/docs/logging/configure-logger"
+  }
+}

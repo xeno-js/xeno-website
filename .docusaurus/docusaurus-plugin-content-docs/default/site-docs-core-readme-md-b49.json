@@ -1,0 +1,24 @@
+{
+  "id": "core/README",
+  "title": "Core",
+  "description": "Documentation for the @graviton5 framework package, its modules, APIs, and",
+  "source": "@site/../docs/core/README.md",
+  "sourceDirName": "core",
+  "slug": "/core/",
+  "permalink": "/docs/core/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Quick Start Guide",
+    "permalink": "/docs/getting-started/quick-start-guide"
+  },
+  "next": {
+    "title": "Modules and Dependencies",
+    "permalink": "/docs/core/modules-and-dependencies"
+  }
+}

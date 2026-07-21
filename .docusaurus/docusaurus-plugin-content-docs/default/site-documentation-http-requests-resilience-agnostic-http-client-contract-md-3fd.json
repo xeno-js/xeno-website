@@ -1,0 +1,24 @@
+{
+  "id": "http-requests-resilience/agnostic-http-client-contract",
+  "title": "agnostic-http-client-contract",
+  "description": "",
+  "source": "@site/../documentation/http-requests-resilience/agnostic-http-client-contract.md",
+  "sourceDirName": "http-requests-resilience",
+  "slug": "/http-requests-resilience/agnostic-http-client-contract",
+  "permalink": "/docs/http-requests-resilience/agnostic-http-client-contract",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/http-requests-resilience/agnostic-http-client-contract.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/http-requests-resilience/"
+  },
+  "next": {
+    "title": "resilience-fault-tolerance-orchestration",
+    "permalink": "/docs/http-requests-resilience/resilience-fault-tolerance-orchestration"
+  }
+}

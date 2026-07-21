@@ -1,0 +1,24 @@
+{
+  "id": "domain-driven-design/value_objects/README",
+  "title": "Value Objects & Immutability",
+  "description": "Overview",
+  "source": "@site/../docs/domain-driven-design/value_objects/README.md",
+  "sourceDirName": "domain-driven-design/value_objects",
+  "slug": "/domain-driven-design/value_objects/",
+  "permalink": "/docs/domain-driven-design/value_objects/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/domain-driven-design/value_objects/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Functional Monads & Application Errors",
+    "permalink": "/docs/domain-driven-design/functional/"
+  },
+  "next": {
+    "title": "HTTP Request and Resilience",
+    "permalink": "/docs/http-requests-resilience/"
+  }
+}

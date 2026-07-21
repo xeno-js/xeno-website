@@ -1,0 +1,24 @@
+{
+  "id": "core/dependency-injection/README",
+  "title": "Dependency Injection",
+  "description": "Graviton5 uses explicit injection tokens to register and resolve services from",
+  "source": "@site/../docs/core/dependency-injection/README.md",
+  "sourceDirName": "core/dependency-injection",
+  "slug": "/core/dependency-injection/",
+  "permalink": "/docs/core/dependency-injection/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/dependency-injection/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Database Setup",
+    "permalink": "/docs/core/database/setup"
+  },
+  "next": {
+    "title": "Injection Tokens",
+    "permalink": "/docs/core/dependency-injection/tokens"
+  }
+}

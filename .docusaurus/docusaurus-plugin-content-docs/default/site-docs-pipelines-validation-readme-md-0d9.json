@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/validation/README",
+  "title": "Validation pipeline behavior",
+  "description": "The Graviton5 Validation Subsystem enforces data integrity and structural safety",
+  "source": "@site/../docs/pipelines/validation/README.md",
+  "sourceDirName": "pipelines/validation",
+  "slug": "/pipelines/validation/",
+  "permalink": "/docs/pipelines/validation/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/validation/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Query caching pipeline behavior",
+    "permalink": "/docs/pipelines/query_caching/"
+  },
+  "next": {
+    "title": "Extending BaseValidationStrategy",
+    "permalink": "/docs/pipelines/validation/custom-validation"
+  }
+}

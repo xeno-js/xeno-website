@@ -1,0 +1,57 @@
+{
+  "version": {
+    "pluginId": "demo",
+    "version": "current",
+    "label": "Next",
+    "banner": null,
+    "badge": false,
+    "noIndex": false,
+    "className": "docs-version-current",
+    "isLast": true,
+    "docsSidebars": {
+      "demoSidebar": [
+        {
+          "type": "link",
+          "href": "/demo/database_drizzle_demo/",
+          "label": "Demo 01: Database, DataSource and Clean Architecture 🚀",
+          "docId": "database_drizzle_demo/README",
+          "unlisted": false
+        },
+        {
+          "type": "link",
+          "href": "/demo/http_core_demo/",
+          "label": "🚀 Gear5 Core Demo: HTTP Integration",
+          "docId": "http_core_demo/README",
+          "unlisted": false
+        },
+        {
+          "type": "link",
+          "href": "/demo/pipelines_middleware_demo/",
+          "label": "CQRS Implementation Guide - Gear5 Framework",
+          "docId": "pipelines_middleware_demo/README",
+          "unlisted": false
+        }
+      ]
+    },
+    "docs": {
+      "database_drizzle_demo/README": {
+        "id": "database_drizzle_demo/README",
+        "title": "Demo 01: Database, DataSource and Clean Architecture 🚀",
+        "description": "This project is a practical demo illustrating how to use the @gear5/core",
+        "sidebar": "demoSidebar"
+      },
+      "http_core_demo/README": {
+        "id": "http_core_demo/README",
+        "title": "🚀 Gear5 Core Demo: HTTP Integration",
+        "description": "Welcome to the Gear5 Core demo. This project demonstrates how to build a",
+        "sidebar": "demoSidebar"
+      },
+      "pipelines_middleware_demo/README": {
+        "id": "pipelines_middleware_demo/README",
+        "title": "CQRS Implementation Guide - Gear5 Framework",
+        "description": "This project demonstrates the implementation of the CQRS (Command Query",
+        "sidebar": "demoSidebar"
+      }
+    }
+  }
+}

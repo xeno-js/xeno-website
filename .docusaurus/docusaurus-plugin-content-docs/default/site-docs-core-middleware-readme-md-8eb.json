@@ -1,0 +1,24 @@
+{
+  "id": "core/middleware/README",
+  "title": "Middleware Overview",
+  "description": "The Presentation Layer Middleware inside Gear5 serves as the secure entry",
+  "source": "@site/../docs/core/middleware/README.md",
+  "sourceDirName": "core/middleware",
+  "slug": "/core/middleware/",
+  "permalink": "/docs/core/middleware/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/gear5/tree/main/../docs/core/middleware/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Sentry Production Logger Configuration",
+    "permalink": "/docs/core/logging/sentry-configuration"
+  },
+  "next": {
+    "title": "The Execution Context Composition",
+    "permalink": "/docs/core/middleware/request-context-execution"
+  }
+}

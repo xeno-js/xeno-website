@@ -1,0 +1,24 @@
+{
+  "id": "cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "title": "cross-cutting-pipeline-behaviors",
+  "description": "",
+  "source": "@site/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors.md",
+  "sourceDirName": "cqrs-pipeline-architecture",
+  "slug": "/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "permalink": "/docs/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/cqrs-pipeline-architecture/cross-cutting-pipeline-behaviors.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/cqrs-pipeline-architecture/"
+  },
+  "next": {
+    "title": "mediator-dispatcher-engine",
+    "permalink": "/docs/cqrs-pipeline-architecture/mediator-dispatcher-engine"
+  }
+}

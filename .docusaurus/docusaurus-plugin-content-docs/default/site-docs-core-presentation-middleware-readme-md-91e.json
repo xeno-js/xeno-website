@@ -1,0 +1,24 @@
+{
+  "id": "core/presentation/middleware/README",
+  "title": "Middleware Overview",
+  "description": "The Presentation Layer Middleware inside Graviton5 serves as the secure entry",
+  "source": "@site/../docs/core/presentation/middleware/README.md",
+  "sourceDirName": "core/presentation/middleware",
+  "slug": "/core/presentation/middleware/",
+  "permalink": "/docs/core/presentation/middleware/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/presentation/middleware/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "BaseController & HTTP Response Contracts",
+    "permalink": "/docs/core/presentation/controllers/"
+  },
+  "next": {
+    "title": "AppBuilder Registration Workflow",
+    "permalink": "/docs/core/presentation/middleware/configuration"
+  }
+}

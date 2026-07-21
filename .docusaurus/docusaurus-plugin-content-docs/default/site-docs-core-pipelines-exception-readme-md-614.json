@@ -1,0 +1,24 @@
+{
+  "id": "core/pipelines/exception/README",
+  "title": "Exception pipeline behavior",
+  "description": "The ExceptionPipeline acts as the ultimate protective perimeter for the",
+  "source": "@site/../docs/core/pipelines/exception/README.md",
+  "sourceDirName": "core/pipelines/exception",
+  "slug": "/core/pipelines/exception/",
+  "permalink": "/docs/core/pipelines/exception/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/pipelines/exception/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Concurrency and Retry behavior",
+    "permalink": "/docs/core/pipelines/concurrency/"
+  },
+  "next": {
+    "title": "Idempotency pipeline behavior",
+    "permalink": "/docs/core/pipelines/idempotency/"
+  }
+}

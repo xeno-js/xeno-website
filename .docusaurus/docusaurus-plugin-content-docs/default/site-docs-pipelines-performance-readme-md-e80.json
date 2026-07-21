@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/performance/README",
+  "title": "Performance pipeline behavior",
+  "description": "The PerformancePipeline implements non-invasive latency tracking and latency",
+  "source": "@site/../docs/pipelines/performance/README.md",
+  "sourceDirName": "pipelines/performance",
+  "slug": "/pipelines/performance/",
+  "permalink": "/docs/pipelines/performance/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/performance/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging pipeline behavior",
+    "permalink": "/docs/pipelines/logging/"
+  },
+  "next": {
+    "title": "Query caching pipeline behavior",
+    "permalink": "/docs/pipelines/query_caching/"
+  }
+}

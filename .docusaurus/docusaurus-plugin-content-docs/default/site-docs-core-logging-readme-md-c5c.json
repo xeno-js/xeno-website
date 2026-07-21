@@ -1,0 +1,24 @@
+{
+  "id": "core/logging/README",
+  "title": "Logging Architecture & Configuration",
+  "description": "The Graviton5 framework features a powerful, diagnostic-centric logging",
+  "source": "@site/../docs/core/logging/README.md",
+  "sourceDirName": "core/logging",
+  "slug": "/core/logging/",
+  "permalink": "/docs/core/logging/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/logging/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Resilience & Fault Tolerance Configuration",
+    "permalink": "/docs/core/http/resilience-configuration"
+  },
+  "next": {
+    "title": "Logging overview",
+    "permalink": "/docs/core/logging/configure-logger"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "core/pipelines/concurrency/README",
+  "title": "Concurrency and Retry behavior",
+  "description": "The ConcurrencyRetryPipeline handles write-collision recovery within the",
+  "source": "@site/../docs/core/pipelines/concurrency/README.md",
+  "sourceDirName": "core/pipelines/concurrency",
+  "slug": "/core/pipelines/concurrency/",
+  "permalink": "/docs/core/pipelines/concurrency/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/pipelines/concurrency/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "SaaS Multi-Tenant Strategy Blueprint",
+    "permalink": "/docs/core/pipelines/authz/tenant-strategy"
+  },
+  "next": {
+    "title": "Exception pipeline behavior",
+    "permalink": "/docs/core/pipelines/exception/"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "introduction/installation",
+  "title": "Installation",
+  "description": "Graviton5 is an agnostic TypeScript core for applications based on DDD, Clean",
+  "source": "@site/../docs/introduction/installation.md",
+  "sourceDirName": "introduction",
+  "slug": "/introduction/installation",
+  "permalink": "/docs/introduction/installation",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/introduction/installation.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "id": "installation",
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction & Philosophy",
+    "permalink": "/docs/introduction/"
+  },
+  "next": {
+    "title": "Core",
+    "permalink": "/docs/core/"
+  }
+}

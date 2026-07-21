@@ -1,0 +1,24 @@
+{
+  "id": "identity-access-control/built-in-authorization-strategies",
+  "title": "built-in-authorization-strategies",
+  "description": "",
+  "source": "@site/../documentation/identity-access-control/built-in-authorization-strategies.md",
+  "sourceDirName": "identity-access-control",
+  "slug": "/identity-access-control/built-in-authorization-strategies",
+  "permalink": "/docs/identity-access-control/built-in-authorization-strategies",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/identity-access-control/built-in-authorization-strategies.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "authorization-pipeline-architecture",
+    "permalink": "/docs/identity-access-control/authorization-pipeline-architecture"
+  },
+  "next": {
+    "title": "custom-authorization-strategy-integration",
+    "permalink": "/docs/identity-access-control/custom-authorization-strategy-integration"
+  }
+}

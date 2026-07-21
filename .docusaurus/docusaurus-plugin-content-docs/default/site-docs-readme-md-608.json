@@ -1,0 +1,24 @@
+{
+  "id": "README",
+  "title": "Gear5 Developer Docs",
+  "description": "This directory contains the operational documentation for building with Gear5.",
+  "source": "@site/../docs/README.md",
+  "sourceDirName": ".",
+  "slug": "/",
+  "permalink": "/docs/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/gear5/tree/main/../docs/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Core Framework Helpers",
+    "permalink": "/docs/core/shared/utils/helpers"
+  },
+  "next": {
+    "title": "Contributing",
+    "permalink": "/docs/contributing/"
+  }
+}

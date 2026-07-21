@@ -1,0 +1,24 @@
+{
+  "id": "identity-access-control/authorization-pipeline-architecture",
+  "title": "authorization-pipeline-architecture",
+  "description": "",
+  "source": "@site/../documentation/identity-access-control/authorization-pipeline-architecture.md",
+  "sourceDirName": "identity-access-control",
+  "slug": "/identity-access-control/authorization-pipeline-architecture",
+  "permalink": "/docs/identity-access-control/authorization-pipeline-architecture",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/identity-access-control/authorization-pipeline-architecture.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/identity-access-control/"
+  },
+  "next": {
+    "title": "built-in-authorization-strategies",
+    "permalink": "/docs/identity-access-control/built-in-authorization-strategies"
+  }
+}

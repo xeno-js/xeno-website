@@ -1,0 +1,24 @@
+{
+  "id": "core/http/resilience-configuration",
+  "title": "Resilience & Fault Tolerance Configuration",
+  "description": "The CockatielResilienceFactory handles the execution protection architecture",
+  "source": "@site/../docs/core/http/resilience-configuration.md",
+  "sourceDirName": "core/http",
+  "slug": "/core/http/resilience-configuration",
+  "permalink": "/docs/core/http/resilience-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/http/resilience-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "The Orchestration Strategy via addHttpCore",
+    "permalink": "/docs/core/http/http-core-module"
+  },
+  "next": {
+    "title": "Logging Architecture & Configuration",
+    "permalink": "/docs/core/logging/"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/authz/custom-strategy-authz",
+  "title": "Custom Authorization Strategy Integration",
+  "description": "Authoring Bespoke Strategy Modules",
+  "source": "@site/../docs/pipelines/authz/custom-strategy-authz.md",
+  "sourceDirName": "pipelines/authz",
+  "slug": "/pipelines/authz/custom-strategy-authz",
+  "permalink": "/docs/pipelines/authz/custom-strategy-authz",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/authz/custom-strategy-authz.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Authorization Pipeline Configuration",
+    "permalink": "/docs/pipelines/authz/configuration"
+  },
+  "next": {
+    "title": "Permission-Based Access Control (PBAC) Manual",
+    "permalink": "/docs/pipelines/authz/policies/permission-policy-configuration"
+  }
+}

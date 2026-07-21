@@ -265,7 +265,7 @@ import { UserDataSource } from './datasources/user.datasource'
 import { UserWriteRepository } from './repositories/user-write.repository'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureDataHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder

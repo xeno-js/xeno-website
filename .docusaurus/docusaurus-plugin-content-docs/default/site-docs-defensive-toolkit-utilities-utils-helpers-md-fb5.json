@@ -1,0 +1,24 @@
+{
+  "id": "defensive-toolkit-utilities/utils/helpers",
+  "title": "Core Framework Helpers",
+  "description": "Overview",
+  "source": "@site/../docs/defensive-toolkit-utilities/utils/helpers.md",
+  "sourceDirName": "defensive-toolkit-utilities/utils",
+  "slug": "/defensive-toolkit-utilities/utils/helpers",
+  "permalink": "/docs/defensive-toolkit-utilities/utils/helpers",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/defensive-toolkit-utilities/utils/helpers.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Defensive Type Guards (Guards)",
+    "permalink": "/docs/defensive-toolkit-utilities/utils/guards"
+  },
+  "next": {
+    "title": "Dependency Injection",
+    "permalink": "/docs/dependency-injection/"
+  }
+}

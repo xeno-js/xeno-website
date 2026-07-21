@@ -1,0 +1,24 @@
+{
+  "id": "app_builder/dependency-injection-lifetimes",
+  "title": "Dependency Injection Lifetimes Manual",
+  "description": "The Instance Allocation Core Engine",
+  "source": "@site/../docs/app_builder/dependency-injection-lifetimes.md",
+  "sourceDirName": "app_builder",
+  "slug": "/app_builder/dependency-injection-lifetimes",
+  "permalink": "/docs/app_builder/dependency-injection-lifetimes",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/app_builder/dependency-injection-lifetimes.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Application Hosting & Bootstrap Engine",
+    "permalink": "/docs/app_builder/"
+  },
+  "next": {
+    "title": "Module & Service Registration Guide",
+    "permalink": "/docs/app_builder/module-service-registration"
+  }
+}

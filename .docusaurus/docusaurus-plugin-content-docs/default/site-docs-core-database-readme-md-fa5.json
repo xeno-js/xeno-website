@@ -1,0 +1,24 @@
+{
+  "id": "core/database/README",
+  "title": "Database",
+  "description": "Graviton5 keeps database access deliberately layered. The framework registers",
+  "source": "@site/../docs/core/database/README.md",
+  "sourceDirName": "core/database",
+  "slug": "/core/database/",
+  "permalink": "/docs/core/database/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/database/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Redis Configuration & CLI Integration",
+    "permalink": "/docs/core/cache/redis-configuration"
+  },
+  "next": {
+    "title": "Data Sources",
+    "permalink": "/docs/core/database/datasources"
+  }
+}

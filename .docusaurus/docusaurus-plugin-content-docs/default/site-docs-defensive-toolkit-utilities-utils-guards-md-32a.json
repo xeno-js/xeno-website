@@ -1,0 +1,24 @@
+{
+  "id": "defensive-toolkit-utilities/utils/guards",
+  "title": "Defensive Type Guards (Guards)",
+  "description": "Overview",
+  "source": "@site/../docs/defensive-toolkit-utilities/utils/guards.md",
+  "sourceDirName": "defensive-toolkit-utilities/utils",
+  "slug": "/defensive-toolkit-utilities/utils/guards",
+  "permalink": "/docs/defensive-toolkit-utilities/utils/guards",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/defensive-toolkit-utilities/utils/guards.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Shared Utilities & Defensive Toolkit",
+    "permalink": "/docs/defensive-toolkit-utilities/utils/"
+  },
+  "next": {
+    "title": "Core Framework Helpers",
+    "permalink": "/docs/defensive-toolkit-utilities/utils/helpers"
+  }
+}

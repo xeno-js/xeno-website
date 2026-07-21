@@ -1,0 +1,24 @@
+{
+  "id": "logging/sentry-configuration",
+  "title": "Sentry Production Logger Configuration",
+  "description": "The Sentry integration in Graviton5 handles production exception tracking, alert",
+  "source": "@site/../docs/logging/sentry-configuration.md",
+  "sourceDirName": "logging",
+  "slug": "/logging/sentry-configuration",
+  "permalink": "/docs/logging/sentry-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/logging/sentry-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Pino Production Logger Configuration",
+    "permalink": "/docs/logging/pino-configuration"
+  },
+  "next": {
+    "title": "CQRS Pipeline Behaviors",
+    "permalink": "/docs/pipelines/"
+  }
+}

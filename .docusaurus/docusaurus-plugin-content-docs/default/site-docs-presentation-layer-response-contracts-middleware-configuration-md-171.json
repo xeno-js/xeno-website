@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/middleware/configuration",
+  "title": "AppBuilder Registration Workflow",
+  "description": "The presentation middleware layer is activated and wired into your application's",
+  "source": "@site/../docs/presentation-layer-response-contracts/middleware/configuration.md",
+  "sourceDirName": "presentation-layer-response-contracts/middleware",
+  "slug": "/presentation-layer-response-contracts/middleware/configuration",
+  "permalink": "/docs/presentation-layer-response-contracts/middleware/configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/presentation-layer-response-contracts/middleware/configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Middleware Overview",
+    "permalink": "/docs/presentation-layer-response-contracts/middleware/"
+  },
+  "next": {
+    "title": "Transportation Contract Metadata",
+    "permalink": "/docs/presentation-layer-response-contracts/middleware/http-header-extraction"
+  }
+}

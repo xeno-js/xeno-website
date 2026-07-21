@@ -1,0 +1,24 @@
+{
+  "id": "core/pipelines/idempotency/README",
+  "title": "Idempotency pipeline behavior",
+  "description": "The IdempotencyPipeline shields the application use-case boundaries from",
+  "source": "@site/../docs/core/pipelines/idempotency/README.md",
+  "sourceDirName": "core/pipelines/idempotency",
+  "slug": "/core/pipelines/idempotency/",
+  "permalink": "/docs/core/pipelines/idempotency/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/pipelines/idempotency/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Exception pipeline behavior",
+    "permalink": "/docs/core/pipelines/exception/"
+  },
+  "next": {
+    "title": "Logging pipeline behavior",
+    "permalink": "/docs/core/pipelines/logging/"
+  }
+}

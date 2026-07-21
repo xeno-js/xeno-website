@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/README",
+  "title": "CQRS Pipeline Behaviors",
+  "description": "Overview",
+  "source": "@site/../docs/pipelines/README.md",
+  "sourceDirName": "pipelines",
+  "slug": "/pipelines/",
+  "permalink": "/docs/pipelines/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Infrastructure Provisioning",
+    "permalink": "/docs/identity-access-control/supabase-configuration"
+  },
+  "next": {
+    "title": "Identity Access & Authorization Subsystem (AuthZ)",
+    "permalink": "/docs/pipelines/authz/"
+  }
+}

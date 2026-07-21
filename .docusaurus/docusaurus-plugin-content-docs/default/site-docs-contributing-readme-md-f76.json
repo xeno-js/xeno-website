@@ -1,0 +1,24 @@
+{
+  "id": "contributing/README",
+  "title": "Contributing",
+  "description": "Documentation for developers working directly on the Graviton5 repository.",
+  "source": "@site/../docs/contributing/README.md",
+  "sourceDirName": "contributing",
+  "slug": "/contributing/",
+  "permalink": "/docs/contributing/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/contributing/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Redis Configuration & CLI Integration",
+    "permalink": "/docs/caching-idempotency-store/redis-configuration"
+  },
+  "next": {
+    "title": "Local Development",
+    "permalink": "/docs/contributing/local-development"
+  }
+}

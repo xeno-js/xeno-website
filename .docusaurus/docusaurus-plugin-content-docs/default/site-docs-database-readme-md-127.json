@@ -1,0 +1,24 @@
+{
+  "id": "database/README",
+  "title": "Database",
+  "description": "Graviton5 keeps database access deliberately layered. The framework registers",
+  "source": "@site/../docs/database/README.md",
+  "sourceDirName": "database",
+  "slug": "/database/",
+  "permalink": "/docs/database/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/database/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Local Development",
+    "permalink": "/docs/contributing/local-development"
+  },
+  "next": {
+    "title": "Data Sources",
+    "permalink": "/docs/database/datasources"
+  }
+}

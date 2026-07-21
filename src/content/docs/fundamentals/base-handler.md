@@ -185,7 +185,7 @@ import { AppBuilder, TOKENS } from '@xeno/core'
 import { SaveUserCommandHandler } from '../application/user/handlers/save-user-command.handler'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureApplicationHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder

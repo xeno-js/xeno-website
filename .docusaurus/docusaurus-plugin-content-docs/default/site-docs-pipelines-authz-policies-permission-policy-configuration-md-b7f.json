@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/authz/policies/permission-policy-configuration",
+  "title": "Permission-Based Access Control (PBAC) Manual",
+  "description": "Overview",
+  "source": "@site/../docs/pipelines/authz/policies/permission-policy-configuration.md",
+  "sourceDirName": "pipelines/authz/policies",
+  "slug": "/pipelines/authz/policies/permission-policy-configuration",
+  "permalink": "/docs/pipelines/authz/policies/permission-policy-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/authz/policies/permission-policy-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Custom Authorization Strategy Integration",
+    "permalink": "/docs/pipelines/authz/custom-strategy-authz"
+  },
+  "next": {
+    "title": "Role-Based Access Control (RBAC) Manual",
+    "permalink": "/docs/pipelines/authz/policies/role-policy-configuration"
+  }
+}

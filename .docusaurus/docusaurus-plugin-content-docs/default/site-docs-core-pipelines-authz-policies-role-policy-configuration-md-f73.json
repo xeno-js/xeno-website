@@ -1,0 +1,24 @@
+{
+  "id": "core/pipelines/authz/policies/role-policy-configuration",
+  "title": "Role-Based Access Control (RBAC) Manual",
+  "description": "Overview",
+  "source": "@site/../docs/core/pipelines/authz/policies/role-policy-configuration.md",
+  "sourceDirName": "core/pipelines/authz/policies",
+  "slug": "/core/pipelines/authz/policies/role-policy-configuration",
+  "permalink": "/docs/core/pipelines/authz/policies/role-policy-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/pipelines/authz/policies/role-policy-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Permission-Based Access Control (PBAC) Manual",
+    "permalink": "/docs/core/pipelines/authz/policies/permission-policy-configuration"
+  },
+  "next": {
+    "title": "SaaS Multi-Tenant Strategy Blueprint",
+    "permalink": "/docs/core/pipelines/authz/tenant-strategy"
+  }
+}

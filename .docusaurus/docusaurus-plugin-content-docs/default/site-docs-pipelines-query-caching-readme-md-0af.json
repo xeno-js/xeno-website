@@ -1,0 +1,24 @@
+{
+  "id": "pipelines/query_caching/README",
+  "title": "Query caching pipeline behavior",
+  "description": "The QueryCachingPipeline provides high-performance response caching across the",
+  "source": "@site/../docs/pipelines/query_caching/README.md",
+  "sourceDirName": "pipelines/query_caching",
+  "slug": "/pipelines/query_caching/",
+  "permalink": "/docs/pipelines/query_caching/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/pipelines/query_caching/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Performance pipeline behavior",
+    "permalink": "/docs/pipelines/performance/"
+  },
+  "next": {
+    "title": "Validation pipeline behavior",
+    "permalink": "/docs/pipelines/validation/"
+  }
+}

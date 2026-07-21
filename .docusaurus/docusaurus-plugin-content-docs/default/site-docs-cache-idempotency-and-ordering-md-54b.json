@@ -1,0 +1,24 @@
+{
+  "id": "cache/idempotency-and-ordering",
+  "title": "Idempotency and Cache Configuration Ordering",
+  "description": "The Graviton5 CQRS middleware core ships with an advanced engine to guarantee",
+  "source": "@site/../docs/cache/idempotency-and-ordering.md",
+  "sourceDirName": "cache",
+  "slug": "/cache/idempotency-and-ordering",
+  "permalink": "/docs/cache/idempotency-and-ordering",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/cache/idempotency-and-ordering.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Cache Module",
+    "permalink": "/docs/cache/"
+  },
+  "next": {
+    "title": "Redis Configuration & CLI Integration",
+    "permalink": "/docs/cache/redis-configuration"
+  }
+}

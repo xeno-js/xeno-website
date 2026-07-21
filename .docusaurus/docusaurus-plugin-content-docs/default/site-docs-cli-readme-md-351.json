@@ -1,0 +1,24 @@
+{
+  "id": "cli/README",
+  "title": "Gear5 CLI",
+  "description": "Documentation for Gear5 command-line tooling.",
+  "source": "@site/../docs/cli/README.md",
+  "sourceDirName": "cli",
+  "slug": "/cli/",
+  "permalink": "/docs/cli/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/gear5/tree/main/../docs/cli/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Installation",
+    "permalink": "/docs/getting-started/installation"
+  },
+  "next": {
+    "title": "CLI create-gear5",
+    "permalink": "/docs/cli/create-gear5"
+  }
+}

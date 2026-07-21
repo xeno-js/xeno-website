@@ -1,0 +1,24 @@
+{
+  "id": "core/database/schema-and-bootstrap",
+  "title": "Schema and Bootstrap",
+  "description": "Graviton5 needs two things to enable database access:",
+  "source": "@site/../docs/core/database/schema-and-bootstrap.md",
+  "sourceDirName": "core/database",
+  "slug": "/core/database/schema-and-bootstrap",
+  "permalink": "/docs/core/database/schema-and-bootstrap",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/database/schema-and-bootstrap.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Repositories and DAOs",
+    "permalink": "/docs/core/database/repositories-and-daos"
+  },
+  "next": {
+    "title": "Database Setup",
+    "permalink": "/docs/core/database/setup"
+  }
+}

@@ -329,7 +329,7 @@ import { UserMapper } from './mappers/user.mapper'
 import { UserWriteRepository } from './repositories/user-write.repository'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureMappingPipeline = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder

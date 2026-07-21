@@ -1,0 +1,24 @@
+{
+  "id": "database-persistence/README",
+  "title": "Database",
+  "description": "Graviton5 keeps database access deliberately layered. The framework registers",
+  "source": "@site/../docs/database-persistence/README.md",
+  "sourceDirName": "database-persistence",
+  "slug": "/database-persistence/",
+  "permalink": "/docs/database-persistence/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/database-persistence/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Local Development",
+    "permalink": "/docs/contributing/local-development"
+  },
+  "next": {
+    "title": "Data Sources",
+    "permalink": "/docs/database-persistence/datasources"
+  }
+}

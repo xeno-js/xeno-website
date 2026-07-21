@@ -1,0 +1,24 @@
+{
+  "id": "core/pipelines/authz/README",
+  "title": "Identity Access & Authorization Subsystem (AuthZ)",
+  "description": "Overview",
+  "source": "@site/../docs/core/pipelines/authz/README.md",
+  "sourceDirName": "core/pipelines/authz",
+  "slug": "/core/pipelines/authz/",
+  "permalink": "/docs/core/pipelines/authz/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/pipelines/authz/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "CQRS Pipeline Behaviors",
+    "permalink": "/docs/core/pipelines/"
+  },
+  "next": {
+    "title": "Authorization Pipeline Configuration",
+    "permalink": "/docs/core/pipelines/authz/configuration"
+  }
+}

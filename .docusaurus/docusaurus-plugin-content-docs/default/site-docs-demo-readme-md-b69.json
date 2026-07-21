@@ -1,0 +1,28 @@
+{
+  "id": "demo/demo-overview",
+  "title": "Executable Demos",
+  "description": "Welcome to the live executable demonstration suite of the Graviton5 framework.",
+  "source": "@site/../docs/demo/README.md",
+  "sourceDirName": "demo",
+  "slug": "/demo",
+  "permalink": "/docs/demo",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/demo/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "demo-overview",
+    "slug": "/demo",
+    "sidebar_label": "Executable Demos"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Modules and Dependencies",
+    "permalink": "/docs/core-architecture/modules-and-dependencies"
+  },
+  "next": {
+    "title": "Support",
+    "permalink": "/docs/community-open-source/"
+  }
+}

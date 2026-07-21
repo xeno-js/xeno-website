@@ -116,7 +116,7 @@ properties inside the `.addPipeline()` block during application bootstrapping:
 import { AppBuilder } from '@xeno/core'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureSecurityPipeline = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder

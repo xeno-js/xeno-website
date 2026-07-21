@@ -1,0 +1,34 @@
+{
+  "id": "getting-started/README",
+  "title": "Getting Started",
+  "description": "Welcome to the Graviton5 Getting Started hub. Explore the core philosophy, Clean Architecture isolation layer boundaries, and step-by-step setup guides.",
+  "source": "@site/../docs/getting-started/README.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/",
+  "permalink": "/docs/getting-started/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/getting-started/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Getting Started",
+    "description": "Welcome to the Graviton5 Getting Started hub. Explore the core philosophy, Clean Architecture isolation layer boundaries, and step-by-step setup guides.",
+    "keywords": [
+      "graviton5 getting started",
+      "introduction",
+      "clean architecture",
+      "quick start",
+      "architecture handbook"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Module & Service Registration Guide",
+    "permalink": "/docs/app_builder/module-service-registration"
+  },
+  "next": {
+    "title": "Introduction & Philosophy",
+    "permalink": "/docs/getting-started/introduction"
+  }
+}

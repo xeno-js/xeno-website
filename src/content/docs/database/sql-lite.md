@@ -61,7 +61,7 @@ engine:
 import { AppBuilder } from '@xeno/core'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureLocalPersistenceHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder

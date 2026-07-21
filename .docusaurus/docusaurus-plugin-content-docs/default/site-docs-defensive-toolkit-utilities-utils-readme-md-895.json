@@ -1,0 +1,24 @@
+{
+  "id": "defensive-toolkit-utilities/utils/README",
+  "title": "Shared Utilities & Defensive Toolkit",
+  "description": "Overview",
+  "source": "@site/../docs/defensive-toolkit-utilities/utils/README.md",
+  "sourceDirName": "defensive-toolkit-utilities/utils",
+  "slug": "/defensive-toolkit-utilities/utils/",
+  "permalink": "/docs/defensive-toolkit-utilities/utils/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/defensive-toolkit-utilities/utils/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Shared Kernel Layer",
+    "permalink": "/docs/defensive-toolkit-utilities/"
+  },
+  "next": {
+    "title": "Defensive Type Guards (Guards)",
+    "permalink": "/docs/defensive-toolkit-utilities/utils/guards"
+  }
+}

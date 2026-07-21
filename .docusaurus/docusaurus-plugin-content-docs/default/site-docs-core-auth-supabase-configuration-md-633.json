@@ -1,0 +1,24 @@
+{
+  "id": "core/auth/supabase-configuration",
+  "title": "Infrastructure Provisioning",
+  "description": "Integrating Supabase as the underlying identity provider can be fully automated",
+  "source": "@site/../docs/core/auth/supabase-configuration.md",
+  "sourceDirName": "core/auth",
+  "slug": "/core/auth/supabase-configuration",
+  "permalink": "/docs/core/auth/supabase-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/auth/supabase-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "The Request-Identity Lifecycle",
+    "permalink": "/docs/core/auth/how-to-use"
+  },
+  "next": {
+    "title": "Cache Module",
+    "permalink": "/docs/core/cache/"
+  }
+}

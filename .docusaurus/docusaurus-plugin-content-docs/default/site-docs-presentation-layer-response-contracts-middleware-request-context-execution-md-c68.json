@@ -1,0 +1,24 @@
+{
+  "id": "presentation-layer-response-contracts/middleware/request-context-execution",
+  "title": "The Execution Context Composition",
+  "description": "When an external transaction triggers the middleware, the system encapsulates",
+  "source": "@site/../docs/presentation-layer-response-contracts/middleware/request-context-execution.md",
+  "sourceDirName": "presentation-layer-response-contracts/middleware",
+  "slug": "/presentation-layer-response-contracts/middleware/request-context-execution",
+  "permalink": "/docs/presentation-layer-response-contracts/middleware/request-context-execution",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/presentation-layer-response-contracts/middleware/request-context-execution.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Transportation Contract Metadata",
+    "permalink": "/docs/presentation-layer-response-contracts/middleware/http-header-extraction"
+  },
+  "next": {
+    "title": "Logging Architecture & Configuration",
+    "permalink": "/docs/telemetry-logging/"
+  }
+}

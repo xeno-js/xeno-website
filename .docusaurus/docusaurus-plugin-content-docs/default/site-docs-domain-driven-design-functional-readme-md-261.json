@@ -1,0 +1,24 @@
+{
+  "id": "domain-driven-design/functional/README",
+  "title": "Functional Monads & Application Errors",
+  "description": "The Railway Oriented Programming (ROP) Pattern",
+  "source": "@site/../docs/domain-driven-design/functional/README.md",
+  "sourceDirName": "domain-driven-design/functional",
+  "slug": "/domain-driven-design/functional/",
+  "permalink": "/docs/domain-driven-design/functional/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/domain-driven-design/functional/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Entities & Unique Identifiers",
+    "permalink": "/docs/domain-driven-design/entities/"
+  },
+  "next": {
+    "title": "Value Objects & Immutability",
+    "permalink": "/docs/domain-driven-design/value_objects/"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "core/presentation/middleware/request-context-execution",
+  "title": "The Execution Context Composition",
+  "description": "When an external transaction triggers the middleware, the system encapsulates",
+  "source": "@site/../docs/core/presentation/middleware/request-context-execution.md",
+  "sourceDirName": "core/presentation/middleware",
+  "slug": "/core/presentation/middleware/request-context-execution",
+  "permalink": "/docs/core/presentation/middleware/request-context-execution",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/presentation/middleware/request-context-execution.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Transportation Contract Metadata",
+    "permalink": "/docs/core/presentation/middleware/http-header-extraction"
+  },
+  "next": {
+    "title": "Shared Kernel Layer",
+    "permalink": "/docs/core/shared/"
+  }
+}

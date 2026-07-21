@@ -1,0 +1,24 @@
+{
+  "id": "core/http/http-client-configuration",
+  "title": "Infrastructure Scaffolding",
+  "description": "When provisioning an application ecosystem via the @Graviton5/create CLI",
+  "source": "@site/../docs/core/http/http-client-configuration.md",
+  "sourceDirName": "core/http",
+  "slug": "/core/http/http-client-configuration",
+  "permalink": "/docs/core/http/http-client-configuration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/http/http-client-configuration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "HTTP Request and Resilience",
+    "permalink": "/docs/core/http/"
+  },
+  "next": {
+    "title": "The Orchestration Strategy via addHttpCore",
+    "permalink": "/docs/core/http/http-core-module"
+  }
+}

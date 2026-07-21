@@ -1,0 +1,24 @@
+{
+  "id": "core/pipelines/logging/README",
+  "title": "Logging pipeline behavior",
+  "description": "The LoggingPipeline provides automated observability for request execution.",
+  "source": "@site/../docs/core/pipelines/logging/README.md",
+  "sourceDirName": "core/pipelines/logging",
+  "slug": "/core/pipelines/logging/",
+  "permalink": "/docs/core/pipelines/logging/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/pipelines/logging/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Idempotency pipeline behavior",
+    "permalink": "/docs/core/pipelines/idempotency/"
+  },
+  "next": {
+    "title": "Performance pipeline behavior",
+    "permalink": "/docs/core/pipelines/performance/"
+  }
+}

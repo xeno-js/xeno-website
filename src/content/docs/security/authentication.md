@@ -163,7 +163,7 @@ action block during the application bootstrapping cycle:
 import { AppBuilder } from '@xeno/core'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureSecurityStack = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder

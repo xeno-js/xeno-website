@@ -1,0 +1,24 @@
+{
+  "id": "core/presentation/README",
+  "title": "Presentation Layer",
+  "description": "Overview",
+  "source": "@site/../docs/core/presentation/README.md",
+  "sourceDirName": "core/presentation",
+  "slug": "/core/presentation/",
+  "permalink": "/docs/core/presentation/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/presentation/README.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Automated Infrastructure Scaffolding",
+    "permalink": "/docs/core/pipelines/validation/zod-configuration"
+  },
+  "next": {
+    "title": "BaseController & HTTP Response Contracts",
+    "permalink": "/docs/core/presentation/controllers/"
+  }
+}

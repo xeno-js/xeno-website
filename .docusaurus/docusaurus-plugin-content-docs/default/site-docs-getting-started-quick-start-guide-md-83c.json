@@ -1,0 +1,37 @@
+{
+  "id": "getting-started/quick-start-guide",
+  "title": "Quick Start Guide",
+  "description": "Bootstrap your first enterprise-grade, decorator-free Graviton5 application using AppBuilder and the CQRS Mediator.",
+  "source": "@site/../docs/getting-started/quick-start-guide.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/quick-start-guide",
+  "permalink": "/docs/getting-started/quick-start-guide",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/getting-started/quick-start-guide.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Quick Start Guide",
+    "sidebar_position": 3,
+    "description": "Bootstrap your first enterprise-grade, decorator-free Graviton5 application using AppBuilder and the CQRS Mediator.",
+    "keywords": [
+      "appbuilder",
+      "bootstrap",
+      "mediator",
+      "dependency injection",
+      "quick start",
+      "setup"
+    ]
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Architectural Layers & Boundaries",
+    "permalink": "/docs/getting-started/architectural-layers"
+  },
+  "next": {
+    "title": "Core Architecture & Lifecycle",
+    "permalink": "/docs/core-architecture/"
+  }
+}

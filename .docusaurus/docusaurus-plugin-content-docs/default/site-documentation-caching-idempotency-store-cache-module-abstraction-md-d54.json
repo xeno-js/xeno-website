@@ -1,0 +1,24 @@
+{
+  "id": "caching-idempotency-store/cache-module-abstraction",
+  "title": "cache-module-abstraction",
+  "description": "",
+  "source": "@site/../documentation/caching-idempotency-store/cache-module-abstraction.md",
+  "sourceDirName": "caching-idempotency-store",
+  "slug": "/caching-idempotency-store/cache-module-abstraction",
+  "permalink": "/docs/caching-idempotency-store/cache-module-abstraction",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Gantry5/tree/main/../documentation/caching-idempotency-store/cache-module-abstraction.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "README",
+    "permalink": "/docs/caching-idempotency-store/"
+  },
+  "next": {
+    "title": "in-memory-vs-redis-client-configurations",
+    "permalink": "/docs/caching-idempotency-store/in-memory-vs-redis-client-configurations"
+  }
+}

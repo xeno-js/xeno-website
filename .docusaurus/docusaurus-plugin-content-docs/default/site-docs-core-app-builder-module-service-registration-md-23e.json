@@ -1,0 +1,24 @@
+{
+  "id": "core/app_builder/module-service-registration",
+  "title": "Module & Service Registration Guide",
+  "description": "Extending the Core Application Workspace",
+  "source": "@site/../docs/core/app_builder/module-service-registration.md",
+  "sourceDirName": "core/app_builder",
+  "slug": "/core/app_builder/module-service-registration",
+  "permalink": "/docs/core/app_builder/module-service-registration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/app_builder/module-service-registration.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Dependency Injection Lifetimes Manual",
+    "permalink": "/docs/core/app_builder/dependency-injection-lifetimes"
+  },
+  "next": {
+    "title": "Identity & Access Control",
+    "permalink": "/docs/core/auth/"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "telemetry-logging/configure-logger",
+  "title": "Logging overview",
+  "description": "The Graviton5 framework features a powerful, diagnostic-centric logging",
+  "source": "@site/../docs/telemetry-logging/configure-logger.md",
+  "sourceDirName": "telemetry-logging",
+  "slug": "/telemetry-logging/configure-logger",
+  "permalink": "/docs/telemetry-logging/configure-logger",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/telemetry-logging/configure-logger.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Logging Architecture & Configuration",
+    "permalink": "/docs/telemetry-logging/"
+  },
+  "next": {
+    "title": "Custom Logging Providers",
+    "permalink": "/docs/telemetry-logging/custom-providers"
+  }
+}

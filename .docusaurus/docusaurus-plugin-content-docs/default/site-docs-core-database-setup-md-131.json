@@ -1,0 +1,24 @@
+{
+  "id": "core/database/setup",
+  "title": "Database Setup",
+  "description": "The quickest way to start with database support is to scaffold the application",
+  "source": "@site/../docs/core/database/setup.md",
+  "sourceDirName": "core/database",
+  "slug": "/core/database/setup",
+  "permalink": "/docs/core/database/setup",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Mattia-Carcione/Graviton5/tree/main/../docs/core/database/setup.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Schema and Bootstrap",
+    "permalink": "/docs/core/database/schema-and-bootstrap"
+  },
+  "next": {
+    "title": "Dependency Injection",
+    "permalink": "/docs/core/dependency-injection/"
+  }
+}
