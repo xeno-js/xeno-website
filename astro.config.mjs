@@ -75,6 +75,8 @@ export default defineConfig({
             { label: 'Logging Behavior', link: '/cqrs/logging-pipeline' },
             { label: 'Performance Behavior', link: '/cqrs/performance-pipeline' },
             { label: 'Validation Behavior', link: '/cqrs/validation-pipeline' },
+            { label: 'Idempotency Behavior', link: '/cqrs/idempotency-pipeline' },
+            { label: 'Concurrency Behavior', link: '/cqrs/concurrency-retry-pipeline' },
           ],
         },
       ],

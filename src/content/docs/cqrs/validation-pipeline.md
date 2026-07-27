@@ -336,7 +336,7 @@ import { CreateUserCommandSchema } from '../application/users/schemas/create-use
 import { UniqueEmailValidationStrategy } from '../application/users/strategies/unique-email-validation.strategy'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureApplicationHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder.addContext().addPipeline((options) => {

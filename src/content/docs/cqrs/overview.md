@@ -183,24 +183,24 @@ Xeno includes an array of built-in pipeline behaviors that can be conditionally
 enabled within the `.addPipeline()` setup action. Each behavior addresses a
 specific cross-cutting concern without altering domain handlers.
 
-| Behavior Name                                              | Target Bus      | Description                                                                                                             |
-| ---------------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| [**Exception Pipeline**](./exception-pipeline.md)          | Command & Query | Catches unexpected exceptions and formats them into functional `AppError` failure results.                              |
-|                                                            |
-| **Logging Pipeline**                                       | Command & Query | Captures message intent name, start timestamps, payload contents, and execution completion results.                     |
-|                                                            |
-| **Performance Pipeline**                                   | Command & Query | Monitors handler execution latency and flags slow-running operations exceeding threshold limits.                        |
-|                                                            |
-| [**Authorization Behavior**](../security/authorization.md) | Command & Query | Enforces user existence, multi-tenant isolation, role checks, and permission requirements via intent policies.          |
-|                                                            |
-| **Validation Behavior**                                    | Command & Query | Validates message payloads against registered validation schemas (such as Zod) before handler execution.                |
-|                                                            |
-| **Idempotency Pipeline**                                   | Command Bus     | Prevents duplicate command execution by acquiring distributed locks and caching transaction outputs.                    |
-|                                                            |
-| **Concurrency Retry Pipeline**                             | Command Bus     | Automatically retries commands encountering state concurrency conflicts using exponential backoff and jitter.           |
-|                                                            |
-| **Query Caching Pipeline**                                 | Query Bus       | Automatically checks `ICache` for pre-calculated query results using context-aware cache keys before handler execution. |
-|                                                            |
+| Behavior Name                                                     | Target Bus      | Description                                                                                                             |
+| ----------------------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [**Exception Pipeline**](./exception-pipeline.md)                 | Command & Query | Catches unexpected exceptions and formats them into functional `AppError` failure results.                              |
+|                                                                   |
+| [**Logging Pipeline**](./logging-pipeline.md)                     | Command & Query | Captures message intent name, start timestamps, payload contents, and execution completion results.                     |
+|                                                                   |
+| [**Performance Pipeline**](./performance-pipeline.md)             | Command & Query | Monitors handler execution latency and flags slow-running operations exceeding threshold limits.                        |
+|                                                                   |
+| [**Authorization Behavior**](../security/authorization.md)        | Command & Query | Enforces user existence, multi-tenant isolation, role checks, and permission requirements via intent policies.          |
+|                                                                   |
+| [**Validation Behavior**](./validatio-pipeline.md)                | Command & Query | Validates message payloads against registered validation schemas (such as Zod) before handler execution.                |
+|                                                                   |
+| [**Idempotency Pipeline**](./idempotency-pipeline.md)             | Command Bus     | Prevents duplicate command execution by acquiring distributed locks and caching transaction outputs.                    |
+|                                                                   |
+| [**Concurrency Retry Pipeline**](./concurrency-retry-pipeline.md) | Command Bus     | Automatically retries commands encountering state concurrency conflicts using exponential backoff and jitter.           |
+|                                                                   |
+| [**Query Caching Pipeline**](./query-caching-pipeline.md)         | Query Bus       | Automatically checks `ICache` for pre-calculated query results using context-aware cache keys before handler execution. |
+|                                                                   |
 
 _Detailed setup configurations, option schemas, and code implementations for
 each individual behavior are covered in dedicated sub-manuals within this

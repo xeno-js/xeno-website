@@ -131,7 +131,7 @@ the default `ConsoleLogger` fallback with a custom logger configuration:
 import { AppBuilder, LOG_LEVEL } from '@xeno/core';
 import type { AppRegistry } from './xeno-registry/app-registry';
 
-export const configureApplicationHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>();
 
   builder

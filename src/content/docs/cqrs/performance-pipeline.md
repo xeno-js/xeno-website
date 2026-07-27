@@ -131,7 +131,7 @@ custom 300ms latency threshold alongside a structured Pino logger setup:
 import { AppBuilder, LOG_LEVEL } from '@xeno/core';
 import type { AppRegistry } from './xeno-registry/app-registry';
 
-export const configurePerformanceMonitoring = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>();
 
   builder

@@ -108,7 +108,7 @@ container. It automatically prepends this behavior token to both
 import { AppBuilder } from '@xeno/core'
 import type { AppRegistry } from './xeno-registry/app-registry'
 
-export const configureCqrsPipeline = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder
