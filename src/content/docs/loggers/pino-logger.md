@@ -61,9 +61,7 @@ export const bootstrap = async () => {
     // 3. Populate Pino configuration settings
     options.pino.config = {
       env: configuration.get('NODE_ENV', 'development'),
-      destination: configuration.get('LOG_DESTINATION', 'stdout') as
-        | 'stdout'
-        | 'file',
+      destination: configuration.get('LOG_DESTINATION', 'stdout')
       filePath: configuration.get('LOG_FILE_PATH', 'logs/app.log'),
       prettyPrint: configuration.get('LOG_PRETTY_PRINT') === 'true',
     }

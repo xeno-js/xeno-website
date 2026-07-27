@@ -67,6 +67,16 @@ export default defineConfig({
             { label: 'Redis', link: '/cache/redis' },
           ],
         },
+        {
+          label: 'CQRS',
+          items: [
+            { label: 'Overview', link: '/cqrs/overview' },
+            { label: 'Exception Behavior', link: '/cqrs/exception-pipeline' },
+            { label: 'Logging Behavior', link: '/cqrs/logging-pipeline' },
+            { label: 'Performance Behavior', link: '/cqrs/performance-pipeline' },
+            { label: 'Validation Behavior', link: '/cqrs/validation-pipeline' },
+          ],
+        },
       ],
     }),
   ],

@@ -36,7 +36,8 @@ identity providers, and materializes strongly-typed authorization claims,
 ensuring secure, isolated execution context boundaries for downstream request
 processing handlers.
 
-The core execution path is driven by the `RequestContextMiddleware` within the
+The core execution path is driven by the
+[`RequestContextMiddleware`](../fundamentals/node-request-context.md) within the
 framework's presentation layer. When an inbound request hits the transport
 layer, this middleware intercepts the network envelope to extract metadata from
 the headers.

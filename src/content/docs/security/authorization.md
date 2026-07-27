@@ -36,10 +36,11 @@ bypasses safety checks for any path explicitly registered in the public route
 registry of the request context middleware layer.
 
 When an inbound request enters the presentation layer, the
-`RequestContextMiddleware` evaluates whether the requested route and HTTP method
-correspond to an open endpoint declared within the `publicRoutes` dictionary. If
-the route matches a public definition, the framework sets the `isPublic` flag to
-`true` inside the current execution context.
+[`RequestContextMiddleware`](../fundamentals/node-request-context.md) evaluates
+whether the requested route and HTTP method correspond to an open endpoint
+declared within the `publicRoutes` dictionary. If the route matches a public
+definition, the framework sets the `isPublic` flag to `true` inside the current
+execution context.
 
 The authorization pipeline stack continuously monitors this flag. Any command or
 query message processed under an active public context completely bypasses
