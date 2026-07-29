@@ -90,8 +90,9 @@ sequenceDiagram
 ## Configuring Performance Behavior via AppBuilder
 
 The `PerformancePipeline` behavior is registered during host assembly when
-calling `.addPipeline()` on `AppBuilder`. Developers can customize the
-millisecond latency threshold by populating `options.performance.thresholdMs`.
+calling `.addPipeline()` on [`AppBuilder`](../fundamentals/app-builder).
+Developers can customize the millisecond latency threshold by populating
+`options.performance.thresholdMs`.
 
 ### Configuring the Execution Threshold
 
@@ -117,7 +118,7 @@ warning logs are triggered:
 
 > **Refer to Logging Documentation**: For complete instructions on setting up
 > custom logging drivers consult the
-> [Loggers Overview & Architecture Guide](../loggers/introduction.md).
+> [Loggers Overview & Architecture Guide](../loggers/introduction).
 
 ---
 
@@ -129,7 +130,7 @@ custom 300ms latency threshold alongside a structured Pino logger setup:
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
 import { AppBuilder, LOG_LEVEL } from '@xeno/core';
-import type { AppRegistry } from './xeno-registry/app-registry';
+import type { AppRegistry } from './infrastructure/app-registry';
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>();
@@ -180,5 +181,13 @@ structured diagnostic metadata to aid in identifying slow application routines:
   evaluate execution speed.
 
 - **Tracing Context** — Inherits active `correlationId`, `requestId`, and
-  `tenantId` from `RequestContext`, enabling correlation with database queries
-  and downstream HTTP calls.
+  `tenantId` from [`RequestContext`](../fundamentals/node-request-context),
+  enabling correlation with database queries and downstream HTTP calls.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

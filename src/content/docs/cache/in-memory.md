@@ -72,7 +72,7 @@ singleton under `TOKENS.CACHE`.
 ```typescript
 // src/infrastructure/bootstrap-inmemory-cache.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const configureInMemoryCaching = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -102,14 +102,14 @@ coupling and complete type safety.
 
 ### Key-Value Specification of Exposed Methods
 
-- **get<T>(key)** — Resolves a cached entry by key, returning
+- **get`<T>`(key)** — Resolves a cached entry by key, returning
   `Promise<Optional<T>>`. Returns `undefined` if the key is missing or expired.
 
-- **set<T>(key, value, ttlSeconds?)** — Stores an entry with an optional TTL
+- **set`<T>`(key, value, ttlSeconds?)** — Stores an entry with an optional TTL
   expiration window in seconds.
 
-- **setIfAbsent<T>(key, value, ttlSeconds?)** — Atomically sets the key only if
-  it does not already exist (or has expired), returning `true` if saved or
+- **setIfAbsent`<T>`(key, value, ttlSeconds?)** — Atomically sets the key only
+  if it does not already exist (or has expired), returning `true` if saved or
   `false` if occupied.
 
 - **has(key)** — Asynchronously returns `true` if a non-expired entry exists for
@@ -163,7 +163,7 @@ during host assembly:
 // src/infrastructure/bootstrap-services.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
 import { UserPreferenceService } from '../application/services/user-preference.service'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const configureServices = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -182,3 +182,11 @@ export const configureServices = async () => {
   return await builder.build()
 }
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

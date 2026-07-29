@@ -327,7 +327,7 @@ To register data mappers, attach their factory initializers inside the
 import { AppBuilder } from '@xeno/core'
 import { UserMapper } from './mappers/user.mapper'
 import { UserWriteRepository } from './repositories/user-write.repository'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -354,3 +354,11 @@ export const bootstrap = async () => {
   return await builder.build()
 }
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

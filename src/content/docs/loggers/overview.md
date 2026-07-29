@@ -132,7 +132,7 @@ composite `BaseLogger` to the central IoC container under `TOKENS.LOGGER`.
 ```typescript
 // src/infrastructure/bootstrap-logging.ts
 import { AppBuilder, LOG_LEVEL } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -248,7 +248,7 @@ from the active scope container:
 // src/infrastructure/bootstrap-services.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
 import { PaymentService } from '../application/services/payment.service'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -350,3 +350,11 @@ function formatLogPrefix(level: LogLevel): string {
 
 console.log(formatLogPrefix(LOG_LEVEL.WARN)) // Output: "[WARN]"
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

@@ -230,3 +230,11 @@ export const appHost = new AppBuilder<AppRegistry>()
     }
   })
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

@@ -31,18 +31,18 @@ dispatched through the mediator bus.
 ## Understanding How Logging Behavior Works
 
 The `LoggingPipeline` behavior intercepts every
-[`ICommand` and `IQuery`](../fundamentals/command-query.md) message dispatched
-via `IMediator`. Positioned immediately behind `ExceptionPipeline` in the
-pipeline stack, it provides complete execution auditing across success and
-failure outcomes.
+[`ICommand` and `IQuery`](../fundamentals/command-query) message dispatched via
+`IMediator`. Positioned immediately behind `ExceptionPipeline` in the pipeline
+stack, it provides complete execution auditing across success and failure
+outcomes.
 
 When a message enters `LoggingPipeline`, the behavior reads the request's unique
 `intent` string and resolves the global composite logger (`TOKENS.LOGGER`). It
 emits an entry log prior to invoking downstream pipeline behaviors or business
 handlers. Once the execution thread returns, `LoggingPipeline` inspects the
-functional [`ResultType<T>`](../fundamentals/result-app-error.md) monad and
-records either a success outcome or detailed failure properties (such as
-`AppError` error codes and status values).
+functional [`ResultType<T>`](../fundamentals/result-app-error) monad and records
+either a success outcome or detailed failure properties (such as `AppError`
+error codes and status values).
 
 ```mermaid
 sequenceDiagram
@@ -102,7 +102,7 @@ setup, Xeno includes an automatic fallback mechanism.
 
 If you enable the CQRS pipeline using `.addPipeline()` without explicitly
 configuring a logger, the framework automatically imports and registers
-[`ConsoleLogger`](../loggers/overview.md) as a default singleton under
+[`ConsoleLogger`](../loggers/overview) as a default singleton under
 `TOKENS.LOGGER`. This enables immediate stdout logging during local development
 and prototyping without throwing missing-dependency errors.
 
@@ -110,14 +110,14 @@ and prototyping without throwing missing-dependency errors.
 
 When building production applications that require structured JSON logs,
 sensitive data redaction, or remote exception tracking, developers should
-explicitly call `.addLogger()` on `AppBuilder` during host initialization.
-Calling `.addLogger()` replaces or enriches the default logger stack with
-drivers such as **PinoLogger**, **SentryLogger**, or bespoke custom logging
-drivers.
+explicitly call `.addLogger()` on [`AppBuilder`](../fundamentals/app-builder)
+during host initialization. Calling `.addLogger()` replaces or enriches the
+default logger stack with drivers such as **PinoLogger**, **SentryLogger**, or
+bespoke custom logging drivers.
 
 > **Refer to Detailed Documentation**: For full architectural details on
 > configuring specific logging drivers see the dedicated
-> [Loggers Architecture & Overview Manual](../loggers/overview.md).
+> [Loggers Architecture & Overview Manual](../loggers/overview).
 
 ---
 
@@ -129,7 +129,7 @@ the default `ConsoleLogger` fallback with a custom logger configuration:
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
 import { AppBuilder, LOG_LEVEL } from '@xeno/core';
-import type { AppRegistry } from './xeno-registry/app-registry';
+import type { AppRegistry } from './infrastructure/app-registry';
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>();
@@ -184,3 +184,11 @@ standard telemetry attributes:
 - **Request Correlation** — Extracted automatically from `RequestContext`,
   linking log statements across middleware, pipeline behaviors, and database
   repositories.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

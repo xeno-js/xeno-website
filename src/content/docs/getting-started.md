@@ -13,8 +13,6 @@ keywords:
     'TypeScript framework',
   ]
 author: 'Xeno'
-sidebar:
-  order: 2
 ---
 
 ## How to Manually Install and Bootstrap Xeno?
@@ -33,7 +31,7 @@ application programmatically.
 Install the core package along with its mandatory runtime and development peer
 dependencies using your preferred package manager:
 
-```
+```bash
 npm install @xeno/core
 npm install
 npm install --save-dev typescript @types/node
@@ -131,3 +129,11 @@ bootstrap().catch((error) => {
 });
 
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](./support-us)

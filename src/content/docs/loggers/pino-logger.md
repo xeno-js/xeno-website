@@ -46,7 +46,7 @@ active redaction rules.
 ```typescript
 // src/infrastructure/bootstrap-pino.ts
 import { AppBuilder, LOG_LEVEL } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -218,7 +218,7 @@ engine alongside its terminal formatting utility.
 
 Execute the package manager installation command within your project root:
 
-```
+```bash
 # Install the mandatory Pino core peer dependency
 npm install pino
 
@@ -232,3 +232,11 @@ npm install --save-dev pino-pretty
 > `options.pino.config` is configured without `pino` present in your project's
 > dependencies, Node.js will throw a runtime module resolution exception during
 > host initialization.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

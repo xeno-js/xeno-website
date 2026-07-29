@@ -168,7 +168,7 @@ exclude from gatekeeper checks:
 ```typescript
 // src/infrastructure/bootstrap.ts
 import { AppBuilder } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export async function initializeApplication() {
   const builder = new AppBuilder<AppRegistry>()
@@ -220,6 +220,10 @@ before compiling the outward HTTP response.
   provide this correlation hash to system administrators to map lookups across
   distributed log aggregators without revealing systemic vulnerabilities.
 
-```
+---
 
-```
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

@@ -68,7 +68,7 @@ instructs the framework to bind the appropriate driver to `TOKENS.CACHE`.
 ```typescript
 // src/infrastructure/bootstrap-cache.ts
 import { AppBuilder } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const configureCachingHost = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -117,7 +117,7 @@ The idempotency behavior protects command handlers from duplicate execution by
 acquiring locks and storing transaction outcomes in `IdempotencyStore`. It uses
 `setIfAbsent` to establish lock keys (e.g., `idempotency_lock:command:<id>`) and
 retrieves cached response payloads for previously processed requests. For full
-details, see the [Idempotency & Concurrency Documentation](../cqrs/overview.md).
+details, see the [Idempotency & Concurrency Documentation](../cqrs/overview).
 
 ### 2. Query Caching Pipeline (`QueryCachingPipeline`)
 
@@ -156,13 +156,13 @@ writing, checking, and evicting cached entries.
 
 ### Key-Value Specification of ICache Primitives
 
-- **get<T>(key)** — Resolves a cached entry by key string, returning
+- **get`<T>`(key)** — Resolves a cached entry by key string, returning
   `Promise<Optional<T>>`.
 
-- **set<T>(key, value, ttlSeconds?)** — Persists an entry in the cache with an
+- **set`<T>`(key, value, ttlSeconds?)** — Persists an entry in the cache with an
   optional time-to-live threshold in seconds.
 
-- **setIfAbsent<T>(key, value, ttlSeconds?)** — Atomic conditional write; sets
+- **setIfAbsent`<T>`(key, value, ttlSeconds?)** — Atomic conditional write; sets
   the key only if it does not already exist, returning `true` if set or `false`
   if occupied.
 
@@ -212,7 +212,7 @@ export class CatalogService {
 // src/infrastructure/bootstrap-services.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
 import { CatalogService } from '../application/services/catalog.service'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const registerCatalogServices = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -233,3 +233,11 @@ export const registerCatalogServices = async () => {
   return await builder.build()
 }
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

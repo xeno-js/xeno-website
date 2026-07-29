@@ -36,7 +36,7 @@ bypasses safety checks for any path explicitly registered in the public route
 registry of the request context middleware layer.
 
 When an inbound request enters the presentation layer, the
-[`RequestContextMiddleware`](../fundamentals/node-request-context.md) evaluates
+[`RequestContextMiddleware`](../fundamentals/node-request-context) evaluates
 whether the requested route and HTTP method correspond to an open endpoint
 declared within the `publicRoutes` dictionary. If the route matches a public
 definition, the framework sets the `isPublic` flag to `true` inside the current
@@ -115,7 +115,7 @@ properties inside the `.addPipeline()` block during application bootstrapping:
 ```typescript
 // src/infrastructure/bootstrap-auth.ts
 import { AppBuilder } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -173,3 +173,11 @@ message intent tokens to targeted role definitions or fine-grained capabilities.
 Detailed configuration manifests, contract structures, and runtime examples for
 these policy engines are provided in dedicated implementation sub-manuals within
 this section.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

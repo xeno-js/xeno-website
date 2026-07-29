@@ -85,17 +85,17 @@ sequenceDiagram
 ### 1. Transport Middleware & Scope Initialization
 
 When an inbound request hits the server,
-[`RequestContextMiddleware`](../fundamentals/middleware.md) intercepts the
-payload. It extracts tracing metadata and authorization headers, then invokes
+[`RequestContextMiddleware`](../fundamentals/middleware) intercepts the payload.
+It extracts tracing metadata and authorization headers, then invokes
 `NodeRequestContext.runAsync()`. This creates a new request-scoped IoC container
 instance (`IServiceScope`) and binds both the scope and the active
-[`RequestContext`](../fundamentals/node-request-context.md) (containing
-identity, network, and tracing metrics) to Node.js `AsyncLocalStorage`.
+[`RequestContext`](../fundamentals/node-request-context) (containing identity,
+network, and tracing metrics) to Node.js `AsyncLocalStorage`.
 
 ### 2. Controller Dispatch
 
 The route handler inside a controller (extending
-[`BaseController`](../fundamentals/base-controller.md)) receives the request.
+[`BaseController`](../fundamentals/base-controller)) receives the request.
 Instead of instantiating business services directly, the controller constructs a
 typed command or query message and calls its protected helper methods:
 `this._send(command)` or `this._query(query)`. These helpers delegate execution
@@ -103,12 +103,12 @@ directly to `IMediator.send()` or `IMediator.query()`.
 
 ### 3. Mediator & Scope-Isolated Behavioral Resolution
 
-When [`Mediator`](../fundamentals/command-query.md) receives a message, it
-accesses `SERVICE_SCOPE_ACCESSOR` to resolve the current active request scope
-from `AsyncLocalStorage`. It resolves `COMMAND_PIPELINES_BEHAVIOR` (for
-commands) or `QUERY_PIPELINES_BEHAVIOR` (for queries) from the container scope.
-Because resolution happens within the request-scoped boundary, dependencies
-injected into handlers or behaviors retain strict context isolation.
+When [`Mediator`](../fundamentals/command-query) receives a message, it accesses
+`SERVICE_SCOPE_ACCESSOR` to resolve the current active request scope from
+`AsyncLocalStorage`. It resolves `COMMAND_PIPELINES_BEHAVIOR` (for commands) or
+`QUERY_PIPELINES_BEHAVIOR` (for queries) from the container scope. Because
+resolution happens within the request-scoped boundary, dependencies injected
+into handlers or behaviors retain strict context isolation.
 
 ### 4. Composite Pipeline Execution Chain
 
@@ -122,7 +122,7 @@ executes behaviors in order, passing control to downstream behaviors via a
 If all pipeline behaviors pass (e.g., authorization is verified, input schemas
 are valid, cache checks are evaluated), the target handler is invoked with the
 message payload and an `AbortSignal`. The handler executes core business logic
-and returns a functional [`ResultType<T>`](../fundamentals/result-app-error.md)
+and returns a functional [`ResultType<T>`](../fundamentals/result-app-error)
 monad back up the behavior stack to the controller.
 
 ---
@@ -137,7 +137,7 @@ for standard framework operation.
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
 import { AppBuilder } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -183,25 +183,33 @@ Xeno includes an array of built-in pipeline behaviors that can be conditionally
 enabled within the `.addPipeline()` setup action. Each behavior addresses a
 specific cross-cutting concern without altering domain handlers.
 
-| Behavior Name                                                     | Target Bus      | Description                                                                                                             |
-| ----------------------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| [**Exception Pipeline**](./exception-pipeline.md)                 | Command & Query | Catches unexpected exceptions and formats them into functional `AppError` failure results.                              |
-|                                                                   |
-| [**Logging Pipeline**](./logging-pipeline.md)                     | Command & Query | Captures message intent name, start timestamps, payload contents, and execution completion results.                     |
-|                                                                   |
-| [**Performance Pipeline**](./performance-pipeline.md)             | Command & Query | Monitors handler execution latency and flags slow-running operations exceeding threshold limits.                        |
-|                                                                   |
-| [**Authorization Behavior**](../security/authorization.md)        | Command & Query | Enforces user existence, multi-tenant isolation, role checks, and permission requirements via intent policies.          |
-|                                                                   |
-| [**Validation Behavior**](./validatio-pipeline.md)                | Command & Query | Validates message payloads against registered validation schemas (such as Zod) before handler execution.                |
-|                                                                   |
-| [**Idempotency Pipeline**](./idempotency-pipeline.md)             | Command Bus     | Prevents duplicate command execution by acquiring distributed locks and caching transaction outputs.                    |
-|                                                                   |
-| [**Concurrency Retry Pipeline**](./concurrency-retry-pipeline.md) | Command Bus     | Automatically retries commands encountering state concurrency conflicts using exponential backoff and jitter.           |
-|                                                                   |
-| [**Query Caching Pipeline**](./query-caching-pipeline.md)         | Query Bus       | Automatically checks `ICache` for pre-calculated query results using context-aware cache keys before handler execution. |
-|                                                                   |
+| Behavior Name                                                  | Target Bus      | Description                                                                                                             |
+| -------------------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [**Exception Pipeline**](./exception-pipeline)                 | Command & Query | Catches unexpected exceptions and formats them into functional `AppError` failure results.                              |
+|                                                                |
+| [**Logging Pipeline**](./logging-pipeline)                     | Command & Query | Captures message intent name, start timestamps, payload contents, and execution completion results.                     |
+|                                                                |
+| [**Performance Pipeline**](./performance-pipeline)             | Command & Query | Monitors handler execution latency and flags slow-running operations exceeding threshold limits.                        |
+|                                                                |
+| [**Authorization Behavior**](../security/authorization)        | Command & Query | Enforces user existence, multi-tenant isolation, role checks, and permission requirements via intent policies.          |
+|                                                                |
+| [**Validation Behavior**](./validatio-pipeline)                | Command & Query | Validates message payloads against registered validation schemas (such as Zod) before handler execution.                |
+|                                                                |
+| [**Idempotency Pipeline**](./idempotency-pipeline)             | Command Bus     | Prevents duplicate command execution by acquiring distributed locks and caching transaction outputs.                    |
+|                                                                |
+| [**Concurrency Retry Pipeline**](./concurrency-retry-pipeline) | Command Bus     | Automatically retries commands encountering state concurrency conflicts using exponential backoff and jitter.           |
+|                                                                |
+| [**Query Caching Pipeline**](./query-caching-pipeline)         | Query Bus       | Automatically checks `ICache` for pre-calculated query results using context-aware cache keys before handler execution. |
+|                                                                |
 
 _Detailed setup configurations, option schemas, and code implementations for
 each individual behavior are covered in dedicated sub-manuals within this
 section._
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

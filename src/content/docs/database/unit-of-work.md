@@ -218,7 +218,7 @@ handler's factory function:
 // src/infrastructure/bootstrap.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
 import { UpdateProfileCommandHandler } from '../application/profile/handlers/update-profile.handler'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -368,3 +368,11 @@ export class UpdateProfileCommandHandler extends BaseHandler<
 
 - **Automatic Rollback** — The error-handling mechanism that catches exceptions
   within a transaction block and immediately cancels all pending row mutations.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

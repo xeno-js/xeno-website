@@ -109,26 +109,27 @@ sequenceDiagram
   competing worker processes to stagger re-execution attempts.
 
 - **Command Bus Specificity** — Applies exclusively to state-modifying
-  operations (`ICommand`), keeping read-only queries free from unnecessary retry
-  loops.
+  operations ([`ICommand`](../fundamentals/command-query)), keeping read-only
+  queries free from unnecessary retry loops.
 
 ---
 
 ## Configuring Concurrency Behavior via AppBuilder
 
 Concurrency retry behavior is registered during host bootstrapping by populating
-`options.commandBus.concurrency` inside `.addPipeline()` on `AppBuilder`. Under
-the hood, `PipelineUtils.addCommand` instantiates `ConcurrencyRetryPipeline` and
-registers it under `TOKENS.CONCURRENCY_RETRY_PIPELINE`.
+`options.commandBus.concurrency` inside `.addPipeline()` on
+[`AppBuilder`](../fundamentals/app-builder). Under the hood,
+`PipelineUtils.addCommand` instantiates `ConcurrencyRetryPipeline` and registers
+it under `TOKENS.CONCURRENCY_RETRY_PIPELINE`.
 
 ### Programmatic Bootstrap Configuration Example
 
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
 import { AppBuilder } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
-export const configureConcurrencyHost = async () => {
+export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder.addContext().addPipeline((options) => {
@@ -176,8 +177,9 @@ stops retrying and returns a functional error monad.
 
 ### Returned AppError Envelope
 
-The resulting failure is wrapped in an `AppError` containing the `CONFLICT`
-error code:
+The resulting failure is wrapped in an
+[`AppError`](../fundamentals/result-app-error) containing the `CONFLICT` error
+code:
 
 - **Error Code**: `ERROR_CODES.CONFLICT` (`'CONFLICT'`).
 
@@ -186,8 +188,9 @@ error code:
 - **Message**:
   `[Concurrency Error]: Maximum retry attempts exceeded due to persistent concurrency conflicts.`.
 
-When processed by a controller extending `BaseController`, the failure renders
-as a standardized 409 API response envelope:
+When processed by a controller extending
+[`BaseController`](../fundamentals/base-controller), the failure renders as a
+standardized 409 API response envelope:
 
 ```json
 {
@@ -204,3 +207,11 @@ as a standardized 409 API response envelope:
   "timestamp": "2026-07-27T18:00:00.000Z"
 }
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

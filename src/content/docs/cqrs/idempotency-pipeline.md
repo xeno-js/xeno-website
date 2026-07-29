@@ -32,20 +32,22 @@ transactional idempotency using lock primitives and cached response payloads.
 
 ## Understanding How Idempotency Behavior Works
 
-The `IdempotencyPipeline` behavior intercepts every `ICommand` dispatched
-through the mediator bus when idempotency is enabled. It ensures that commands
-sharing the same unique request identifier are executed **exactly once** within
-a configured TTL window.
+The `IdempotencyPipeline` behavior intercepts every
+[`ICommand`](../fundamentals/command-query) dispatched through the mediator bus
+when idempotency is enabled. It ensures that commands sharing the same unique
+request identifier are executed **exactly once** within a configured TTL window.
 
 When an inbound command enters `IdempotencyPipeline`, the behavior extracts the
-request's unique identifier (`requestId`) from `NetworkContext`. It then
-executes the following transactional lifecycle:
+request's unique identifier (`requestId`) from
+[`NetworkContext`](../fundamentals/node-request-context). It then executes the
+following transactional lifecycle:
 
 1. **Processed Payload Check**: Queries `IdempotencyStore` to check if the
    command has already completed (`hasBeenProcessed`). If a cached payload
    exists, `IdempotencyPipeline` short-circuits execution and immediately
-   returns the previously cached `ResultType<T>` payload without invoking the
-   command handler.
+   returns the previously cached
+   [`ResultType<T>`](../fundamentals/result-app-error) payload without invoking
+   the command handler.
 
 2. **Lock Acquisition**: If the command has not been processed,
    `IdempotencyPipeline` attempts to acquire an in-flight execution lock
@@ -133,7 +135,7 @@ Idempotency behavior is enabled during application bootstrapping by populating
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
 import { AppBuilder } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -186,7 +188,7 @@ distribute idempotency locks and payloads across a shared Redis cluster.
 
 > **Refer to Caching Architecture**: For full details on configuring distributed
 > Redis caching, connection parameters, and driver setup, consult the
-> [Caching Subsystem Overview](../cache/overview.md).
+> [Caching Subsystem Overview](../cache/overview).
 
 ---
 
@@ -202,7 +204,7 @@ To support enterprise SaaS applications and multi-tenant architectures,
 `CacheKeyBuilder` builds storage keys using the AWS SaaS Factory pattern for
 logical data partitioning:
 
-```
+```text
 [Lock Key Prefix] + [Contextual Prefix] + [Command Request Key]
 
 ```
@@ -232,3 +234,11 @@ commands, guest endpoints, or single-tenant applications), `tenantId` is absent.
 `CacheKeyBuilder` falls back to a root-level contextual key namespace:
 
 $$\text{Key} = \text{\texttt{idempotency\_lock:command:req\_998877}}$$
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

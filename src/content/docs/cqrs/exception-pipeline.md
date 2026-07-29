@@ -35,7 +35,7 @@ The `ExceptionPipeline` acts as the first behavior executed in the CQRS pipeline
 chain and the last behavior processed when returning an execution result. It
 wraps downstream behaviors and handler execution in a safety boundary,
 intercepting any thrown exceptions and standardizing them into functional
-`AppError` structures.
+[`AppError`](../fundamentals/result-app-error) structures.
 
 When a message is dispatched via the mediator, `ExceptionPipeline` executes a
 `try/catch` block around the invocation of `next()`. If a downstream pipeline
@@ -82,8 +82,9 @@ sequenceDiagram
   shielding all subsequent pipeline operations.
 
 - **Monadic Standardization** — Guarantees that mediator methods (`send` and
-  `query`) always resolve to a `ResultType<T>` monad and never throw unhandled
-  promise rejections.
+  `query`) always resolve to a
+  [`ResultType<T>`](../fundamentals/result-app-error) monad and never throw
+  unhandled promise rejections.
 
 - **Exception Normalization** — Converts raw JavaScript exceptions into
   strongly-typed `AppError` instances, retaining error names, cause chains, and
@@ -94,7 +95,8 @@ sequenceDiagram
 ## Registering Exception Behavior in the Bootstrap Cycle
 
 The `ExceptionPipeline` is registered automatically as a core framework behavior
-during application startup when calling `.addPipeline()` on `AppBuilder`.
+during application startup when calling `.addPipeline()` on
+[`AppBuilder`](../fundamentals/app-builder).
 
 During module assembly, `CqrsModule` registers `ExceptionPipeline` under
 `TOKENS.EXCEPTION_PIPELINE` as a singleton inside the dependency injection
@@ -106,7 +108,7 @@ container. It automatically prepends this behavior token to both
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
 import { AppBuilder } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -134,7 +136,7 @@ checks rather than `try/catch` blocks.
 ### Accessing Errors from Mediator Execution
 
 When invoking commands or queries via the mediator, callers evaluate the
-returned [`ResultType<T>`](../fundamentals/result-app-error.md):
+returned [`ResultType<T>`](../fundamentals/result-app-error):
 
 ```typescript
 // Example inside a custom application service or workflow
@@ -153,8 +155,7 @@ if (!result.isOk()) {
 
 ### Key-Value Specification of AppError Properties
 
-When an exception is transformed into an
-[`AppError`](../fundamentals/result-app-error.md), the object exposes the
+When an exception is transformed into an `AppError`, the object exposes the
 following properties:
 
 - **code** — Machine-readable error string (e.g., `ERROR_CODES.SYSTEM_ERROR`,
@@ -177,14 +178,13 @@ following properties:
 ## Mapping Errors to Standardized API Responses
 
 When a command or query fails, controllers extending
-[`BaseController`](../fundamentals/base-controller.md) map the returned
-`AppError` monad directly into an HTTP response envelope using
-`this.fail(error)`.
+[`BaseController`](../fundamentals/base-controller) map the returned `AppError`
+monad directly into an HTTP response envelope using `this.fail(error)`.
 
 Under the hood, `BaseController.fail()` delegates response construction to
 `HttpHelper.error()`, enriching the payload with active request context metadata
 (such as `correlationId`, `requestId`, `spanId`, and request `path`) extracted
-from [`AsyncLocalStorage`](../fundamentals/node-request-context.md).
+from [`AsyncLocalStorage`](../fundamentals/node-request-context).
 
 ### Controller Error Handling Pattern
 
@@ -243,3 +243,11 @@ headers for distributed tracing and cache control:
 - `X-Request-Id`: Matching request execution GUID
 
 - `Cache-Control`: `no-store, no-cache, must-revalidate, proxy-revalidate`
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

@@ -17,7 +17,7 @@ keywords:
 author: 'Xeno'
 ---
 
-# Remote Error Tracking with SentryLogger
+## Remote Error Tracking with SentryLogger
 
 Capturing unhandled exceptions and performance anomalies in production
 distributed systems requires real-time telemetry forwarding to centralized
@@ -45,7 +45,7 @@ the resulting `SentryLogger` instance as an active driver inside the composite
 
 ```typescript
 import { AppBuilder, LOG_LEVEL } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -177,7 +177,7 @@ dependencies into environments that do not require remote APM tracking.
 To enable Sentry error logging, execute the package manager installation command
 within your project root:
 
-```
+```bash
 # Install the mandatory Sentry SDK peer dependency
 npm install @sentry/node
 
@@ -187,3 +187,11 @@ npm install @sentry/node
 > framework's peer dependency range (`^7.64.0` or higher). If you configure
 > Sentry logging via `.addLogger()` without installing `@sentry/node`, Node.js
 > will throw a runtime module resolution error during host initialization.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

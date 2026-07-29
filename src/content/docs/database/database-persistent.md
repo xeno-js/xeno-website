@@ -180,7 +180,7 @@ database interactions remain type-safe during bootstrapping:
 ```typescript
 // src/infrastructure/bootstrap-data.ts
 import { AppBuilder } from '@xeno/core'
-import { type AppRegistry } from './xeno-registry/app-registry'
+import { type AppRegistry } from './infrastructure/app-registry'
 
 // Initialize the fluent AppBuilder using your strongly-typed registry schema
 const builder = new AppBuilder<AppRegistry>()
@@ -208,7 +208,7 @@ transaction rollbacks:
 ```typescript
 // src/infrastructure/bootstrap-data.ts
 import { AppBuilder, TOKENS } from '@xeno/core';
-import type { AppRegistry } from './xeno-registry/app-registry';
+import type { AppRegistry } from './infrastructure/app-registry';
 import { UserDataSource } from './datasources/user.datasource';
 
 export const bootstrap = async () => {
@@ -355,8 +355,13 @@ use cases that modify data states.
   manages state commits, record updates, and row erasure routines across
   database boundaries.
 
-<!--
-* **IRemoteDataSource** — Network transport abstraction. It executes remote endpoint requests through integrated resilience policies like retries and circuit breakers. -->
-
 - **DbContext** — A strongly-typed connection pool wrapper that validates SQL
   statements and data payloads against database table schemas at compile time.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

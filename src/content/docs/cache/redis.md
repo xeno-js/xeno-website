@@ -84,7 +84,7 @@ binds `RedisCache` to `TOKENS.CACHE`.
 ```typescript
 // src/infrastructure/bootstrap-redis-cache.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const configureRedisCaching = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -143,15 +143,15 @@ Redis-specific logic.
 
 ### Key-Value Specification of Exposed Methods
 
-- **get<T>(key)** — Resolves a cached entry from Redis by key, returning
+- **get`<T>`(key)** — Resolves a cached entry from Redis by key, returning
   `Promise<Optional<T>>`. Returns `undefined` if the key is missing or expired.
 
-- **set<T>(key, value, ttlSeconds?)** — Persists an entry in Redis with an
+- **set`<T>`(key, value, ttlSeconds?)** — Persists an entry in Redis with an
   optional expiration TTL in seconds.
 
-- **setIfAbsent<T>(key, value, ttlSeconds?)** — Atomically writes the entry only
-  if the key does not already exist, returning `true` if saved or `false` if
-  occupied.
+- **setIfAbsent`<T>`(key, value, ttlSeconds?)** — Atomically writes the entry
+  only if the key does not already exist, returning `true` if saved or `false`
+  if occupied.
 
 - **has(key)** — Asynchronously returns `true` if the key exists in Redis.
 
@@ -204,7 +204,7 @@ export class SessionService {
 // src/infrastructure/bootstrap-services.ts
 import { AppBuilder, TOKENS } from '@xeno/core';
 import { SessionService } from '../application/services/session.service';
-import type { AppRegistry } from './xeno-registry/app-registry';
+import type { AppRegistry } from './infrastructure/app-registry';
 
 export const configureServices = async () => {
   const builder = new AppBuilder<AppRegistry>();
@@ -246,7 +246,7 @@ bundles that only require in-memory caching.
 
 Execute the following package manager command within your project workspace:
 
-```
+```bash
 # Install mandatory ioredis peer dependency for Redis support
 npm install ioredis
 
@@ -256,3 +256,11 @@ npm install ioredis
 > `AppBuilder` without installing `ioredis`, Node.js will throw a runtime module
 > resolution exception during host initialization when attempting to import
 > `ioredis`.
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

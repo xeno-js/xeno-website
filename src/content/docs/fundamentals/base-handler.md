@@ -183,7 +183,7 @@ request context metadata.
 // src/infrastructure/bootstrap.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
 import { SaveUserCommandHandler } from '../application/user/handlers/save-user-command.handler'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -369,3 +369,11 @@ export class UserController extends BaseController<UserProps, void> {
 >   return await builder.build()
 > }
 > ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

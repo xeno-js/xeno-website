@@ -218,7 +218,7 @@ Singletons via the `ContextModule`.
 The framework automatically configures and binds four distinct context accessor
 interfaces to the central asynchronous context engine:
 
-- **IContextAccessor<RequestContext>** — (TOKENS.CONTEXT_ACCESSOR) Exposes the
+- **IContextAccessor`<RequestContext>`** — (TOKENS.CONTEXT_ACCESSOR) Exposes the
   method `getContext()`, which returns the comprehensive
   `Optional<RequestContext>` wrapper for complete transaction tracking.
 
@@ -249,7 +249,7 @@ consumption:
 // src/infrastructure/bootstrap.ts
 import { AppBuilder, TOKENS } from '@xeno/core'
 import { BillingService } from '@/domain/services/billing.service'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 async function bootstrap() {
   const builder = new AppBuilder<AppRegistry>()
@@ -295,3 +295,11 @@ export class BillingService {
   }
 }
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)

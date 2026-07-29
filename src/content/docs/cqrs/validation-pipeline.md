@@ -29,10 +29,11 @@ validates command and query requests before they reach application handlers.
 
 ## Understanding How Validation Works in Xeno
 
-The `ValidationPipeline` behavior intercepts every command (`ICommand`) and
-query (`IQuery`) dispatched through the mediator bus. Positioned after
-authorization behaviors, it evaluates message payloads against registered
-validation schemas and custom validation rules.
+The `ValidationPipeline` behavior intercepts every
+[command (`ICommand`) and query (`IQuery`)](../fundamentals/command-query)
+dispatched through the mediator bus. Positioned after authorization behaviors,
+it evaluates message payloads against registered validation schemas and custom
+validation rules.
 
 When a message enters `ValidationPipeline`, the behavior executes its array of
 registered validation strategies sequentially. If any strategy detects a
@@ -92,8 +93,9 @@ sequenceDiagram
 - **Short-Circuit Shortening** — Aborts pipeline execution at the first
   validation error, avoiding unnecessary database queries or external RPC calls.
 - **Monadic Failure Envelope** — Wraps input validation failures into
-  standardized `AppError` instances, providing formatted, field-specific error
-  paths (e.g., `[user.email] Invalid email address`).
+  standardized [`AppError`](../fundamentals/result-app-error) instances,
+  providing formatted, field-specific error paths (e.g.,
+  `[user.email] Invalid email address`).
 - **Hybrid Strategy Support** — Allows combining declarative Zod schema
   validation with dynamic custom validation strategies within the same pipeline
   execution chain.
@@ -111,7 +113,7 @@ incoming payloads against their corresponding schema definition.
 > (`@xeno/core`). To use Zod schema validation, you must explicitly install
 > `zod` in your project workspace:
 >
-> ```
+> ```bash
 > npm install zod
 >
 > ```
@@ -151,7 +153,7 @@ message `intent` keys to their respective Zod schemas:
 // src/infrastructure/bootstrap-validation.ts
 import { AppBuilder } from '@xeno/core'
 import { CreateUserCommandSchema } from '../application/users/schemas/create-user.schema'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const configureValidationPipeline = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -334,7 +336,7 @@ factory callback receives the request-scoped dependency injection container
 import { AppBuilder, TOKENS } from '@xeno/core'
 import { CreateUserCommandSchema } from '../application/users/schemas/create-user.schema'
 import { UniqueEmailValidationStrategy } from '../application/users/strategies/unique-email-validation.strategy'
-import type { AppRegistry } from './xeno-registry/app-registry'
+import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
@@ -386,3 +388,11 @@ response returns a structured 400 error payload:
   "timestamp": "2026-07-27T12:00:00.000Z"
 }
 ```
+
+---
+
+## Support Us
+
+Xeno is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../support-us)
