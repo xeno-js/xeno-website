@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   integrations: [
     starlight({
-      title: 'Xeno Docs',
+      title: 'Xeno',
       favicon: '/favicon.ico',
       description:
         'Xeno is a Node.js framework for building scalable and maintainable applications.',
@@ -80,10 +80,7 @@ export default defineConfig({
             { label: 'Query caching Behavior', link: '/cqrs/query-caching-pipeline' },
           ],
         },
-        {
-          label: 'HTTP Core',
-          items: [{ label: 'Overview', link: '/http_core/overview' }],
-        },
+        { label: 'HTTP Core', link: '/http_core/overview' },
         {
           label: 'Utils',
           items: [

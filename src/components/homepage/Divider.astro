@@ -1,0 +1,125 @@
+---
+// Divider component showcasing Xeno's versatility with a smooth CSS marquee scroll from right to left
+const useCases = [
+  {
+    title: "CLI & Console Applications",
+    category: "Background Workers",
+    description: "Execute migration scripts, scheduled cron jobs, or queue message workers using directly the AppBuilder and ServiceContainer without opening any HTTP port.",
+    icon: "bi-terminal",
+    badge: "CLI"
+  },
+  {
+    title: "Desktop Apps (Electron / Tauri)",
+    category: "Local Domain-Driven Design",
+    description: "Manage complex desktop business logic inside the Main Process leveraging local SQLite storage and strict type-safety architectures.",
+    icon: "bi-display",
+    badge: "Desktop"
+  },
+  {
+    title: "Serverless & Edge Computing",
+    category: "AWS Lambda / Vercel",
+    description: "Run stateless, high-performance serverless APIs and webhooks utilizing NodeRequestContext execution context isolation and Zod validation.",
+    icon: "bi-cloud-lightning",
+    badge: "Edge"
+  },
+  {
+    title: "Alternative HTTP Frameworks",
+    category: "Express, Koa, NestJS, Native",
+    description: "Modernize or protect legacy web stacks by mounting Xeno's core middleware pipeline, authentication guardrails, and error handling monads.",
+    icon: "bi-layers",
+    badge: "Flexible"
+  }
+];
+
+// Duplicate array to ensure a seamless infinite scrolling marquee effect
+const scrollingItems = [...useCases, ...useCases];
+---
+
+<section class="py-24 border-t border-[var(--border-color)] bg-[var(--bg-secondary)]/20 relative overflow-hidden">
+  
+  {/* Background Glow Effect */}
+  <div class="absolute bottom-0 right-10 w-[400px] h-[400px] bg-[var(--color-primary)] opacity-5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+
+  <div class="max-w-[var(--container-max)] mx-auto px-6 mb-12">
+    {/* Section Header */}
+    <div data-aos="fade-up" data-aos-delay="100" class="text-center max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
+        <i class="bi bi-cpu"></i> Agnostic & Decoupled Architecture
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 leading-[1.15]">
+        How <strong class="text-[var(--color-primary)]">Xeno</strong> can power virtually any Node.js runtime
+      </h2>
+      <p class="text-[length:var(--body-size)] text-[var(--text-muted)] leading-relaxed">
+        Because <strong class="text-[var(--text-main)]">Xeno</strong> core is completely independent of any specific HTTP server or transport driver, its modular Dependency Injection and CQRS Mediator allow it to power virtually any Node.js runtime environment.
+      </p>
+    </div>
+  </div>
+
+  {/* Marquee Infinite Scrolling Container (Right to Left) */}
+  <div class="relative w-full overflow-hidden flex marquee-container">
+    {/* Left and right gradient fade masks for smooth transition */}
+    <div class="absolute top-0 bottom-0 left-0 w-24 bg-gradient-to-r from-[var(--bg-primary)] to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute top-0 bottom-0 right-0 w-24 bg-gradient-to-l from-[var(--bg-primary)] to-transparent z-10 pointer-events-none"></div>
+
+    <div class="flex gap-6 animate-marquee py-4 px-3 w-max">
+      {scrollingItems.map((item, index) => (
+        <div
+          data-aos="fade-up"
+          data-aos-delay={index * 70}
+          class="w-[320px] sm:w-[360px] shrink-0 p-6 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)]/60 transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden"
+        >
+          
+          {/* Top category & icon */}
+          <div>
+            <div class="flex items-center justify-between mb-5">
+              <div class="w-12 h-12 rounded-[var(--border-radius)] bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center text-xl group-hover:bg-[var(--color-primary)] group-hover:text-[var(--text-contrast)] transition-colors">
+                <i class={`bi ${item.icon}`}></i>
+              </div>
+              <span class="text-xs font-mono text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2.5 py-1 rounded-full border border-[var(--color-primary)]/20">
+                {item.badge}
+              </span>
+            </div>
+            
+            <h3 class="text-xl font-semibold text-[var(--text-main)] mb-3 group-hover:text-[var(--color-primary)] transition-colors">
+              {item.title}
+            </h3>
+            
+            {/* Description hidden by default, appears smoothly on card hover */}
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-40 transition-all duration-300 ease-in-out overflow-hidden">
+              {item.description}
+            </p>
+          </div>
+
+          <div class="pt-4 mt-4 border-t border-[var(--border-color)]/60 text-xs font-mono text-[var(--text-muted)] flex items-center justify-between">
+            <span>{item.category}</span>
+            <span class="text-[var(--color-primary)] opacity-0 group-hover:opacity-100 transition-opacity text-xs font-sans font-medium">Hover details <i class="bi bi-arrow-right"></i></span>
+          </div>
+
+        </div>
+      ))}
+    </div>
+  </div>
+
+</section>
+
+<style>
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+  }
+
+  /* Pause marquee animation on hover for better user experience */
+  .marquee-container:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+</style>

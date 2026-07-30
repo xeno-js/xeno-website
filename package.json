@@ -13,6 +13,7 @@
     "@astrojs/starlight": "^0.41.3",
     "@astrojs/starlight-tailwind": "^5.0.0",
     "@tailwindcss/vite": "^4.3.3",
+    "aos": "^2.3.4",
     "astro": "^7.0.2",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.3.3"

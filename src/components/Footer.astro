@@ -1,0 +1,143 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--border-color)] bg-[var(--bg-secondary)] pt-16 pb-12 relative overflow-hidden">
+  
+  {/* Background Glow Accent */}
+  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-[var(--color-primary)] opacity-5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+
+  <div class="max-w-[var(--container-max)] mx-auto px-6">
+    
+    {/* Main Footer Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-[var(--border-color)]">
+      
+      {/* Brand & Description Column (Width: 4/12) */}
+      <div class="md:col-span-4 text-left">
+        <a href="/" class="flex items-center gap-3 mb-4 group">
+          <img 
+            src="/img/logo.png" 
+            alt="Xeno Framework Logo" 
+            class="w-7 h-7 object-contain transition-transform group-hover:scale-105" 
+          />
+          <span class="text-[var(--text-main)] font-[number:var(--h2-weight)] tracking-tight text-lg font-[family-name:var(--font-sans)]">
+            Xeno<span class="text-[var(--color-primary)]">.JS</span>
+          </span>
+        </a>
+        <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-6 max-w-sm">
+          An enterprise-grade, type-safe architectural framework built on Domain-Driven Design (DDD) and CQRS for modern Node.js applications.
+        </p>
+        
+        {/* Social Icons */}
+        <div class="flex items-center gap-3">
+          <a 
+            href="https://github.com/Mattia-Carcione/xeno-js" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="w-10 h-10 rounded-[var(--border-radius)] bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-all"
+            aria-label="GitHub"
+          >
+            <i class="bi bi-github text-lg"></i>
+          </a>
+          <a 
+            href="https://twitter.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="w-10 h-10 rounded-[var(--border-radius)] bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-all"
+            aria-label="Twitter"
+          >
+            <i class="bi bi-twitter-x text-lg"></i>
+          </a>
+          <a 
+            href="https://discord.com" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="w-10 h-10 rounded-[var(--border-radius)] bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-all"
+            aria-label="Discord"
+          >
+            <i class="bi bi-discord text-lg"></i>
+          </a>
+        </div>
+      </div>
+
+      {/* Navigation Links Columns (Width: 4/12 total) */}
+      <div class="md:col-span-2 text-left">
+        <h4 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
+          Documentation
+        </h4>
+        <ul class="flex flex-col gap-2.5 text-sm">
+          <li>
+            <a href="/introduction" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Introduction</a>
+          </li>
+          <li>
+            <a href="/getting-started" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Getting Started</a>
+          </li>
+          <li>
+            <a href="/fundamentals/overview" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Fundamentals</a>
+          </li>
+          <li>
+            <a href="/support-us" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Support Us</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-2 text-left">
+        <h4 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
+          Community
+        </h4>
+        <ul class="flex flex-col gap-2.5 text-sm">
+          <li>
+            <a href="https://github.com/Mattia-Carcione/xeno-js" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">GitHub Repo</a>
+          </li>
+          <li>
+            <a href="/contributing-guide" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Contributing</a>
+          </li>
+          <li>
+            <a href="https://github.com/Mattia-Carcione/xeno-js/issues" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Issues</a>
+          </li>
+        </ul>
+      </div>
+
+      {/* Newsletter Column (Width: 4/12) */}
+      <div class="md:col-span-4 text-left">
+        <h4 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
+          Stay Updated
+        </h4>
+        <p class="text-sm text-[var(--text-muted)] mb-4 leading-relaxed">
+          Subscribe to our newsletter to receive updates on new releases, architectural patterns, and tutorials.
+        </p>
+        
+        {/* Newsletter Form */}
+        <form class="flex flex-col sm:flex-row gap-2" onsubmit="event.preventDefault(); alert('Thank you for subscribing!');">
+          <input 
+            type="email" 
+            placeholder="Enter your email" 
+            required 
+            class="bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-main)] placeholder:text-[var(--text-muted)] text-sm rounded-full px-4 py-2.5 focus:outline-none focus:border-[var(--color-primary)] flex-grow transition-colors"
+          />
+          <button 
+            type="submit" 
+            class="rounded-full text-[length:var(--body-size)] font-medium transition-all duration-200 inline-flex items-center justify-center gap-2 px-4 py-2 cursor-pointer bg-[var(--color-primary)] text-[var(--text-contrast)] font-semibold hover:bg-[var(--color-primary-hover)] shadow-[0_0_20px_var(--accent-glow)]"
+          >
+            Subscribe
+        </button>
+        </form>
+      </div>
+
+    </div>
+
+    {/* Bottom Copyright Row */}
+    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-[var(--text-muted)]">
+      <p>
+        © {currentYear} Xeno. Released under the MIT License.
+      </p>
+      <div class="flex items-center gap-6">
+        <span class="flex items-center gap-1.5 text-[var(--color-primary)] font-mono">
+          <span class="w-2 h-2 rounded-full bg-[var(--color-primary)] inline-block animate-pulse"></span>
+          Actively maintained and open-source
+        </span>
+      </div>
+    </div>
+
+  </div>
+</footer>

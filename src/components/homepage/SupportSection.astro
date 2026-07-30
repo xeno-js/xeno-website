@@ -1,0 +1,60 @@
+---
+// SupportSection component to encourage donations / Buy Me A Coffee sponsorship
+import Button from '../ui/Button.astro';
+---
+
+<section class="py-24 relative overflow-hidden" style="background: linear-gradient(135deg, rgba(201, 245, 27, 0.05) 0%, rgba(10, 10, 10, 1) 100%);">
+  
+  {/* Background Glow Effect using Brand Primary Color */}
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--color-primary)] opacity-10 blur-[140px] rounded-full pointer-events-none -z-10"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(201,245,27,0.06),transparent_50%)] pointer-events-none -z-10"></div>
+
+  <div class="max-w-[var(--container-max)] mx-auto px-6 relative z-10">
+    
+    <div class="mx-auto rounded-[calc(var(--border-radius)+8px)] border border-[var(--border-color)] bg-[linear-gradient(135deg,var(--bg-secondary),var(--bg-tertiary))] p-8 sm:p-12 lg:p-16 shadow-[0_24px_80px_rgba(0,0,0,0.4)] text-center relative overflow-hidden flex flex-col items-center">
+      
+      {/* Top Accent Badge */}
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--color-primary)]/20 bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold uppercase tracking-[0.2em] mb-6">
+        <i class="bi bi-heart-fill"></i>
+        Support Open Source
+      </div>
+
+      {/* Main Title */}
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 leading-[1.15]">
+        Help keep <span class="text-[var(--color-primary)]">Xeno</span> independent and sustainable.
+      </h2>
+
+      {/* Description */}
+      <p class="w-full text-base sm:text-lg text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed mb-10">
+        Xeno is an independent, MIT-licensed open-source project. Building and maintaining an enterprise-grade framework takes countless hours of research, coding, and documentation. Your support buys precious time to keep the engine running.
+      </p>
+
+      {/* Action Buttons (Buy Me A Coffee & Star on GitHub) */}
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <Button 
+          href="https://www.buymeacoffee.com/xenojs" 
+          variant="primary" 
+          class="w-full sm:w-auto px-8 py-4 text-base font-semibold shadow-[0_0_30px_var(--accent-glow)] flex items-center justify-center gap-2"
+          target='_blank'
+        >
+          <i class="bi bi-cup-hot-fill text-lg"></i> Buy Me A Coffee
+        </Button>
+        <Button 
+          href="https://github.com/Mattia-Carcione/xeno-js" 
+          variant="secondary" 
+          class="w-full sm:w-auto px-8 py-4 text-base font-semibold flex items-center justify-center gap-2"
+          target='_blank'
+        >
+          <i class="bi bi-star-fill text-[var(--color-primary)]"></i> Star on GitHub
+        </Button>
+      </div>
+
+      {/* Footer Note within the Box */}
+      <p class="text-xs font-mono text-[var(--text-muted)]" style="margin-top: 12px">
+        Are you using Xeno in production? Reach out directly at <a href="mailto:xeno-js@outlook.it" class="text-[var(--color-primary)] hover:underline">xeno-js@outlook.it</a> for enterprise support.
+      </p>
+
+    </div>
+
+  </div>
+</section>

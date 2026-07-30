@@ -1,1 +1,129 @@
 @import 'tailwindcss';
+
+:root {
+  /* === 1. PALETTE COLORI & CONTRASTI (Modern Dark Mode) === */
+  --color-primary: #c9f51b; /* Verde neon principale del brand */
+  --color-primary-hover: #b5dc15; /* Verde neon slightly darker per hover */
+
+  --bg-primary: #0a0a0a; /* Nero moderno ed elegante (sfondo root) */
+  --bg-secondary: #121212; /* Nero intermedio per card, dropdown, sidebar */
+  --bg-tertiary: #1a1a1a; /* Sfondo per elementi in evidenza o hover profondi */
+
+  --border-color: #262626; /* Bordo moderno, sottile e non invasivo */
+  --border-color-hover: #404040; /* Bordo più visibile per interazioni/focus */
+
+  --accent-glow: rgba(201, 245, 27, 0.12); /* Bagliore soffuso per elementi attivi/focus */
+
+  --text-main: #ffffff; /* Bianco puro per titoli e testi ad alto risalto */
+  --text-muted: #888888; /* Grigio bilanciato per descrizioni e metadati */
+  --text-contrast: #050505; /* Nero profondo per testi sopra sfondi verdi/primari */
+  --text-code: #c9f51b; /* Colore focalizzato per frammenti di codice */
+
+  /* === 2. TIPOGRAFIA & DIMENSIONI === */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+
+  --h1-size: 2.5rem; /* 40px */
+  --h2-size: 1.75rem; /* 28px */
+  --h3-size: 1.25rem; /* 20px */
+  --body-size: 1rem; /* 16px */
+  --small-size: 0.875rem; /* 14px */
+
+  --h1-weight: 800;
+  --h2-weight: 700;
+  --h3-weight: 600;
+  --body-weight: 400;
+
+  /* === 3. SPAZIATURE & LAYOUT === */
+  --spacing-unit: 1rem;
+  --border-radius: 8px;
+  --container-max: 1200px;
+}
+
+/* === 4. RESET & REGOLE GLOBALI === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === 5. TIPOGRAFIA GLOBALE === */
+h1 {
+  font-size: var(--h1-size);
+  font-weight: var(--h1-weight);
+  color: var(--text-main);
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h2,
+.site-title {
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  color: var(--text-main);
+  margin: 2.5rem 0 1rem 0;
+  border-left: 4px solid var(--color-primary);
+  padding-left: 12px;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: var(--h3-size);
+  font-weight: var(--h3-weight);
+  color: var(--color-primary);
+  margin: 1.5rem 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+p {
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
+  color: var(--text-muted);
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+p strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  display: block;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text-main);
+  background-color: var(--bg-secondary);
+  text-decoration: none;
+}
+
+.nav-link.active {
+  color: var(--text-contrast);
+  background-color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: underline 2px var(--color-primary);
+}

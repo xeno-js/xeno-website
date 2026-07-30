@@ -1,0 +1,93 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import 'aos/dist/aos.css';
+import AOS from 'aos';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: 'website' | 'article';
+}
+
+const {
+  title,
+  description,
+  image = '/img/logo.png',
+  canonicalURL = Astro.url.href,
+  type = 'website'
+} = Astro.props;
+
+// Ottieni il path corrente per evidenziare correttamente i link nella Navbar
+const currentPath = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Primary SEO Meta Tags */}
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    {/* Open Graph / Facebook / LinkedIn */}
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {/*<meta property="og:image" content={new URL(image, Astro.site)} />*/}
+    <meta property="og:locale" content="it_IT" />
+
+    {/* Twitter Cards */}
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    {/*<meta property="twitter:image" content={new URL(image, Astro.site)} />*/}
+
+    {/* Google / Search Console & Indexing Rules */}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+
+    {/* Preload dei font critici per ottimizzare i Cumulative Layout Shift (CLS) */}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  </head>
+  <body class="bg-[var(--bg-primary)] text-[var(--text-main)] min-h-screen flex flex-col font-[family-name:var(--font-sans)] antialiased selection:bg-[var(--accent-primary)] selection:text-[var(--bg-primary)]">
+    
+    {/* Global Top Navbar */}
+    <Navbar currentPath={currentPath} />
+
+    {/* Main Semantic Content Wrapper */}
+    <main id="main-content" class="flex-grow">
+      <slot />
+    </main>
+
+    {/* Global Footer */}
+    <Footer />
+
+    <script type="module">
+      import AOS from 'aos';
+
+      AOS.init({
+        duration: 700,
+        once: true,
+        offset: 80,
+        easing: 'ease-out-cubic',
+        disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      });
+    </script>
+
+  </body>
+</html>
