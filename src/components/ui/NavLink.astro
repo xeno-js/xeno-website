@@ -1,0 +1,24 @@
+---
+interface Props {
+  href: string;
+  active?: boolean;
+  class?: string;
+  isMobile?: boolean;
+}
+
+const { href, active = false, class: className = '', isMobile = false } = Astro.props;
+---
+
+<a 
+  href={href} 
+  class:list={[
+    "transition-all duration-200 font-medium text-[length:var(--body-size)] relative flex items-center",
+    // Desktop vs Mobile active state handling
+    isMobile 
+      ? (active ? "text-[var(--color-primary)] font-semibold pl-2 border-l-2 border-[var(--color-primary)] bg-[var(--bg-secondary)] py-2 rounded-r-[var(--border-radius)]" : "text-[var(--text-muted)] hover:text-[var(--text-main)] py-2")
+      : (active ? "text-[var(--text-main)] pb-1 after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[var(--color-primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-main)] py-1"),
+    className
+  ]}
+>
+  <slot />
+</a>

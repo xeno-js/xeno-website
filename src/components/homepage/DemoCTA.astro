@@ -1,0 +1,139 @@
+---
+import Button from '../ui/Button.astro';
+
+const demoPoints = [
+  {
+    title: 'Architecture in action',
+    description: 'See how commands, queries, and pipelines compose into a predictable runtime flow.'
+  },
+  {
+    title: 'Type-safe bootstrap',
+    description: 'Explore the fluent setup experience with modules, services, and explicit dependencies.'
+  },
+  {
+    title: 'Fast onboarding',
+    description: 'Understand the framework in minutes through a compact, practical walkthrough.'
+  }
+];
+---
+
+<section class="py-24 border-t border-[var(--border-color)] bg-[var(--bg-primary)] relative overflow-hidden">
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(201,245,27,0.08),transparent_45%)] pointer-events-none"></div>
+
+  <div class="max-w-[var(--container-max)] mx-auto px-6 relative z-10">
+    <div data-aos="fade-up" data-aos-delay="80" class="rounded-[calc(var(--border-radius)+8px)] border border-[var(--border-color)] bg-[linear-gradient(135deg,var(--bg-secondary),var(--bg-tertiary))] shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_24px_80px_rgba(0,0,0,0.35)] overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr]">
+        
+        {/* Left Column: Headings and points */}
+        <div class="p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
+          <div data-aos="fade-right" data-aos-delay="120" class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--color-primary)]/20 bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold uppercase tracking-[0.24em] w-fit mb-6">
+            <i class="bi bi-play-circle-fill"></i>
+            Interactive experience
+          </div>
+
+          <h2 data-aos="fade-right" data-aos-delay="180" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-5 leading-[1.1]">
+            See the demo and understand how <span class="text-[var(--color-primary)]">Xeno</span> feels in practice.
+          </h2>
+
+          <p data-aos="fade-right" data-aos-delay="240" class="text-[length:var(--body-size)] text-[var(--text-muted)] leading-relaxed max-w-2xl mb-8">
+            A focused walkthrough designed to show the architecture, the developer experience, and the clarity behind each building block.
+          </p>
+
+          <div data-aos="fade-right" data-aos-delay="300" class="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10">
+            <Button href="/getting-started" variant="primary">
+              Explore the demo
+            </Button>
+            <Button href="/introduction" variant="secondary">
+              Getting Started
+            </Button>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-3">
+            {demoPoints.map((point, index) => (
+              <div data-aos="fade-up" data-aos-delay={140 + index * 70} class="rounded-[var(--border-radius)] border border-[var(--border-color)] bg-[var(--bg-primary)]/70 p-4">
+                <h3 class="text-sm font-semibold text-[var(--text-main)] mb-2">{point.title}</h3>
+                <p class="text-sm leading-relaxed text-[var(--text-muted)]">{point.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column: Completely Redesigned Execution Inspector / Live Trace Panel */}
+        <div class="relative p-8 sm:p-10 lg:p-12 border-t lg:border-t-0 lg:border-l border-[var(--border-color)] bg-[linear-gradient(145deg,rgba(201,245,27,0.08),transparent)] flex items-center justify-center">
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(201,245,27,0.12),transparent_60%)] pointer-events-none"></div>
+
+          <div data-aos="zoom-in" data-aos-delay="220" class="relative w-full max-w-md rounded-[calc(var(--border-radius)+6px)] border border-[var(--border-color)] bg-[var(--bg-secondary)]/90 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+            
+            {/* Inspector Header */}
+            <div class="flex items-center justify-between mb-5 pb-3 border-b border-[var(--border-color)]">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+              </div>
+              <div class="flex items-center gap-2 text-xs font-mono text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2.5 py-1 rounded-full border border-[var(--color-primary)]/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] animate-ping"></span>
+                <span>Trace Inspector</span>
+              </div>
+            </div>
+
+            {/* Execution Trace Stream Container */}
+            <div class="space-y-3 font-[family-name:var(--font-mono)] text-xs">
+              
+              {/* Step 1 */}
+              <div class="rounded-[var(--border-radius)] border border-[var(--border-color)] bg-[var(--bg-primary)] p-3 flex items-start gap-3">
+                <div class="mt-0.5 text-[var(--color-primary)]">
+                  <i class="bi bi-shield-check text-sm"></i>
+                </div>
+                <div class="flex-grow">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-semibold text-[var(--text-main)]">1. AuthGuard Middleware</span>
+                    <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">0.4ms</span>
+                  </div>
+                  <p class="text-[var(--text-muted)] text-[11px] font-sans">Context resolved via AsyncLocalStorage</p>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div class="rounded-[var(--border-radius)] border border-[var(--border-color)] bg-[var(--bg-primary)] p-3 flex items-start gap-3">
+                <div class="mt-0.5 text-[var(--color-primary)]">
+                  <i class="bi bi-cpu text-sm"></i>
+                </div>
+                <div class="flex-grow">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-semibold text-[var(--text-main)]">2. Mediator Pipeline</span>
+                    <span class="text-[10px] text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-1.5 py-0.5 rounded">Zod Validated</span>
+                  </div>
+                  <p class="text-[var(--text-muted)] text-[11px] font-sans">Executing CreateOrderCommand payload</p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div class="rounded-[var(--border-radius)] border border-[var(--border-color)] bg-[var(--bg-primary)] p-3 flex items-start gap-3">
+                <div class="mt-0.5 text-emerald-400">
+                  <i class="bi bi-check-circle text-sm"></i>
+                </div>
+                <div class="flex-grow">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="font-semibold text-[var(--text-main)]">3. Result Monad Handled</span>
+                    <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">HTTP 201 OK</span>
+                  </div>
+                  <p class="text-[var(--text-muted)] text-[11px] font-sans">Safe payload envelope returned successfully</p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Inspector Footer Status */}
+            <div class="mt-5 pt-3 border-t border-[var(--border-color)] flex items-center justify-between text-[11px] font-mono text-[var(--text-muted)]">
+              <span>Status: <strong class="text-[var(--text-main)]">Deterministic</strong></span>
+              <span class="text-[var(--color-primary)]">0 unhandled exceptions</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

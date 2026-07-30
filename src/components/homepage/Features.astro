@@ -1,0 +1,112 @@
+---
+// Features component highlighting Xeno's core architectural advantages
+const featuresList = [
+  {
+    title: "Zero-Magic & Explicit IoC",
+    category: "Architecture",
+    description: "No hidden magic or runtime directory auto-scanning. Every dependency, module, and lifecycle (singleton, scoped, transient) is declared programmatically and transparently.",
+    icon: "bi-cpu"
+  },
+  {
+    title: "Strongly-Typed Service Registry",
+    category: "Compile-Time Safety",
+    description: "Contracts mapped statically via TypeScript. If you modify a service signature, the compiler immediately flags any non-compliant injections before runtime.",
+    icon: "bi-shield-check"
+  },
+  {
+    title: "Async Context Isolation",
+    category: "Node.js AsyncLocalStorage",
+    description: "Eliminates parameter drilling completely. Automatically tracks correlation IDs, tenant IDs, and user identities across asynchronous execution flows.",
+    icon: "bi-diagram-3"
+  },
+  {
+    title: "CQRS & Composite Pipelines",
+    category: "Mediator & Pipelines",
+    description: "Clean separation of Commands and Queries with built-in cross-cutting pipelines: Zod Validation, Authorization, Idempotency, Concurrency Retry, and Caching.",
+    icon: "bi-layers"
+  },
+  {
+    title: "Fluent AppBuilder Config",
+    category: "Developer Experience",
+    description: "A .NET-inspired fluent bootstrapper leveraging SetupActions to assemble your application cleanly, securely, and strongly-typed.",
+    icon: "bi-sliders"
+  },
+  {
+    title: "Deterministic Error Handling",
+    category: "Result Monad",
+    description: "Replaces unhandled exceptions with functional Result<T, E> monads and AppErrors, forcing safe error-state checks before payload extraction.",
+    icon: "bi-exclamation-triangle"
+  },
+  {
+    title: "Type-Safe Drizzle ORM",
+    category: "Database & Unit of Work",
+    description: "SQL-first approach supporting PostgreSQL and SQLite/libSQL with an integrated Unit of Work pattern for atomic transaction blocks and automatic rollbacks.",
+    icon: "bi-database"
+  },
+  {
+    title: "Built-in Network Resiliency",
+    category: "Cockatiel Integration",
+    description: "RemoteDataSource combining Axios with robust resiliency patterns like retries, circuit breakers, and timeouts for external HTTP microservices.",
+    icon: "bi-shield-shaded"
+  },
+  {
+    title: "Official CLI Scaffolding",
+    category: "Tooling (@xeno/cli)",
+    description: "Instant project initialization and module code generation through interactive prompts or rapid flags (--full / --empty) to bootstrap in seconds.",
+    icon: "bi-terminal"
+  }
+];
+---
+
+<section id="features" class="py-24 border-t border-[var(--border-color)] bg-[var(--bg-primary)] relative overflow-hidden">
+  
+  {/* Background Glow Accents */}
+  <div class="absolute top-1/3 left-0 w-[500px] h-[500px] bg-[var(--color-primary)] opacity-5 blur-[140px] rounded-full pointer-events-none -z-10"></div>
+
+  <div class="max-w-[var(--container-max)] mx-auto px-6">
+    
+    {/* Section Header */}
+    <div data-aos="fade-up" data-aos-delay="100" class="text-center max-w-3xl mx-auto mb-20">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
+        <i class="bi bi-star"></i> Core Value Proposition
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 leading-[1.15]">
+        Why choose <span class="text-[var(--color-primary)]">Xeno</span>?
+      </h2>
+      <p class="text-[length:var(--body-size)] text-[var(--text-muted)] leading-relaxed">
+        Engineered specifically for teams and developers seeking deep control over their dependency graph, request lifecycles, and domain architectures in Node.js.
+      </p>
+    </div>
+
+    {/* Features Grid */}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {featuresList.map((feature, index) => (
+        <div
+          data-aos="fade-up"
+          data-aos-delay={index * 80}
+          class="p-8 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)]/50 transition-all duration-300 group flex flex-col justify-between shadow-lg hover:-translate-y-1"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <div class="w-12 h-12 rounded-[var(--border-radius)] bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center text-xl group-hover:bg-[var(--color-primary)] group-hover:text-[var(--text-contrast)] transition-colors">
+                <i class={`bi ${feature.icon}`}></i>
+              </div>
+              <span class="text-xs font-mono text-[var(--text-muted)] bg-[var(--bg-primary)] px-2.5 py-1 rounded border border-[var(--border-color)]">
+                {feature.category}
+              </span>
+            </div>
+            
+            <h3 class="text-xl font-semibold text-[var(--text-main)] mb-3 group-hover:text-[var(--color-primary)] transition-colors">
+              {feature.title}
+            </h3>
+            
+            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
+              {feature.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

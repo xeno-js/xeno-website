@@ -1,0 +1,116 @@
+---
+import NavLink from './ui/NavLink.astro';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+
+// Navigation items list in English
+const navItems = [
+  { href: '/introduction', label: 'Introduction' },
+  { href: '/getting-started', label: 'Getting Started' },
+  { href: '/support-us', label: 'Support Us' },
+];
+---
+
+<header class="fixed top-0 left-0 w-full z-50 border-b border-[var(--border-color)] bg-[var(--bg-primary)]/80 backdrop-blur-md">
+  <div class="max-w-[var(--container-max)] mx-auto px-6 h-16 flex items-center justify-between">
+    
+    {/* Logo & Brand */}
+    <NavLink href="/" class="flex items-center gap-2 group">
+      <img 
+        src="/img/logo.png" 
+        alt="Xeno Framework Logo" 
+        class="w-8 h-8 object-contain transition-transform group-hover:scale-105" 
+      />
+      <span class="text-[var(--text-main)] font-[number:var(--h2-weight)] tracking-tight text-[length:var(--h3-size)] font-[family-name:var(--font-sans)]">
+        Xeno<span class="text-[var(--color-primary)]">.JS</span>
+      </span>
+    </NavLink>
+
+    {/* Desktop Navigation Links */}
+    <nav class="hidden md:flex items-center gap-8">
+      {navItems.map((item) => (
+        <NavLink href={item.href} active={currentPath === item.href}>
+          {item.label}
+        </NavLink>
+      ))}
+    </nav>
+
+    {/* Desktop Right Icons (GitHub via Bootstrap Icon) */}
+    <div class="hidden md:flex items-center gap-4">
+      <a 
+        href="https://github.com/Mattia-Carcione/xeno-js" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors p-2 text-xl flex items-center"
+        aria-label="GitHub Repository"
+      >
+        <i class="bi bi-github"></i>
+      </a>
+    </div>
+
+    {/* Mobile Hamburger Toggle Button */}
+    <button 
+      id="mobile-menu-button" 
+      class="md:hidden text-[var(--text-main)] focus:outline-none p-2 rounded-[var(--border-radius)] hover:bg-[var(--bg-secondary)] transition-colors"
+      aria-label="Toggle Navigation Menu"
+    >
+      <i id="menu-icon" class="bi bi-list text-2xl"></i>
+    </button>
+
+  </div>
+
+  {/* Mobile Dropdown Menu */}
+  <div 
+    id="mobile-menu" 
+    class="hidden md:hidden border-b border-[var(--border-color)] bg-[var(--bg-primary)] px-6 py-6 shadow-2xl transition-all"
+  >
+    <nav class="flex flex-col gap-4">
+      {navItems.map((item) => (
+        <NavLink href={item.href} active={currentPath === item.href} isMobile={true}>
+          {item.label}
+        </NavLink>
+      ))}
+      
+      <div class="pt-4 mt-2 border-t border-[var(--border-color)] flex items-center justify-center">
+        <a 
+          href="https://github.com/Mattia-Carcione/xeno-js" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="text-[var(--text-main)] hover:text-[var(--color-primary)] transition-colors text-xl p-2 bg-[var(--bg-secondary)] rounded-[var(--border-radius)] border border-[var(--border-color)]"
+          aria-label="GitHub Repository"
+        >
+          <i class="bi bi-github"></i>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+{/* Spacer to prevent layout shift under fixed navbar */}
+<div class="h-16"></div>
+
+{/* Client-side script to handle mobile menu toggle state */}
+<script>
+  const menuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+
+  if (menuButton && mobileMenu && menuIcon) {
+    menuButton.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('hidden');
+      
+      // Toggle between hamburger list icon and close x icon
+      if (!isOpen) {
+        menuIcon.classList.remove('bi-list');
+        menuIcon.classList.add('bi-x-lg');
+      } else {
+        menuIcon.classList.remove('bi-x-lg');
+        menuIcon.classList.add('bi-list');
+      }
+    });
+  }
+</script>

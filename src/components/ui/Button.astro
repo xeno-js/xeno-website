@@ -1,0 +1,29 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'outline';
+  class?: string;
+  target?: '_blank'
+}
+
+const { href, variant = 'primary', class: className = '', target } = Astro.props;
+
+const baseStyles = "rounded-full text-[length:var(--body-size)] font-medium transition-all duration-200 inline-flex items-center justify-center gap-2 px-4 py-2 cursor-pointer";
+
+const variants = {
+  /* Bottone Primario: Sfondo verde neon ad alto impatto con testo nero contrastante */
+  primary: "bg-[var(--color-primary)] text-[var(--text-contrast)] font-semibold hover:bg-[var(--color-primary-hover)] shadow-[0_0_20px_var(--accent-glow)]",
+  
+  /* Bottone Secondario: Sfondo nero moderno con bordo sottile e testo bianco puro */
+  secondary: "bg-[var(--bg-secondary)] text-[var(--text-main)] border border-[var(--border-color)] hover:bg-[var(--bg-tertiary)] hover:border-[var(--border-color-hover)]",
+  
+  /* Outline: Bordo e testo verde neon con effetto trasparenza pulito */
+  outline: "border border-[var(--color-primary)]/40 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 hover:border-[var(--color-primary)]"
+};
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag href={href} class:list={[baseStyles, variants[variant], className]} target={target}>
+  <slot />
+</Tag>
