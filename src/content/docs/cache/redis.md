@@ -83,7 +83,7 @@ binds `RedisCache` to `TOKENS.CACHE`.
 
 ```typescript
 // src/infrastructure/bootstrap-redis-cache.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const configureRedisCaching = async () => {
@@ -161,7 +161,7 @@ Redis-specific logic.
 
 ```typescript
 // src/application/services/session.service.ts
-import type { ICache } from '@xeno/core'
+import type { ICache } from '@xeno-js/core'
 
 export class SessionService {
   constructor(private readonly _cache: ICache) {}
@@ -202,7 +202,7 @@ export class SessionService {
 
 ```typescript
 // src/infrastructure/bootstrap-services.ts
-import { AppBuilder, TOKENS } from '@xeno/core';
+import { AppBuilder, TOKENS } from '@xeno-js/core';
 import { SessionService } from '../application/services/session.service';
 import type { AppRegistry } from './infrastructure/app-registry';
 

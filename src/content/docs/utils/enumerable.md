@@ -123,7 +123,7 @@ The snippet below demonstrates using `Enumerable` inside a domain handler to
 process domain events or entity arrays safely:
 
 ```typescript
-import { Enumerable } from '@xeno/core'
+import { Enumerable } from '@xeno-js/core'
 
 interface OrderLineItem {
   sku: string

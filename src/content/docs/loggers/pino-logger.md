@@ -45,7 +45,7 @@ active redaction rules.
 
 ```typescript
 // src/infrastructure/bootstrap-pino.ts
-import { AppBuilder, LOG_LEVEL } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {

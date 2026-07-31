@@ -60,7 +60,7 @@ the `ICommand<TResponse>` contract:
 
 ```typescript
 // src/application/user/commands/create-user.command.ts
-import { type ICommand, REQUEST_TYPE } from '@xeno/core'
+import { type ICommand, REQUEST_TYPE } from '@xeno-js/core'
 import type { UserProps } from '../../../domain/entities/user'
 
 export class CreateUserCommand implements ICommand<void> {
@@ -107,7 +107,7 @@ database layers.
 
 ```typescript
 // src/application/user/queries/get-user-by-id.query.ts
-import { type IQuery, type ICacheableOptions, REQUEST_TYPE } from '@xeno/core'
+import { type IQuery, type ICacheableOptions, REQUEST_TYPE } from '@xeno-js/core'
 import type { User } from '../../../domain/entities/user'
 
 export class GetUserByIdQuery implements IQuery<User> {
@@ -157,7 +157,7 @@ safety layers targeting write-specific commands.
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, LOG_LEVEL } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
 import type { AppRegistry } from './registry'
 
 export const appHost = new AppBuilder<AppRegistry>()
@@ -209,7 +209,7 @@ invoking the matching application read handler.
 
 ```typescript
 // src/infrastructure/bootstrap-queries.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './registry'
 
 export const appHost = new AppBuilder<AppRegistry>()

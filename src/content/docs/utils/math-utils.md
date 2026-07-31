@@ -170,7 +170,7 @@ The snippet below demonstrates how `MathHelper` is used inside a rate-limiting
 and pagination calculation service:
 
 ```typescript
-import { MathHelper } from '@xeno/core'
+import { MathHelper } from '@xeno-js/core'
 
 export class MetricsCalculator {
   public calculateProgress(

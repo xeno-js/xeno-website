@@ -151,7 +151,7 @@ The snippet below demonstrates how `HttpHelper` is used inside custom
 controllers or middleware to render responses:
 
 ```typescript
-import { HttpHelper, STATUS_CODES, GuidHelper } from '@xeno/core'
+import { HttpHelper, STATUS_CODES, GuidHelper } from '@xeno-js/core'
 
 export class CustomResponseController {
   public renderUserFound(user: { id: string; name: string }) {

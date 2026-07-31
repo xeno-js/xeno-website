@@ -94,14 +94,14 @@ edit their own profile data):
 
 ```typescript
 // src/application/security/resource-ownership.strategy.ts
-import { BaseAuthorizationStrategy, Result, AppError } from '@xeno/core'
+import { BaseAuthorizationStrategy, Result, AppError } from '@xeno-js/core'
 import type {
   IRequest,
   Identity,
   ResultType,
   IContextAccessor,
   RequestContext,
-} from '@xeno/core'
+} from '@xeno-js/core'
 
 // Define a type contract requiring messages to supply a target owner parameter
 interface IOwnedResourceRequest extends IRequest {
@@ -186,7 +186,7 @@ assembly sequence:
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { ResourceOwnershipStrategy } from '../application/security/resource-ownership.strategy'
 import type { AppRegistry } from './infrastructure/app-registry'
 

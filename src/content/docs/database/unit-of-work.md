@@ -137,7 +137,7 @@ Pass the full database schema type as the primary type argument to
 
 ```typescript
 // src/infrastructure/xeno-registry/app-registry.ts
-import type { XenoRegistry, IUnitOfWork } from '@xeno/core'
+import type { XenoRegistry, IUnitOfWork } from '@xeno-js/core'
 import type { FullDbSchema } from '../db/schema'
 
 /**
@@ -182,7 +182,7 @@ import {
   type IRepository,
   type UserContext,
   type IFactory,
-} from '@xeno/core'
+} from '@xeno-js/core'
 import type { UpdateProfileCommand } from '../commands/update-profile.command'
 import type { Profile } from '../../../domain/entities/profile'
 
@@ -216,7 +216,7 @@ handler's factory function:
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { UpdateProfileCommandHandler } from '../application/profile/handlers/update-profile.handler'
 import type { AppRegistry } from './infrastructure/app-registry'
 
@@ -268,7 +268,7 @@ import {
   type IRepository,
   type UserContext,
   type IFactory,
-} from '@xeno/core'
+} from '@xeno-js/core'
 import type { UpdateProfileCommand } from '../commands/update-profile.command'
 import type { Profile } from '../../../domain/entities/profile'
 

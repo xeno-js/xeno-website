@@ -94,7 +94,7 @@ pipeline configuration block on the `AppBuilder` instance. This block exposes
 the raw `IServiceContainer` and `IConfigurationService` interfaces.
 
 ```typescript
-import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno-js/core'
 import type { AppRegistry } from './registry'
 
 // 1. Instantiating the programmatic AppBuilder
@@ -202,7 +202,7 @@ Services can implement the explicit `IDisposable` interface to participate in
 automated cleanups:
 
 ```typescript
-import type { IDisposable } from '@xeno/core'
+import type { IDisposable } from '@xeno-js/core'
 
 export class MyDatabaseDisposable implements IDisposable {
   private isReleased = false

@@ -170,7 +170,7 @@ setup method on `AppBuilder`.
 
 ```typescript
 // src/infrastructure/bootstrap-http-core.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
@@ -216,7 +216,7 @@ To interact with external services, extend `RemoteDataSource` or inject
 
 ```typescript
 // src/infrastructure/app-registry.ts
-import { IHttpClient, IRemoteDataSource, XenoRegistry } from '@xeno/core'
+import { IHttpClient, IRemoteDataSource, XenoRegistry } from '@xeno-js/core'
 
 export interface AppRegistry extends XenoRegistry {
   PAYMENT_DATA_SOURCE: IRemoteDataSource
@@ -232,7 +232,7 @@ import {
   RemoteDataSource,
   type IHttpClient,
   type IServiceResilience,
-} from '@xeno/core'
+} from '@xeno-js/core'
 
 export interface PaymentGatewayResponse {
   transactionId: string
@@ -271,7 +271,7 @@ export class PaymentRemoteDataSource extends RemoteDataSource {
 
 ```typescript
 // src/infrastructure/bootstrap-services.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { PaymentRemoteDataSource } from './datasources/payment-remote.datasource'
 import type { AppRegistry } from './infrastructure/app-registry'
 

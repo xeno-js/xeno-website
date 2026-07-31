@@ -156,7 +156,7 @@ delegates database configuration options without exposing raw infrastructure
 components to the outer scope:
 
 ```typescript
-import { AppBuilder, LOG_LEVEL } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
 import type { AppRegistry } from './registry'
 
 async function bootstrap() {

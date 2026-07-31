@@ -23,7 +23,7 @@ author: 'Xeno'
 
 ## Shared Utilities Subsystem Overview
 
-The `@xeno/core` framework exposes a centralized set of **Shared Utilities**
+The `@xeno-js/core` framework exposes a centralized set of **Shared Utilities**
 located under the `shared/utils/` namespace. These helpers provide immutable,
 timezone-agnostic, type-safe primitives used internally across Xeno modules
 (such as pipelines, controllers, and middleware) and exposed to application
@@ -136,7 +136,7 @@ or timeout policy.
 
 ## Import & Usage Pattern
 
-All utilities are exported directly from `@xeno/core` (or internally via
+All utilities are exported directly from `@xeno-js/core` (or internally via
 `@/shared`):
 
 ```typescript
@@ -150,7 +150,7 @@ import {
   PromiseHelper,
   Enumerable,
   AbortSignalHelper,
-} from '@xeno/core'
+} from '@xeno-js/core'
 
 // Example: Validating defined state and creating a tracking GUID
 if (Guards.isDefined(payload)) {

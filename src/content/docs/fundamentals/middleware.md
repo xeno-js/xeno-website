@@ -127,7 +127,7 @@ pattern:
 
 ```typescript
 // src/main.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/xeno-registry/app-registry'
 
 async function bootstrap() {
@@ -167,7 +167,7 @@ exclude from gatekeeper checks:
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export async function initializeApplication() {

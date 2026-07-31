@@ -114,8 +114,8 @@ internal helper methods and forwards it cleanly into a `ReadDao` invocation:
 
 ```typescript
 // src/application/user/handlers/find-user-query.handler.ts
-import { BaseHandler, Result, type ResultType } from '@xeno/core'
-import type { IReadDao, UserContext, IFactory } from '@xeno/core'
+import { BaseHandler, Result, type ResultType } from '@xeno-js/core'
+import type { IReadDao, UserContext, IFactory } from '@xeno-js/core'
 import type { UserQuery } from '../queries/user.query'
 import type { User } from '../../../domain/entities/user'
 
@@ -168,11 +168,11 @@ constraints. Custom query methodologies require extending the default
 
 ```typescript
 // src/infrastructure/repositories/user-read.repository.ts
-import { ReadDao, type Optional } from '@xeno/core'
+import { ReadDao, type Optional } from '@xeno-js/core'
 import type { User } from '../../domain/entities/user'
 import type { UserDto } from '../schema'
 import type { IUserDataSource } from '../datasources/user.read-datasource'
-import type { IMapper } from '@xeno/core'
+import type { IMapper } from '@xeno-js/core'
 
 // Declare a domain interface contract to stay compliant with Clean Architecture
 export interface IUserReadRepository {
@@ -214,10 +214,10 @@ export class UserReadRepository
 
 ```typescript
 // src/infrastructure/repositories/user-write.repository.ts
-import { Repository, type Optional, type UserContext } from '@xeno/core'
+import { Repository, type Optional, type UserContext } from '@xeno-js/core'
 import type { User } from '../../domain/entities/user'
 import type { UserDto } from '../schema'
-import type { IWriteDataSource, IMapper } from '@xeno/core'
+import type { IWriteDataSource, IMapper } from '@xeno-js/core'
 
 export class UserWriteRepository extends Repository<User, UserDto> {
   constructor(
@@ -259,7 +259,7 @@ across that specific operation loop.
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { UserMapper } from './mappers/user.mapper'
 import { UserDataSource } from './datasources/user.datasource'
 import { UserWriteRepository } from './repositories/user-write.repository'

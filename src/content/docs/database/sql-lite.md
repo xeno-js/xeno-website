@@ -58,7 +58,7 @@ engine:
 
 ```typescript
 // src/infrastructure/bootstrap-sqlite.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
@@ -122,7 +122,7 @@ smoothly to the polymorphic `DbTransaction` wrapper.
 
 ```typescript
 // src/infrastructure/xeno-registry/app-registry.ts
-import { type XenoRegistry, type IReadDao } from '@xeno/core'
+import { type XenoRegistry, type IReadDao } from '@xeno-js/core'
 import { tenantsTable } from '../db/sqlite-schema'
 import { type Tenant } from '../../domain/entities/tenant'
 

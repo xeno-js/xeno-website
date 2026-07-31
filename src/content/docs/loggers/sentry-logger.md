@@ -44,7 +44,7 @@ the resulting `SentryLogger` instance as an active driver inside the composite
 ### Programmatic Bootstrap Registration Example
 
 ```typescript
-import { AppBuilder, LOG_LEVEL } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
@@ -170,7 +170,7 @@ lazy-loaded and must be added manually before activating Sentry logging within
 the AppBuilder host configuration.
 
 Because Sentry is classified as an **optional peer dependency** in Xeno
-(`@xeno/core`), the `@sentry/node` package is not bundled with the core
+(`@xeno-js/core`), the `@sentry/node` package is not bundled with the core
 framework installation. This prevents pulling heavy third-party monitoring
 dependencies into environments that do not require remote APM tracking.
 

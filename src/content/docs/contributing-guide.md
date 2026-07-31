@@ -23,7 +23,7 @@ Thank you for your interest in contributing to **Xeno**! As an open-source,
 enterprise-grade framework for Node.js, Xeno relies on clean architectural
 principles, strict type safety, and robust community contributions.
 
-To maintain code quality and structural integrity across `@xeno/core` and
+To maintain code quality and structural integrity across `@xeno-js/core` and
 `@xeno/cli`, all contributors must adhere to the development workflows,
 branching models, and testing protocols outlined below.
 

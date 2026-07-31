@@ -114,7 +114,7 @@ properties inside the `.addPipeline()` block during application bootstrapping:
 
 ```typescript
 // src/infrastructure/bootstrap-auth.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {

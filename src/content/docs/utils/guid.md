@@ -139,7 +139,7 @@ The example below illustrates using `GuidHelper` inside an incoming HTTP header
 extractor to trace distributed execution flows:
 
 ```typescript
-import { GuidHelper, type Guid, type HttpHeaders } from '@xeno/core'
+import { GuidHelper, type Guid, type HttpHeaders } from '@xeno-js/core'
 
 export class CorrelationExtractor {
   public extractCorrelationId(headers: HttpHeaders): Guid {

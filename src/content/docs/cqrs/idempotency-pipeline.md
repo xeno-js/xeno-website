@@ -134,7 +134,7 @@ Idempotency behavior is enabled during application bootstrapping by populating
 
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {

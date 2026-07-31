@@ -131,7 +131,7 @@ composite `BaseLogger` to the central IoC container under `TOKENS.LOGGER`.
 
 ```typescript
 // src/infrastructure/bootstrap-logging.ts
-import { AppBuilder, LOG_LEVEL } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
@@ -212,7 +212,7 @@ To use the logger within custom application services, inject `TOKENS.LOGGER`
 
 ```typescript
 // src/application/services/payment.service.ts
-import type { ILogger } from '@xeno/core'
+import type { ILogger } from '@xeno-js/core'
 
 export class PaymentService {
   constructor(private readonly _logger: ILogger) {}
@@ -246,7 +246,7 @@ from the active scope container:
 
 ```typescript
 // src/infrastructure/bootstrap-services.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { PaymentService } from '../application/services/payment.service'
 import type { AppRegistry } from './infrastructure/app-registry'
 
@@ -334,7 +334,7 @@ import {
   LOG_LEVEL,
   LOG_LEVEL_NAMES,
   type LogLevel,
-} from '@xeno/core'
+} from '@xeno-js/core'
 
 // 1. Setting the global minimum log level in AppBuilder
 const builder = new AppBuilder()

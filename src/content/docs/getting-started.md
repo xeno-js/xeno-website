@@ -1,6 +1,6 @@
 ---
 title: 'Xeno Getting Started Guide'
-description: 'Hot to install manually @xeno/core and how to bootstrap.'
+description: 'Hot to install manually @xeno-js/core and how to bootstrap.'
 keywords:
   [
     'Xeno',
@@ -32,7 +32,7 @@ Install the core package along with its mandatory runtime and development peer
 dependencies using your preferred package manager:
 
 ```bash
-npm install @xeno/core
+npm install @xeno-js/core
 npm install
 npm install --save-dev typescript @types/node
 
@@ -70,7 +70,7 @@ your dependency injection hierarchy:
 
 ```typescript
 // src/infrastructure/registry.ts
-import type { XenoRegistry } from '@xeno/core'
+import type { XenoRegistry } from '@xeno-js/core'
 
 export interface MyCustomService {
   executeTask(): Promise<void>
@@ -89,7 +89,7 @@ system configurations, and builds the finalized `ServiceContainer`:
 
 ```typescript
 // src/main.ts
-import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno/core';
+import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno-js/core';
 import type { AppRegistry, MyCustomService } from './infrastructure/registry';
 
 class CustomService implements MyCustomService {

@@ -116,7 +116,7 @@ The snippet below demonstrates using `PromiseHelper` within a custom exponential
 backoff retry loop:
 
 ```typescript
-import { PromiseHelper } from '@xeno/core'
+import { PromiseHelper } from '@xeno-js/core'
 
 export class ResilientWorker {
   public async executeWithRetry<T>(

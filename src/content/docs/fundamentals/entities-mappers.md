@@ -48,7 +48,7 @@ model a domain object:
 
 ```typescript
 // src/domain/entities/user.ts
-import { Entity, type UniqueId } from '@xeno/core'
+import { Entity, type UniqueId } from '@xeno-js/core'
 
 // 1. Define the internal property state schema contract
 export interface UserProps {
@@ -104,7 +104,7 @@ state information from an entity instance:
 
 ```typescript
 // src/infrastructure/mappers/user.mapper.ts
-import type { IMapper } from '@xeno/core'
+import type { IMapper } from '@xeno-js/core'
 import type { UserDto } from '../schema'
 import { User, type UserProps } from '../../domain/entities/user'
 
@@ -158,7 +158,7 @@ data overwrites from outside layers:
 
 ```typescript
 // src/domain/entities/user.ts
-import { Entity, AppError } from '@xeno/core'
+import { Entity, AppError } from '@xeno-js/core'
 import type { UserProps } from './user'
 
 export class User extends Entity<UserProps> {
@@ -240,7 +240,7 @@ aggregate:
 
 ```typescript
 // src/infrastructure/mappers/user.mapper.ts
-import type { IMapper } from '@xeno/core'
+import type { IMapper } from '@xeno-js/core'
 import type { UserDto } from '../db/schema'
 import { User, type UserProps } from '../../domain/entities/user'
 
@@ -324,7 +324,7 @@ To register data mappers, attach their factory initializers inside the
 
 ```typescript
 // src/infrastructure/bootstrap-mapping.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import { UserMapper } from './mappers/user.mapper'
 import { UserWriteRepository } from './repositories/user-write.repository'
 import type { AppRegistry } from './infrastructure/app-registry'

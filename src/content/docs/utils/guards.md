@@ -133,7 +133,7 @@ The snippet below demonstrates using `Guards` within a domain service to
 validate input parameters and narrow types cleanly:
 
 ```typescript
-import { Guards } from '@xeno/core'
+import { Guards } from '@xeno-js/core'
 
 export class OrderService {
   public processDiscount(discountCode: unknown, percentage: number): void {

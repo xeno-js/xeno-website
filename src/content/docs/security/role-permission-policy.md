@@ -166,7 +166,7 @@ as its unique injection key within the framework ecosystem:
 
 ```typescript
 // src/application/user/commands/delete-user.command.ts
-import { type ICommand, REQUEST_TYPE } from '@xeno/core'
+import { type ICommand, REQUEST_TYPE } from '@xeno-js/core'
 
 export class DeleteUserCommand implements ICommand<void> {
   // The unique string intent acting as the message identifier token
@@ -179,7 +179,7 @@ export class DeleteUserCommand implements ICommand<void> {
 
 ```typescript
 // src/application/user/queries/get-analytics.query.ts
-import { type IQuery, type ICacheableOptions, REQUEST_TYPE } from '@xeno/core'
+import { type IQuery, type ICacheableOptions, REQUEST_TYPE } from '@xeno-js/core'
 
 export class GetAnalyticsQuery implements IQuery<Record<string, unknown>> {
   public readonly intent = 'GET_ANALYTICS_QUERY_HANDLER_TOKEN'
@@ -200,7 +200,7 @@ required roles and permissions:
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrapApplication = async () => {

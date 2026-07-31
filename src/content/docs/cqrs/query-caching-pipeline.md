@@ -132,7 +132,7 @@ Query caching is enabled during host bootstrapping by setting
 
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
@@ -209,7 +209,7 @@ dispatched through a controller:
 
 ```typescript
 // src/application/catalog/queries/get-products.query.ts
-import { type IQuery, REQUEST_TYPE } from '@xeno/core'
+import { type IQuery, REQUEST_TYPE } from '@xeno-js/core'
 import type { ProductDto } from '../dtos/product.dto'
 
 export class GetProductsQuery implements IQuery<ProductDto[]> {
@@ -233,7 +233,7 @@ export class GetProductsQuery implements IQuery<ProductDto[]> {
 
 ```typescript
 // src/presentation/controllers/catalog.controller.ts
-import { BaseController, type ResponseDto } from '@xeno/core'
+import { BaseController, type ResponseDto } from '@xeno-js/core'
 import { GetProductsQuery } from '../../application/catalog/queries/get-products.query'
 import type { ProductDto } from '../../application/catalog/dtos/product.dto'
 

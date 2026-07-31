@@ -118,7 +118,7 @@ into a single centralized schema.
 
 ```typescript
 // src/infrastructure/xeno-registry/app-registry.ts
-import type { XenoRegistry } from '@xeno/core';
+import type { XenoRegistry } from '@xeno-js/core';
 import type { IUserRepository } from '../../domain/repositories/user-repository.interface';
 import type { INotificationService } from '../../application/services/notification.interface';
 
@@ -155,7 +155,7 @@ and resolving services with complete type safety.
 
 ```typescript
 // src/main.ts
-import { AppBuilder, LOG_LEVEL } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/xeno-registry/app-registry'
 
 // Concrete implementations (Infrastructure)
@@ -277,7 +277,7 @@ internal `DB_CONTEXT` token throughout the framework execution lifecycle:
 
 ```typescript
 // src/infrastructure/xeno-registry/app-registry.ts
-import type { XenoRegistry } from '@xeno/core'
+import type { XenoRegistry } from '@xeno-js/core'
 import type { ProjectDbSchema } from '../db/schema'
 import type { IUserRepository } from '../../domain/repositories/user-repository.interface'
 
@@ -298,7 +298,7 @@ auto-completion of table structures directly from the container context:
 
 ```typescript
 // src/infrastructure/repositories/sql-user.repository.ts
-import type { DbContext } from '@xeno/core'
+import type { DbContext } from '@xeno-js/core'
 import type {
   IUserRepository,
   User,
@@ -338,7 +338,7 @@ export class SqlUserRepository implements IUserRepository {
 
 ```typescript
 // src/main.ts
-import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/xeno-registry/app-registry'
 
 // Concrete implementations (Infrastructure)

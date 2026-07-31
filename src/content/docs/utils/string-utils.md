@@ -181,7 +181,7 @@ The snippet below demonstrates using `StringHelper` to safely interpolate
 dynamic log messages and normalize header parameters:
 
 ```typescript
-import { StringHelper, type HttpHeaders } from '@xeno/core'
+import { StringHelper, type HttpHeaders } from '@xeno-js/core'
 
 export class NotificationService {
   public formatMessage(rawUserHeader: HttpHeaders, template: string): string {

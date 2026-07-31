@@ -145,7 +145,7 @@ The snippet below demonstrates how `DateHelper` is used to validate
 time-sensitive tokens and schedule record expiration:
 
 ```typescript
-import { DateHelper } from '@xeno/core'
+import { DateHelper } from '@xeno-js/core'
 
 export class TokenValidationService {
   public isTokenValid(issuedAt: Date, expiresInDays: number): boolean {

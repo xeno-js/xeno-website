@@ -90,7 +90,7 @@ example shows how to activate the module inside the framework bootstrap file:
 
 ```typescript
 // src/main.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/xeno-registry/app-registry'
 
 async function bootstrap() {
@@ -247,7 +247,7 @@ consumption:
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { BillingService } from '@/domain/services/billing.service'
 import type { AppRegistry } from './infrastructure/app-registry'
 
@@ -269,7 +269,7 @@ async function bootstrap() {
 
 ```typescript
 // src/domain/services/billing.service.ts
-import type { IIdentityAccessor } from '@xeno/core'
+import type { IIdentityAccessor } from '@xeno-js/core'
 
 export class BillingService {
   // The framework's static identity accessor is cleanly injected into the constructor boundary

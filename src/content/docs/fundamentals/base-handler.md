@@ -82,10 +82,10 @@ import {
   AppError,
   type ResultType,
   type Optional,
-} from '@xeno/core'
+} from '@xeno-js/core'
 import { SaveUserCommand } from '../commands/user.command'
 import { User } from '../../../domain/entities/user'
-import type { IRepository, UserContext, IFactory } from '@xeno/core'
+import type { IRepository, UserContext, IFactory } from '@xeno-js/core'
 
 export class SaveUserCommandHandler extends BaseHandler<SaveUserCommand, void> {
   constructor(
@@ -181,7 +181,7 @@ request context metadata.
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { SaveUserCommandHandler } from '../application/user/handlers/save-user-command.handler'
 import type { AppRegistry } from './infrastructure/app-registry'
 
@@ -262,7 +262,7 @@ stack safely:
 
 ```typescript
 // src/presentation/controllers/user.controller.ts
-import { BaseController, type ResponseDto, STATUS_CODES } from '@xeno/core'
+import { BaseController, type ResponseDto, STATUS_CODES } from '@xeno-js/core'
 import { SaveUserCommand } from '../../application/user/commands/user.command'
 import type { UserProps } from '../../domain/entities/user'
 
@@ -311,7 +311,7 @@ export class UserController extends BaseController<UserProps, void> {
 >
 > ```typescript
 > // src/infrastructure/xeno-registry/app-registry.ts
-> import type { XenoRegistry } from '@xeno/core'
+> import type { XenoRegistry } from '@xeno-js/core'
 > import type { CreateUserCommandHandler } from '../../application/users/handlers/create-user.handler'
 > import type { GetUserQueryHandler } from '../../application/users/handlers/get-user.handler'
 >
@@ -329,8 +329,8 @@ export class UserController extends BaseController<UserProps, void> {
 >
 > ```typescript
 > // src/domain/commands/create-user.command.ts
-> import type { ICommand } from '@xeno/core'
-> import { REQUEST_TYPE } from '@xeno/core'
+> import type { ICommand } from '@xeno-js/core'
+> import { REQUEST_TYPE } from '@xeno-js/core'
 > import type { UserProps } from '../../domain/entities/user'
 >
 > export class CreateUserCommand extends ICommand<UserProps> {
@@ -349,7 +349,7 @@ export class UserController extends BaseController<UserProps, void> {
 >
 > ```typescript
 > // src/main.ts
-> import { AppBuilder, TOKENS } from '@xeno/core'
+> import { AppBuilder, TOKENS } from '@xeno-js/core'
 > import type { AppRegistry } from './infrastructure/xeno-registry/app-registry'
 > import { CreateUserCommandHandler } from './application/users/handlers/create-user.handler'
 >

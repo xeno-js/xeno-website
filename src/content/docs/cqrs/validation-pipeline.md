@@ -110,7 +110,7 @@ request intent strings directly to Zod schemas, automatically validating
 incoming payloads against their corresponding schema definition.
 
 > ⚠️ **Installation Disclaimer**: Zod is an **optional peer dependency** in Xeno
-> (`@xeno/core`). To use Zod schema validation, you must explicitly install
+> (`@xeno-js/core`). To use Zod schema validation, you must explicitly install
 > `zod` in your project workspace:
 >
 > ```bash
@@ -151,7 +151,7 @@ message `intent` keys to their respective Zod schemas:
 
 ```typescript
 // src/infrastructure/bootstrap-validation.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import { CreateUserCommandSchema } from '../application/users/schemas/create-user.schema'
 import type { AppRegistry } from './infrastructure/app-registry'
 
@@ -230,7 +230,7 @@ To avoid code duplication across strict schemas, it is recommended to create
 reusable base Zod schemas for the framework's core metadata:
 
 ```typescript
-import { BaseRequestSchema, CacheOptionsSchema } from '@xeno/core'
+import { BaseRequestSchema, CacheOptionsSchema } from '@xeno-js/core'
 import { z } from 'zod'
 
 // 1. Strict Schema for a Command (.strict())
@@ -277,7 +277,7 @@ import {
   type IStrategy,
   type IRequest,
   type ResultType,
-} from '@xeno/core'
+} from '@xeno-js/core'
 import type { IUserRepository } from '../../domain/repositories/user-repository.interface'
 
 interface ICreateUserRequest extends IRequest {
@@ -333,7 +333,7 @@ factory callback receives the request-scoped dependency injection container
 
 ```typescript
 // src/infrastructure/bootstrap-custom-validation.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { CreateUserCommandSchema } from '../application/users/schemas/create-user.schema'
 import { UniqueEmailValidationStrategy } from '../application/users/strategies/unique-email-validation.strategy'
 import type { AppRegistry } from './infrastructure/app-registry'

@@ -81,11 +81,11 @@ import {
   type ResponseDto,
   AppError,
   STATUS_CODES,
-} from '@xeno/core'
+} from '@xeno-js/core'
 import { CreateUserCommand } from '../../application/user/commands/create-user.command'
 import type { UserDto } from '../../infrastructure/schema'
 import type { UserProps } from '../../domain/entities/user'
-import type { IContextAccessor, IMediator, RequestContext } from '@xeno/core'
+import type { IContextAccessor, IMediator, RequestContext } from '@xeno-js/core'
 
 export class CreateUserController extends BaseController<UserProps, UserDto> {
   constructor(
@@ -165,7 +165,7 @@ eliminates cross-request memory contamination.
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { CreateUserController } from '../presentation/controllers/create-user.controller'
 import type { AppRegistry } from './infrastructure/app-registry'
 
@@ -213,7 +213,7 @@ controller business logic is evaluated.
 
 ```typescript
 // src/main.ts
-import { TOKENS } from '@xeno/core'
+import { TOKENS } from '@xeno-js/core'
 import fastify from 'fastify'
 import { bootstrap } from './infrastructure/bootstrap'
 import type { UserProps } from './domain/entities/user'

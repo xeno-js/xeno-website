@@ -128,7 +128,7 @@ the default `ConsoleLogger` fallback with a custom logger configuration:
 
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
-import { AppBuilder, LOG_LEVEL } from '@xeno/core';
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core';
 import type { AppRegistry } from './infrastructure/app-registry';
 
 export const bootstrap = async () => {

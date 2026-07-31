@@ -107,7 +107,7 @@ container. It automatically prepends this behavior token to both
 
 ```typescript
 // src/infrastructure/bootstrap-cqrs.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './infrastructure/app-registry'
 
 export const bootstrap = async () => {
@@ -190,7 +190,7 @@ from [`AsyncLocalStorage`](../fundamentals/node-request-context).
 
 ```typescript
 // src/presentation/controllers/user.controller.ts
-import { BaseController, type ResponseDto } from '@xeno/core'
+import { BaseController, type ResponseDto } from '@xeno-js/core'
 import type { DeleteUserCommand } from '../commands/delete-user.command'
 
 export class UserController extends BaseController<DeleteUserCommand, void> {

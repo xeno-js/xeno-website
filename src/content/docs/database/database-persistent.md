@@ -153,7 +153,7 @@ framework's core database services:
 
 ```typescript
 // src/infrastructure/xeno-registry/app-registry.ts
-import { type XenoRegistry, type IRepository } from '@xeno/core'
+import { type XenoRegistry, type IRepository } from '@xeno-js/core'
 import { type FullSchema } from '../db/full-schema'
 import { type User } from '../../domain/entities/user'
 import { UserDataSource } from './datasources/user.datasource'
@@ -179,7 +179,7 @@ database interactions remain type-safe during bootstrapping:
 
 ```typescript
 // src/infrastructure/bootstrap-data.ts
-import { AppBuilder } from '@xeno/core'
+import { AppBuilder } from '@xeno-js/core'
 import { type AppRegistry } from './infrastructure/app-registry'
 
 // Initialize the fluent AppBuilder using your strongly-typed registry schema
@@ -207,7 +207,7 @@ transaction rollbacks:
 
 ```typescript
 // src/infrastructure/bootstrap-data.ts
-import { AppBuilder, TOKENS } from '@xeno/core';
+import { AppBuilder, TOKENS } from '@xeno-js/core';
 import type { AppRegistry } from './infrastructure/app-registry';
 import { UserDataSource } from './datasources/user.datasource';
 
@@ -265,8 +265,8 @@ import {
   eq,
   type Optional,
   type UserContext,
-} from '@xeno/core'
-import type { DbContext } from '@xeno/core'
+} from '@xeno-js/core'
+import type { DbContext } from '@xeno-js/core'
 import { users, type UserDto, type FullSchema } from '../schema'
 
 export class UserDataSource {

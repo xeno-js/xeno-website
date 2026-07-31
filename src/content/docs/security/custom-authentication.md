@@ -79,8 +79,8 @@ payloads directly to standard application claims:
 
 ```typescript
 // src/infrastructure/security/custom-jwt-auth.service.ts
-import { Result, AppError } from '@xeno/core'
-import type { IAuthService, ResultType, AuthClaims } from '@xeno/core'
+import { Result, AppError } from '@xeno-js/core'
+import type { IAuthService, ResultType, AuthClaims } from '@xeno-js/core'
 
 export class CustomJwtAuthService implements IAuthService {
   constructor(private readonly _jwtSecret: string) {}
@@ -169,7 +169,7 @@ initialization:
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, TOKENS } from '@xeno/core'
+import { AppBuilder, TOKENS } from '@xeno-js/core'
 import { CustomJwtAuthService } from './security/custom-jwt-auth.service'
 import type { AppRegistry } from './infrastructure/app-registry'
 

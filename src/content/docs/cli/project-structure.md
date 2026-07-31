@@ -57,7 +57,7 @@ module selections:
 
 ### Baseline Core Dependencies (Always Included)
 
-- **`@xeno/core`**: `latest` — Framework kernel and CQRS abstractions.
+- **`@xeno-js/core`**: `latest` — Framework kernel and CQRS abstractions.
 
 - **`dotenv`**: `^16.4.5` — Environment variable loader.
 
@@ -118,7 +118,7 @@ Generated dynamically by `BootstrapGenerator`, assembling selected modules
 inside `AppBuilder`:
 
 ```typescript
-import { AppBuilder, LOG_LEVEL } from '@xeno/core'
+import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
 import { MyRegistry } from './registry'
 
 export async function bootstrap() {
@@ -173,7 +173,7 @@ Provides the interface extension point for defining IoC container injection
 tokens:
 
 ```typescript
-import { XenoRegistry } from '@xeno/core'
+import { XenoRegistry } from '@xeno-js/core'
 
 // export interface MyRegistry extends XenoRegistry<{ /** Db Schema **/ }> {
 //   MY_SERVICE: MyService;
