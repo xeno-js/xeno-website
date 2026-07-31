@@ -1,12 +1,12 @@
 ---
 title: 'Xeno CLI Overview & System Architecture'
 description:
-  'High-level technical overview of @xeno/cli, including installation steps,
+  'High-level technical overview of @xeno-js/cli, including installation steps,
   usage flags, scaffolding workflow, and core responsibilities.'
 keywords:
   [
     'Xeno CLI',
-    '@xeno/cli',
+    '@xeno-js/cli',
     'Scaffolding Engine',
     'CLI Overview',
     'Global Installation',
@@ -17,7 +17,7 @@ author: 'Xeno'
 
 ## Xeno CLI: Overview & Scaffolding Engine
 
-`@xeno/cli` is the official command-line utility for the Xeno framework.
+`@xeno-js/cli` is the official command-line utility for the Xeno framework.
 Executable via the `xeno` binary token, it automates project initialization,
 infrastructure setup, dependency wiring, and configuration file generation for
 Xeno applications.
@@ -26,7 +26,7 @@ Xeno applications.
 
 ## 1. Panoramica Generale (General Overview)
 
-`@xeno/cli` acts as an interactive scaffolding engine designed to eliminate
+`@xeno-js/cli` acts as an interactive scaffolding engine designed to eliminate
 boilerplate setup time. It guides developers through prompt-driven setups or
 quick execution flags (`--full` / `--empty`) to assemble tailored application
 architecture templates.
@@ -53,7 +53,7 @@ install the package using `npm`:
 
 ```bash
 # Global installation command
-npm install -g @xeno/cli
+npm install -g @xeno-js/cli
 
 ```
 
@@ -73,7 +73,7 @@ xeno --version
 
 ## 3. Scopi della CLI (Core Scaffolding Capabilities)
 
-The primary goal of `@xeno/cli` is to establish production-ready Xeno
+The primary goal of `@xeno-js/cli` is to establish production-ready Xeno
 application structures configured with strongly-typed setups out of the box.
 
 ```mermaid

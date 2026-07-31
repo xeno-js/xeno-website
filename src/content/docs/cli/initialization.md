@@ -12,14 +12,14 @@ keywords:
     '--full',
     '--empty',
     'Interactive Mode',
-    '@xeno/cli',
+    '@xeno-js/cli',
   ]
 author: 'Xeno'
 ---
 
 ## `xeno init`: Usage Guide & Scaffolding Modes
 
-The core command of `@xeno/cli` is `xeno init` (or simply executing
+The core command of `@xeno-js/cli` is `xeno init` (or simply executing
 `xeno [target-dir]`), which initializes and scaffolds a complete,
 production-ready Xeno project structure.
 
@@ -48,7 +48,7 @@ the arguments and flags provided. There are three primary modes of operation:
 
 ### 1. Interactive Prompt Mode (Default)
 
-If you run the CLI without passing `--full` or `--empty`, `@xeno/cli` launches
+If you run the CLI without passing `--full` or `--empty`, `@xeno-js/cli` launches
 an interactive prompt interface using `prompts`. The terminal will walk you
 through a series of confirmation questions to selectively enable or disable
 architecture modules:

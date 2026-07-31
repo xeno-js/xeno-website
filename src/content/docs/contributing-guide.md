@@ -24,7 +24,7 @@ enterprise-grade framework for Node.js, Xeno relies on clean architectural
 principles, strict type safety, and robust community contributions.
 
 To maintain code quality and structural integrity across `@xeno-js/core` and
-`@xeno/cli`, all contributors must adhere to the development workflows,
+`@xeno-js/cli`, all contributors must adhere to the development workflows,
 branching models, and testing protocols outlined below.
 
 ---
@@ -143,7 +143,7 @@ pre-configured Git hooks managed by Husky:
 If you are looking for places to start contributing, check out our active
 development tracks:
 
-- **CLI Generators (`@xeno/cli`)**: Expanding scaffolding options for new
+- **CLI Generators (`@xeno-js/cli`)**: Expanding scaffolding options for new
   command, query, and handler boilerplates.
 
 - **Outbox & Distributed Messaging**: Implementing pattern-based message
