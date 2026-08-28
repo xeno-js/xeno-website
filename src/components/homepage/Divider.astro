@@ -66,7 +66,7 @@ const scrollingItems = [...useCases, ...useCases];
         <div
           data-aos="fade-up"
           data-aos-delay={index * 70}
-          class="w-[320px] sm:w-[360px] shrink-0 p-6 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)]/60 transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden"
+          class="card w-[320px] sm:w-[360px] shrink-0 p-6 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)]/60 transition-all duration-300 shadow-xl flex flex-col justify-between group relative overflow-hidden"
         >
           
           {/* Top category & icon */}
@@ -85,7 +85,7 @@ const scrollingItems = [...useCases, ...useCases];
             </h3>
             
             {/* Description hidden by default, appears smoothly on card hover */}
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-40 transition-all duration-300 ease-in-out overflow-hidden">
+            <p class="card-description text-sm text-[var(--text-muted)] leading-relaxed opacity-100 max-h-40 transition-all duration-300 ease-in-out overflow-hidden">
               {item.description}
             </p>
           </div>
@@ -116,6 +116,34 @@ const scrollingItems = [...useCases, ...useCases];
     display: flex;
     width: max-content;
     animation: marquee 30s linear infinite;
+  }
+
+  .card-description {
+    opacity: 1;
+    max-height: 10rem;
+  }
+
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+    .card-description {
+      opacity: 0;
+      max-height: 0;
+    }
+
+    .card:hover,
+    .card:focus-within {
+      border-color: rgba(201, 245, 27, 0.6);
+    }
+
+    .card:hover .card-description,
+    .card:focus-within .card-description {
+      opacity: 1;
+      max-height: 10rem;
+    }
+
+    .card:hover .text\[--color-primary\],
+    .card:focus-within .text\[--color-primary\] {
+      color: var(--color-primary);
+    }
   }
 
   /* Pause marquee animation on hover for better user experience */

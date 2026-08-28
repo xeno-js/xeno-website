@@ -19,18 +19,21 @@ import Button from '../ui/Button.astro'
   <div
     class="w-full max-w-[var(--container-max)] mx-auto text-center relative z-10 flex flex-col items-center"
   >
-    {/* Glassmorphism Announcement Badge */}
-    <div data-aos="fade-right" data-aos-delay="100" class="md:col-span-5 text-left">
-      <div
-        class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase border border-[var(--color-primary)]/20"
-      >
-      <i class="bi bi-lightning-fill"></i>
-          Next-Gen Architecture for Node.js
-      </div>
-    </div>
+  
 
     {/* Main Title */}
-    <h1
+    <div class="flex items-center justify-center gap-2 mb-4">
+      <img
+        src="/static/img/logo.png"
+        alt="Xeno Logo"
+        class="w-12 h-12 sm:w-16 sm:h-16 animate-spin-slow"
+      />
+
+    </div>
+    <h1>
+      Xeno<span class="text-[var(--color-primary)]">.JS</span>
+    </h1>
+    <h2
       data-aos="fade-up"
       data-aos-delay="120"
       class="text-3xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] max-w-5xl mx-auto leading-[1.1] mb-6"
@@ -39,7 +42,7 @@ import Button from '../ui/Button.astro'
         class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[#ffffff]"
         >DDD & CQRS</span
       > framework for Node.js
-    </h1>
+    </h2>
 
     {/* Payoff description featuring Xeno */}
     <p

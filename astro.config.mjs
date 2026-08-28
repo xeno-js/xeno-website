@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   integrations: [
     starlight({
-      title: 'Xeno',
+      title: 'Xeno Docs',
       favicon: '/favicon.ico',
       description:
         'Xeno is a Node.js framework for building scalable and maintainable applications.',

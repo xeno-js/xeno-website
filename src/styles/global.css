@@ -1,43 +1,79 @@
 @import 'tailwindcss';
 
 :root {
-  /* === 1. PALETTE COLORI & CONTRASTI (Modern Dark Mode) === */
-  --color-primary: #c9f51b; /* Verde neon principale del brand */
-  --color-primary-hover: #b5dc15; /* Verde neon slightly darker per hover */
+  /* Dark theme default, matching Starlight dark mode */
+  --color-primary: #c9f51b;
+  --color-primary-hover: #b5dc15;
 
-  --bg-primary: #0a0a0a; /* Nero moderno ed elegante (sfondo root) */
-  --bg-secondary: #121212; /* Nero intermedio per card, dropdown, sidebar */
-  --bg-tertiary: #1a1a1a; /* Sfondo per elementi in evidenza o hover profondi */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #121212;
+  --bg-tertiary: #1a1a1a;
 
-  --border-color: #262626; /* Bordo moderno, sottile e non invasivo */
-  --border-color-hover: #404040; /* Bordo più visibile per interazioni/focus */
+  --border-color: #262626;
+  --border-color-hover: #404040;
 
-  --accent-glow: rgba(201, 245, 27, 0.12); /* Bagliore soffuso per elementi attivi/focus */
+  --accent-glow: rgba(201, 245, 27, 0.12);
 
-  --text-main: #ffffff; /* Bianco puro per titoli e testi ad alto risalto */
-  --text-muted: #888888; /* Grigio bilanciato per descrizioni e metadati */
-  --text-contrast: #050505; /* Nero profondo per testi sopra sfondi verdi/primari */
-  --text-code: #c9f51b; /* Colore focalizzato per frammenti di codice */
+  --text-main: #ffffff;
+  --text-muted: #a3a3a3;
+  --text-contrast: #050505;
+  --text-code: #c9f51b;
 
-  /* === 2. TIPOGRAFIA & DIMENSIONI === */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
 
-  --h1-size: 2.5rem; /* 40px */
-  --h2-size: 1.75rem; /* 28px */
-  --h3-size: 1.25rem; /* 20px */
-  --body-size: 1rem; /* 16px */
-  --small-size: 0.875rem; /* 14px */
+  --h1-size: 2.5rem;
+  --h2-size: 1.75rem;
+  --h3-size: 1.25rem;
+  --body-size: 1rem;
+  --small-size: 0.875rem;
 
   --h1-weight: 800;
   --h2-weight: 700;
   --h3-weight: 600;
   --body-weight: 400;
 
-  /* === 3. SPAZIATURE & LAYOUT === */
   --spacing-unit: 1rem;
   --border-radius: 8px;
   --container-max: 1200px;
+}
+
+html[data-theme='light'] {
+  --color-primary: #111111;
+  --color-primary-hover: #2a2a2a;
+
+  --bg-primary: #f7f7f5;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f0f0ee;
+
+  --border-color: #d9d9d4;
+  --border-color-hover: #b7b7b1;
+
+  --accent-glow: rgba(17, 17, 17, 0.08);
+
+  --text-main: #111111;
+  --text-muted: #4b4b4b;
+  --text-contrast: #ffffff;
+  --text-code: #111111;
+}
+
+html[data-theme='dark'] {
+  --color-primary: #c9f51b;
+  --color-primary-hover: #b5dc15;
+
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #121212;
+  --bg-tertiary: #1a1a1a;
+
+  --border-color: #262626;
+  --border-color-hover: #404040;
+
+  --accent-glow: rgba(201, 245, 27, 0.12);
+
+  --text-main: #ffffff;
+  --text-muted: #a3a3a3;
+  --text-contrast: #050505;
+  --text-code: #c9f51b;
 }
 
 /* === 4. RESET & REGOLE GLOBALI === */
@@ -48,6 +84,14 @@
 }
 
 html {
+  color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
   color-scheme: dark;
 }
 
