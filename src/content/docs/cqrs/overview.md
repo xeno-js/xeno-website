@@ -193,7 +193,7 @@ specific cross-cutting concern without altering domain handlers.
 |                                                                |
 | [**Authorization Behavior**](../security/authorization)        | Command & Query | Enforces user existence, multi-tenant isolation, role checks, and permission requirements via intent policies.          |
 |                                                                |
-| [**Validation Behavior**](./validatio-pipeline)                | Command & Query | Validates message payloads against registered validation schemas (such as Zod) before handler execution.                |
+| [**Validation Behavior**](./validation-pipeline)                | Command & Query | Validates message payloads against registered validation schemas (such as Zod) before handler execution.                |
 |                                                                |
 | [**Idempotency Pipeline**](./idempotency-pipeline)             | Command Bus     | Prevents duplicate command execution by acquiring distributed locks and caching transaction outputs.                    |
 |                                                                |

@@ -202,11 +202,7 @@ export const initializeApplicationHost = async () => {
 
     // 3. Inject custom strategy behaviors into the authorization stack
     .addPipeline((options) => {
-      // Toggle standard context checks
-      options.authorization.userId = true
-      options.authorization.tenantId = true
-
-      // Register the custom strategy using an inline factory mapping function
+      // Register the global custom strategy using an inline factory mapping function
       options.authorization.customAuthorizationStrategy = [
         (container) => {
           // Resolve required dependencies out of the active service container scope

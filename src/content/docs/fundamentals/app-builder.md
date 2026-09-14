@@ -1,9 +1,8 @@
 ---
 title: 'AppBuilder: Fluent Bootstrapping and Module Orchestration'
 description:
-  'Explore the Xeno AppBuilder architecture. Learn how it manages sequential
-  module bootstrapping, priority-based module queueing, and programmatic
-  configuration using SetupAction.'
+  'Learn how Xeno AppBuilder configures modules, orders asynchronous
+  bootstrapping, and registers services through SetupAction callbacks.'
 keywords:
   [
     'AppBuilder',
@@ -11,8 +10,8 @@ keywords:
     'Dependency Injection',
     'ServiceContainer',
     'SetupAction',
-    'module queueing',
-    'compile-time type safety',
+    'module registration',
+    'module priority',
     'asynchronous bootstrapping',
   ]
 author: 'Xeno'
@@ -32,33 +31,32 @@ them together. Xeno resolves this coordination challenge through the
 
 ## What is the AppBuilder and How Does It Structure Bootstrapping?
 
-The AppBuilder is a fluent, programmatic bootstrapper designed for Xeno
-applications. It orchestrates the configuration and sequential instantiation of
-core framework modules, translating declarative setup actions into a validated,
-strongly-typed dependency injection graph within the central ServiceContainer
-during startup.
+The `AppBuilder` is a fluent, programmatic bootstrapper for Xeno applications.
+It collects module registration actions, applies configuration callbacks, and
+initializes the registered modules in priority order inside a
+`ServiceContainer`.
 
-The `AppBuilder` provides a .NET-style configuration experience that avoids
-directory parsing and declarative decorators. It acts as a temporary host that
-gathers configurations, instantiates essential system-level prerequisites (such
-as the `EnvironmentConfigurationService`), and queues configuration directives.
-This programmatic approach ensures that configuration errors are caught
-immediately during execution setup, giving developers deep control over
-initialization pathways.
+The `AppBuilder` provides a .NET-style configuration experience without
+directory scanning or declarative decorators. Its constructor registers and
+resolves the `EnvironmentConfigurationService`. Methods such as `addLogger`,
+`addDb`, `addPipeline`, `addHttpCore`, `addModule`, and `addServices` then
+configure the builder or add asynchronous actions to its internal module queue.
+Calling `build()` executes those actions and returns the configured
+`ServiceContainer`.
 
 ### Key Architectural Characteristics
 
 - **Fluent API Interface** — Exposes chainable, high-level orchestration methods
   that guide the developer through an orderly configuration workflow.
-- **Lazy Module Queueing** — Postpones actual module instantiation and
-  dependency execution until the final `.build()` method is resolved, allowing
-  configuration states to safely mutate during assembly.
+- **Deferred Module Initialization** — Postpones module imports, instantiation,
+  and registration actions until `build()` is called. A `SetupAction` callback,
+  when supplied, runs immediately while the builder method is called.
 - **Automated Context Safeguards** — Automatically schedules core contextual
   prerequisites (such as the `ContextModule`) when dependent systems (like CQRS
   pipelines or request middlewares) are registered.
-- **Decoupled Configuration Provisioning** — Provides localized environment
-  variables directly to modules during setup, preventing hardcoded references
-  across layers.
+- **Configuration Provisioning** — Passes the shared
+  `IConfigurationService` to setup callbacks so configuration can read
+  environment values without directly accessing infrastructure modules.
 
 ---
 
@@ -71,21 +69,23 @@ database clients and authentication services initialize before domain logic or
 custom HTTP endpoints.
 
 At its core, `AppBuilder` manages an internal array of queued modules
-(`QueuedModule[]`). When a developer chains configuration methods like
-`.addLogger()` or `.addDb()`, the builder does not execute these operations
-immediately. Instead, it pushes an anonymous executable action wrapper alongside
-a predefined numeric priority score.
+(`QueuedModule[]`). Methods that register modules push an executable action and
+a numeric priority into this array. Configuration callbacks for methods such as
+`.addLogger()` and `.addDb()` run immediately; the module action itself is
+deferred until `build()`.
 
 ### Bootstrapping Lifecycle and Priorities
 
-When `.build()` is invoked, the builder sorts this queue in ascending order by
-priority, executing each module’s configuration routine asynchronously.
+When `.build()` is invoked, the builder sorts the queue in ascending order by
+priority and awaits each module action sequentially. If an action fails,
+`AppBuilder` logs the module name and throws an error identifying the bootstrap
+failure.
 
 ```mermaid
 graph TD
     A[AppBuilder Instantiated] --> B[EnvironmentConfig Registered]
     B --> C[Developer Chains Methods .addLogger, .addDb, etc.]
-    C --> D[Actions Pushed to Queue with Priority Numbers]
+    C --> D[Module Actions Pushed to Queue with Priorities]
 
     subgraph Build Phase [Execution of .build]
         D --> E[Queue Sorted by Priority Ascending]
@@ -93,10 +93,11 @@ graph TD
         F --> G[Priority 2-3: Auth, Logger, & Middleware Modules]
         G --> H[Priority 4-5: Db & CQRS Modules]
         H --> I[Priority 30-40: HTTP Core & Concurrency Services]
-        I --> J[Priority 50-99: Custom Modules & Client Services]
+        I --> J[Priority 50: Custom Modules]
+        J --> K[Priority 99: Client Services]
     end
 
-    J --> K[Finalized ServiceContainer Returned]
+    K --> L[Configured ServiceContainer Returned]
 
 ```
 
@@ -106,18 +107,17 @@ execution of `.build()`:
 - **ContextModule (Priority 0)** — Initializes request-scoped state boundaries
   via `AsyncLocalStorage` before any subsequent module accesses the resolution
   stack.
-- **AuthModule (Priority 2)** — Registers identity-verification client
-  abstractions required by the downstream pipeline layers.
-- **LoggerModule / MiddlewareModule / CacheModule (Priority 3)** — Instantiates
-  tracing drivers, response sanitization chains, and cache providers.
-- **DbModule (Priority 4)** — Establishes persistent connection pools and
-  schemas (e.g., Drizzle ORM contexts).
-- **CqrsModule (Priority 5)** — Builds the Mediator engine, pipeline behaviors,
-  and message handler registries.
+- **AuthModule (Priority 2)** — Configures the authentication integration.
+- **LoggerModule / MiddlewareModule / CacheModule (Priority 3)** — Registers
+  the configured logging, middleware, and cache services.
+- **DbModule (Priority 4)** — Configures the database module with its connection
+  string and SQL-based configuration.
+- **CqrsModule (Priority 5)** — Configures the CQRS module with the pipeline,
+  command bus, and query bus settings.
 - **HttpCoreModule (Priority 30)** — Binds network transport settings, outbound
-  client configurations, and resilience policies.
-- **ConcurrencyServiceModule (Priority 40)** — Registers thread-safe rate
-  limiters and task throttle implementations.
+  client configurations, data source registration, and resilience settings.
+- **ConcurrencyServiceModule (Priority 40)** — Registers the concurrency
+  service used to limit concurrent asynchronous work.
 - **Custom Modules (Priority 50)** — Mounts user-defined external packages
   utilizing the standard `IModule` contract.
 - **Client Services (Priority 99)** — Evaluates custom service factories
@@ -127,14 +127,13 @@ execution of `.build()`:
 
 ## Decoupling Configurations with the SetupAction Functional Paradigm
 
-The SetupAction paradigm represents a type-safe callback contract used to
-configure modules within Xeno. It accepts a mutable configuration state and a
-read-only environment configuration service, enabling developers to dynamically
-adjust application parameters programmatically without exposing raw
-infrastructure instances directly.
+`SetupAction` is a typed callback contract used to configure Xeno modules. It
+receives a mutable configuration value and the shared `IConfigurationService`,
+enabling application settings to be read from the environment without exposing
+module instances to the caller.
 
-Rather than accepting pre-constructed configuration objects, `AppBuilder`
-methods accept an optional callback defined by the `SetupAction` signature:
+Rather than requiring pre-constructed configuration objects, `AppBuilder`
+methods accept callbacks that follow the `SetupAction` signature:
 
 ```typescript
 export type SetupAction<TConfig, TContext = IConfigurationService> = (
@@ -143,11 +142,10 @@ export type SetupAction<TConfig, TContext = IConfigurationService> = (
 ) => void
 ```
 
-This pattern decouples the configuration schema from the application
-environment. The builder passes a mutable, default configuration structure
-(`TConfig`) along with the active `IConfigurationService` into the callback.
-This design allows developers to read environment variables dynamically and map
-them to type-safe settings within an isolated scope.
+The builder passes the mutable configuration structure (`TConfig`) and the
+active `IConfigurationService` to the callback. The callback executes during
+the builder method call, before the corresponding module action is queued. This
+allows environment values to be mapped to module settings before bootstrapping.
 
 ### Programmatic SetupAction Implementation
 
@@ -162,27 +160,39 @@ import type { AppRegistry } from './registry'
 async function bootstrap() {
   const builder = new AppBuilder<AppRegistry>()
 
-  // Utilizing SetupAction to configure the DB module
+  // Configure the DB module through SetupAction
   builder.addDb((config, env) => {
-    // 1. Dynamic environment variable extraction via IConfigurationService
     const dbUrl = env.getOrThrow('DATABASE_URL')
-
-    // 2. Safely mutating the localized configuration parameter
     config.connectionString = dbUrl
   })
 
-  // Utilizing SetupAction to configure logging parameters
+  // Configure logging parameters through SetupAction
   builder.addLogger((config, env) => {
     config.level =
       env.get('LOG_LEVEL') === 'production' ? LOG_LEVEL.INFO : LOG_LEVEL.DEBUG
     config.console = true
   })
 
-  // Build the unified, fully-configured container
   const container = await builder.build()
   return container
 }
 ```
+
+## Constraints and Current Behavior
+
+- `build()` sorts all queued actions by ascending priority and awaits them one
+  at a time.
+- Calling a module-registration method more than once does not always have the
+  same effect. Logger, cache, authentication, database, concurrency, pipeline,
+  and middleware modules guard against duplicate registration; custom modules,
+  services, HTTP core actions, and allowed origins are added to the queue for
+  each call.
+- Registering a CQRS pipeline or middleware also queues the context module when
+  it has not already been queued.
+- `addServices()` runs its service-registration callback during the build phase
+  at priority `99`.
+- `resolve()` resolves a registered service from the builder's
+  `ServiceContainer`; it does not add a new service.
 
 ---
 

@@ -1,19 +1,22 @@
 ---
 title: 'Middleware Architecture in Xeno'
 description:
-  'Complete guide to middleware configuration and operation in Xeno. Discover
-  how to manage the request lifecycle, log security events, and isolate public
-  routes.'
+  'Learn how Xeno composes request middleware for context creation,
+  authentication, CSRF protection, rate limiting, method checks, and OPTIONS
+  handling.'
 keywords:
   [
     'Middleware',
     'Xeno Middleware',
     'Request Lifecycle',
     'AsyncLocalStorage',
-    'Public Routes',
+    'CSRF Middleware',
+    'Rate Limit Middleware',
+    'Method Check Middleware',
+    'OPTIONS Middleware',
     'AppBuilder Middleware',
-    'Gatekeeper',
-    'CWE-209 Sanatization',
+    'GateKeeper',
+    'CompositeMiddleware',
     'ILogger Integration',
   ]
 author: 'Xeno'
@@ -23,50 +26,108 @@ sidebar:
 
 ## Request Lifecycle Management through Middleware
 
-Within a decoupled software architecture, the management of cross-cutting
-concerns such as security, traceability, and data formatting requires a robust
-and efficient interception system. Xeno addresses this need through an
-integrated middleware stack, capable of operating upstream of application
-controllers.
+Within a decoupled software architecture, cross-cutting concerns such as
+security, traceability, and request validation require an interception system.
+Xeno provides a configurable middleware stack that runs before the application
+controller and handler boundary.
 
 ## Understanding the Framework's Middleware Architecture
 
 A middleware in Xeno is an interception component positioned within the request
-execution pipeline. It analyzes, validates, or enriches the metadata of incoming
-transport packets, isolating the asynchronous execution context before the
-request reaches application controllers.
+execution pipeline. It can create request context, validate request properties,
+apply security checks, enforce traffic limits, or return a response before the
+request reaches the application controller.
 
-The system is based on an ordered execution sequence defined as the **middleware
-execution stack**. When an HTTP message or transaction reaches the server, the
-module intercepts the request and performs fundamental infrastructure tasks.
+The system uses an ordered **middleware execution stack**. `MiddlewareModule`
+registers the enabled middleware services and `CompositeMiddleware` composes
+them into a chain. Each middleware either calls `next()` or returns a response
+immediately.
 
-The primary responsibility of the system middleware (`RequestContextMiddleware`)
-is to initialize the asynchronous execution context, binding it to the current
-transaction through **asynchronous local storage** (ALS). This isolation
-prevents memory collisions between concurrent requests and enables the
-resolution of services with a **request-scoped lifecycle** in complete safety.
+The first middleware, `RequestContextMiddleware`, extracts request metadata and
+creates the asynchronous request context through `IRequestContext.runAsync()`.
+Later middleware can read correlation, request, span, network, and identity
+data from that context. `AuthenticationMiddleware` updates the identity after
+successful authentication.
 
-### Injected Dependencies within the Core MiddlewareStack
+## Which Middleware Does Xeno Provide?
 
-To enforce structural decoupling, `RequestContextMiddleware` consumes only
-domain-level and core infrastructural abstractions via constructor injection:
+`MiddlewareModule` always registers `RequestContextMiddleware` and
+`AuthenticationMiddleware`. The other middleware are registered when their
+corresponding `MiddlewareConfig` option is enabled or configured.
 
-- **IMatcher** (`ROUTE_MATCHER`): Evaluates whether incoming HTTP methods and
-  request paths map to open endpoints.
+### [RequestContextMiddleware](../middlewares/request.middleware.md)
+
+`RequestContextMiddleware` extracts metadata from HTTP headers, assigns fallback
+identifiers when required, maps the request into the Xeno request context, and
+executes the remaining chain inside `runAsync()`. It logs unsuccessful response
+data and converts unexpected exceptions into a `500 Internal Server Error`
+response.
+
+### [AuthenticationMiddleware](../middlewares/auth.middleware.md)
+
+`AuthenticationMiddleware` extracts an optional bearer token and passes it to
+the configured `IGateKeeper`. On success, it updates the request identity and
+calls `next()`. On failure, it logs the event and returns the gatekeeper error,
+using `401 Unauthorized` when the error does not provide another status.
+
+When authentication is not configured, `MiddlewareModule` registers
+`NoAuthGateKeeper`. The authentication middleware remains in the chain, but the
+no-auth gatekeeper supplies the unauthenticated behavior.
+
+### [MethodCheckMiddleware](../middlewares/allow-method.middleware.md)
+
+`MethodCheckMiddleware` is registered when `routeRegistry` is defined. It checks
+the request path and HTTP method against the configured `Dictionary<HttpMethod[]>`.
+If the method is not allowed, it returns a `405 Method Not Allowed` response;
+otherwise, it calls `next()`.
+
+### [CsrfMiddleware](../middlewares/csrf.middleware.md)
+
+`CsrfMiddleware` is registered when `csrf` is configured. It validates the CSRF
+value stored in the request context for `POST`, `PUT`, `DELETE`, and `PATCH`.
+A missing or case-insensitively mismatched value returns a `403 Forbidden`
+response. Other methods continue without this check.
+
+### [RateLimitMiddleware](../middlewares/rate-limiter.middleware.md)
+
+`RateLimitMiddleware` is registered when either rate-limit option is defined. It
+uses the configured cache and the client IP from the request context to count
+requests. The defaults are `30` requests and a `30`-second window when the
+corresponding values are omitted. Requests over the limit return `429 Too Many
+Requests` with a `Retry-After` header.
+
+### [OptionsMiddleware](../middlewares/options.middleware.md)
+
+`OptionsMiddleware` is registered when `optionsMiddleware` is `true`. It
+short-circuits `OPTIONS` requests with a `204 No Content` response. Other
+methods continue through the chain.
+
+### CompositeMiddleware
+
+`CompositeMiddleware` is the chain coordinator. It receives the enabled
+middleware instances, wraps them in reverse order, and invokes the first
+middleware in the resulting chain. This preserves registration order and lets
+each middleware perform work before and after `next()`.
+
+### Injected Dependencies Within the Middleware Stack
+
+To enforce structural decoupling, the middleware services consume domain-level
+and core infrastructural abstractions through constructor injection:
+
 - **IRequestContext**: The AsyncLocalStorage engine wrapped to orchestrate
   asynchronous execution context streams.
-- **IServiceExtractor**: Parses raw HTTP header maps to isolate correlation
-  metadata and tracing span identifiers.
-- **IGateKeeper**: Evaluates cryptographic tokens against identity repositories
-  to materialize user profiles.
-- **ILogger**: Explicit domain logging service utilized to capture
-  infrastructure faults without pollution.
+- **IServiceExtractor**: Extracts request metadata and bearer tokens from HTTP
+  headers.
+- **IGateKeeper**: Authenticates the extracted token and returns an identity or
+  an application error.
+- **ICache**: Stores rate-limit counters when rate limiting is enabled.
+- **ILogger**: Records authentication failures, rate-limit events, and request
+  processing errors.
 
 ### Flow Diagram: Request Interception and Routing
 
 The following sequence diagram shows how an HTTP request passes through the
-middleware stack, emphasizing the security gates, the logging interception
-points, and the production error masking strategy:
+middleware stack, including optional middleware and error handling:
 
 ```mermaid
 sequenceDiagram
@@ -74,40 +135,35 @@ sequenceDiagram
     actor Client as External Client
     participant Host as Server Host (Fastify/Hono)
     participant MW as RequestContextMiddleware
-    participant Gate as Auth & Authz Gatekeeper
+    participant Options as OptionsMiddleware
+    participant Method as MethodCheckMiddleware
+    participant Csrf as CsrfMiddleware
+    participant Limit as RateLimitMiddleware
+    participant Auth as AuthenticationMiddleware
     participant Log as Domain ILogger
     participant Ctrl as BaseController / Handler
 
     Client->>Host: Sends HTTP Request (e.g. GET /api/v1/users)
     Host->>MW: execute(req, headers, next)
     activate MW
-    MW->>MW: Extract Tracing Identifiers & Build Context Metadata
-
-    alt Route matches publicRoutes (Security Bypass for Identity Guards)
-        MW->>Ctrl: Forwards request directly via runAsync()
-        Ctrl-->>Client: Returns Success Response (200 OK)
-    else Route is protected (Requires Validation)
-        MW->>Gate: authenticate(token)
-        activate Gate
-        alt Authentication Passed
-            Gate-->>MW: Returns Result.ok(Identity)
-            deactivate Gate
-            MW->>Ctrl: runAsync() -> Invoke Target Controller Boundary
-            Ctrl-->>Client: Returns Processed Response Envelope
-        else Credentials Invalid / Token Expired
-            activate Gate
-            Gate-->>MW: Returns Result.fail(AppError)
-            deactivate Gate
-            MW->>Log: warn("Authentication failed...")
-            MW-->>Client: Short-Circuit: 401 Unauthorized Response
-        end
+    MW->>MW: Extract metadata and create request context
+    MW->>Options: Continue when OPTIONS handling is enabled
+    Options->>Method: Continue when method checks are enabled
+    Method->>Csrf: Continue when method is allowed
+    Csrf->>Limit: Continue when CSRF is valid or not required
+    Limit->>Auth: Continue when rate limit is not exceeded
+    Auth->>Auth: Authenticate bearer token
+    alt Authentication succeeds
+      Auth->>Ctrl: Calls next()
+      Ctrl-->>Client: Returns processed response
+    else Authentication fails
+      Auth->>Log: Logs authentication failure
+      Auth-->>Client: Returns authentication error
     end
 
-    Note over MW: Exception Block (Catch Gate)
-    MW->>MW: Unexpected Crash Occurs (e.g., DB Pool Down)
+    Note over MW: RequestContextMiddleware catches unexpected errors
     MW->>Log: error("RequestContextMiddleware encountered an error", error)
-    MW->>MW: Sanitize details payload (Mask Stack Trace for production)
-    MW-->>Client: 500 Internal Server Error (Secure JSON Envelope)
+    MW-->>Client: 500 Internal Server Error response
     deactivate MW
 
 ```
@@ -115,9 +171,9 @@ sequenceDiagram
 ## Registering Middleware through AppBuilder
 
 Middleware registration takes place programmatically by invoking the fluent
-`addMiddlewares` method on the AppBuilder instance. This inserts the middleware
-module into the bootstrap lifecycle with execution priority three, ensuring
-context tracking initialization before CQRS and database module loading.
+`addMiddlewares` method on `AppBuilder`. This queues `MiddlewareModule` at
+priority `3`. The module then registers the request context, authentication, and
+configured optional middleware services in the `ServiceContainer`.
 
 ### Programmatic Registration Flow
 
@@ -133,11 +189,8 @@ import type { AppRegistry } from './infrastructure/xeno-registry/app-registry'
 async function bootstrap() {
   const builder = new AppBuilder<AppRegistry>()
   builder
-    // 1. Enables isolated request state management
     .addContext()
-    // 2. Registers and configures the system middleware stack
     .addMiddlewares()
-    // 3. Registers application services in the DI container
     .addServices((container) => {
       // Custom client module registrations
     })
@@ -147,23 +200,13 @@ async function bootstrap() {
 }
 ```
 
-## Configuring Public Routes Exempt from Identity Guards
+## Configuring Middleware Behavior
 
-Public routes that exclude security checks are configured by passing a
-`SetupAction` callback to the `addMiddlewares` method. By defining the
-`publicRoutes` dictionary inside the bootstrap chain, the developer exempts
-specific endpoints from mandatory `userId` and `tenantId` authorization checks.
-
-In many enterprise applications, certain endpoints (e.g., system health
-monitoring, external webhooks, or public portals) must be accessible without
-requiring authorization tokens or session credentials. Xeno provides an explicit
-exclusion mechanism to bypass baseline identity presence validation hooks.
-
-### Practical Configuration of Exclusions (`publicRoutes`)
-
-Through the `MiddlewareConfig` configuration object exposed in the
-`addMiddlewares` callback, it is possible to define an array of route objects to
-exclude from gatekeeper checks:
+The `MiddlewareConfig` passed to `addMiddlewares` controls optional middleware
+features. The current configuration does not define a `publicRoutes` property.
+Authentication bypass behavior must therefore be implemented by the configured
+`IGateKeeper` or another application-level strategy, not by a public-route
+dictionary in `MiddlewareConfig`.
 
 ```typescript
 // src/infrastructure/bootstrap.ts
@@ -174,13 +217,16 @@ export async function initializeApplication() {
   const builder = new AppBuilder<AppRegistry>()
 
   builder.addContext().addMiddlewares((config, env) => {
-    // Explicit definition of endpoints exempt from baseline security checks
-    config.publicRoutes = {
-      // Allows public access to the main authentication endpoint
-      '/api/v1/auth/login': { POST: 'isPublic' },
-      '/api/v1/auth/register': { POST: 'isPublic' },
-      '/api/v1/system/health': { GET: 'isPublic' },
+    config.isSSR = false
+    config.optionsMiddleware = true
+    config.routeRegistry = {
+      '/api/v1/users': ['GET', 'POST'],
+      '/api/v1/system/health': ['GET'],
     }
+    config.csrf = env.get('CSRF_TOKEN')
+    config.rateLimite.maxRequests = 30
+    config.rateLimite.windowSeconds = 30
+    config.trustedIpHeader = 'x-forwarded-for'
   })
 
   const container = await builder.build()
@@ -188,37 +234,13 @@ export async function initializeApplication() {
 }
 ```
 
-> [!WARNING] While active public route bypasses exempt unauthenticated requests
-> from strict `userId` or `tenantId` strategy gatekeeping, other authorization
-> pipelines registered on messaging boundaries (such as Role-Based or
-> Permission-Based intent mappings) remain fully operational and will continue
-> to evaluate the active `GUEST` claims posture.
+## Error Handling in RequestContextMiddleware
 
-## Production Error Masking and Defensive Auditing (CWE-209 Mitigation)
-
-To comply with enterprise security standards, `RequestContextMiddleware`
-implements an automated **Information Disclosure Mitigation Policy**.
-
-When an unhandled exception or critical infrastructural crash occurs inside the
-request execution lifecycle (e.g., database connection timeouts or system
-exceptions), the framework traps the failure, logs the full stack trace securely
-into internal telemetry channels, and strips away all raw technical parameters
-before compiling the outward HTTP response.
-
-### Technical Properties of Safe Error Envelopes
-
-- **Production Environment (`process.env.NODE_ENV !== 'development'`)**:
-  Outbound response envelopes hide underlying technical codes. The client
-  receives a generic `500 Internal Server Error` containing a secured diagnostic
-  reference string.
-- **Development Environment (`process.env.NODE_ENV === 'development'`)**: The
-  framework can be configured via standard dev-logging streams to expose local
-  stacks directly on stdout, optimizing developer feedback loops without risking
-  exposure over public enterprise endpoints.
-- **Telemetry Correlationship**: The outer response envelope includes the
-  unmodifiable `correlationId` and `requestId` parameters. Calling actors can
-  provide this correlation hash to system administrators to map lookups across
-  distributed log aggregators without revealing systemic vulnerabilities.
+When an exception escapes the downstream chain, `RequestContextMiddleware`
+logs the error and returns a generic system-error response with status `500`.
+The response includes the request path and generated correlation, request, and
+span identifiers. The current implementation does not branch on `NODE_ENV` or
+expose a separate development stack-trace response.
 
 ---
 

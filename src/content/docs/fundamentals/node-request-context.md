@@ -1,9 +1,8 @@
 ---
 title: 'NodeRequestContext: Isolated Request State Management'
 description:
-  'Complete guide to the NodeRequestContext architecture in Xeno. Discover how
-  to manage multi-tenant asynchronous state and eliminate parameter drilling
-  with AsyncLocalStorage.'
+  'Learn how Xeno NodeRequestContext isolates request state with AsyncLocalStorage,
+  exposes context accessors, and propagates identity, network, and tracing data.'
 keywords:
   [
     'NodeRequestContext',
@@ -13,7 +12,10 @@ keywords:
     'Clean Architecture',
     'Context Accessor',
     'AppBuilder Context',
-    'Multi-tenant',
+    'request-scoped state',
+    'Identity Context',
+    'Network Context',
+    'Tracing Context',
   ]
 author: 'Xeno'
 sidebar:
@@ -33,17 +35,18 @@ Node.js runtime.
 
 ## Understanding How NodeRequestContext Works
 
-NodeRequestContext is the execution context management engine in Xeno that uses
-Node.js AsyncLocalStorage. It safely isolates request-specific data for each
-asynchronous request across all architectural layers, eliminating the need to
-pass context parameters through method signatures.
+`NodeRequestContext` is the Xeno execution-context implementation built on
+Node.js `AsyncLocalStorage`. It isolates request-specific data across an
+asynchronous execution chain and exposes typed accessors for the active context,
+identity, network data, and service scope.
 
 Unlike traditional "parameter drilling", where every interface or service must
 accept a `context` object among its arguments, `NodeRequestContext` stores the
 current state directly inside Node.js thread's asynchronous execution store.
-This allows any module, domain service, or repository to query the context at
-any point during the request lifecycle, keeping interfaces clean and focused
-exclusively on their business responsibilities.
+This allows registered services and application components to access the active
+context through interfaces instead of receiving context values through every
+method signature. Access is available only while code executes inside the
+corresponding asynchronous context boundary.
 
 ### Data Propagation Flow in the Asynchronous Context
 
@@ -78,11 +81,10 @@ graph TD
 
 ## How to Automatically Register the Context with AppBuilder
 
-Automatic context registration takes place through the fluent `addContext`
-method on the AppBuilder instance. This call instantiates the ContextModule with
-execution priority zero, configuring lifecycle factories inside the
-ServiceContainer and attaching asynchronous local storage to the pipelines and
-system middleware.
+Context registration takes place through the fluent `addContext` method on
+`AppBuilder`. This queues `ContextModule` at priority `0`. During `build()`, the
+module registers the `NodeRequestContext`, service-scope factory, context
+accessors, and user-context factory in the `ServiceContainer`.
 
 Context activation is a centralized operation that declares the presence of
 isolation services within the application's bootstrap lifecycle. The following
@@ -109,20 +111,19 @@ async function bootstrap() {
 }
 ```
 
-If the developer registers middleware or CQRS pipelines without explicitly
-invoking `.addContext()`, the **AppBuilder** will detect the missing dependency
-and execute the registration safely internally, preventing bootstrap failures
-caused by missing resources in the IoC container.
+If the developer registers middleware or a CQRS pipeline without explicitly
+invoking `.addContext()`, `AppBuilder` queues the context module automatically
+as a prerequisite. Other modules do not necessarily queue it automatically.
 
 ---
 
 ## Detailed Structure of the Xeno Execution Context
 
 The Xeno execution context is structured into specialized sub-contexts that
-describe the entire transaction. Structured through formal contracts, it
-includes the Identity interface for security authorization, the NetworkContext
-for network routing profiles, the TracingContext for distributed observability,
-and the MessagingContext for asynchronous messaging flows.
+describe the active request or operation. The contracts include `Identity` for
+authentication and authorization data, `NetworkContext` for request metadata,
+`TracingContext` for observability, and optional `MessagingContext` data for
+message-based workflows.
 
 The main `RequestContext` interface unifies access to these different aspects of
 execution state, organizing them according to precise logical categories for
@@ -154,6 +155,8 @@ import type { Guid, Optional } from '@/shared'
 
 export interface Identity {
   readonly userId: Optional<Guid>
+  readonly email: Optional<string>
+  readonly name: Optional<string>
   readonly tenantId: Optional<Guid>
   readonly roles: Optional<string[]>
   readonly permissions: Optional<string[]>
@@ -165,7 +168,8 @@ export interface NetworkContext {
   readonly userAgent: Optional<string>
   readonly formatIndicator: Optional<string>
   readonly path: Optional<string>
-  readonly isPublic: boolean
+  readonly csrf: Optional<string>
+  readonly transport: Optional<{ req: unknown; res: unknown }>
 }
 
 export interface TracingContext {
@@ -195,44 +199,47 @@ export interface MessageSequence {
 - **Identity Context** — Encapsulates the token-extracted user properties,
   including the `userId` and the logical partitioning `tenantId`.
 
-- **Network Context** — Captures the atomic transport attributes of the packet,
-  such as `clientIp`, `path`, and the content negotiation `formatIndicator`.
+- **Network Context** — Captures request and transport metadata, such as
+  `requestId`, `clientIp`, `path`, `formatIndicator`, `csrf`, and the optional
+  transport request and response objects.
 
 - **Tracing Context** — Manages system-wide telemetry metadata, exposing the
   root `correlationId` and operational `startTime` performance metrics.
 
-- **Messaging Context** — Maps transient transaction metadata for event-driven
-  boundaries, storing sequence data and message expirations.
+- **Messaging Context** — Maps optional message metadata for event-driven
+  boundaries, including return addresses, expiration values, and sequence data.
 
 ---
 
 ## Accessing Contexts and Injecting Context Accessors
 
-Xeno avoids exposing raw execution contexts or native Node.js asynchronous
-primitives directly to application services. Instead, the framework segregates
-access by registering granular, single-responsibility **Accessor Interfaces** as
-Singletons via the `ContextModule`.
+Xeno avoids exposing the native `AsyncLocalStorage` instance directly to
+application services. Instead, `ContextModule` registers granular,
+single-responsibility **Accessor Interfaces** as singletons.
 
 ### The Core Context Accessors Exposed by the Framework
 
-The framework automatically configures and binds four distinct context accessor
-interfaces to the central asynchronous context engine:
+The framework automatically configures and binds four context accessor
+interfaces to the active `NodeRequestContext`:
 
-- **IContextAccessor`<RequestContext>`** — (TOKENS.CONTEXT_ACCESSOR) Exposes the
-  method `getContext()`, which returns the comprehensive
-  `Optional<RequestContext>` wrapper for complete transaction tracking.
+- **IContextAccessor<RequestContext>** — (`TOKENS.CONTEXT_ACCESSOR`) exposes
+  `getContext()`, which returns the optional active `RequestContext`.
 
-- **IIdentityAccessor** — (TOKENS.IDENTITY_ACCESSOR) Exposes the method
-  `getIdentity()`, returning an `Optional<Identity>` object to extract
-  authorization scopes, roles, and user identifiers.
+- **IIdentityAccessor** — (`TOKENS.IDENTITY_ACCESSOR`) exposes `getIdentity()`
+  and returns an optional `Identity` object.
 
-- **INetworkContextAccessor** — (TOKENS.NETWORK_CONTEXT_ACCESSOR) Exposes the
-  method `getNetworkContext()`, returning an `Optional<NetworkContext>`
-  structure for accessing transport metrics and client IP information.
+- **INetworkContextAccessor** — (`TOKENS.NETWORK_CONTEXT_ACCESSOR`) exposes
+  `getNetworkContext()` and returns an optional `NetworkContext` object.
 
-- **IServiceScopeAccessor** — (TOKENS.SERVICE_SCOPE_ACCESSOR) Exposes the method
-  `getScope()`, enabling internal infrastructure layers to resolve nested
-  dependencies within the active request lifetime boundary.
+- **IServiceScopeAccessor** — (`TOKENS.SERVICE_SCOPE_ACCESSOR`) exposes
+  `getScope()`, enabling infrastructure code to resolve dependencies within the
+  active service scope.
+
+`NodeRequestContext` also implements `IRequestContext`, which adds
+`runAsync(context, callback)` for creating the asynchronous boundary and
+`updateIdentity(identity)` for replacing the current identity after successful
+authentication. `ContextModule` registers the same request-context instance for
+these accessor tokens.
 
 ### Injection and Usage in Domain Services
 

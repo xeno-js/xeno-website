@@ -215,12 +215,12 @@ export const bootstrapApplication = async () => {
       // Map declarative security requirements using explicit intent keys
       options.authorization.policies = {
         // Enforces role-based checks specifically on DeleteUserCommand
-        DELETE_USER_COMMAND_HANDLER_TOKEN: {
+        'DELETE_USER_COMMAND_HANDLER_TOKEN': {
           roles: ['super_admin', 'security_officer'],
         },
 
         // Enforces both role and permission constraints on GetAnalyticsQuery
-        GET_ANALYTICS_QUERY_HANDLER_TOKEN: {
+        'GET_ANALYTICS_QUERY_HANDLER_TOKEN': {
           roles: ['admin', 'analyst'],
           permissions: ['read:analytics', 'export:reports'],
         },

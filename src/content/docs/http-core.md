@@ -2,15 +2,15 @@
 title:
   'HTTP Core Subsystem: Resilient External HTTP Client & Remote Data Sources'
 description:
-  'Technical specification for the HTTP Core client module in Xeno, detailing
-  outgoing HTTP request encapsulation via Axios, Cockatiel resilience policies,
-  RemoteDataSource integration, and AppBuilder registration.'
+  'Learn how Xeno HTTP Core configures an HTTP client, wraps remote data source
+  calls with Cockatiel resilience policies, and registers the required services
+  through AppBuilder.'
 keywords:
   [
     'HTTP Core',
-    'AxiosClient',
+    'AxiosHttpClient',
     'Cockatiel',
-    'ResilienceService',
+    'ServiceResilience',
     'RemoteDataSource',
     'Circuit Breaker',
     'HttpCoreModule',
@@ -21,45 +21,41 @@ author: 'Xeno'
 
 ## Resilient Outgoing HTTP Communications with HTTP Core
 
-The **HTTP Core** module in Xeno is the framework's enterprise wrapper for
-making **outgoing HTTP requests** to external REST APIs, third-party
-microservices, and remote endpoints. Built on top of **Axios** and
-**Cockatiel**, HTTP Core combines HTTP transport primitives with resilience
-policies—such as automated retries, circuit breakers, timeouts, and
-fallbacks—ensuring high fault tolerance across distributed architectures.
+The **HTTP Core** module in Xeno configures outgoing HTTP requests to external
+REST APIs and remote services. It combines an `IHttpClient` implementation based
+on Axios with an `IServiceResilience` implementation based on Cockatiel.
+`RemoteDataSource` uses both services and returns remote payloads inside
+`ResultType<T>` values.
 
 ---
 
 ## What is HTTP Core and How It Works
 
-HTTP Core abstracts external HTTP communication away from raw `axios` or native
-`fetch` calls. Instead of instantiating unmanaged HTTP clients inside domain or
-infrastructure services, Xeno encapsulates outgoing HTTP execution within a
-resilient data source pipeline.
+HTTP Core abstracts external HTTP communication behind `IHttpClient` and
+`RemoteDataSource`. The current built-in transport is `AxiosHttpClient`; the
+contracts remain independent of the concrete transport implementation.
 
 When an application service or repository executes an external HTTP call:
 
 1. **Remote Data Source Invocation**: A repository or integration service
-   extends or consumes `RemoteDataSource`, calling typed HTTP methods (`get`,
-   `post`, `put`, `delete`, `patch`).
-2. **Resilience Policy Wrapping (Cockatiel)**: `ResilienceService` intercepts
-   the outgoing call and executes it within Cockatiel resilience policies (e.g.,
-   retrying transient 5xx errors with exponential backoff, or tripping a circuit
-   breaker if downstream endpoints fail consistently).
-3. **HTTP Transport Execution (AxiosClient)**: `AxiosClient` wraps the
-   underlying `axios` instance, applying default base URLs, connection timeouts,
-   custom headers, and automatically injecting active tracing headers
-   (`correlationId`, `requestId`) extracted from `RequestContext`.
-4. **Normalized Response Unwrapping**: The external JSON response is unwrapped
-   and returned as a strongly-typed payload or functional `ResultType<T>` monad.
+  extends `RemoteDataSource` and calls typed methods such as `get`, `post`,
+  `put`, `patch`, or `delete`.
+2. **Resilience Policy Wrapping (Cockatiel)**: `ServiceResilience` executes the
+  HTTP operation through the configured bulkhead, circuit breaker, and retry
+  policy chain.
+3. **HTTP Transport Execution (AxiosHttpClient)**: The client applies the
+  configured base URL, headers, timeout, query parameters, abort signal, and
+  response validation to the Axios request.
+4. **Result Mapping**: `RemoteDataSource` returns `response.data` wrapped in
+  `Result.ok()`. Transport and resilience exceptions propagate to the caller.
 
 ```mermaid
 sequenceDiagram
     autonumber
     participant App as Application / Remote Repository
     participant RDS as RemoteDataSource
-    participant Res as ResilienceService (Cockatiel)
-    participant Ax as AxiosClient (Axios)
+    participant Res as ServiceResilience (Cockatiel)
+    participant Ax as AxiosHttpClient (Axios)
     participant Ext as External REST API / Microservice
 
     App->>RDS: get<T>("/v1/payments/pay_123")
@@ -68,11 +64,11 @@ sequenceDiagram
     activate Res
 
     rect rgb(240, 248, 255)
-        note over Res: Evaluates Cockatiel Policy Chain<br/>(Retry / Circuit Breaker / Timeout)
+        note over Res: Evaluates Cockatiel Policy Chain<br/>(Bulkhead / Circuit Breaker / Retry)
         Res->>Ax: request(config)
         activate Ax
 
-        note over Ax: Inject Base Headers & Correlation ID
+        note over Ax: Applies configured headers and Axios request options
         Ax->>Ext: Outgoing HTTP GET Request
         activate Ext
 
@@ -96,7 +92,7 @@ sequenceDiagram
 
     Res-->>RDS: Return Resilient Output
     deactivate Res
-    RDS-->>App: Return Unwrapped DTO / Model
+    RDS-->>App: Return ResultType<TResponse>
     deactivate RDS
 
 ```
@@ -113,53 +109,58 @@ components:
 │                            HTTP Core Subsystem                            │
 │                                                                           │
 │   ┌──────────────────────────┐             ┌──────────────────────────┐   │
-│   │    RemoteDataSource      │ ──────────> │    ResilienceService     │   │
+│   │    RemoteDataSource      │ ──────────> │   ServiceResilience      │   │
 │   │ (Base Remote Repository) │             │   (Cockatiel Policies)   │   │
 │   └──────────────────────────┘             └──────────────────────────┘   │
 │                 │                                        │                │
 │                 ▼                                        ▼                │
 │   ┌──────────────────────────┐             ┌──────────────────────────┐   │
-│   │       AxiosClient        │ ──────────> │      HttpCoreModule      │   │
+│   │     AxiosHttpClient      │ ──────────> │      HttpCoreModule      │   │
 │   │   (Axios HTTP Engine)    │             │   (IoC Registration)     │   │
 │   └──────────────────────────┘             └──────────────────────────┘   │
 └───────────────────────────────────────────────────────────────────────────┘
 
 ```
 
-### 1. `AxiosClient`
+### 1. `AxiosHttpClient`
 
-The underlying HTTP client wrapper that encapsulates an `axios` instance. It
-manages default request configuration (base URL, timeout, headers, query
-serialization) and automatically propagates active tracing metadata
-(`X-Correlation-Id`, `X-Request-Id`) across outgoing HTTP request headers.
+The built-in `IHttpClient` implementation that encapsulates an `axios` instance.
+It applies the configured base URL, default headers, timeout, query parameters,
+abort signal, redirects, decompression, and credentials settings. It converts
+successful Axios responses into `HttpResponse<T>` and maps HTTP or transport
+failures to `AppError`.
 
-### 2. `ResilienceService` (Cockatiel Integration)
+### 2. `ServiceResilience` (Cockatiel Integration)
 
-The fault-tolerance engine built on top of **Cockatiel**. It configures and
-applies execution policies to outgoing HTTP calls, including:
+The `IServiceResilience` implementation built on top of **Cockatiel**. It
+executes an operation through the configured policy chain, including:
 
-- **Retry Policy**: Retries transient network failures or specific status codes
-  using exponential backoff with jitter.
-- **Circuit Breaker Policy**: Temporarily opens (blocks execution) when
-  downstream services breach error threshold limits, preventing cascading system
-  failures.
-- **Timeout Policy**: Enforces hard cancellation limits on slow external HTTP
-  requests.
-- **Fallback Policy**: Provides default fallback values or secondary execution
-  paths when external calls fail consistently.
+- **Bulkhead Policy**: Limits concurrent operations.
+- **Circuit Breaker Policy**: Opens after the configured number of consecutive
+  transient failures and later permits a half-open recovery attempt.
+- **Retry Policy**: Retries transient and idempotent HTTP operations using
+  exponential backoff. Transient failures include network errors, status `408`,
+  status `429`, and `5xx` responses.
+
+The current resilience configuration does not define a fallback policy. Request
+timeouts are provided by the HTTP client configuration or an `AbortSignal`, not
+by a separate timeout property in `ResilienceConfig`.
 
 ### 3. `RemoteDataSource`
 
 The abstract base data source designed to be extended by infrastructure remote
 repositories (e.g., `PaymentRemoteDataSource`, `NotificationClient`). It
-combines `AxiosClient` and `ResilienceService` into a unified helper interface
-for executing typed HTTP operations (`get`, `post`, `put`, `delete`, `patch`).
+combines `IHttpClient` and `IServiceResilience` into a unified helper interface
+for executing typed HTTP operations (`get`, `post`, `put`, `patch`, `delete`).
+Each method returns `Promise<ResultType<TResponse>>`.
 
 ### 4. `HttpCoreModule`
 
-The framework container module responsible for registering HTTP Core services,
-default client configurations, and resilience policy singletons inside the IoC
-container.
+The framework container module responsible for registering the configured HTTP
+client and resilience singleton inside the Dependency Injection Container. The
+current `HttpCoreModule` invokes `HttpUtils.addAxios()` and
+`HttpUtils.addResilience()`; application-specific `RemoteDataSource` instances
+are registered separately.
 
 ---
 
@@ -177,28 +178,25 @@ export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder.addContext().addHttpCore((opts, configuration) => {
-    // 1. Configure DataSource using the token in AppRegistry
-    opts.dataSourceToken = DATA_SOURCE_TOKEN
-    // 2. Configure Base Axios Settings
+    // Configure the HTTP client token and Axios settings
+    opts.http.token = 'PAYMENT_HTTP_CLIENT_TOKEN'
     opts.http.client.baseURL = configuration.get(
       'PAYMENT_GATEWAY_URL',
       'https://api.payments.com',
     )
-    ;((opts.http.client.timeout = 10000), // 10 seconds timeout
-      (opts.http.client.defaultHeaders = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      }))
-    // 3. Configure Http Client using the token in AppRegistry
-    opts.http.token = HTTP_CLIENT_TOKEN
+    opts.http.client.timeoutMs = 10000
+    opts.http.client.defaultHeaders = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
 
-    // 4. Configure Cockatiel Resilience Policies
-    opts.resilience.retry.attempts = 10 // 10 attempts for retrying failed requests
-    opts.resilience.retry.baseDelayMs = 100 // 100 milliseconds base delay for retrying failed requests
-    opts.resilience.retry.maxDelayMs = 1000 // 1000 milliseconds max delay for retrying failed requests
-    opts.resilience.circuitBreaker.consecutiveFailures = 7 // 7 consecutive failures to open the circuit
-    opts.resilience.circuitBreaker.halfOpenTimeoutMs = 5000 // 5000 milliseconds timeout for half-open state
-    opts.resilience.bulkhead.maxConcurrent = 5 // 5 concurrent requests allowed
+    // Configure retry, circuit breaker, and bulkhead policies
+    opts.resilience.retry.attempts = 10
+    opts.resilience.retry.baseDelayMs = 100
+    opts.resilience.retry.maxDelayMs = 1000
+    opts.resilience.circuitBreaker.consecutiveFailures = 7
+    opts.resilience.circuitBreaker.halfOpenTimeoutMs = 5000
+    opts.resilience.bulkhead.maxConcurrent = 5
   })
 
   return await builder.build()
@@ -210,7 +208,7 @@ export const bootstrap = async () => {
 ## How to Use HTTP Core in Application Code
 
 To interact with external services, extend `RemoteDataSource` or inject
-`AxiosClient` / `ResilienceService` into your infrastructure repositories.
+`IHttpClient` and `IServiceResilience` into infrastructure repositories.
 
 ### Register The DataSource Token in AppRegistry
 
@@ -232,6 +230,7 @@ import {
   RemoteDataSource,
   type IHttpClient,
   type IServiceResilience,
+  type ResultType,
 } from '@xeno-js/core'
 
 export interface PaymentGatewayResponse {
@@ -248,8 +247,8 @@ export class PaymentRemoteDataSource extends RemoteDataSource {
   public async processCharge(
     payload: { amount: number; cardToken: string },
     signal?: AbortSignal,
-  ): Promise<PaymentGatewayResponse> {
-    // Automatically wrapped with Cockatiel resilience policies and AxiosClient
+  ): Promise<ResultType<PaymentGatewayResponse>> {
+    // The base class applies the configured resilience service.
     return await this.post<PaymentGatewayResponse>('/v1/charges', payload, {
       signal,
     })
@@ -257,8 +256,8 @@ export class PaymentRemoteDataSource extends RemoteDataSource {
 
   public async getTransactionStatus(
     transactionId: string,
-    singal?: AbortSignal,
-  ): Promise<PaymentGatewayResponse> {
+    signal?: AbortSignal,
+  ): Promise<ResultType<PaymentGatewayResponse>> {
     return await this.get<PaymentGatewayResponse>(
       `/v1/charges/${transactionId}`,
       { signal },
@@ -278,72 +277,78 @@ import type { AppRegistry } from './infrastructure/app-registry'
 export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
-  builder.addHttpCore((opts, config) => {
-    opts.dataSourceToken = (container) => {
-      // Resolve AxiosClient and ResilienceService bound by HttpCoreModule
+  builder
+    .addHttpCore((opts, config) => {
+      // HttpCoreModule registers these two dependencies during build.
+      opts.http.token = 'PAYMENT_HTTP_CLIENT_TOKEN'
+      opts.http.client.baseURL = config.get(
+        'PAYMENT_GATEWAY_URL',
+        'https://api.payments.com',
+      )
+      opts.http.client.timeoutMs = 5000
+    })
+    .addServices((container) => {
+      // Register application-specific RemoteDataSource after HTTP Core.
       container.addSingleton('PAYMENT_DATA_SOURCE', (c) => {
-        const axiosClient = c.resolve('PAYMENT_HTTP_CLIENT_TOKEN')
-        const resilienceService = c.resolve(TOKENS.RESILIENCE_SERVICE)
+        const httpClient = c.resolve('PAYMENT_HTTP_CLIENT_TOKEN')
+        const resilienceService = c.resolve(TOKENS.RESILIENCE_CLIENT)
 
-        return new PaymentRemoteDataSource(axiosClient, resilienceService)
+        return new PaymentRemoteDataSource(httpClient, resilienceService)
       })
-    }
-    opts.http.client.baseURL = config.get(
-      'PAYMENT_GATEWAY_URL',
-      'https://api.payments.com',
-    )
-    opts.http.client.timeoutMs = 5000
-    opts.http.token = 'PAYMENT_HTTP_CLIENT_TOKEN'
-    opts.resilience.retry.attempts = 10 // 10 attempts for retrying failed requests
-    opts.resilience.retry.baseDelayMs = 100 // 100 milliseconds base delay for retrying failed requests
-    opts.resilience.retry.maxDelayMs = 1000 // 1000 milliseconds max delay for retrying failed requests
-    opts.resilience.circuitBreaker.consecutiveFailures = 7 // 7 consecutive failures to open the circuit
-    opts.resilience.circuitBreaker.halfOpenTimeoutMs = 5000 // 5000 milliseconds timeout for half-open state
-    opts.resilience.bulkhead.maxConcurrent = 5 // 5 concurrent requests allowed
-  })
+    })
   return await builder.build()
 }
 ```
+
+`HttpCoreModule` registers the HTTP client and resilience service during the
+priority `30` AppBuilder phase. `RemoteDataSource` instances are application
+services and must be registered separately after those dependencies are
+available, for example through `addServices()` at priority `99`.
+
+The current implementation has these constraints:
+
+- `opts.http.token` must be defined when `HttpCoreModule` is configured;
+- retry applies only to transient failures on idempotent methods: `GET`, `PUT`,
+  `DELETE`, `HEAD`, and `OPTIONS`;
+- `POST` and `PATCH` failures are not retried by the built-in retry predicate;
+- `RemoteDataSource` returns the response payload in `ResultType<T>` but does
+  not convert transport or resilience exceptions into failed Results;
+- `dataSourceToken` exists in `HttpCoreConfig`, but the current
+  `HttpCoreModule` does not execute it automatically;
+- tracing headers are not injected automatically by `AxiosHttpClient`;
+- fallback and a dedicated resilience timeout policy are not available in the
+  current `ResilienceConfig`.
 
 ---
 
 ## Why Should You Use HTTP Core?
 
-1. **Built-in Resilience (Cockatiel Integration)** Instead of writing custom
-   `try/catch` retry loops or installing unintegrated retry libraries, HTTP Core
-   provides native, configurable circuit breakers, exponential backoff retries,
-   and execution timeouts out of the box.
-2. **Automatic Distributed Tracing Propagation** `AxiosClient` automatically
-   reads the active `RequestContext` from `AsyncLocalStorage` and injects
-   `X-Correlation-Id` and `X-Request-Id` headers into outgoing requests. This
-   ensures end-to-end distributed tracing across external microservices.
-3. **Standardized Base Remote Data Source (`RemoteDataSource`)** Provides a
-   clean architectural pattern for infrastructure repositories interacting with
-   external REST APIs, enforcing consistent error mapping and response
-   serialization across the codebase.
-4. **Centralized Client Configuration & IoC Registration** All outgoing HTTP
-   client settings—such as base URLs, default authentication headers, timeouts,
-   and resilience thresholds—are centrally managed during host initialization
-   via `AppBuilder.addHttpCore()`.
+1. **Built-in Resilience (Cockatiel Integration)** HTTP Core provides
+  configurable bulkhead, circuit breaker, and conditional retry policies for
+  operations executed through `RemoteDataSource`.
+2. **Agnostic HTTP Contract** `IHttpClient` isolates application code from the
+  concrete Axios transport and normalizes successful responses as
+  `HttpResponse<T>`.
+3. **Standardized Remote Data Source (`RemoteDataSource`)** Infrastructure
+  repositories can reuse a typed API that combines HTTP transport and
+  resilience, returning `ResultType<TResponse>` values.
+4. **Centralized Client Configuration and Dependency Injection** Base URLs,
+  headers, timeouts, transport options, and resilience thresholds are
+  configured through `AppBuilder.addHttpCore()`.
 
 ---
 
-> ⚠️ **WARNING — Installing Mandatory Peer Dependencies for HTTP Core** In order
-> to keep the core library footprint lightweight, external libraries required by
-> **HTTP Core** (`axios` and `cockatiel`) are registered as **optional peer
-> dependencies** in Xeno. If you choose to enable HTTP Core via
-> `.addHttpCore()`, you must explicitly install `axios` and `cockatiel` in your
-> project's workspace:
+> **Warning: HTTP Core dependencies** HTTP Core requires `axios` and `cockatiel`
+> at runtime. Install them in the application workspace when enabling
+> `.addHttpCore()`:
 >
 > ```bash
-> # Install mandatory peer dependencies for HTTP Core
 > npm install axios cockatiel
 >
 > ```
 >
-> If `.addHttpCore()` is configured without these dependencies present in your
-> project, Node.js will throw a runtime module resolution exception when Xeno
-> attempts to import `axios` or `cockatiel`.
+> If either dependency is missing, module resolution fails when Xeno creates the
+> HTTP client or resilience implementation.
 
 ---
 

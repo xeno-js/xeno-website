@@ -177,17 +177,7 @@ export const bootstrapApplication = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder
-    // 1. Setup request context boundaries using AsyncLocalStorage
-    .addContext()
-
-    // 2. Map framework middlewares and public routes
-    .addMiddlewares((config) => {
-      config.publicRoutes = {
-        '/api/v1/public/status': { GET: 'isPublic' },
-      }
-    })
-
-    // 3. Register your custom authentication service factory via SetupAction
+    // 1. Register your custom authentication service factory via SetupAction
     .addAuth((options, env) => {
       const secret = env.getOrThrow('JWT_SIGNING_SECRET')
 
@@ -198,7 +188,7 @@ export const bootstrapApplication = async () => {
       }
     })
 
-    // 4. Configure other standard framework layers
+    // 2. Configure other standard framework layers such as logger
     .addLogger((config) => {
       config.console = true
     })

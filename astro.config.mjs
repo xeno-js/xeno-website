@@ -44,6 +44,17 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Middlewares',
+          items: [
+            { label: 'Request Context Middleware', link: '/middlewares/request-middleware' },
+            { label: 'Options Middleware', link: '/middlewares/options-middleware' },
+            { label: 'Check Method Middleware', link: '/middlewares/allow-method-middleware' },
+            { label: 'CSRF Middleware', link: '/middlewares/csrf-middleware' },
+            { label: 'Rate Limiter Middleware', link: '/middlewares/rate-limiter-middleware' },
+            { label: 'Authentication Middleware', link: '/middlewares/auth-middleware' },
+          ],
+        },
+        {
           label: 'Database',
           items: [
             { label: 'Drizzle ORM', link: '/database/database-persistent' },
@@ -80,7 +91,7 @@ export default defineConfig({
             { label: 'Query caching Behavior', link: '/cqrs/query-caching-pipeline' },
           ],
         },
-        { label: 'HTTP Core', link: '/http_core/overview' },
+        { label: 'HTTP Core', link: '/http-core' },
         {
           label: 'Utils',
           items: [

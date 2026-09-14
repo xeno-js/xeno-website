@@ -1,14 +1,16 @@
 ---
 title: 'CQRS Primitives: Command and Query Pipeline Architecture'
 description:
-  'Comprehensive guide to Command and Query architectural primitives in Xeno.
-  Learn how to implement ICommand, configure IQuery caching, and customize
-  mediator pipelines.'
+  'Learn how Xeno Command and Query base classes define CQRS requests, assign
+  request types, configure query caching, and integrate with mediator
+  pipelines.'
 keywords:
   [
     'CQRS',
     'ICommand',
     'IQuery',
+    'Command base class',
+    'Query base class',
     'Mediator',
     'Pipeline Behavior',
     'Query Caching',
@@ -30,45 +32,46 @@ application intents from underlying infrastructure configurations.
 
 ## Understanding the Command Primitive and State Mutation
 
-A Command in Xeno is a cross-layer messaging primitive designed to encapsulate
-user intentions that mutate system state. Implementing the `ICommand` interface
-ensures compile-time type safety, routing payloads through the mediator bus to
-execute state-changing domain logic without return-value overhead.
+A Command in Xeno is a CQRS request that represents an operation which can
+change application state. The abstract `Command<TResponse>` base class already
+implements `ICommand<TResponse>` and assigns `REQUEST_TYPE.COMMAND` to the
+request. A concrete Command therefore supplies its intent and its own payload
+properties without redeclaring the request type.
 
 Commands represent write operations within the system (e.g., creating a record,
 updating fields, or deleting data structures). They are imperative data
-envelopes named with present-tense actions that reflect business events. Within
-Xeno, commands avoid returning rich domain objects; instead, they generally
-return a functional `Result<void>` or metadata identifiers, reinforcing the
-principle that write operations are distinct from data queries.
+envelopes named with present-tense actions that reflect business operations. The
+response type is selected through the `Command<TResponse>` generic and is
+handled by the corresponding Handler.
 
-### Key-Value Specification of ICommand Attributes
+### Common Command Attributes
 
-- **intent** — A distinct, string-based injection token matching the unique
-  command handler registered in the dependency injection container.
+- **intent** — A string identifying the purpose of the Command and matching the
+  handler registration used by the application.
 
-- **type** — An explicit discriminator set to `REQUEST_TYPE.COMMAND` to guide
-  routing decisions across cross-cutting behaviors.
+- **type** — Assigned by the `Command` base class as
+  `REQUEST_TYPE.COMMAND`. Concrete Commands do not need to assign it.
 
-- **props** — An immutable, strongly-typed structural data transfer object
-  encapsulating the operational payload parameters.
+- **custom properties** — Application-specific readonly values that carry the
+  Command payload. Xeno does not require a `props` property in the base class.
 
 ### Programmatic Definition of a Command Contract
 
-To author a state-mutating command, construct a concrete class that adheres to
-the `ICommand<TResponse>` contract:
+To author a state-mutating Command, extend `Command<TResponse>` and declare the
+payload properties required by the application:
 
 ```typescript
 // src/application/user/commands/create-user.command.ts
-import { type ICommand, REQUEST_TYPE } from '@xeno-js/core'
+import { Command } from '@xeno-js/core'
 import type { UserProps } from '../../../domain/entities/user'
 
-export class CreateUserCommand implements ICommand<void> {
-  // Binds the contract to its matching infrastructure handler token
-  public readonly intent = 'CREATE_USER_COMMAND_HANDLER_TOKEN'
-  public readonly type = REQUEST_TYPE.COMMAND
+export class CreateUserCommand extends Command<void> {
+  public readonly props: UserProps
 
-  constructor(public readonly props: UserProps) {}
+  constructor(props: UserProps) {
+    super('CREATE_USER_COMMAND_HANDLER_TOKEN')
+    this.props = props
+  }
 }
 ```
 
@@ -76,18 +79,16 @@ export class CreateUserCommand implements ICommand<void> {
 
 ## Executing Read Operations and Caching Configurations with Queries
 
-A Query in Xeno represents an idempotent read-only operation tailored for data
-retrieval. Leveraging the `IQuery` interface provides native binding to
-`ICacheableOptions`, enabling automated result caching, time-to-live expiration
-constraints, and cache-bypass controls to optimize data fetching efficiency
-across infrastructure boundaries.
+A Query in Xeno represents a read operation tailored for data retrieval. The
+abstract `BaseQuery<TResponse>` base class already implements `IQuery<TResponse>` and
+assigns `REQUEST_TYPE.QUERY`. Its constructor requires the Query intent and
+`ICacheableOptions`, so concrete Queries only need to provide those common
+values and any application-specific payload properties.
 
-Queries isolate data fetching paths from domain state modifications. Because
-read operations lack side effects, they bypass write-heavy locks and
-transactional blocks. Xeno requires every query instance to supply an explicit
-caching policy via `ICacheableOptions`, allowing the mediator to route identical
-queries straight to fast in-memory or distributed cache blocks without touching
-database layers.
+Queries isolate data-fetching paths from state-changing Commands. Each Query
+must provide an explicit `ICacheableOptions` value, allowing the query pipeline
+to apply the configured cache behavior when query caching is enabled. The base
+class does not perform the cache lookup itself.
 
 ### Key-Value Specification of ICacheableOptions Attributes
 
@@ -103,26 +104,24 @@ database layers.
 - **consistentRead** — A boolean directing the query bus to bypass secondary
   cache replicas when strict data freshness is required.
 
-### Programmatic Definition of a Query Contract
+### Programmatic Definition of a Query
 
 ```typescript
 // src/application/user/queries/get-user-by-id.query.ts
-import { type IQuery, type ICacheableOptions, REQUEST_TYPE } from '@xeno-js/core'
+import { BaseQuery } from '@xeno-js/core'
 import type { User } from '../../../domain/entities/user'
 
-export class GetUserByIdQuery implements IQuery<User> {
-  // Binds the contract to its matching infrastructure handler token
-  public readonly intent = 'GET_USER_QUERY_HANDLER_TOKEN'
-  public readonly type = REQUEST_TYPE.QUERY
-  public readonly cacheOptions: ICacheableOptions
+export class GetUserByIdQuery extends BaseQuery<User> {
+  public readonly userId: string
 
-  constructor(public readonly userId: string) {
-    this.cacheOptions = {
-      cacheKey: `${this.intent}:${userId}`,
+  constructor(userId: string) {
+    super('GET_USER_QUERY_HANDLER_TOKEN', {
+      cacheKey: `GET_USER_QUERY_HANDLER_TOKEN:${userId}`,
       ttl: 60, // Cache lifecycle lifespan of 60 seconds
       bypassCache: false,
       consistentRead: false,
-    }
+    })
+    this.userId = userId
   }
 }
 ```
@@ -157,28 +156,22 @@ safety layers targeting write-specific commands.
 
 ```typescript
 // src/infrastructure/bootstrap.ts
-import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
+import { AppBuilder } from '@xeno-js/core'
 import type { AppRegistry } from './registry'
 
 export const appHost = new AppBuilder<AppRegistry>()
   .addContext()
   .addPipeline((opts) => {
-    // 1. Configure fine-grained authorization constraints
-    opts.authorization.userId = true
-    opts.authorization.tenantId = true
-
-    // 2. Configure Command-specific Idempotency protection layers
     opts.commandBus.idempotency = {
-      lockTtlSeconds: 30, // Maximum lock retention during processing
-      processedTtlSeconds: 60, // Payload storage lifespan for deduplication
+      lockTtlSeconds: 30,
+      processedTtlSeconds: 60,
     }
 
-    // 3. Configure Command-specific Concurrency Retry limits
     opts.commandBus.concurrency = {
       maxRetries: 3,
       delayConfig: {
         baseDelayMs: 100,
-        maxJitterMs: 500, // Mitigates thundering herd syndrome
+        maxJitterMs: 500,
       },
     }
   })
@@ -215,13 +208,9 @@ import type { AppRegistry } from './registry'
 export const appHost = new AppBuilder<AppRegistry>()
   .addContext()
   .addPipeline((opts) => {
-    // Standard default pipelines (Exception, Logging, Performance) mount automatically here
-
-    // Activate the Query Caching engine pipeline behavior explicitly
     opts.queryBus.isEnabled = true
   })
   .addCache((opts, config) => {
-    // Configure backing caching providers (e.g., Redis or local In-Memory stores)
     opts.inMemory = false
     opts.redis = {
       host: config.getOrThrow('REDIS_HOST'),

@@ -1,15 +1,19 @@
 ---
 title: 'Authorization Pipeline Architecture & Policy Configuration'
 description:
-  'An architectural guide to the Xeno authorization subsystem, detailing
-  pipeline strategies, user/tenant context verification, and programmatic policy
-  mapping.'
+  'Learn how Xeno configures authorization policies by request intent and
+  evaluates user, tenant, role, permission, and custom strategies in the CQRS
+  pipeline.'
 keywords:
   [
     'Authorization',
     'Access Control',
     'UserAuthorizationStrategy',
     'TenantAuthorizationStrategy',
+    'RoleAuthorizationStrategy',
+    'PermissionAuthorizationStrategy',
+    'AuthPolicy',
+    'AuthorizationPipeline',
     'AppBuilder Security',
     'CQRS Pipeline',
     'Xeno',
@@ -28,89 +32,78 @@ access boundaries.
 
 ---
 
-## Understanding the Ingress Authorization Flow and Public Bypass Rules
+## Understanding the CQRS Authorization Flow
 
-The Xeno authorization subsystem intercepts execution threads within the
-mediator bus to enforce structural access policies. This pipeline automatically
-bypasses safety checks for any path explicitly registered in the public route
-registry of the request context middleware layer.
+The Xeno authorization subsystem evaluates Commands and Queries inside the CQRS
+mediator pipeline. Authorization is based on the request `intent` and the
+identity stored in the active `RequestContext`; it is independent of HTTP route
+configuration.
 
-When an inbound request enters the presentation layer, the
-[`RequestContextMiddleware`](../fundamentals/node-request-context) evaluates
-whether the requested route and HTTP method correspond to an open endpoint
-declared within the `publicRoutes` dictionary. If the route matches a public
-definition, the framework sets the `isPublic` flag to `true` inside the current
-execution context.
+`AuthenticationMiddleware` may populate the request identity before a
+Controller sends a Command or Query. When the mediator reaches
+`AuthorizationPipeline`, each configured strategy evaluates the request intent
+and the identity available through `IContextAccessor<RequestContext>`.
 
-The authorization pipeline stack continuously monitors this flag. Any command or
-query message processed under an active public context completely bypasses
-security evaluation gates only for user id authorization and tenant id
-authorization. This design allows open endpoints—such as public health checks,
-login portals, or anonymous status streams—to run without throwing authorization
-exceptions for user id or tenant id or requiring mock authorization payloads. On
-protected routes, the middleware verifies that the identity context is fully
-populated by the security gatekeeper before dispatching the message down the
-mediator pipelines.
+If a strategy fails, `AuthorizationPipeline` returns a failed `Result` and does
+not call the next pipeline behavior or Handler. If all strategies succeed, it
+delegates to the next behavior.
 
 > [!WARNING]
 >
-> The others authorization that doas not include the user/tenant id
-> authorization such as Roles/Permissions or custom authorization not bypass the
-> security under an active public context
+> Xeno does not define a `publicRoutes` bypass in `MiddlewareConfig`. Route
+> accessibility and Command or Query authorization are separate concerns. A
+> request can be reachable through HTTP and still fail a policy evaluation.
 
 ---
 
 ## Mapping the Four Foundational Authorization Pipeline Strategies
 
-Xeno structures access management into four foundational pipeline strategies
-evaluated before handler execution. These deterministic behaviors validate
-client identities across user boundaries, tenant environments, cryptographic
-role configurations, and custom domain-specific authorization conditions
-injected via programmatic host builders.
+Xeno provides four built-in authorization strategies and supports custom
+strategies. Strategies are created from the configured policy fields and are
+evaluated before Handler execution.
 
 The framework organizes access validation into distinct pipeline behaviors that
-are evaluated sequentially before a message hits its target application handler.
-These strategies pull verified identity claims directly from the active
-asynchronous local storage context and throw detailed validation failures if
-requirements are unmet.
+are evaluated sequentially before a message reaches its target Handler. The
+strategies read the active identity through the context accessor and return
+`Result.fail(AppError)` when requirements are unmet.
 
 ### Key-Value Specification of Foundational Strategies
 
-- **User Authorization Strategy** — Verifies that an incoming request possesses
-  a verified, non-empty user identifier signature within the current request
-  context.
+- **UserAuthorizationStrategy** — When the policy for an intent sets `userId`,
+  verifies that the context contains a valid user identifier.
 
-- **Tenant Authorization Strategy** — Enforces data layer isolation by
-  confirming that a valid tenant identifier footprint accompanies the executing
-  transaction.
+- **TenantAuthorizationStrategy** — When the policy sets `tenantId`, verifies
+  that the context contains a valid tenant identifier.
 
-- **Role Authorization Strategy** — Evaluates group membership profiles against
-  declarative token rules mapped to specific handler intents.
+- **RoleAuthorizationStrategy** — When the policy contains roles, succeeds when
+  the identity has at least one required role.
 
-- **Permission Authorization Strategy** — Assesses fine-grained capability
-  scopes to grant or deny execution paths for targeted business actions.
+- **PermissionAuthorizationStrategy** — When the policy contains permissions,
+  succeeds when the identity has at least one required permission.
+
+- **Custom authorization strategies** — Execute application-specific rules
+  supplied through `customAuthorizationStrategy`.
 
 ---
 
-## Configuring UserId and TenantId Authorization via AppBuilder
+## Configuring Authorization Policies via AppBuilder
 
-Programmatic configuration of user and tenant authorization hooks occurs
-directly through the fluent AppBuilder pipeline method. Toggling these boolean
-switches tells the internal bootstrapping engine to inject matching verification
-strategies into the container's core authorization stack.
+Authorization configuration occurs through the `authorization` property passed
+to `AppBuilder.addPipeline()`. The `policies` dictionary maps each Command or
+Query `intent` to an `AuthPolicy`. The bootstrap process registers a policy
+registry and creates only the built-in strategies required by the configured
+policy fields.
 
-The `UserAuthorizationStrategy` and `TenantAuthorizationStrategy` form the
-baseline security guard rails for multi-tenant enterprise software. When
-enabled, these strategies intercept the mediator bus execution thread, access
-the active context via the `CONTEXT_ACCESSOR` token, and assert that the
-required context keys are present. If a protected command or query executes
-while `userId` or `tenantId` are absent or undefined, the pipeline
-short-circuits, returning an explicit `UNAUTHORIZED` application result.
+The policy is looked up by request intent. If `userId` or `tenantId` is defined,
+the corresponding strategy validates the identity value and GUID format. Role
+and permission strategies require at least one matching value from the identity.
+The strategies use `TOKENS.CONTEXT_ACCESSOR` to read the active
+`RequestContext`.
 
 ### Programmatic Security Configuration
 
-To enable baseline identity tracking guards, activate the corresponding
-properties inside the `.addPipeline()` block during application bootstrapping:
+To configure authorization, assign an `AuthPolicy` dictionary inside the
+`.addPipeline()` block during application bootstrapping:
 
 ```typescript
 // src/infrastructure/bootstrap-auth.ts
@@ -121,25 +114,19 @@ export const bootstrap = async () => {
   const builder = new AppBuilder<AppRegistry>()
 
   builder
-    // 1. Initialize AsyncLocalStorage request context boundaries
     .addContext()
-
-    // 2. Initialize Middleware with public routes that bypass the user/tenant id authz
-    .addMiddleware((opts) => {
-      opts.publicRoutes = {
-        // Allows public access to the main authentication endpoint
-        '/api/v1/auth/login': { POST: 'isPublic' },
-        '/api/v1/auth/register': { POST: 'isPublic' },
-      }
-    })
-
-    // 2. Configure the CQRS behavioral pipeline stack
     .addPipeline((options) => {
-      // Enforce mandatory verification of user IDs on protected routes
-      options.authorization.userId = true
-
-      // Enforce mandatory verification of tenant IDs for multi-tenant data safety
-      options.authorization.tenantId = true
+      options.authorization.policies = {
+        CREATE_USER_COMMAND_HANDLER_TOKEN: {
+          userId: true,
+          tenantId: true,
+          roles: ['admin'],
+          permissions: ['users:create'],
+        },
+        GET_USER_QUERY_HANDLER_TOKEN: {
+          tenantId: true,
+        },
+      }
     })
 
   return await builder.build()
@@ -155,20 +142,40 @@ policies and custom strategy factories. These advanced execution paths evaluate
 specific permission tokens or custom evaluation functions, providing granular
 access control detailed further in dedicated sub-manuals.
 
-For applications requiring more than simple identity existence checks, Xeno
-supports policy-driven access controls. These advanced structures match specific
-message intent tokens to targeted role definitions or fine-grained capabilities.
+For applications requiring more than identity and tenant checks, Xeno supports
+policy-driven role and permission controls, as well as custom strategy
+factories. Policies are associated with message intent tokens and can define
+role lists, permission lists, or identity requirements.
 
 - **[Role and Permission Policies](./role-permission-policy)** — Configured via
-  the `authorization.policies` dictionary. This schema maps incoming handler
-  intent strings to mandatory role lists (e.g., `['admin']`) or capability keys
-  (e.g., `['read']`), prompting the bootstrapper to dynamically instantiate the
-  `RoleAuthorizationStrategy` and `PermissionAuthorizationStrategy`.
+  the `authorization.policies` dictionary. This schema maps request intent
+  strings to `AuthPolicy` values. A policy can require roles, permissions, a
+  user ID, or a tenant ID. The bootstrapper instantiates only the strategies
+  required by the configured policies.
 
 - **[Custom Strategy Factories](./custom-authorization)** — Registered using the
-  `customAuthorizationStrategy` array. This hook allows developers to inject
-  completely custom, domain-specific evaluation functions directly into the main
-  `AuthorizationPipeline` loop.
+  `customAuthorizationStrategy` array. Each callback receives the current
+  service scope and returns an `IStrategy<IRequest>`. The resulting strategies
+  are appended to the `AuthorizationPipeline`.
+
+## Authorization Results and Constraints
+
+`AuthorizationPipeline` evaluates strategies in registration order. The first
+failed strategy stops evaluation and returns its `AppError`; later strategies
+and the Handler are not executed. A successful strategy returns `Result.ok()`.
+
+The current implementation has these constraints:
+
+- authorization policies are keyed by request `intent`, not HTTP path;
+- the policy registry normalizes intent keys to lowercase when registering and
+  retrieving policies;
+- `userId` and `tenantId` checks validate GUID values;
+- role and permission checks use an "at least one matching value" rule;
+- an absent policy field does not activate its corresponding built-in strategy;
+- authentication and authorization are separate: the authentication flow
+  populates `Identity`, while authorization evaluates it;
+- `customAuthorizationStrategy` is configured as a factory array and is not a
+  route-level bypass mechanism.
 
 Detailed configuration manifests, contract structures, and runtime examples for
 these policy engines are provided in dedicated implementation sub-manuals within
