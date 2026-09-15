@@ -189,6 +189,7 @@ export const bootstrap = async () => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     }
+    opts.http.client.proxy = false
 
     // Configure retry, circuit breaker, and bulkhead policies
     opts.resilience.retry.attempts = 10
