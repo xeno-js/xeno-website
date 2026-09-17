@@ -19,3 +19,9 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# dir for fetched repos
+.temp/
+
+# vs code extension
+.vscode/

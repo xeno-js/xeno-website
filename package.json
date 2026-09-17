@@ -3,9 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "fetch-repos": "rm -rf .temp && git clone --depth 1 git@github.com:Mattia-Carcione/xeno-cli.git .temp/xeno-cli && git clone --depth 1 git@github.com:Mattia-Carcione/xeno-fe.git .temp/xeno-vue && git clone --depth 1 git@github.com:Mattia-Carcione/xeno-shared.git .temp/xeno-shared && git clone --depth 1 git@github.com:Mattia-Carcione/xeno-js.git .temp/xeno-js && npm install --prefix .temp/xeno-shared --legacy-peer-deps --no-audit --no-fund && npm install --prefix .temp/xeno-js --legacy-peer-deps --no-audit --no-fund && npm install --prefix .temp/xeno-vue --legacy-peer-deps --no-audit --no-fund && npm install --prefix .temp/xeno-cli --legacy-peer-deps --no-audit --no-fund",
+    "build": "npm run fetch-repos && astro build",
+    "dev": "npm run fetch-repos && astro dev",
     "start": "astro dev",
-    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -16,6 +17,8 @@
     "aos": "^2.3.4",
     "astro": "^7.0.2",
     "sharp": "^0.34.5",
-    "tailwindcss": "^4.3.3"
+    "starlight-typedoc": "^0.23.1",
+    "tailwindcss": "^4.3.3",
+    "typedoc": "^0.28.20"
   }
 }
