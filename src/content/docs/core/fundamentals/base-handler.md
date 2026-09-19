@@ -48,8 +48,11 @@ without compromising architecture portability.
 - **\_identityFactory** — An injected instance of `IFactory<void, UserContext>`
   tasked with building or resolving the active client security posture.
 
-- **handle()** — The mandatory, abstract execution method that subclasses must
+- **handle()** — The mandatory, execution method that subclasses must
   implement to process messages and return functional monads.
+
+- **executeAsync()** - An internal helper method that executes the
+  `handle()` method and manages asynchronous cancellation flows.
 
 - **\_getCurrentContext()** — An internal helper method that extracts the
   current request context directly from the active asynchronous storage layer.
@@ -100,7 +103,7 @@ export class SaveUserCommandHandler extends BaseHandler<SaveUserCommand, void> {
    * @param request The type-safe command envelope containing payload variables.
    * @param signal An optional AbortSignal used to monitor connection terminations.
    */
-  public async handle(
+  protected async executeAsync(
     request: SaveUserCommand,
     signal: Optional<AbortSignal>,
   ): Promise<ResultType<void>> {
@@ -108,13 +111,10 @@ export class SaveUserCommandHandler extends BaseHandler<SaveUserCommand, void> {
       `[CQRS: Command] Processing SaveUserCommand for: ${request.props.email}`,
     )
 
-    // 1. Enforce transactional cancellation barriers early
-    AppError.throwIfAborted(signal, 'SaveUserCommandHandler.handle')
-
-    // 2. Hydrate a new Domain Entity from incoming properties
+    // 1. Hydrate a new Domain Entity from incoming properties
     const userEntity = new User(request.props)
 
-    // 3. Persist the change via the injected infrastructure repository contract
+    // 2. Persist the change via the injected infrastructure repository contract
     const saveResult = await this._userRepository.save(userEntity, signal)
 
     if (!saveResult.isOk()) {
@@ -329,16 +329,13 @@ export class UserController extends BaseController<UserProps, void> {
 >
 > ```typescript
 > // src/domain/commands/create-user.command.ts
-> import type { ICommand } from '@xeno-js/core'
-> import { REQUEST_TYPE } from '@xeno-js/core'
+> import { Command } from '@xeno-js/core'
 > import type { UserProps } from '../../domain/entities/user'
 >
-> export class CreateUserCommand extends ICommand<UserProps> {
->   // The token keys match the exact conceptual intents of the messages
->   public readonly intent = 'CREATE_USER_COMMAND'
->   public readonly type = REQUEST_TYPE.COMMAND
+> export class CreateUserCommand extends Command<UserProps> {
 >
->   constructor(public readonly props: UserProps & { id: string }) {}
+>   // The token keys match the exact conceptual intents of the messages
+>   constructor(public readonly props: UserProps & { id: string }) { super('CREATE_USER_COMMAND') }
 > }
 > ```
 >
@@ -376,4 +373,4 @@ export class UserController extends BaseController<UserProps, void> {
 
 Xeno is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
-[support section](../support-us)
+[support section](../../support-us)

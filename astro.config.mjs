@@ -13,37 +13,16 @@ export default defineConfig({
       customCss: ['./src/styles/global.css'],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/Mattia-Carcione/xeno-js' }],
 
-      plugins: [
-        starlightTypeDoc({
-          entryPoints: ['.temp/xeno-js/src/index.ts'],
-          tsconfig: '.temp/xeno-js/tsconfig.json',
-          output: 'core/api-reference',
-        }),
-        starlightTypeDoc({
-          entryPoints: ['.temp/xeno-vue/src/index.ts'],
-          tsconfig: '.temp/xeno-vue/tsconfig.json',
-          output: 'vue/api-reference',
-        }),
-        starlightTypeDoc({
-          entryPoints: ['.temp/xeno-shared/src/index.ts'],
-          tsconfig: '.temp/xeno-shared/tsconfig.json',
-          output: 'shared/api-reference',
-        }),
-        // starlightTypeDoc({
-        //   entryPoints: ['.temp/xeno-cli/src/index.ts'],
-        //   tsconfig: '.temp/xeno-cli/tsconfig.json',
-        //   output: 'cli/api-reference',
-        // })
-      ],
-
       // 2. Definizione gerarchica della Sidebar
       sidebar: [
+        {
+          label: 'Introduction',
+          link: '/introduction'
+        },
         {
           label: '📦 @xeno-js/core',
           collapsed: false,
           items: [
-            // ATTENZIONE: Se separi la documentazione, assicurati di spostare 
-            // fisicamente questi file .md nella sottocartella src/content/docs/core/
             { label: 'Introduction', link: '/core/introduction' },
             { label: 'Getting Started', link: '/core/getting-started' },
             {
@@ -51,26 +30,104 @@ export default defineConfig({
               items: [
                 { label: 'Overview', link: '/core/fundamentals/overview' },
                 { label: 'App Registry', link: '/core/fundamentals/xeno-registry' },
-                // ... altri file manuali ...
+                { label: 'Service Container', link: '/core/fundamentals/service-container' },
+                { label: 'App Builder', link: '/core/fundamentals/app-builder' },
+                { label: 'Request Context', link: '/core/fundamentals/node-request-context' },
+                { label: 'Middleware', link: '/core/fundamentals/middleware' },
+                { label: 'Controllers', link: '/core/fundamentals/base-controller' },
+                { label: 'Handlers', link: '/core/fundamentals/base-handler' },
+                { label: 'Commands & Queries', link: '/core/fundamentals/command-query' },
+                { label: 'Base Repositories', link: '/core/fundamentals/base-repositories' },
+                { label: 'Entities & Mappers', link: '/core/fundamentals/entities-mappers' },
+                { label: 'Result and Error Handling', link: '/core/fundamentals/result-app-error' },
               ],
             },
-            // --- INIEZIONE AUTOMATICA DELLE API ---
             {
-              label: 'API Reference',
-              items: [{ autogenerate: { directory: 'core/api-reference' } }]
-            }
-          ]
+              label: 'Security',
+              items: [
+                { label: 'Authentication', link: '/core/security/authentication' },
+                { label: 'Custom Authentication', link: '/core/security/custom-authentication' },
+                { label: 'Authorization', link: '/core/security/authorization' },
+                { label: 'Roles & Permissions Policies', link: '/core/security/role-permission-policy' },
+                { label: 'Custom Authorization', link: '/core/security/custom-authorization' },
+              ],
+            },
+            {
+              label: 'Database',
+              items: [
+                { label: 'Drizzle ORM', link: '/core/database/database-persistent' },
+                { label: 'Sql Lite', link: '/core/database/sql-lite' },
+                { label: 'Unit of Work Transaction', link: '/core/database/unit-of-work' },
+              ],
+            },
+            {
+              label: 'Loggers',
+              items: [
+                { label: 'Overview', link: '/core/loggers/overview' },
+                { label: 'Pino', link: '/core/loggers/pino-logger' },
+                { label: 'Sentry', link: '/core/loggers/sentry-logger' },
+              ],
+            },
+            {
+              label: 'Cache',
+              items: [
+                { label: 'Overview', link: '/core/cache/overview' },
+                { label: 'In-Memory', link: '/core/cache/in-memory' },
+                { label: 'Redis', link: '/core/cache/redis' },
+              ],
+            },
+            {
+              label: 'CQRS',
+              items: [
+                { label: 'Overview', link: '/core/cqrs/overview' },
+                { label: 'Exception Behavior', link: '/core/cqrs/exception-pipeline' },
+                { label: 'Logging Behavior', link: '/core/cqrs/logging-pipeline' },
+                { label: 'Performance Behavior', link: '/core/cqrs/performance-pipeline' },
+                { label: 'Validation Behavior', link: '/core/cqrs/validation-pipeline' },
+                { label: 'Idempotency Behavior', link: '/core/cqrs/idempotency-pipeline' },
+                { label: 'Concurrency Behavior', link: '/core/cqrs/concurrency-retry-pipeline' },
+                { label: 'Query caching Behavior', link: '/core/cqrs/query-caching-pipeline' },
+              ],
+            },
+            { label: 'HTTP Core', link: '/core/http-core' },
+          ],
         },
         {
-          label: '🎨 @xeno-js/vue',
-          collapsed: true,
+          label: '📦 @xeno-js/vue',
+          collapsed: false,
           items: [
             { label: 'Overview', link: '/vue/overview' },
-            // --- INIEZIONE AUTOMATICA DELLE API ---
             {
-              label: 'API Reference',
-              items: [{ autogenerate: { directory: 'vue/api-reference' } }]
-            }
+              label: 'Fundamentals',
+              items: [
+                { label: 'App Builder & Bootstrap', link: '/vue/fundamentals/app-builder' },
+                // { label: 'IoC & Vue Inject', link: '/vue/fundamentals/ioc-registry' },
+                // { label: 'Browser Context', link: '/vue/fundamentals/browser-context' },
+                // { label: 'Vite Environment', link: '/vue/fundamentals/vite-env-config' },
+              ],
+            },
+            // {
+            //   label: 'CQRS & State',
+            //   items: [
+            //     { label: 'Client Mediator', link: '/vue/cqrs/client-mediator' },
+            //     { label: 'Composables & Handlers', link: '/vue/cqrs/cqrs-composables' },
+            //     { label: 'Pipeline Behaviors', link: '/vue/cqrs/client-pipelines' },
+            //   ],
+            // },
+            // {
+            //   label: 'Data Fetching',
+            //   items: [
+            //     { label: 'HTTP Core & Resiliency', link: '/vue/data/http-core' },
+            //     { label: 'Remote Data Sources', link: '/vue/data/remote-data-sources' },
+            //   ],
+            // },
+            // {
+            //   label: 'Observability & Security',
+            //   items: [
+            //     { label: 'Sentry Vue Tracker', link: '/vue/observability/sentry-logger' },
+            //     { label: 'Supabase Auth', link: '/vue/security/supabase-auth' },
+            //   ],
+            // },
           ]
         },
         {
@@ -78,26 +135,29 @@ export default defineConfig({
           collapsed: true,
           items: [
             { label: 'Overview', link: '/shared/overview' },
-            // --- INIEZIONE AUTOMATICA DELLE API ---
-            {
-              label: 'API Reference',
-              items: [{ autogenerate: { directory: 'shared/api-reference' } }]
+            { label: 'Utils', 
+              items: [
+                { label: 'Overview', link: '/shared/utils/overview' },
+                { label: 'Guards Utils', link: '/shared/utils/guards' },
+                { label: 'String Utils', link: '/shared/utils/string-utils' },
+                { label: 'Math Utils', link: '/shared/utils/math-utils' },
+                { label: 'Date Utils', link: '/shared/utils/date-utils' },
+                { label: 'Enumerable', link: '/shared/utils/enumerable' },
+                { label: 'Guid Utils', link: '/shared/utils/guid' },
+                { label: 'HTTP Utils', link: '/shared/utils/http-utils' },
+                { label: 'Promise Utils', link: '/shared/utils/promise-utils' },
+              ]
             }
           ]
         },
-        // {
-        //   label: '💻 CLI',
-        //   collapsed: true,
-        //   items: [
-        //     { label: 'Overview', link: '/cli/overview' },
-        //     { label: 'Initialization', link: '/cli/initialization' },
-        //     // --- INIEZIONE AUTOMATICA DELLE API ---
-        //     {
-        //       label: 'API Reference',
-        //       items: [{ autogenerate: { directory: 'cli/api-reference' } }]
-        //     }
-        //   ],
-        // },
+        {
+          label: '💻 CLI',
+          collapsed: true,
+          items: [
+            { label: 'Overview', link: '/cli/overview' },
+            { label: 'Initialization', link: '/cli/initialization' }
+          ],
+        },
         { label: 'Support', link: 'support-us' },
         { label: 'Contributing Guide', link: 'contributing-guide' },
       ],

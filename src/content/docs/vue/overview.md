@@ -1,118 +1,41 @@
 ---
-title: 'Xeno Architectural Overview & Getting Started Guide'
-description:
-  'An in-depth introduction to Xeno, a decoupled TypeScript framework built on
-  Domain-Driven Design (DDD), CQRS, and explicit Inversion of Control (IoC).'
-keywords:
-  [
-    'Xeno',
-    'Dependency Injection',
-    'Inversion of Control',
-    'Domain-Driven Design',
-    'CQRS',
-    'Clean Architecture',
-    'Node.js framework',
-    'TypeScript framework',
-  ]
+title: 'Xeno Vue Overview: Enterprise-Grade DDD & CQRS for the Browser'
+description: 'An in-depth guide to @xeno-js/vue. Learn how to bring strict Domain-Driven Design, explicit Dependency Injection, and CQRS natively to your Vue.js frontend.'
+keywords: 'Xeno Vue, Vue.js architecture, CQRS frontend, DDD browser, Dependency Injection Vue, Frontend Middleware, Vue.js framework, @xeno-js/vue'
 author: 'Xeno'
 ---
 
-## What is Xeno and Why Use It?
+# Xeno Vue: Architectural Overview
 
-Xeno is an emerging, type-safe architectural framework designed for Node.js
-runtime environments. It provides explicit abstractions for Domain-Driven Design
-(DDD) and Command-Query Responsibility Segregation (CQRS), leveraging a
-customized Inversion of Control (IoC) container to manage request-scoped
-dependencies without implicit runtime magic.
+## What is `@xeno-js/vue`?
 
-Unlike high-magic frameworks that rely heavily on decorators and global
-execution contexts, Xeno introduces an explicit, deterministic design model. It
-is architected for teams seeking to maintain deep control over their dependency
-graph, request lifecycle, and execution boundaries. The framework offers an
-alternative design pattern focused on programmatic composition, strict
-compile-time validation, and runtime predictability.
+**Xeno Vue** (`@xeno-js/vue`) is an enterprise-grade, deterministic architectural framework that brings the strictness of Domain-Driven Design (DDD) and Command Query Responsibility Segregation (CQRS) natively to the browser. It shifts operational logic, remote data fetching, and state mutations entirely away from Vue components and Pinia stores, ensuring the frontend architecture remains pristine, highly testable, and completely decoupled from the UI layer. Xeno treats the browser as a complex distributed client, rather than a simple document viewer.
 
-Xeno is engineered to address the common pain points of architectural drift in
-large applications by enforcing clean architectural boundaries. It structures
-code into explicit layers—Presentation, Infrastructure, Application, and
-Domain—ensuring that business logic remains completely decoupled from database
-engines, HTTP clients, and third-party transport layers.
+## Why Apply DDD and CQRS to the Frontend?
 
----
+Modern frontend development often leads to "Spaghetti State," where API calls, business rules, and DOM manipulations are tightly coupled inside UI components. Xeno Vue eliminates this by enforcing pure Dependency Injection (DI) and clean architectural boundaries. 
 
-## What is the Core Design Philosophy of Xeno?
+If your application requires offline-first synchronization, complex data orchestration from multiple backend-for-frontend (BFF) endpoints, or heavy client-side business rules, Xeno isolates this complexity into dedicated Handlers. Vue components are relegated strictly to the Presentation Layer, observing state and dispatching commands without knowing how the data is fetched or mutated.
 
-The design philosophy of Xeno prioritizes architectural determinism,
-compile-time type safety, and strict separation of concerns. By implementing a
-zero-magic dependency injection container and explicit module boundaries, the
-framework eliminates captive dependencies and guarantees clean, testable
-software boundaries across domain and infrastructure layers.
+## What Does the Package Expose?
 
-Xeno is built upon several foundational architectural pillars:
+The package provides the exact abstractions needed to build a resilient, decoupled client-side architecture:
 
-- **Explicit Dependency Injection** — The framework avoids auto-scanning
-  directory trees or guessing registration scopes. Every service, repository,
-  and controller must be programmatically registered inside an explicit registry
-  using dedicated lifetime scopes. This guarantees that your dependency tree can
-  be fully validated at bootstrap, preventing unexpected runtime lookup
-  failures.
-- **Asynchronous Execution Context Isolation** — Using Node.js
-  `AsyncLocalStorage`, the underlying IoC container manages request-scoped
-  lifecycles safely. It prevents cross-request state pollution and ensures that
-  scoped dependencies (such as active database transactions or user contexts)
-  are resolved consistently across the asynchronous execution path.
-- **Clean Architecture and DDD Primacy** — Domain entities, value objects, and
-  specifications are isolated from external delivery channels and persistent
-  databases. Infrastructure concerns are kept strictly behind interfaces,
-  allowing developers to switch from SQL to NoSQL, or from HTTP to gRPC, without
-  modifying core application logic.
-- **Command-Query Responsibility Segregation (CQRS)** — Write operations
-  (Commands) and read operations (Queries) are processed through separate
-  pipelines. This separation allows developers to tune data access strategies
-  individually, implement targeted caching, and apply custom validation or
-  performance monitoring strategies where they matter most.
+### 1. Explicit Dependency Injection
+Xeno Vue relies on programmatic configuration rather than hidden Vue plugins or implicit reactivity bindings.
+* **`XenoAppBuilder`**: The fluent composition root used to construct the IoC container during application bootstrap. It explicitly registers loggers, authentication configurations, and remote data sources.
+* **`XENO_SERVICES_KEY`**: The canonical Vue `InjectionKey` used to provide the finalized IoC container to the Vue component tree safely.
+* **`ServicesUtils`**: A global utility that allows Vue Composables to cleanly resolve the `ClientMediator` and injected Handlers.
 
-### Architectural Blueprint: Data & Dependency Flow
+### 2. Frontend CQRS & Middleware Pipelines
+The framework replicates the backend's strict pipeline execution model directly inside the browser.
+* **`ClientMediator`**: The central nervous system of the frontend. It intercepts all commands and queries, running them through a sequence of middleware before invoking the business logic.
+* **Cross-Cutting Behaviors**: Natively handles Authentication, CSRF validation, aggressive Query Caching, and Performance logging before an API call ever fires over the network.
 
-The diagram below illustrates how Xeno handles request propagation through its
-layered boundaries, using its native IoC container and middleware execution
-stack to isolate contexts.
-
-```mermaid
-graph TD
-    %% Presentation Layer
-    A[HTTP Request / Client] --> B[Presentation Layer: Controllers & Middlewares]
-
-    %% Middleware Context Boundary
-    subgraph Context Isolation [AsyncLocalStorage Boundary]
-        B --> C[Request Context Factory]
-        C --> D[Service Scope Created]
-    end
-
-    %% Application Layer (Mediator & Pipelines)
-    D --> E[Mediator: Send Request]
-    subgraph Application Pipeline Stack [Middleware Execution Stack]
-        E --> F[Validation Pipeline]
-        F --> G[Authorization Pipeline]
-        G --> H[Execution Pipeline / Handler]
-    end
-
-    %% Domain & Infrastructure Layers
-    H --> I[Domain Layer: Entities & Value Objects]
-    H --> J[Infrastructure Layer: Repositories & DB Client]
-    J --> K[Data Store / Drizzle ORM]
-
-    classDef presentation fill:#e1f5fe,stroke:#039be5,stroke-width:2px;
-    classDef application fill:#e8f5e9,stroke:#43a047,stroke-width:2px;
-    classDef domain fill:#fff8e1,stroke:#ffb300,stroke-width:2px;
-    classDef infrastructure fill:#efebe9,stroke:#8d6e63,stroke-width:2px;
-
-    class A,B,C,D presentation;
-    class E,F,G,H application;
-    class I domain;
-    class J,K infrastructure;
-
-```
+### 3. Enterprise-Grade Resiliency
+The browser is a hostile and unreliable environment. Xeno Vue intercepts network failures before they crash the UI.
+* **Resilient Transports**: Exposes configuration primitives (via `Cockatiel` and `Axios`) to wrap remote data sources with circuit breakers, exponential backoff retries with jitter, and bulkheads.
+* **`Result` Monads**: All Handlers and Remote Data Sources return functional `Result` objects, eliminating scattered `try/catch` blocks inside Vue components and ensuring predictable error states for the user interface.
 
 ---
 
@@ -120,4 +43,4 @@ graph TD
 
 Xeno is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
-[support section](./support-us)
+[support section](../support-us)

@@ -73,33 +73,33 @@ The `shared/utils` barrel exports nine core utility modules:
 
 ```
 
-### 1. `Guards`
+### 1. [`Guards`](./guards)
 
 Centralized runtime type guards and assertion functions. Provides methods like
 `isDefined`, `isNullOrEmpty`, `isString`, `isNumber`, `isDate`,
 `isObjectRecord`, and assertion throwing helpers like `throwIfNullOrEmpty` and
 `throwIfNegative`.
 
-### 2. `GuidHelper`
+### 2. [`GuidHelper`](./guid)
 
 Cryptographically secure UUID v4 generation and validation module. Features
 `generate()` via standard `crypto.randomUUID()`, UUID pattern validation
 (`isValid`), empty GUID checks (`isEmpty`), and parsing routines (`parse`).
 
-### 3. `HttpHelper`
+### 3. [`HttpHelper`](./http-utils)
 
 Standardized HTTP response builder and header normalization module. Formats
 success payloads (`HttpHelper.success` producing `ResponseDto<T>`), error
 envelopes (`HttpHelper.error` producing `ErrorResponseDto`), and converts header
 maps into uniform string key-value dictionaries.
 
-### 4. `DateHelper`
+### 4. [`DateHelper`](./http-utils)
 
 Timezone-agnostic date calculation and evaluation tools. Includes ISO string
 converters (`toISOString`), date arithmetic (`addDays`), and expiration check
 helpers (`isExpired`, `isFuture`, `isAfter`).
 
-### 5. `StringHelper`
+### 5. [`StringHelper`](./string-utils)
 
 Safe string manipulations, template interpolation, and formatting. Provides
 circular-safe JSON serialization (`safeStringify`), fault-tolerant parsing
@@ -107,30 +107,30 @@ circular-safe JSON serialization (`safeStringify`), fault-tolerant parsing
 (`interpolate`), truncation (`truncate`), and header extraction
 (`getSingleValue`).
 
-### 6. `MathHelper`
+### 6. [`MathHelper`](./math-utils)
 
 Safe mathematical calculations designed to prevent divide-by-zero or precision
 rounding bugs. Includes bounds clamping (`clamp`), rounding (`roundTo`), safe
 division (`safeDivide`), percentage calculation (`toPercentage`), and safe
 number casting (`toNumber`).
 
-### 7. `PromiseHelper`
+### 7. [`PromiseHelper`](./promise-utils)
 
 Asynchronous timing and backoff primitives. Offers millisecond delay suspenders
 (`delay`) and randomized exponential backoff helpers (`delayWithJitter`)
 engineered specifically to mitigate Thundering Herd scenarios.
 
-### 8. `Enumerable`
+### 8. [`Enumerable`](./enumerable)
 
 Type-safe array operators inspired by LINQ / sequence evaluation. Provides
 strict (`first`) and safe (`firstOrDefault`) element finders based on predicate
 callbacks.
 
-### 9. `AbortSignalHelper`
+<!-- ### 9. `AbortSignalHelper`
 
 Cancellation-aware Promise execution wrapper. Listens to `AbortSignal` events
 and rejects immediately when an execution cancellation is requested by a client
-or timeout policy.
+or timeout policy. -->
 
 ---
 
@@ -165,4 +165,4 @@ if (Guards.isDefined(payload)) {
 
 Xeno is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
-[support section](../support-us)
+[support section](../../support-us)

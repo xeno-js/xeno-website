@@ -1,118 +1,60 @@
 ---
-title: 'Xeno Architectural Overview & Getting Started Guide'
-description:
-  'An in-depth introduction to Xeno, a decoupled TypeScript framework built on
-  Domain-Driven Design (DDD), CQRS, and explicit Inversion of Control (IoC).'
-keywords:
-  [
-    'Xeno',
-    'Dependency Injection',
-    'Inversion of Control',
-    'Domain-Driven Design',
-    'CQRS',
-    'Clean Architecture',
-    'Node.js framework',
-    'TypeScript framework',
-  ]
+title: 'Xeno Shared Overview: The Universal Architectural Foundation'
+description: 'An in-depth guide to @xeno-js/shared. Discover the core primitive types, constants, CQRS base classes, and isomorphic utilities that power the Xeno framework across Node.js and Vue.'
+keywords: 'Xeno Shared, Xeno utilities, CQRS interfaces, TypeScript primitives, Isomorphic JavaScript, Dependency Injection tokens, Xeno framework, DDD'
 author: 'Xeno'
 ---
 
-## What is Xeno and Why Use It?
+# Xeno Shared: Architectural Overview
 
-Xeno is an emerging, type-safe architectural framework designed for Node.js
-runtime environments. It provides explicit abstractions for Domain-Driven Design
-(DDD) and Command-Query Responsibility Segregation (CQRS), leveraging a
-customized Inversion of Control (IoC) container to manage request-scoped
-dependencies without implicit runtime magic.
+## What is `@xeno-js/shared`?
 
-Unlike high-magic frameworks that rely heavily on decorators and global
-execution contexts, Xeno introduces an explicit, deterministic design model. It
-is architected for teams seeking to maintain deep control over their dependency
-graph, request lifecycle, and execution boundaries. The framework offers an
-alternative design pattern focused on programmatic composition, strict
-compile-time validation, and runtime predictability.
+**Xeno Shared** (`@xeno-js/shared`) is the structural backbone of the entire Xeno framework ecosystem. It is an isomorphic, highly optimized library that provides the foundational primitive types, canonical constants, and pure utility functions required to build enterprise-grade applications. 
 
-Xeno is engineered to address the common pain points of architectural drift in
-large applications by enforcing clean architectural boundaries. It structures
-code into explicit layers—Presentation, Infrastructure, Application, and
-Domain—ensuring that business logic remains completely decoupled from database
-engines, HTTP clients, and third-party transport layers.
+Rather than duplicating logic between the client and the server, Xeno Shared acts as a **single source of truth**. It enforces structural consistency and strict architectural boundaries, ensuring that your data contracts and utility behaviors remain perfectly synchronized across your entire stack.
+
+## Where is it Used?
+
+`@xeno-js/shared` is fundamentally **environment-agnostic**. It is designed to execute predictably and deterministically in both Node.js (V8) and modern browser runtimes.
+
+1. **Backend Integration (`@xeno-js/core`)**: It provides the base HTTP server contracts, database abstraction layers (`Repository`, `UnitOfWork`), and server-side authentication mappers.
+2. **Frontend Integration (`@xeno-js/vue`)**: It supplies the browser-compatible `ClientMediator`, resilience pipelines, local caching interfaces, and unified API response DTOs.
+3. **Monorepo Workspaces**: In a typical full-stack Xeno architecture, this package is the shared dependency that allows your Vue frontend and Node.js backend to communicate using the exact same TypeScript interfaces and domain symbols without code duplication.
+
+## What Does it Expose?
+
+The package is strictly categorized into functional domains to prevent architectural drift. Here is what it exposes to downstream applications:
+
+### 1. Universal Contracts & Types
+Xeno Shared defines the structural interfaces required for Domain-Driven Design (DDD) and Command Query Responsibility Segregation (CQRS) patterns.
+* **CQRS Primitives**: `ICommand`, `IQuery`, `IRequest`, and `IHandler` interfaces ensure that every operation in the system follows a predictable execution path.
+* **Data Transfer Objects (DTOs)**: Canonical structures like `ResponseDto<T>`, `SuccessResponseDto`, `ErrorResponseDto`, and `IPaginatedResult` guarantee that APIs communicate using a standardized envelope.
+* **Dependency Injection**: The `InjectionToken<T>` phantom type enables type-safe, collision-free dependency resolution inside the `XenoRegistry`.
+
+### 2. Isomorphic Infrastructure Base Classes
+Instead of reinventing the wheel for every environment, Xeno exposes abstract bases and ready-to-use adapters.
+* **Pipelines & Mediator**: Provides the `CompositePipeline` and built-in cross-cutting behaviors such as `ExceptionPipeline`, `LoggingPipeline`, `PerformancePipeline`, and `QueryCachingPipeline`.
+* **Data Access**: Base abstract classes like `ReadDao` and `Repository` establish a strict contract for reading and writing domain entities.
+* **Pre-configured Adapters**: Exports modular adapters like `AxiosHttpClient`, `CockatielResilienceFactory`, `ConsoleLogger`, and `ZodValidatorService`.
+
+### 3. Agnostic Constants
+To eliminate magic strings and numbers, the package exports frozen constant dictionaries that define application semantics.
+* **HTTP & Flow Control**: `STATUS_CODES` and `ERROR_CODES` map internal failures to standard network responses natively.
+* **Log & Intent**: `LOG_LEVEL` and `REQUEST_TYPE` (`COMMAND` / `QUERY`) standardize observability.
+* **Resiliency Defaults**: `RESILIENCE_DEFAULTS` provides Battle-tested fallback and jitter configurations for Thundering Herd mitigation.
+* **IoC Tokens**: `TOKENS` contains the official registry keys used by the Xeno App Builders.
+
+### 4. Pure Utilities & Guards
+A suite of zero-dependency, immutable (`Object.freeze`) helper modules designed for high-performance operations.
+* **Runtime Safety**: `Guards` provides `isDefined`, `isNullOrEmpty`, and invariant assertions (`throwIfNegative`) combined with TypeScript type-narrowing.
+* **Asynchronous Control**: `PromiseHelper` exposes precise millisecond delays and randomized exponential backoff (`delayWithJitter`).
+* **Security & Formatting**: `SanitizeHelper` prevents Log Injection (CWE-117) and unsafe URIs, while `StringHelper` and `MathHelper` handle fault-tolerant parsing and zero-division protection.
+* **Identifier Management**: `GuidHelper` natively handles cryptographic UUID v4 generation and structural validation.
 
 ---
 
-## What is the Core Design Philosophy of Xeno?
+By leveraging `@xeno-js/shared`, developers inherit a deterministic, thoroughly tested foundation that drastically reduces the maintenance burden of full-stack TypeScript architectures.
 
-The design philosophy of Xeno prioritizes architectural determinism,
-compile-time type safety, and strict separation of concerns. By implementing a
-zero-magic dependency injection container and explicit module boundaries, the
-framework eliminates captive dependencies and guarantees clean, testable
-software boundaries across domain and infrastructure layers.
-
-Xeno is built upon several foundational architectural pillars:
-
-- **Explicit Dependency Injection** — The framework avoids auto-scanning
-  directory trees or guessing registration scopes. Every service, repository,
-  and controller must be programmatically registered inside an explicit registry
-  using dedicated lifetime scopes. This guarantees that your dependency tree can
-  be fully validated at bootstrap, preventing unexpected runtime lookup
-  failures.
-- **Asynchronous Execution Context Isolation** — Using Node.js
-  `AsyncLocalStorage`, the underlying IoC container manages request-scoped
-  lifecycles safely. It prevents cross-request state pollution and ensures that
-  scoped dependencies (such as active database transactions or user contexts)
-  are resolved consistently across the asynchronous execution path.
-- **Clean Architecture and DDD Primacy** — Domain entities, value objects, and
-  specifications are isolated from external delivery channels and persistent
-  databases. Infrastructure concerns are kept strictly behind interfaces,
-  allowing developers to switch from SQL to NoSQL, or from HTTP to gRPC, without
-  modifying core application logic.
-- **Command-Query Responsibility Segregation (CQRS)** — Write operations
-  (Commands) and read operations (Queries) are processed through separate
-  pipelines. This separation allows developers to tune data access strategies
-  individually, implement targeted caching, and apply custom validation or
-  performance monitoring strategies where they matter most.
-
-### Architectural Blueprint: Data & Dependency Flow
-
-The diagram below illustrates how Xeno handles request propagation through its
-layered boundaries, using its native IoC container and middleware execution
-stack to isolate contexts.
-
-```mermaid
-graph TD
-    %% Presentation Layer
-    A[HTTP Request / Client] --> B[Presentation Layer: Controllers & Middlewares]
-
-    %% Middleware Context Boundary
-    subgraph Context Isolation [AsyncLocalStorage Boundary]
-        B --> C[Request Context Factory]
-        C --> D[Service Scope Created]
-    end
-
-    %% Application Layer (Mediator & Pipelines)
-    D --> E[Mediator: Send Request]
-    subgraph Application Pipeline Stack [Middleware Execution Stack]
-        E --> F[Validation Pipeline]
-        F --> G[Authorization Pipeline]
-        G --> H[Execution Pipeline / Handler]
-    end
-
-    %% Domain & Infrastructure Layers
-    H --> I[Domain Layer: Entities & Value Objects]
-    H --> J[Infrastructure Layer: Repositories & DB Client]
-    J --> K[Data Store / Drizzle ORM]
-
-    classDef presentation fill:#e1f5fe,stroke:#039be5,stroke-width:2px;
-    classDef application fill:#e8f5e9,stroke:#43a047,stroke-width:2px;
-    classDef domain fill:#fff8e1,stroke:#ffb300,stroke-width:2px;
-    classDef infrastructure fill:#efebe9,stroke:#8d6e63,stroke-width:2px;
-
-    class A,B,C,D presentation;
-    class E,F,G,H application;
-    class I domain;
-    class J,K infrastructure;
-
-```
 
 ---
 
@@ -120,4 +62,4 @@ graph TD
 
 Xeno is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
-[support section](./support-us)
+[support section](../support-us)
