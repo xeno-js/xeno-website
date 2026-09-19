@@ -101,7 +101,7 @@ export default defineConfig({
               label: 'Fundamentals',
               items: [
                 { label: 'App Builder & Bootstrap', link: '/vue/fundamentals/app-builder' },
-                // { label: 'IoC & Vue Inject', link: '/vue/fundamentals/ioc-registry' },
+                { label: 'IoC & Vue Inject', link: '/vue/fundamentals/ioc-registry' },
                 // { label: 'Browser Context', link: '/vue/fundamentals/browser-context' },
                 // { label: 'Vite Environment', link: '/vue/fundamentals/vite-env-config' },
               ],

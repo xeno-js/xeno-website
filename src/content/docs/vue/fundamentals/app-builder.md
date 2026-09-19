@@ -11,11 +11,15 @@ In modern Single Page Applications (SPAs), bundle size directly impacts Core Web
 
 Xeno Vue solves this through the **`XenoAppBuilder`**: a fluent composition root that enforces pure Dependency Injection (DI) while aggressively utilizing dynamic imports (`import()`) to defer the resolution of non-critical infrastructure modules until the actual bootstrap execution.
 
+---
+
 ## What is XenoAppBuilder?
 
 The `XenoAppBuilder` is the programmatic entry point for configuring your frontend architecture. It acts as a deterministic Inversion of Control (IoC) container builder, replacing the implicit, "magic" injection mechanisms often found in native Vue plugins.
 
 Instead of globally registering mixins or polluting the Vue prototype, `XenoAppBuilder` constructs a strongly-typed, frozen registry (`XenoVueRegistry`) containing all your handlers, logging clients, data sources, and CQRS pipelines. This registry is then securely provided to the Vue component tree.
+
+---
 
 ## The Performance Advantage: Lazy Bootstrapping
 
@@ -37,6 +41,8 @@ this._tasks.push(async (services) => {
 ```
 
 This ensures that Vite (or Webpack) can automatically code-split your infrastructure logic, keeping the initial `main.ts` payload extremely lightweight.
+
+---
 
 ## Configuring the Builder Pipeline
 
@@ -118,6 +124,8 @@ builder.addServices((config, register, services) => {
 });
 
 ```
+
+---
 
 ## The Build Phase: Finalizing the Registry
 
