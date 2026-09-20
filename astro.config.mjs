@@ -13,7 +13,6 @@ export default defineConfig({
       customCss: ['./src/styles/global.css'],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/Mattia-Carcione/xeno-js' }],
 
-      // 2. Definizione gerarchica della Sidebar
       sidebar: [
         {
           label: 'Introduction',
@@ -93,7 +92,7 @@ export default defineConfig({
           ],
         },
         {
-          label: '📦 @xeno-js/vue',
+          label: '🎨 @xeno-js/vue',
           collapsed: false,
           items: [
             { label: 'Overview', link: '/vue/overview' },
@@ -102,25 +101,25 @@ export default defineConfig({
               items: [
                 { label: 'App Builder & Bootstrap', link: '/vue/fundamentals/app-builder' },
                 { label: 'IoC & Vue Inject', link: '/vue/fundamentals/ioc-registry' },
-                // { label: 'Browser Context', link: '/vue/fundamentals/browser-context' },
-                // { label: 'Vite Environment', link: '/vue/fundamentals/vite-env-config' },
+                { label: 'Browser Context', link: '/vue/fundamentals/browser-context' },
+                { label: 'Vite Environment', link: '/vue/fundamentals/vite-env-config' },
               ],
             },
-            // {
-            //   label: 'CQRS & State',
-            //   items: [
-            //     { label: 'Client Mediator', link: '/vue/cqrs/client-mediator' },
-            //     { label: 'Composables & Handlers', link: '/vue/cqrs/cqrs-composables' },
-            //     { label: 'Pipeline Behaviors', link: '/vue/cqrs/client-pipelines' },
-            //   ],
-            // },
-            // {
-            //   label: 'Data Fetching',
-            //   items: [
-            //     { label: 'HTTP Core & Resiliency', link: '/vue/data/http-core' },
-            //     { label: 'Remote Data Sources', link: '/vue/data/remote-data-sources' },
-            //   ],
-            // },
+            {
+              label: 'CQRS & State',
+              items: [
+                { label: 'Client Mediator', link: '/vue/cqrs/client-mediator' },
+                { label: 'Composables & Handlers', link: '/vue/cqrs/cqrs-composables' },
+                { label: 'Pipeline Behaviors', link: '/vue/cqrs/client-pipelines' },
+              ],
+            },
+            {
+              label: 'Data Fetching',
+              items: [
+                { label: 'HTTP Core & Resiliency', link: '/vue/data/http-core' },
+                // { label: 'Remote Data Sources', link: '/vue/data/remote-data-sources' },
+              ],
+            },
             // {
             //   label: 'Observability & Security',
             //   items: [

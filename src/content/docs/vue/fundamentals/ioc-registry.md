@@ -7,7 +7,7 @@ sidebar:
   order: 2
 ---
 
-# IoC & Vue Inject: The Frontend Service Registry
+## IoC & Vue Inject: The Frontend Service Registry
 
 In many Vue applications, dependencies like API clients, loggers, or state stores are either imported directly as global singletons or injected via untyped Vue plugins. This approach creates tight coupling, makes unit testing difficult, and obscures the application's dependency graph.
 
