@@ -55,7 +55,7 @@ successful authentication.
 `AuthenticationMiddleware`. The other middleware are registered when their
 corresponding `MiddlewareConfig` option is enabled or configured.
 
-### [RequestContextMiddleware](../middlewares/request.middleware.md)
+### [RequestContextMiddleware](../middlewares/request.middleware)
 
 `RequestContextMiddleware` extracts metadata from HTTP headers, assigns fallback
 identifiers when required, maps the request into the Xeno request context, and
@@ -63,7 +63,7 @@ executes the remaining chain inside `runAsync()`. It logs unsuccessful response
 data and converts unexpected exceptions into a `500 Internal Server Error`
 response.
 
-### [AuthenticationMiddleware](../middlewares/auth.middleware.md)
+### [AuthenticationMiddleware](../middlewares/auth.middleware)
 
 `AuthenticationMiddleware` extracts an optional bearer token and passes it to
 the configured `IGateKeeper`. On success, it updates the request identity and
@@ -74,21 +74,21 @@ When authentication is not configured, `MiddlewareModule` registers
 `NoAuthGateKeeper`. The authentication middleware remains in the chain, but the
 no-auth gatekeeper supplies the unauthenticated behavior.
 
-### [MethodCheckMiddleware](../middlewares/allow-method.middleware.md)
+### [MethodCheckMiddleware](../middlewares/allow-method.middleware)
 
 `MethodCheckMiddleware` is registered when `routeRegistry` is defined. It checks
 the request path and HTTP method against the configured `Dictionary<HttpMethod[]>`.
 If the method is not allowed, it returns a `405 Method Not Allowed` response;
 otherwise, it calls `next()`.
 
-### [CsrfMiddleware](../middlewares/csrf.middleware.md)
+### [CsrfMiddleware](../middlewares/csrf.middleware)
 
 `CsrfMiddleware` is registered when `csrf` is configured. It validates the CSRF
 value stored in the request context for `POST`, `PUT`, `DELETE`, and `PATCH`.
 A missing or case-insensitively mismatched value returns a `403 Forbidden`
 response. Other methods continue without this check.
 
-### [RateLimitMiddleware](../middlewares/rate-limiter.middleware.md)
+### [RateLimitMiddleware](../middlewares/rate-limiter.middleware)
 
 `RateLimitMiddleware` is registered when either rate-limit option is defined. It
 uses the configured cache and the client IP from the request context to count
@@ -96,11 +96,15 @@ requests. The defaults are `30` requests and a `30`-second window when the
 corresponding values are omitted. Requests over the limit return `429 Too Many
 Requests` with a `Retry-After` header.
 
-### [OptionsMiddleware](../middlewares/options.middleware.md)
+### [OptionsMiddleware](../middlewares/options.middleware)
 
 `OptionsMiddleware` is registered when `optionsMiddleware` is `true`. It
 short-circuits `OPTIONS` requests with a `204 No Content` response. Other
 methods continue through the chain.
+
+### [CORSMiddleware](../middlewares/cors-middleware)
+
+`CORSMiddleware` is registered when `cors` is `true`. 
 
 ### CompositeMiddleware
 

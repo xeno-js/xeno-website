@@ -42,6 +42,18 @@ export default defineConfig({
               ],
             },
             {
+              label: 'Middleware',
+              items: [
+                { label: 'Request Middleware', link: '/core/middlewares/request-middleware' },
+                { label: 'RateLimit Middleware', link: '/core/middlewares/rate-limiter-middleware' },
+                { label: 'Options Middleware', link: '/core/middlewares/options-middleware' },
+                { label: 'Allow Origin Middleware', link: '/core/middlewares/allow-origins-middleware' },
+                { label: 'CORS Middleware', link: '/core/middlewares/cors-middleware' },
+                { label: 'Method Check Middleware', link: '/core/middlewares/allow-method-middleware' },
+                { label: 'CSRF Middleware', link: '/core/middlewares/csrf-middleware' }
+              ],
+            },
+            {
               label: 'Security',
               items: [
                 { label: 'Authentication', link: '/core/security/authentication' },
