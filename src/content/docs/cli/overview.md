@@ -1,159 +1,58 @@
 ---
-title: 'Xeno CLI Overview & System Architecture'
-description:
-  'High-level technical overview of @xeno-js/cli, including installation steps,
-  usage flags, scaffolding workflow, and core responsibilities.'
-keywords:
-  [
-    'Xeno CLI',
-    '@xeno-js/cli',
-    'Scaffolding Engine',
-    'CLI Overview',
-    'Global Installation',
-    'AppBuilder Boilerplate',
-  ]
+title: 'Xeno CLI: Enterprise Scaffolding Toolkit'
+description: 'Official overview of @xeno-js/cli, the command-line tool for automating the architectural scaffolding of Xeno projects.'
+keywords: 'Xeno CLI, scaffolding, DDD, CQRS, code generator, @xeno-js/cli, architectural automation'
 author: 'Xeno'
+sidebar:
+  order: 1
 ---
 
-## Xeno CLI: Overview & Scaffolding Engine
+## Xeno CLI: Enterprise Scaffolding Toolkit
 
-`@xeno-js/cli` is the official command-line utility for the Xeno framework.
-Executable via the `xeno` binary token, it automates project initialization,
-infrastructure setup, dependency wiring, and configuration file generation for
-Xeno applications.
+**Xeno CLI** (`@xeno-js/cli`) is the official command-line interface designed to initialize, configure, and manage projects based on the Xeno framework. Its primary goal is to automate infrastructural scaffolding to natively enforce **Domain-Driven Design (DDD)** and **Command Query Responsibility Segregation (CQRS)** patterns, eliminating boilerplate for both Node.js backend environments (`@xeno-js/core`) and frontend applications (`@xeno-js/vue`).
 
----
-
-## 1. Panoramica Generale (General Overview)
-
-`@xeno-js/cli` acts as an interactive scaffolding engine designed to eliminate
-boilerplate setup time. It guides developers through prompt-driven setups or
-quick execution flags (`--full` / `--empty`) to assemble tailored application
-architecture templates.
-
-### Key Technical Attributes
-
-- **Target Execution Runtime**: Node.js `>=20.0.0`.
-
-- **Exposed Binary Identifier**: `xeno` (`dist/index.js`).
-
-- **Core Dependencies**: Driven by `prompts` for interactive user selection and
-  `picocolors` for terminal output formatting.
-
-- **Extensible Engine**: Powered by an internal `ScaffoldingEngine` that
-  coordinates sequential file generation tasks through modular generator
-  handlers.
+Through the CLI, the development team eliminates human error in Dependency Injection wiring and ensures that every new component respects the framework's strict architectural conventions.
 
 ---
 
-## 2. Installazione Globale (Global Installation)
+## Installation
 
-To make the `xeno` command globally available across your local environment,
-install the package using `npm`:
+The CLI can be installed globally for quick access to generators in existing workspaces, or executed on-demand via `npx` to bootstrap new ecosystems:
 
 ```bash
-# Global installation command
+# Global installation
 npm install -g @xeno-js/cli
 
-```
-
-### Verification and System Engine Check
-
-Ensure your Node.js version satisfies the package requirement (`>=20.0.0`):
-
-```bash
-node -v
-# Output should be >= v20.0.0
-
-xeno --version
+# On-demand execution to initialize a new project
+npx xeno-js new my-xeno-app
 
 ```
 
 ---
 
-## 3. Scopi della CLI (Core Scaffolding Capabilities)
+## Main Commands Overview
 
-The primary goal of `@xeno-js/cli` is to establish production-ready Xeno
-application structures configured with strongly-typed setups out of the box.
+The CLI acts as an executive "guardrail," channeling development through specific commands that manage the creation and extension of the architecture in a predictable manner.
 
-```mermaid
-flowchart TD
-    A[xeno init command] --> B{Execution Mode}
-    B -->|Interactive Prompts| C[User selects features]
-    B -->|--full flag| D[Enable all features]
-    B -->|--empty flag| E[Minimal Core setup]
+* **`new <project-name> [--core | --vue]`**: Performs the interactive bootstrap of an entire architecture (backend or frontend), pre-configuring the environment (Git, variables, configuration files) and installing only the selected dependencies.
 
-    C --> F[Scaffolding Engine]
-    D --> F
-    E --> F
+* **`generate <type> <Name> [--core | --vue]`** (Alias: `g`): Dynamically generates all files necessary for a CQRS operation (Command or Query). It instantly creates and wires Handlers, Models, Controllers (in the backend), reactive Composables (in the frontend), and schemas, updating the relevant IoC registries.
 
-    F --> G[Generate Configuration Files]
-    F --> H[Generate Source Code Structure]
-    F --> I[Automatic npm install execution]
-
-    subgraph Generated Artifacts
-        G --> G1[package.json / tsconfig.json]
-        G --> G2[.env.example / drizzle.config.ts]
-        H --> H1[src/main.ts / src/bootstrap.ts]
-        H --> H2[src/registry.ts / src/schema.ts]
-    end
-
-```
-
-### Core Responsibilities
-
-1. **Modular Feature Opt-In / Opt-Out** Dynamically enables/disables integration
-   packages based on project requirements:
-
-- **Validation**: Zod schema validation.
-
-- **Persistence Layer**: Choice between PostgreSQL (Drizzle ORM +
-  `pg`/`postgres`) or SQLite (`@libsql/client`).
-
-- **Remote HTTP Client**: Axios & Cockatiel integration.
-
-- **Authentication**: Supabase client (`@supabase/supabase-js`).
-
-- **Logging & Observability**: Pino JSON logger (`pino` / `pino-pretty`) and
-  Sentry tracking (`@sentry/node`).
-
-- **Distributed Caching**: Redis driver (`ioredis`).
-
-2. **Automated Code Generation** Creates all essential project configuration
-   files and application bootstrap scripts:
-
-- **`package.json`**: Generated with matching dependency versions and database
-  script aliases (`db:generate`, `db:push`, `db:migrate`).
-
-- **`src/bootstrap.ts`**: Assembles the programmatic `AppBuilder` pipeline
-  according to selected modules.
-
-- **`src/main.ts`**: Provides the entry point for starting the application
-  container.
-
-- **`src/registry.ts`**: Prepares the type-safe `XenoRegistry` container tokens.
-
-- **`.env.example`**: Populates environment variable keys for configured
-  drivers.
-
-3. **Automated Workspace Bootstrap** Executes `npm install` inside the created
-   target directory automatically upon completing file generation.
+* **`--help` / `-h` / `--h`**: Shows the interactive quick start guide and the list of supported aliases directly in the terminal.
 
 ---
 
-## Command Usage Examples
+## Strategic and Architectural Advantages
 
-```bash
-# Interactive setup in a custom folder
-xeno my-xeno-service
+Adopting `@xeno-js/cli` is not just a convenience (Developer Experience), but a true architectural governance choice that significantly reduces the *Time-to-First-Feature*:
 
-# Non-interactive full feature scaffold
-xeno my-xeno-service --full
+* **Interactive Configuration (Pay-for-what-you-use):** Starts project creation through guided prompts that install and configure only the essential dependencies selected by the team (e.g., Zod, Supabase, Drizzle ORM, Pino, Sentry, Pinia, and Tailwind CSS), preventing bundle and `package.json` bloat.
 
-# Non-interactive minimal scaffold
-xeno my-xeno-service --empty
+* **CQRS Architectural Scaffolding:** With a single command, the CLI scaffolds the entire lifecycle of a business intent. In the backend, it generates Controllers, Handlers, Commands/Queries, and DB/Zod schemas; in the frontend, it generates files for the Presentation Layer (Composables) and the Application Layer (Handlers and Models).
 
-```
+* **Target Agnosticism:** Natively manages project structures for Backend (pure TypeScript) and Frontend (Vue.js), automatically setting up critical files (`tsconfig.json`, `vite.config.ts`, `.env`) and configuring infrastructure bootstrappers.
+
+* **CI/CD & Git Ready:** Instantly initializes Git repositories and triggers NPM installations automatically, delivering a "ready-to-code" ecosystem to the team from the very first run.
 
 ---
 

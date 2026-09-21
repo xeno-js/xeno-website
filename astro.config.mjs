@@ -116,17 +116,17 @@ export default defineConfig({
             {
               label: 'Data Fetching',
               items: [
-                { label: 'HTTP Core & Resiliency', link: '/vue/data/http-core' },
-                // { label: 'Remote Data Sources', link: '/vue/data/remote-data-sources' },
+                { label: 'HTTP Core', link: '/vue/data/http-core' },
+                { label: 'Remote Data Sources', link: '/vue/data/remote-data-sources' },
               ],
             },
-            // {
-            //   label: 'Observability & Security',
-            //   items: [
-            //     { label: 'Sentry Vue Tracker', link: '/vue/observability/sentry-logger' },
-            //     { label: 'Supabase Auth', link: '/vue/security/supabase-auth' },
-            //   ],
-            // },
+            {
+              label: 'Observability & Security',
+              items: [
+                { label: 'Sentry Vue Tracker', link: '/vue/observability/sentry-logger' },
+                { label: 'Supabase Auth', link: '/vue/security/supabase-auth' },
+              ],
+            },
           ]
         },
         {
@@ -150,11 +150,12 @@ export default defineConfig({
           ]
         },
         {
-          label: '💻 CLI',
-          collapsed: true,
+          label: '🚀 CLI',
+          collapsed: false,
           items: [
             { label: 'Overview', link: '/cli/overview' },
-            { label: 'Initialization', link: '/cli/initialization' }
+            { label: 'New Project Scaffolding', link: '/cli/new-project' },
+            { label: 'CQRS Generators', link: '/cli/generate-cqrs' },
           ],
         },
         { label: 'Support', link: 'support-us' },
