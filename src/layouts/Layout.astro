@@ -5,6 +5,14 @@ import '../styles/global.css';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
 
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/inter/800.css';
+
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 interface Props {
   title: string;
   description: string;
@@ -59,10 +67,6 @@ const currentPath = Astro.url.pathname;
     <meta name="googlebot" content="index, follow" />
 
     {/* Preload dei font critici per ottimizzare i Cumulative Layout Shift (CLS) */}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </head>
   <body class="bg-[var(--bg-primary)] text-[var(--text-main)] min-h-screen flex flex-col font-[family-name:var(--font-sans)] antialiased selection:bg-[var(--accent-primary)] selection:text-[var(--bg-primary)]">
     
