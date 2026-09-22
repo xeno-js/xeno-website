@@ -1,26 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/homepage/Hero.astro';
-import Divider from '../components/homepage/Divider.astro';
+import ValueProposition from '../components/homepage/ValueProposition.astro';
 import Features from '../components/homepage/Features.astro';
 import CodeShowCase from '../components/homepage/CodeShowCase.astro';
 import DemoCTA from '../components/homepage/DemoCTA.astro';
 import SupportSection from '../components/homepage/SupportSection.astro';
+import Vision from '../components/homepage/Vision.astro';
 
 // Current page path for active state handling
 const currentPath = Astro.url.pathname;
 ---
 
 <Layout 
-  title="Xeno Framework - Enterprise-grade DDD & CQRS framework for Node.js" 
-  description="An architectural type-safe framework built on Domain-Driven Design (DDD) and CQRS for scalable and maintainable Node.js applications."
+  title="Xeno.JS - Home" 
+  description="Xeno.JS is a modern, lightweight, and easy-to-use JavaScript library for building web applications."
   canonicalURL={Astro.url.href}
 >
   <Hero />
-  <Divider />
+  <ValueProposition />
   <Features />
   <CodeShowCase />
   <!-- <DemoCTA /> -->
+   <Vision/>
   <SupportSection />
 
 </Layout>

@@ -4,7 +4,7 @@ import Button from '../ui/Button.astro'
 
 {/* Hero Section (NestJS Modern Style with Glassmorphism & Primary Green Glow) */}
 <section
-  class="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 pb-16 px-6"
+  class="relative min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-24 pb-16 px-6"
 >
   {/* Background Mirror / Glass Glow Effect using Brand Primary Color */}
   <div
@@ -36,13 +36,10 @@ import Button from '../ui/Button.astro'
     <h2
       data-aos="fade-up"
       data-aos-delay="120"
-      class="text-3xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] max-w-5xl mx-auto leading-[1.1] mb-6"
+      class="text-3xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] max-w-5xl mx-auto leading-[1.1]"
     >
-      Enterprise-grade <span
-        class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-primary)] to-[#ffffff]"
-        >DDD & CQRS</span
-      > framework for Node.js
-    </h2>
+    Architecture that survives <span class="text-[var(--color-primary)]">CHANGE</span>.
+</h2>
 
     {/* Payoff description featuring Xeno */}
     <p
@@ -50,9 +47,7 @@ import Button from '../ui/Button.astro'
       data-aos-delay="220"
       class="text-base sm:text-xl text-[var(--text-muted)] max-w-3xl mx-auto font-normal leading-relaxed mb-10"
     >
-      Discover <strong class="text-[var(--text-main)] font-semibold">Xeno</strong>, a type-safe
-      architectural framework designed to eliminate runtime magic, providing explicit Inversion of
-      Control, absolute domain isolation, and deterministic execution pipelines.
+      <strong class="text-[var(--text-main)] font-semibold">Xeno.JS</strong> is an enterprise-grade TypeScript framework for building mission-critical systems with <strong class="text-[var(--text-main)] font-semibold">DDD</strong>, <strong class="text-[var(--text-main)] font-semibold">CQRS</strong>, and explicit <strong class="text-[var(--text-main)] font-semibold">Dependency Injection</strong> across backend and browser.
     </p>
 
     {/* Action Buttons (Docs Index & Source Code) */}
@@ -69,11 +64,11 @@ import Button from '../ui/Button.astro'
         Getting Started
       </Button>
       <Button
-        href="https://github.com/Mattia-Carcione/xeno-js"
+        href="#packages"
         variant="secondary"
         class="w-full sm:w-auto px-8 py-4 text-base"
       >
-        <i class="bi bi-github text-lg mr-2"></i> Source Code
+        Explore Ecosystem
       </Button>
     </div>
 
@@ -99,7 +94,7 @@ import Button from '../ui/Button.astro'
       </div>
       <pre
         class="font-[family-name:var(--font-mono)] text-xs sm:text-sm text-[var(--text-main)] overflow-x-auto"><code class="language-bash"><span class="text-[var(--color-primary)]">$</span> npm install @xeno-js/cli
-<span class="text-[var(--color-primary)]">$</span> xeno my-xeno-app
+<span class="text-[var(--color-primary)]">$</span> xeno-js new my-xeno-app --core
 <span class="text-emerald-400">✔ Scaffolding completed successfully!</span></code></pre>
     </div>
   </div>

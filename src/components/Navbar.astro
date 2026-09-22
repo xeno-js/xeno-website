@@ -9,12 +9,13 @@ const { currentPath = '' } = Astro.props;
 
 // Navigation items list in English
 const navItems = [
-  { href: '/introduction', label: 'Introduction' },
-  { href: '/support-us', label: 'Support Us' },
+  { href: '/', label: 'Home' },
+  { href: '/introduction', label: 'Docs' },
+  // { href: '/blog', label: 'Blog' },
 ];
 ---
 
-<header class="fixed top-0 left-0 w-full z-50 border-b border-[var(--border-color)] bg-[var(--bg-primary)]/80 backdrop-blur-md">
+<header class="fixed top-0 left-0 w-full z-50 bg-[var(--bg-primary)]/25 backdrop-blur-xs">
   <div class="max-w-[var(--container-max)] mx-auto px-6 h-16 flex items-center justify-between">
     
     {/* Logo & Brand */}

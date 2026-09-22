@@ -1,10 +1,10 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
-import starlightTypeDoc from 'starlight-typedoc'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  site: 'https://xenojs.com',
   integrations: [
     starlight({
       title: 'Xeno Docs',

@@ -1,112 +1,146 @@
 ---
-// Features component highlighting Xeno's core architectural advantages
-const featuresList = [
-  {
-    title: "Zero-Magic & Explicit IoC",
-    category: "Architecture",
-    description: "No hidden magic or runtime directory auto-scanning. Every dependency, module, and lifecycle (singleton, scoped, transient) is declared programmatically and transparently.",
-    icon: "bi-cpu"
-  },
-  {
-    title: "Strongly-Typed Service Registry",
-    category: "Compile-Time Safety",
-    description: "Contracts mapped statically via TypeScript. If you modify a service signature, the compiler immediately flags any non-compliant injections before runtime.",
-    icon: "bi-shield-check"
-  },
-  {
-    title: "Async Context Isolation",
-    category: "Node.js AsyncLocalStorage",
-    description: "Eliminates parameter drilling completely. Automatically tracks correlation IDs, tenant IDs, and user identities across asynchronous execution flows.",
-    icon: "bi-diagram-3"
-  },
-  {
-    title: "CQRS & Composite Pipelines",
-    category: "Mediator & Pipelines",
-    description: "Clean separation of Commands and Queries with built-in cross-cutting pipelines: Zod Validation, Authorization, Idempotency, Concurrency Retry, and Caching.",
-    icon: "bi-layers"
-  },
-  {
-    title: "Fluent AppBuilder Config",
-    category: "Developer Experience",
-    description: "A .NET-inspired fluent bootstrapper leveraging SetupActions to assemble your application cleanly, securely, and strongly-typed.",
-    icon: "bi-sliders"
-  },
-  {
-    title: "Deterministic Error Handling",
-    category: "Result Monad",
-    description: "Replaces unhandled exceptions with functional Result<T, E> monads and AppErrors, forcing safe error-state checks before payload extraction.",
-    icon: "bi-exclamation-triangle"
-  },
-  {
-    title: "Type-Safe Drizzle ORM",
-    category: "Database & Unit of Work",
-    description: "SQL-first approach supporting PostgreSQL and SQLite/libSQL with an integrated Unit of Work pattern for atomic transaction blocks and automatic rollbacks.",
-    icon: "bi-database"
-  },
-  {
-    title: "Built-in Network Resiliency",
-    category: "Cockatiel Integration",
-    description: "RemoteDataSource combining Axios with robust resiliency patterns like retries, circuit breakers, and timeouts for external HTTP microservices.",
-    icon: "bi-shield-shaded"
-  },
-  {
-    title: "Official CLI Scaffolding",
-    category: "Tooling (@xeno-js/cli)",
-    description: "Instant project initialization and module code generation through interactive prompts or rapid flags (--full / --empty) to bootstrap in seconds.",
-    icon: "bi-terminal"
-  }
-];
+import Button from "../ui/Button.astro";
+
+// src/components/homepage/PackagesExplore.astro
 ---
 
-<section id="features" class="py-24 border-t border-[var(--border-color)] bg-[var(--bg-primary)] relative overflow-hidden">
+<section class="py-32 bg-[var(--bg-tertiary)] relative overflow-hidden" id="packages">
   
-  {/* Background Glow Accents */}
-  <div class="absolute top-1/3 left-0 w-[500px] h-[500px] bg-[var(--color-primary)] opacity-5 blur-[140px] rounded-full pointer-events-none -z-10"></div>
+  <!-- Sottile linea di accento superiore per separare visivamente le sezioni -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent opacity-20"></div>
 
-  <div class="max-w-[var(--container-max)] mx-auto px-6">
+  <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     
-    {/* Section Header */}
-    <div data-aos="fade-up" data-aos-delay="100" class="text-center max-w-3xl mx-auto mb-20">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
-        <i class="bi bi-star"></i> Core Value Proposition
+    <!-- Intestazione orizzontale compatta -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6" data-aos="fade-right">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
+        <i class="bi bi-boxes"></i> More than a framework
       </div>
-      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 leading-[1.15]">
-        Why choose <span class="text-[var(--color-primary)]">Xeno</span>?
-      </h2>
-      <p class="text-[length:var(--body-size)] text-[var(--text-muted)] leading-relaxed">
-        Engineered specifically for teams and developers seeking deep control over their dependency graph, request lifecycles, and domain architectures in Node.js.
-      </p>
+        <h2 class="text-[var(--h2-size)] font-[var(--h1-weight)] text-[var(--text-main)] mb-3 tracking-tight">
+          Modular <span class="text-[var(--color-primary)]">Ecosystem</span>
+        </h2>
+        <p class="text-[var(--body-size)] text-[var(--text-muted)] m-0">
+          <strong class="text-[var(--text-main)] font-medium">Pay-for-what-you-use</strong> architecture. Integrate only the necessary packages to structure your domain without infrastructure overhead.
+        </p>
+      </div>
     </div>
 
-    {/* Features Grid */}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {featuresList.map((feature, index) => (
-        <div
-          data-aos="fade-up"
-          data-aos-delay={index * 80}
-          class="p-8 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)]/50 transition-all duration-300 group flex flex-col justify-between shadow-lg hover:-translate-y-1"
-        >
-          <div>
-            <div class="flex items-center justify-between mb-6">
-              <div class="w-12 h-12 rounded-[var(--border-radius)] bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center text-xl group-hover:bg-[var(--color-primary)] group-hover:text-[var(--text-contrast)] transition-colors">
-                <i class={`bi ${feature.icon}`}></i>
-              </div>
-              <span class="text-xs font-mono text-[var(--text-muted)] bg-[var(--bg-primary)] px-2.5 py-1 rounded border border-[var(--border-color)]">
-                {feature.category}
-              </span>
-            </div>
-            
-            <h3 class="text-xl font-semibold text-[var(--text-main)] mb-3 group-hover:text-[var(--color-primary)] transition-colors">
-              {feature.title}
-            </h3>
-            
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">
-              {feature.description}
-            </p>
+    <!-- Griglia 2x2 stile Dashboard/Pannelli -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Pacchetto Core -->
+      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="0">
+        <div class="flex justify-between items-start mb-8">
+          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
+            <i class="bi bi-cpu"></i>
           </div>
         </div>
-      ))}
-    </div>
+        <div class="mt-auto flex flex-col flex-grow">
+          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/core</h3>
+          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
+            The backend kernel. Provides the IoC container, context isolation using AsyncLocalStorage, and CQRS server-side pipelines.
+          </p>
+          <div class="flex items-center gap-3 mt-auto">
+            <Button href="/core/introduction" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
+              <i class="bi bi-book"></i> Docs
+            </Button>
+            <Button
+        href="https://github.com/Mattia-Carcione/xeno-js"
+        variant="secondary"
+        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
+        target="_blank"
+      >
+        <i class="bi bi-github"></i> Codespace
+      </Button>
+          </div>
+        </div>
+      </div>
 
+      <!-- Pacchetto Vue -->
+      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex justify-between items-start mb-8">
+          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
+            <i class="bi bi-browser-edge"></i>
+          </div>
+        </div>
+        <div class="mt-auto flex flex-col flex-grow">
+          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/vue</h3>
+          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
+            The frontend engine. Brings explicit Dependency Injection, resilient data-fetching, and native CQRS patterns to the browser.
+          </p>
+          <div class="flex items-center gap-3 mt-auto">
+            <Button href="/vue/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
+              <i class="bi bi-book"></i> Docs
+            </Button>
+            <Button
+        href="https://github.com/Mattia-Carcione/xeno-fe"
+        variant="secondary"
+        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
+        target="_blank"
+      >
+        <i class="bi bi-github"></i> Codespace
+      </Button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pacchetto Shared -->
+      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex justify-between items-start mb-8">
+          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
+            <i class="bi bi-layers-half"></i>
+          </div>
+        </div>
+        <div class="mt-auto flex flex-col flex-grow">
+          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/shared</h3>
+          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
+            The isomorphic foundation. Ensures synchronization of contracts, constants, error monads, and utilities between Node.js and Vue.js.
+          </p>
+          <div class="flex items-center gap-3 mt-auto">
+            <Button href="/shared/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
+              <i class="bi bi-book"></i> Docs
+            </Button>
+            <Button
+        href="https://github.com/Mattia-Carcione/xeno-shared"
+        variant="secondary"
+        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
+        target="_blank"
+      >
+        <i class="bi bi-github"></i> Codespace
+      </Button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pacchetto CLI -->
+      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="300">
+        <div class="flex justify-between items-start mb-8">
+          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
+            <i class="bi bi-terminal"></i>
+          </div>
+        </div>
+        <div class="mt-auto flex flex-col flex-grow">
+          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/cli</h3>
+          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
+            The enterprise generator. Automates the creation of boilerplate, instantly configuring architectural boundaries for Commands and Queries.
+          </p>
+          <div class="flex items-center gap-3 mt-auto">
+            <Button href="/cli/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
+              <i class="bi bi-book"></i> Docs
+            </Button>
+            <Button
+        href="https://github.com/Mattia-Carcione/xeno-cli"
+        variant="secondary"
+        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
+        target="_blank"
+      >
+        <i class="bi bi-github"></i> Codespace
+      </Button>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>

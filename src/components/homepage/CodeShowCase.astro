@@ -19,7 +19,7 @@ export const XenoApp = new AppBuilder<MyRegistry>()
 await XenoApp.build()`;
 ---
 
-<section class="py-24 border-t border-[var(--border-color)] relative overflow-hidden" style="background: linear-gradient(135deg, rgba(201, 245, 27, 0.05) 0%, rgba(10, 10, 10, 1) 100%);">
+<section class="py-24 relative overflow-hidden bg-[var(--bg-secondary)]" >
   
   {/* Sfumatura verde fluo diffusa */}
   <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--color-primary)] opacity-10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
@@ -37,17 +37,32 @@ await XenoApp.build()`;
         </div>
         
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 leading-[1.15]">
-          Built with clarity, driven by <span class="text-[var(--color-primary)]">types</span>.
+          Dependencies you can see, reason about, and <span class="text-[var(--color-primary)]">trust</span>.
         </h2>
         
         <p class="text-[length:var(--body-size)] text-[var(--text-muted)] leading-relaxed mb-8">
-          Configure loggers, database connectors, and transient dependencies in a fully type-safe manner. Xeno's fluent API design ensures your application bootstrap sequence remains clean, predictable, and completely transparent.
+          Xeno uses an explicit functional container with deterministic lifetimes. It catches captive dependencies before they become production memory leaks and preserves compile-time safety without decorator metadata.
         </p>
         
-        <div>
-          <Button href="/getting-started" variant="primary" class="px-6 py-3.5 shadow-[0_0_25px_var(--accent-glow)]">
-            Getting Started
-          </Button>
+        <div class="mx-4">
+          <ul class="flex flex-col gap-3 text-sm text-[var(--text-main)] font-medium">
+            <li data-aos="fade-up" data-aos-delay="200" class="flex items-center gap-2.5">
+              <i class="bi bi-check-circle-fill text-[var(--color-primary)]"></i>
+              <span>Explicit registrations</span>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="250" class="flex items-center gap-2.5">
+              <i class="bi bi-check-circle-fill text-[var(--color-primary)]"></i>
+              <span>Lifetime safety</span>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="300" class="flex items-center gap-2.5">
+              <i class="bi bi-check-circle-fill text-[var(--color-primary)]"></i>
+              <span>Compile-time contracts</span>
+            </li>
+            <li data-aos="fade-up" data-aos-delay="350" class="flex items-center gap-2.5">
+              <i class="bi bi-check-circle-fill text-[var(--color-primary)]"></i>
+              <span>Framework-independent domain</span>
+            </li>
+          </ul>
         </div>
       </div>
 
