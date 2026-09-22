@@ -57,7 +57,7 @@ sponsorship, buys the most precious resource: **time**.
   show appreciation for a specific feature, release, or simply to keep me fueled
   during late-night coding sessions.
 - **Star the Repository**: Give us a ⭐ on our
-  [GitHub repository](https://github.com/Mattia-Carcione/xeno-js)! It costs
+  [GitHub repository](https://github.com/xeno-js/xeno-js)! It costs
   nothing, but it boosts our visibility and helps more developers discover Xeno.
 - **Direct Contact & Project Support**: If you are using Xeno in your
   application and need dedicated support, architectural advice, or guidance with

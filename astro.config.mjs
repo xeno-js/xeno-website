@@ -11,7 +11,7 @@ export default defineConfig({
       favicon: '/favicon.ico',
       description: 'Xeno is a Node.js framework for building scalable and maintainable applications.',
       customCss: ['./src/styles/global.css'],
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/Mattia-Carcione/xeno-js' }],
+      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/xeno-js/xeno-js' }],
 
       sidebar: [
         {
