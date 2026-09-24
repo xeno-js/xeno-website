@@ -45,6 +45,7 @@ export default defineConfig({
               label: 'Middleware',
               items: [
                 { label: 'Request Middleware', link: '/core/middlewares/request-middleware' },
+                { label: 'Cookie Middleware', link: '/core/middlewares/cookie-middleware' },
                 { label: 'RateLimit Middleware', link: '/core/middlewares/rate-limiter-middleware' },
                 { label: 'Options Middleware', link: '/core/middlewares/options-middleware' },
                 { label: 'Allow Origin Middleware', link: '/core/middlewares/allow-origins-middleware' },
@@ -61,6 +62,8 @@ export default defineConfig({
                 { label: 'Authorization', link: '/core/security/authorization' },
                 { label: 'Roles & Permissions Policies', link: '/core/security/role-permission-policy' },
                 { label: 'Custom Authorization', link: '/core/security/custom-authorization' },
+                { label: 'CSRF Token Service', link: '/core/security/csrf-token-service' },
+                { label: 'SSR & Platform Adapters', link: '/core/security/ssr-adapters' },
               ],
             },
             {
@@ -170,6 +173,7 @@ export default defineConfig({
             { label: 'CQRS Generators', link: '/cli/generate-cqrs' },
           ],
         },
+        { label: 'GDPR & IP Masking', link: '/loggers/gdpr-ip-masking' },
         { label: 'Support', link: 'support-us' },
         { label: 'Contributing Guide', link: 'contributing-guide' },
       ],

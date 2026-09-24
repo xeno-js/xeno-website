@@ -1,15 +1,13 @@
 ---
-title: 'RateLimitMiddleware: Request Rate Limiting in Xeno'
-description: 'Learn how Xeno RateLimitMiddleware counts requests by client IP, stores
-  counters in the configured cache, and returns 429 Too Many Requests when the
-  configured limit is exceeded.'
+title: 'RateLimitMiddleware: Dynamic Key-Based Request Rate Limiting in Xeno'
+description: 'Learn how Xeno RateLimitMiddleware leverages IRateLimitKeyBuilder to throttle incoming requests based on tenant, user, or IP contexts, preventing traffic abuse in distributed systems.'
 keywords: [
 		'RateLimitMiddleware',
 		'rate limiting',
+		'IRateLimitKeyBuilder',
 		'request throttling',
 		'MiddlewareConfig rateLimite',
 		'ICache',
-		'client IP rate limit',
 		'429 Too Many Requests',
 		'Retry-After',
 		'Xeno',
@@ -21,37 +19,28 @@ sidebar:
 
 ## What Is RateLimitMiddleware?
 
-`RateLimitMiddleware` is a Xeno Presentation middleware that limits the number
-of requests accepted from a client during a configured time window. It obtains
-the client IP from the current `RequestContext`, stores the request counter in
-an `ICache`, and either forwards the request or returns `429 Too Many Requests`.
+`RateLimitMiddleware` is an enterprise-grade presentation middleware in Xeno designed to control traffic flow and prevent system abuse by limiting the number of requests a client can execute within a specified time window. 
 
-The limit is applied using the cache key `rate_limit:<clientIp>`. The middleware
-does not identify users or authorize application operations; it limits traffic
-before the request reaches later middleware and the application layer.
+Unlike traditional rate limiters that bind strictly to raw client IP addresses, Xeno's rate limiter delegates key generation to the **`IRateLimitKeyBuilder`** interface. This allows rate-limiting policies to adapt dynamically to complex multi-tenant and user-scoped environments (e.g., partitioning limits by tenant ID, user ID, or IP address).
+
+---
 
 ## How Does RateLimitMiddleware Work?
 
-For each request, the middleware performs these steps:
+For every incoming HTTP request, `RateLimitMiddleware` executes a structured evaluation pipeline:
 
-1. It reads `network.clientIp` and tracing metadata from the current context
-	 through `IContextAccessor`.
-2. It creates the cache key `rate_limit:<clientIp>`.
-3. It reads the current hit count from `ICache`.
-4. If the count is greater than or equal to `maxRequests`, it logs a warning and
-	 returns a `429` response.
-5. Otherwise, it stores the incremented count with the configured expiration
-	 window and calls `next()`.
+1. **Context Resolution**: It retrieves network metadata, tracing data, and active identity scopes via `IContextAccessor`.
+2. **Dynamic Key Generation**: It invokes `this._keyBuilder.buildRateLimitKey(req.path)`, generating a precise, contextual cache key for the resource.
+3. **Client Identification Safeguard**: If the key builder cannot resolve a valid client context, the middleware immediately halts execution and returns a `503 Service Unavailable` response (`Bad Request: Unable to identify client context for rate limiting`).
+4. **Atomic Hit Counter Increment**: It queries the underlying `IAtomicCache` using the generated key, incrementing the counter atomically within the configured `windowSeconds`.
+5. **Throttling Enforcement**: If the `currentHits` exceed `maxRequests`, it logs a warning via `ILogger` and returns a `429 Too Many Requests` response equipped with a `Retry-After` header.
+6. **Pipeline Progression**: If requests remain within permitted thresholds, it delegates control to downstream middleware and handlers via `next()`.
 
-The counter is updated before the downstream middleware and Handler execute.
-The current implementation does not decrement the counter when downstream
-processing fails.
+---
 
 ## How Is It Configured?
 
-`MiddlewareModule` registers `RateLimitMiddleware` when either
-`rateLimite.maxRequests` or `rateLimite.windowSeconds` is defined in
-`MiddlewareConfig`.
+`MiddlewareModule` registers `RateLimitMiddleware` automatically when either `rateLimite.maxRequests` or `rateLimite.windowSeconds` is defined inside `MiddlewareConfig`.
 
 ```typescript
 import { AppBuilder } from '@xeno-js/core'
@@ -65,100 +54,75 @@ builder.addMiddlewares((config) => {
 })
 
 const container = await builder.build()
+
 ```
 
-If only one value is configured, `MiddlewareModule` applies the default for the
-other value:
+If only one property is specified, Xeno applies default values for the omitted parameter:
 
-- `maxRequests`: `30` requests;
-- `windowSeconds`: `30` seconds.
+* **`maxRequests`**: Defaults to `30` requests.
 
-When neither value is defined, `RateLimitMiddleware` is not registered.
+* **`windowSeconds`**: Defaults to `30` seconds.
 
-## Which Cache Does It Use?
+If neither property is defined, `RateLimitMiddleware` is omitted from the execution chain entirely.
 
-The middleware receives an `ICache` instance through Dependency Injection. If
-rate limiting is enabled and no cache module has already been registered,
-`MiddlewareModule` creates an in-memory cache for the rate-limit counters.
+---
 
-When an application cache is already configured, the middleware uses the
-resolved cache service. The cache must support numeric reads and writes with a
-time-to-live in seconds.
+## Contextual Rate Limit Keys (`IRateLimitKeyBuilder`)
+
+The core innovation of Xeno's rate-limiting mechanism is its hierarchical key resolution strategy via `RateLimitKeyBuilder`. Depending on the active request context, keys are automatically structured to match advanced architectural patterns (such as SaaS multi-tenant isolation):
+
+* **Tenant & User Scoped**: `ratelimit:tenant:<tenantId>:user:<userId>:<resource>` (Highest priority when both are present).
+
+* **Tenant & IP Scoped**: `ratelimit:tenant:<tenantId>:ip:<clientIp>:<resource>`.
+
+* **User Scoped**: `ratelimit:user:<userId>:<resource>`.
+
+* **IP Scoped (Default Fallback)**: `ratelimit:ip:<clientIp>:<resource>`.
+
+---
 
 ## What Happens When the Limit Is Exceeded?
 
-When the current count is greater than or equal to `maxRequests`, the
-middleware:
+When client traffic surpasses the configured threshold (`currentHits > maxRequests`), the middleware halts execution and renders a structured error response via `HttpHelper.error`:
 
-- logs a warning containing the client IP and request path;
-- returns an error with `ERROR_CODES.TOO_MANY_REQUESTS`;
-- returns status `429`;
-- includes the message `Rate limit exceeded.`;
-- includes the throttled IP and request path in the error details;
-- includes correlation, request, and span identifiers;
-- sets `Retry-After` to the configured window in seconds;
-- does not call `next()`.
+* **HTTP Status**: `429 Too Many Requests` (`STATUS_CODES.TOO_MANY_REQUESTS`).
 
-The configured response format is taken from the request context and defaults to
-`application/json` when no format indicator is available.
+* **Error Code**: `ERROR_CODES.TOO_MANY_REQUESTS`.
 
-## Which Requests Share a Counter?
+* **Headers**: Includes `Retry-After` set to the window duration in seconds alongside standard JSON content types.
 
-All requests with the same `network.clientIp` share the same cache key:
+* **Audit Logging**: Emits a warning log through `ILogger` identifying the blocked key and target path.
 
-```text
-rate_limit:<clientIp>
-```
-
-The current implementation does not include the request path, HTTP method,
-authenticated identity, tenant, or API key in the cache key. Consequently,
-requests from the same client IP share one counter across routes and methods.
-
-If `clientIp` is unavailable, the cache key is generated with the undefined
-value as returned by the current context. Applications should configure request
-metadata extraction correctly when IP-based limiting is required.
+---
 
 ## Where Does It Run in the Middleware Chain?
 
-`MiddlewareModule` appends `RateLimitMiddleware` after the optional
-`CsrfMiddleware` and before the always-registered
-`AuthenticationMiddleware`.
-
-The effective order depends on the enabled configuration:
+`RateLimitMiddleware` executes after CSRF validation and immediately prior to authentication processing:
 
 ```text
 RequestContextMiddleware
-	-> OptionsMiddleware (when optionsMiddleware is true)
+	-> OptionsMiddleware (optional)
 	-> MethodCheckMiddleware (when routeRegistry is defined)
 	-> CsrfMiddleware (when csrf is defined)
-	-> RateLimitMiddleware (when a rate-limit option is defined)
+	-> RateLimitMiddleware (when rate-limiting options are active)
 	-> AuthenticationMiddleware
 	-> Controller or Handler
+
 ```
 
-An enabled `OptionsMiddleware` can complete an `OPTIONS` request before rate
-limiting. A request that reaches `RateLimitMiddleware` consumes one cache count
-when it is under the limit.
+---
 
 ## Dependencies and Constraints
 
-`RateLimitMiddleware` receives these constructor dependencies:
+`RateLimitMiddleware` receives these constructor dependencies via Dependency Injection:
 
-- `IContextAccessor<RequestContext>`, used to read the client IP and tracing
-	metadata;
-- `ICache`, used to read and write the request counter;
-- `ILogger`, used to record blocked requests;
-- a configuration object containing `maxRequests` and `windowSeconds`.
+* `IContextAccessor<RequestContext>`: Accesses client network metadata and identity tokens.
 
-The current implementation has these constraints:
+* `IAtomicCache`: Manages atomic hit counting and expiration windows.
 
-- the limit is keyed only by `network.clientIp`;
-- counters use the cache time-to-live in seconds;
-- `maxRequests` and `windowSeconds` are validated by `MiddlewareModule` before
-	registration;
-- the middleware does not provide distributed atomic increment semantics itself;
-- the middleware does not add rate-limit headers to successful responses;
-- the middleware does not authenticate users or enforce authorization policies.
+* `IRateLimitKeyBuilder`: Constructs the contextual rate limit key.
+
+* `ILogger`: Records traffic violations and throttling events.
 
 ---
 

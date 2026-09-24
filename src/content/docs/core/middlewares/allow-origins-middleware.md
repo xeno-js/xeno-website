@@ -16,7 +16,7 @@ sidebar:
 
 ## What Is AllowOriginMiddleware?
 
-`AllowOriginMiddleware` is a Xeno Presentation middleware that validates whether the origin of an incoming request is authorized to access the resource. It evaluates the sanitized request origin stored in the execution context against a configurable whitelist (`IAllowOrigin`)[cite: 3]. If the origin is not permitted, the middleware short-circuits the pipeline and returns a structured `403 Forbidden` response[cite: 3].
+`AllowOriginMiddleware` is a Xeno Presentation middleware that validates whether the origin of an incoming request is authorized to access the resource. It evaluates the sanitized request origin stored in the execution context against a configurable whitelist (`IAllowOrigin`). If the origin is not permitted, the middleware short-circuits the pipeline and returns a structured `403 Forbidden` response.
 
 ---
 
@@ -24,21 +24,21 @@ sidebar:
 
 For each request, the middleware executes the following sequence:
 
-1. It reads the execution context via `IContextAccessor` to retrieve the sanitized request origin (`network.origin`)[cite: 3].
-2. It calls the injected whitelist service through `IAllowOrigin.isAllowed(origin)`[cite: 3].
+1. It reads the execution context via `IContextAccessor` to retrieve the sanitized request origin (`network.origin`).
+2. It calls the injected whitelist service through `IAllowOrigin.isAllowed(origin)`.
 3. The whitelist evaluation handles:
-   - **Global Asterisk (`*`)**: Accepts any incoming valid origin[cite: 1].
-   - **Exact Matches**: Compares the normalized origin against specific domain entries (e.g., `https://tuodominio.com`)[cite: 1].
-   - **Wildcard Subdomains**: Supports subdomain patterns (e.g., `*.tuodominio.com`) with secure prefix validation[cite: 1].
+   - **Global Asterisk (`*`)**: Accepts any incoming valid origin.
+   - **Exact Matches**: Compares the normalized origin against specific domain entries (e.g., `https://tuodominio.com`).
+   - **Wildcard Subdomains**: Supports subdomain patterns (e.g., `*.tuodominio.com`) with secure prefix validation.
    - **Missing Origins (`undefined`)**: Automatically permits requests lacking an `Origin` header (such as direct top-level browser navigation or OAuth redirect callbacks).
-4. If the origin passes validation, the middleware forwards execution by calling `next()`[cite: 3].
-5. If the origin is denied, it logs a warning through `ILogger` and returns a standardized error response via `HttpHelper.error`[cite: 3].
+4. If the origin passes validation, the middleware forwards execution by calling `next()`.
+5. If the origin is denied, it logs a warning through `ILogger` and returns a standardized error response via `HttpHelper.error`.
 
 ---
 
 ## How Is It Configured?
 
-`MiddlewareModule` registers `AllowOriginMiddleware` automatically when `MiddlewareConfig.allowOrigins` is configured and non-empty[cite: 3].
+`MiddlewareModule` registers `AllowOriginMiddleware` automatically when `MiddlewareConfig.allowOrigins` is configured and non-empty.
 
 ```typescript
 import { AppBuilder } from '@xeno-js/core'
