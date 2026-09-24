@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import tailwindcss from '@tailwindcss/vite'
+import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
   site: 'https://xenojs.com',
@@ -178,6 +179,7 @@ export default defineConfig({
         { label: 'Contributing Guide', link: 'contributing-guide' },
       ],
     }),
+    sitemap(),
   ],
   vite: {
     plugins: [tailwindcss()],
