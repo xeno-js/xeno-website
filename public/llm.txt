@@ -1,0 +1,29 @@
+# Xeno.JS
+
+> Xeno.JS is an enterprise-grade, deterministic architectural framework for TypeScript, designed for both backend runtime environments (Node.js) and modern browser clients (Vue.js). It natively enforces Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), and pure Dependency Injection (DI) across the entire full-stack.
+
+## Core Packages & Architecture
+
+- **@xeno-js/core**: The backend kernel providing an explicit IoC container, context isolation via `AsyncLocalStorage`, server-side CQRS pipelines (exception, logging, performance, validation, idempotency, concurrency retry, and query caching), robust security middleware (CSRF dual-token, rate limiting, CORS, method checks), and Drizzle ORM persistence integrations.
+- **@xeno-js/vue**: The frontend counterpart bringing strict Dependency Injection (`XenoAppBuilder`), frontend CQRS via `ClientMediator`, pipeline behaviors, and agnostic remote data sources (`RemoteDataSource`) with Axios transport and Cockatiel resilience delegation.
+- **@xeno-js/shared**: The isomorphic foundation supplying universal contracts, DTO envelopes (`ResponseDto`), error codes, and zero-dependency utilities (`Guards`, `GuidHelper`, `HttpHelper`, `DateHelper`, `MathHelper`, `StringHelper`, `PromiseHelper`, `Enumerable`).
+- **@xeno-js/cli**: Enterprise code generator automating scaffolding for projects, commands, queries, and handlers.
+
+## Key Technical Features
+
+- **Zero-Magic IoC**: Explicit programmatic container registration ensuring compile-time type safety and predictable execution graphs.
+- **Transport Decoupling**: Business logic and core domain rules are strictly isolated from HTTP engines (Fastify, Hono, Vercel) and UI renderers.
+- **Request Context Isolation**: Thread-safe tracing (`correlationId`, `requestId`) and multi-tenant security headers managed seamlessly.
+- **Resiliency & Security**: Built-in cryptographic nonce generation, HMAC SHA-256 signature validation for CSRF, and GDPR-compliant log redaction and IP masking.
+
+## Documentation & Navigation Links
+
+- [Official Documentation Home](https://xeno-js.it/introduction)
+- [Core Getting Started](https://xeno-js.it/core/getting-started)
+- [Core Fundamentals](https://xeno-js.it/core/fundamentals/overview)
+- [Vue Frontend Architecture](https://xeno-js.it/vue/overview)
+- [Shared Primitives](https://xeno-js.it/shared/overview)
+- [CLI Scaffolding Guide](https://xeno-js.it/cli/overview)
+- [Contributing Guide](https://xeno-js.it/contributing-guide)
+- [Project Support](https://xeno-js.it/support-us)
+- [GitHub Repository](https://github.com/xeno-js/xeno-js)
