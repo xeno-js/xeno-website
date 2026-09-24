@@ -73,6 +73,7 @@ export default defineConfig({
                 { label: 'Drizzle ORM', link: '/core/database/database-persistent' },
                 { label: 'Sql Lite', link: '/core/database/sql-lite' },
                 { label: 'Unit of Work Transaction', link: '/core/database/unit-of-work' },
+                { label: 'Base DataSource', link: '/core/database/base-datasource' },
               ],
             },
             {
