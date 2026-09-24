@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
-  site: 'https://xenojs.com',
+  site: 'https://xeno-js.it',
   integrations: [
     starlight({
       title: 'Xeno Docs',
