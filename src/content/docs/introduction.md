@@ -60,8 +60,8 @@ The Xeno ecosystem is modular and pay-for-what-you-use. It is composed of interc
 
 Xeno is a commitment to engineering excellence. Ready to explore the architecture?
 
-* **[Read the Core Fundamentals](./fundamentals/overview)** to dive into the Dependency Injection and Request Context mechanisms.
-* **[Explore the CQRS Architecture](./cqrs/overview)** to understand how Xeno handles Commands, Queries, and Pipelines.
+* **[Read the Core Fundamentals](./core/fundamentals/overview)** to dive into the Dependency Injection and Request Context mechanisms.
+* **[Explore the CQRS Architecture](./core/cqrs/overview)** to understand how Xeno handles Commands, Queries, and Pipelines.
 * **[Learn about Frontend Integration](./vue/overview)** to see how Xeno brings enterprise patterns to the browser.
 * **[Discover the Scaffolding CLI](./cli/overview)** to streamline your development process and focus on business logic.
 * **[Explore the Shared Primitives](./shared-primitives/overview)** to understand the core contracts and utilities that power Xeno.
