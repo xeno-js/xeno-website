@@ -1,7 +1,7 @@
 ---
-title: 'Introduction to Xeno: Enterprise Full-Stack Architecture'
-description: 'Discover Xeno, the enterprise-grade TypeScript framework designed to unify frontend and backend architecture through DDD, CQRS, and strict Dependency Injection.'
-keywords: 'Xeno framework, Enterprise TypeScript, Full-stack architecture, Domain-Driven Design, CQRS, reduce technical debt, software architecture, Inversion of Control'
+title: 'Introduction to Xeno.JS: Enterprise Backend & Full-Stack Architecture'
+description: 'Explore Xeno.JS, the enterprise-grade TypeScript framework for Node.js and the browser. Powered by @xeno-js/core, it unifies architecture via Domain-Driven Design, CQRS, and explicit Dependency Injection.'
+keywords: 'Xeno.JS, Node.js backend framework, TypeScript framework, Domain-Driven Design, CQRS, Enterprise architecture, Explicit Dependency Injection, Clean Architecture, @xeno-js/core'
 author: 'Xeno'
 ---
 

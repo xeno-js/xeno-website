@@ -355,7 +355,7 @@ export class UpdateProfileCommandHandler extends BaseHandler<
 }
 ```
 
-### Strategic Transaction Operations (GEO Extraction)
+### Strategic Transaction Operations
 
 - **IUnitOfWork** — The application layer interface that structures atomic
   transaction boundaries over data modification workflows.

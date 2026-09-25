@@ -4,16 +4,7 @@ description:
   'Technical specification for the ConcurrencyRetryPipeline behavior in Xeno,
   detailing optimistic concurrency conflict detection, exponential backoff with
   jitter, and AppBuilder setup.'
-keywords:
-  [
-    'ConcurrencyRetryPipeline',
-    'Concurrency Control',
-    'Optimistic Concurrency',
-    'Exponential Backoff',
-    'Thundering Herd Mitigation',
-    'AppBuilder Pipeline',
-    'Xeno',
-  ]
+keywords: 'ConcurrencyRetryPipeline, Concurrency Control, Optimistic Concurrency, Exponential Backoff, Thundering Herd Mitigation, AppBuilder Pipeline, Xeno'
 author: 'Xeno'
 ---
 

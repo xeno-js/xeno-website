@@ -4,16 +4,7 @@ description:
   'Technical guide to configuring the RedisCache driver in Xeno, covering
   ioredis integration, connection pooling options, AppBuilder registration, and
   ICache dependency resolution.'
-keywords:
-  [
-    'RedisCache',
-    'ICache',
-    'ioredis',
-    'Distributed Caching',
-    'AppBuilder Caching',
-    'TOKENS.CACHE',
-    'Xeno Caching',
-  ]
+keywords: 'RedisCache, ICache, Distributed Caching, AppBuilder Caching, TOKENS.CACHE, Xeno Caching'
 author: 'Xeno'
 ---
 

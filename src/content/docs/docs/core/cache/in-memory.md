@@ -4,15 +4,7 @@ description:
   'Technical guide to using InMemoryCache in Xeno, covering process-local
   storage mechanics, TTL expiration handling, AppBuilder registration, and
   ICache dependency resolution.'
-keywords:
-  [
-    'InMemoryCache',
-    'ICache',
-    'Process-Local Caching',
-    'AppBuilder Caching',
-    'TOKENS.CACHE',
-    'Xeno Caching',
-  ]
+keywords: 'InMemoryCache, ICache, Process-Local Caching, AppBuilder Caching, TOKENS.CACHE, Xeno Caching'
 author: 'Xeno'
 ---
 

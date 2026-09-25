@@ -1,19 +1,7 @@
 ---
-title: 'Contributing to Xeno: Developer Workflow & Contribution Guidelines'
-description:
-  'Comprehensive guide for open-source contributors to Xeno-JS. Details local
-  setup, Git branching strategies, Conventional Commit specifications, and
-  validation scripts.'
-keywords:
-  [
-    'Contributing to Xeno',
-    'Xeno Developer Guide',
-    'Git Flow',
-    'Conventional Commits',
-    'Vitest',
-    'TypeScript Scaffolding',
-    'Open Source Node.js',
-  ]
+title: 'Contributing to Xeno.JS: Developer Workflow & Contribution Guidelines'
+description: 'Comprehensive guide for open-source contributors to Xeno.JS. Details local setup, Git branching strategies, Conventional Commit specifications, and validation scripts.'
+keywords: 'Xeno.JS, Contributing to Xeno, Xeno Developer Guide, Git Flow, Conventional Commits, Vitest, TypeScript Scaffolding, Open Source Node.js'
 author: 'Xeno'
 ---
 

@@ -7,21 +7,60 @@ const posts = (await getCollection('blog')).sort(
 );
 ---
 
-<Layout title="Xeno.JS - Blog Tecnico" description="Approfondimenti su Clean Architecture e TypeScript.">
-  <main class="max-w-4xl mx-auto px-6 py-12">
-    <h1 class="text-4xl font-extrabold mb-4">Blog Tecnico</h1>
-    <p class="text-[var(--text-muted)] mb-10 text-lg">Articoli, approfondimenti e dietro le quinte sullo sviluppo di Xeno.JS.</p>
-    
-    <div class="space-y-8">
-      {posts.map((post) => (
-        <article class="p-6 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all">
-          
-          <a href={`/blog/${post.id}`} class="block mt-2">
-            <h2 class="text-2xl font-bold hover:text-[var(--color-primary)] transition-colors">{post.data.title}</h2>
-          </a>
-          <p class="text-[var(--text-muted)] mt-2">{post.data.description}</p>
-        </article>
-      ))}
+<Layout 
+  title="Xeno.JS - Technical Blog & Enterprise Architectures" 
+  description="In-depth technical insights into Domain-Driven Design, CQRS, Clean Architecture, and scalable backend development in TypeScript with Xeno.JS."
+>
+  <section class="max-w-4xl mx-auto px-6 py-16">
+    <!-- Header della sezione -->
+    <div class="mb-12 border-b border-[var(--border-color)] pb-8">
+      <h1 class="text-4xl font-extrabold tracking-tight mb-3">Xeno<span class="text-[var(--color-primary)]">.JS</span> Blog</h1>
+      <p class="text-[var(--text-muted)] text-lg">
+        Behind the scenes: architectural choices and practical guides for scaling backend systems in TypeScript.
+      </p>
     </div>
-  </main>
+
+    <!-- Lista degli articoli -->
+    <div class="grid gap-6">
+      {posts.map((post) => {
+        // Tronca la descrizione a circa 150 caratteri aggiungendo i puntini di sospensione
+        const truncatedDesc = post.data.description.length > 150 
+          ? `${post.data.description.substring(0, 150)}...` 
+          : post.data.description;
+
+        return (
+          <article class="p-6 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-200 group">
+            <div class="flex items-center gap-3 text-xs text-[var(--text-muted)] mb-3">
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toLocaleDateString('it-IT', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </time>
+              <span>•</span>
+              <span>{post.data.author}</span>
+            </div>
+
+            <a href={`/blog/${post.id}`} class="block">
+              <h2 class="text-2xl font-bold group-hover:text-[var(--color-primary)] transition-colors mb-2">
+                {post.data.title}
+              </h2>
+            </a>
+
+            <p class="text-[var(--text-muted)] text-sm leading-relaxed mb-4">
+              {truncatedDesc}
+            </p>
+
+            <a 
+              href={`/blog/${post.id}`} 
+              class="inline-flex items-center text-sm font-semibold text-[var(--color-primary)] hover:underline gap-1"
+            >
+              Read more <i class="bi bi-arrow-right"></i>
+            </a>
+          </article>
+        );
+      })}
+    </div>
+  </section>
 </Layout>

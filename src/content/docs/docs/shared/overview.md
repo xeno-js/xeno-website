@@ -1,10 +1,9 @@
 ---
-title: 'Xeno Shared Overview: The Universal Architectural Foundation'
-description: 'An in-depth guide to @xeno-js/shared. Discover the core primitive types, constants, CQRS base classes, and isomorphic utilities that power the Xeno framework across Node.js and Vue.'
-keywords: 'Xeno Shared, Xeno utilities, CQRS interfaces, TypeScript primitives, Isomorphic JavaScript, Dependency Injection tokens, Xeno framework, DDD'
+title: 'Xeno.JS Shared Overview: The Universal Architectural Foundation'
+description: 'An in-depth guide to @xeno-js/shared. Discover the core primitive types, constants, CQRS base classes, and isomorphic utilities that power the Xeno.JS enterprise ecosystem across Node.js and the browser.'
+keywords: 'Xeno.JS, @xeno-js/shared, Xeno utilities, CQRS interfaces, TypeScript primitives, Isomorphic TypeScript, Dependency Injection tokens, Enterprise framework, Domain-Driven Design'
 author: 'Xeno'
 ---
-
 # Xeno Shared: Architectural Overview
 
 ## What is `@xeno-js/shared`?

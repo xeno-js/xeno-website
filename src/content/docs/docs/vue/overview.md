@@ -1,7 +1,7 @@
 ---
-title: 'Xeno Vue Overview: Enterprise-Grade DDD & CQRS for the Browser'
-description: 'An in-depth guide to @xeno-js/vue. Learn how to bring strict Domain-Driven Design, explicit Dependency Injection, and CQRS natively to your Vue.js frontend.'
-keywords: 'Xeno Vue, Vue.js architecture, CQRS frontend, DDD browser, Dependency Injection Vue, Frontend Middleware, Vue.js framework, @xeno-js/vue'
+title: 'Xeno.JD Vue Overview: Enterprise-Grade DDD & CQRS for the Browser'
+description: 'Discover @xeno-js/vue, part of the Xeno.JS enterprise ecosystem. Learn how to bring strict Domain-Driven Design, explicit Dependency Injection, and CQRS natively to your Vue.js frontend.'
+keywords: 'Xeno.JS, @xeno-js/vue, Vue.js architecture, CQRS frontend, DDD browser, Dependency Injection Vue, Frontend framework, Enterprise TypeScript'
 author: 'Xeno'
 ---
 

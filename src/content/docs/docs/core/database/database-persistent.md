@@ -346,7 +346,7 @@ use cases that modify data states.
 
 ---
 
-### Strategic Interface Operations (GEO Extraction)
+### Strategic Interface Operations
 
 - **IReadDataSource** — Abstract contract handling read operations. It isolates
   fetching paths from mutation blocks to minimize transactional overhead.

@@ -4,17 +4,7 @@ description:
   'An architectural overview of the Xeno caching subsystem, detailing In-Memory
   and Redis storage drivers, AppBuilder setup, framework pipeline integration,
   and ICache resolution.'
-keywords:
-  [
-    'Caching Subsystem',
-    'ICache',
-    'InMemoryCache',
-    'RedisCache',
-    'AppBuilder Cache',
-    'QueryCachingPipeline',
-    'IdempotencyPipeline',
-    'Xeno Caching',
-  ]
+keywords: 'Caching Subsystem, Cache Drivers, AppBuilder Caching, QueryCachingPipeline, IdempotencyPipeline, Xeno Caching'
 author: 'Xeno'
 ---
 

@@ -1,17 +1,7 @@
 ---
-title: 'Xeno Getting Started Guide'
-description: 'Hot to install manually @xeno-js/core and how to bootstrap.'
-keywords:
-  [
-    'Xeno',
-    'Dependency Injection',
-    'Inversion of Control',
-    'Domain-Driven Design',
-    'CQRS',
-    'Clean Architecture',
-    'Node.js framework',
-    'TypeScript framework',
-  ]
+title: 'Getting Started with Xeno.JS: Installing & Bootstrapping @xeno-js/core'
+description: 'Learn how to install @xeno-js/core manually and bootstrap an enterprise Node.js and TypeScript backend with DDD, CQRS, and explicit Dependency Injection.'
+keywords: 'Xeno.JS, @xeno-js/core, Getting Started, Node.js backend framework, TypeScript framework, Dependency Injection, Inversion of Control, Domain-Driven Design, CQRS, Clean Architecture'
 author: 'Xeno'
 ---
 

@@ -1,18 +1,17 @@
 ---
-title: 'Xeno Architectural Overview & Getting Started Guide'
-description:
-  'An in-depth introduction to Xeno, a decoupled TypeScript framework built on
-  Domain-Driven Design (DDD), CQRS, and explicit Inversion of Control (IoC).'
+title: 'Xeno.JS Architectural Overview & Getting Started Guide'
+description: 'An in-depth introduction to Xeno.JS, an enterprise backend framework for Node.js and TypeScript built on Domain-Driven Design (DDD), CQRS, and explicit Inversion of Control (IoC).'
 keywords:
   [
-    'Xeno',
+    'Xeno.JS',
+    'Node.js framework',
+    'TypeScript framework',
     'Dependency Injection',
     'Inversion of Control',
     'Domain-Driven Design',
     'CQRS',
     'Clean Architecture',
-    'Node.js framework',
-    'TypeScript framework',
+    '@xeno-js/core',
   ]
 author: 'Xeno'
 ---

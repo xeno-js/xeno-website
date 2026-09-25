@@ -1,21 +1,7 @@
 ---
-title:
-  'HTTP Core Subsystem: Resilient External HTTP Client & Remote Data Sources'
-description:
-  'Learn how Xeno HTTP Core configures an HTTP client, wraps remote data source
-  calls with Cockatiel resilience policies, and registers the required services
-  through AppBuilder.'
-keywords:
-  [
-    'HTTP Core',
-    'AxiosHttpClient',
-    'Cockatiel',
-    'ServiceResilience',
-    'RemoteDataSource',
-    'Circuit Breaker',
-    'HttpCoreModule',
-    'Xeno',
-  ]
+title: 'HTTP Core Subsystem: Resilient External HTTP Client & Remote Data Sources'
+description: 'Learn how Xeno.JS HTTP Core configures an HTTP client, wraps remote data source calls with Cockatiel resilience policies, and registers the required services through AppBuilder.'
+keywords: 'Xeno.JS, HTTP Core, AxiosHttpClient, Cockatiel, ServiceResilience, RemoteDataSource, Circuit Breaker, HttpCoreModule, Node.js framework, TypeScript framework'
 author: 'Xeno'
 ---
 
