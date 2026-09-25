@@ -183,6 +183,27 @@ this section.
 
 ---
 
+## Understanding User and Tenant Context (Guest Fallback Strategy)
+
+A common misconception in backend architecture is that `userId` and `tenantId` exist solely to protect individual HTTP routes via authentication middlewares. In **Xeno Core**, the security context is designed as a foundational, thread-safe boundary managed via `AsyncLocalStorage`.
+
+### Why Authentication Yields a "Guest" Instead of Undefined
+When a request hits your application, Xeno's auth layer attempts to resolve the identity (e.g., via Supabase tokens). 
+
+* **If credentials are valid:** The context is populated with the verified `userId`, `tenantId`, and assigned roles.
+* **If no credentials are provided or validation fails:** The context **does not fail or return undefined**. Instead, it gracefully falls back to a **`Guest`** context.
+
+### How Protection Works in Pipelines
+Because the context is *always* present, your business logic, query handlers, and command pipelines don't need to check for null references or scattered boolean flags. 
+
+Instead, the authorization pipeline enforces strict boundaries:
+1. Public routes allow `Guest` contexts to pass through.
+2. Protected routes evaluate the active context. If a route requires authentication and detects a `Guest` state, it immediately short-circuits and throws a standardized **`401 Unauthorized`**.
+
+This design guarantees that security is handled declaratively and deterministically at the architectural level, preventing accidental data leaks caused by forgotten checks in individual controllers.
+
+---
+
 ## Support Us
 
 Xeno is an MIT-licensed open source project. It can grow thanks to the support
