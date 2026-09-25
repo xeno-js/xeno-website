@@ -14,7 +14,7 @@ export default defineConfig({
       customCss: ['./src/styles/global.css'],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/xeno-js/xeno-js' }],
       logo: {
-        src: '/img/logo.png',
+        src: './static/img/logo.png',
         alt: 'Xeno.JS Logo',
       },
       sidebar: [
