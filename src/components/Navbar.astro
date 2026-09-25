@@ -70,7 +70,7 @@ const navItems = [
   >
     <nav class="flex flex-col gap-4">
       {navItems.map((item) => (
-        <NavLink href={item.href} active={currentPath === item.href} isMobile={true}>
+        <NavLink href={item.href} active={item.isActive} isMobile={true}>
           {item.label}
         </NavLink>
       ))}
