@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout title="Xeno.JS - Blog Tecnico" description="Approfondimenti su Clean Architecture e TypeScript.">
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <h1 class="text-4xl font-extrabold mb-4">Blog Tecnico</h1>
+    <p class="text-[var(--text-muted)] mb-10 text-lg">Articoli, approfondimenti e dietro le quinte sullo sviluppo di Xeno.JS.</p>
+    
+    <div class="space-y-8">
+      {posts.map((post) => (
+        <article class="p-6 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all">
+          
+          <a href={`/blog/${post.id}`} class="block mt-2">
+            <h2 class="text-2xl font-bold hover:text-[var(--color-primary)] transition-colors">{post.data.title}</h2>
+          </a>
+          <p class="text-[var(--text-muted)] mt-2">{post.data.description}</p>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>

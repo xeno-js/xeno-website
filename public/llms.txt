@@ -1,13 +1,25 @@
 # Xeno.JS
 
-> Xeno.JS is an enterprise-grade, deterministic architectural framework for TypeScript, designed for both backend runtime environments (Node.js) and modern browser clients (Vue.js). It natively enforces Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), and pure Dependency Injection (DI) across the entire full-stack.
+> Xeno.JS is an open-source, enterprise-grade, deterministic architectural framework for TypeScript, designed for both backend runtime environments (Node.js) and modern browser clients (Vue.js). It natively enforces Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), and pure Dependency Injection (DI) across the entire full-stack.
 
-## Core Packages & Architecture
+## Ecosystem Architecture
+
+Xeno.JS is structured as a modular monorepo ecosystem where packages serve distinct architectural layers:
 
 - **@xeno-js/core**: The backend kernel providing an explicit IoC container, context isolation via `AsyncLocalStorage`, server-side CQRS pipelines (exception, logging, performance, validation, idempotency, concurrency retry, and query caching), robust security middleware (CSRF dual-token, rate limiting, CORS, method checks), and Drizzle ORM persistence integrations.
 - **@xeno-js/vue**: The frontend counterpart bringing strict Dependency Injection (`XenoAppBuilder`), frontend CQRS via `ClientMediator`, pipeline behaviors, and agnostic remote data sources (`RemoteDataSource`) with Axios transport and Cockatiel resilience delegation.
 - **@xeno-js/shared**: The isomorphic foundation supplying universal contracts, DTO envelopes (`ResponseDto`), error codes, and zero-dependency utilities (`Guards`, `GuidHelper`, `HttpHelper`, `DateHelper`, `MathHelper`, `StringHelper`, `PromiseHelper`, `Enumerable`).
 - **@xeno-js/cli**: Enterprise code generator automating scaffolding for projects, commands, queries, and handlers.
+
+## Classification
+
+- Category: Enterprise Backend & Full-Stack Framework
+- Runtime Environment: Node.js (v20+)
+- Language: TypeScript (v5+)
+- Architecture: Domain-Driven Design (DDD) & Clean Architecture
+- Application Pattern: CQRS (Command Query Responsibility Segregation)
+- Dependency Injection: Explicit, Decorator-Free IoC Container
+- HTTP Layer: Transport-Agnostic (Fastify, Hono, AWS Lambda)
 
 ## Key Technical Features
 
