@@ -8,12 +8,15 @@ export default defineConfig({
   site: 'https://xeno-js.it',
   integrations: [
     starlight({
-      title: 'Xeno.JS Docs',
+      title: 'Xeno.JS',
       favicon: '/favicon.ico',
       description: 'Xeno.JS is an enterprise backend framework for Node.js and TypeScript. Powered by @xeno-js/core, it delivers DDD, CQRS, and explicit dependency injection.',
       customCss: ['./src/styles/global.css'],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/xeno-js/xeno-js' }],
-
+      logo: {
+        src: '/public/img/logo.png',
+        alt: 'Xeno.JS Logo',
+      },
       sidebar: [
         {
           label: 'Introduction',

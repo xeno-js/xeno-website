@@ -9,9 +9,9 @@ const { currentPath = '' } = Astro.props;
 
 // Navigation items list in English
 const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/docs/introduction', label: 'Docs' },
-  { href: '/blog', label: 'Blog' },
+  { href: '/', label: 'Home', isActive: currentPath === '/' },
+  { href: '/docs/introduction', label: 'Docs', isActive: currentPath.startsWith('/docs') },
+  { href: '/blog', label: 'Blog', isActive: currentPath.startsWith('/blog') },
 ];
 ---
 
@@ -33,7 +33,7 @@ const navItems = [
     {/* Desktop Navigation Links */}
     <nav class="hidden md:flex items-center gap-8">
       {navItems.map((item) => (
-        <NavLink href={item.href} active={currentPath === item.href}>
+        <NavLink href={item.href} active={item.isActive}>
           {item.label}
         </NavLink>
       ))}

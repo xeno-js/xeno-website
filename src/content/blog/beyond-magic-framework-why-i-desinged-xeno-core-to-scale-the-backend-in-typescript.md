@@ -1,5 +1,5 @@
 ---
-title: "How I implemented CSRF protection in TypeScript with Xeno.JS"
+title: "Beyond \"Magic\" Frameworks: Why I Designed Xeno Core to Scale the Backend (and the Entire Ecosystem) in TypeScript"
 description: "Discover why Xeno Core was designed to scale TypeScript backends without \"magic\" or hidden decorators, focusing instead on DDD, CQRS, and explicit Dependency Injection."
 keywords: 'Xeno.JS, Xeno Core, TypeScript backend framework, Domain-Driven Design, CQRS, Explicit Dependency Injection, Clean Architecture, AsyncLocalStorage, AppBuilder, @xeno-js/core'
 author: "Xeno"
