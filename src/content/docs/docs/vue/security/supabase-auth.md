@@ -1,7 +1,7 @@
 ---
 title: 'Supabase Auth: Agnostic Identity Management'
-description: 'Learn how Xeno Vue integrates Supabase authentication using an Anti-Corruption Layer, lazy loading, and the agnostic IExtendendService contract.'
-keywords: 'Supabase Vue, Authentication, Anti-Corruption Layer, Identity Management, IExtendendService, Code-Splitting, Xeno Vue'
+description: 'Learn how Xeno Vue integrates Supabase authentication using an Anti-Corruption Layer, lazy loading, and the agnostic IExtendendAuthService contract.'
+keywords: 'Supabase Vue, Authentication, Anti-Corruption Layer, Identity Management, IExtendendAuthService, Code-Splitting, Xeno Vue'
 author: 'Xeno'
 sidebar:
   order: 1
@@ -11,7 +11,7 @@ sidebar:
 
 In many Vue projects, developers import the `@supabase/supabase-js` client directly into their components, stores, or router guards. While convenient for rapid prototyping, this creates severe **vendor lock-in**. If the business later decides to migrate from Supabase to Auth0, Firebase, or a custom OAuth2 provider, the engineering team must rewrite authentication logic scattered across the entire presentation layer.
 
-Xeno Vue prevents this architectural drift by enforcing an **Anti-Corruption Layer (ACL)**. Your Vue application never interacts with Supabase directly; instead, it relies entirely on the framework-agnostic `IExtendendService` contract exposed by the `XenoVueRegistry`.
+Xeno Vue prevents this architectural drift by enforcing an **Anti-Corruption Layer (ACL)**. Your Vue application never interacts with Supabase directly; instead, it relies entirely on the framework-agnostic `IExtendendAuthService` contract exposed by the `XenoVueRegistry`.
 
 ---
 
@@ -67,11 +67,11 @@ When the factory initializes the `SupabaseClient` (integrating the customized `S
 1. **`SupabaseClaimsMapper`**: Translates the raw JWT payload from Supabase into Xeno's standardized `AuthClaims` domain model.
 2. **`SupabaseSessionMapper`**: Translates proprietary session objects into a generic `Identity` context.
 
-The factory ultimately returns a `SupabaseAuthService` instance, which strictly implements the agnostic `IExtendendService` interface.
+The factory ultimately returns a `SupabaseAuthService` instance, which strictly implements the agnostic `IExtendendAuthService` interface.
 
 ### Consuming Authentication in Vue Composables
 
-Because the `XenoVueRegistry` securely types the `authService` as an `IExtendendService`, your Vue Composables interact with a pure, vendor-agnostic API:
+Because the `XenoVueRegistry` securely types the `authService` as an `IExtendendAuthService`, your Vue Composables interact with a pure, vendor-agnostic API:
 
 ```typescript
 // src/features/auth/use-login.ts
@@ -85,7 +85,7 @@ export function useLogin() {
         loading.value = true;
         
         try {
-            // Resolve the agnostic IExtendendService from the IoC container
+            // Resolve the agnostic IExtendendAuthService from the IoC container
             const { authService } = ServicesUtils.useApp();
             
             // Execute the sign-in without knowing it relies on Supabase

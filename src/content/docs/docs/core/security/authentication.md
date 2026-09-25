@@ -12,7 +12,7 @@ keywords:
     'GateKeeper',
     'AuthClaims',
     'IBaseAuthService',
-    'IExtendendService',
+    'IExtendendAuthService',
     'TOKENS.AUTH_SERVICE',
     'TOKENS.BASE_AUTH_SERVICE',
     'AppBuilder Security',
@@ -40,7 +40,7 @@ and `ClaimsIdentityMapper` converts those claims into the internal `Identity`
 stored in the request context.
 
 The extended authentication service is a separate application dependency. It
-implements `IExtendendService`, which extends `IBaseAuthService` with session,
+implements `IExtendendAuthService`, which extends `IBaseAuthService` with session,
 provider sign-in, sign-out, and authorization-code exchange operations. It is
 resolved through `TOKENS.AUTH_SERVICE` and can be injected into application
 classes that need those capabilities.
@@ -58,7 +58,7 @@ sequenceDiagram
     participant Extractor as BearerTokenExtractor
     participant GK as GateKeeper Engine
     participant Base as IBaseAuthService
-    participant Auth as IExtendendService
+    participant Auth as IExtendendAuthService
     participant Store as NodeRequestContext
 
     Client->>MW: Inbound Request (Headers with Authorization)
@@ -102,7 +102,7 @@ sequenceDiagram
   `GateKeeper`. It exposes `isAuthenticated()`, `getUser()`, and
   `authenticate(token)`.
 
-- **IExtendendService** — The extended application contract. It includes the
+- **IExtendendAuthService** — The extended application contract. It includes the
   base authentication operations plus `signInWithProvider()`, `getSession()`,
   `signOut()`, and `exchangeCodeForSession()`.
 
@@ -234,9 +234,9 @@ Xeno exposes two authentication contracts with different responsibilities.
 the claims mapper. Application code normally does not need to resolve this
 token directly.
 
-### `IExtendendService`: The Application Contract
+### `IExtendendAuthService`: The Application Contract
 
-`IExtendendService` extends `IBaseAuthService` with the application-facing
+`IExtendendAuthService` extends `IBaseAuthService` with the application-facing
 authentication operations:
 
 - `signInWithProvider(provider)`;
@@ -246,18 +246,18 @@ authentication operations:
 
 When `addAuth()` is configured, the same provider is registered as a scoped
 service under `TOKENS.AUTH_SERVICE`. A custom provider must implement the
-complete `IExtendendService` contract before it can be used as the extended
+complete `IExtendendAuthService` contract before it can be used as the extended
 authentication service. The class that consumes it should resolve
 `TOKENS.AUTH_SERVICE` through Dependency Injection and receive the resolved
 service in its constructor.
 
 ```typescript
 import { TOKENS } from '@xeno-js/core'
-import type { IExtendendService } from '@xeno-js/core'
+import type { IExtendendAuthService } from '@xeno-js/core'
 import type { IServiceContainer } from '@/domain'
 
 export class AccountService {
-  constructor(private readonly _authService: IExtendendService) {}
+  constructor(private readonly _authService: IExtendendAuthService) {}
 
   public async getCurrentSession() {
     return this._authService.getSession()
@@ -271,7 +271,7 @@ export function registerAccountService(container: IServiceContainer) {
 }
 ```
 
-The built-in `SupabaseAuthService` already implements `IExtendendService`. For a
+The built-in `SupabaseAuthService` already implements `IExtendendAuthService`. For a
 custom provider, implement all methods from `IBaseAuthService` and `IAuthService`
 and register the implementation under `TOKENS.AUTH_SERVICE` with the
 application container. The `GateKeeper` dependency must remain compatible with

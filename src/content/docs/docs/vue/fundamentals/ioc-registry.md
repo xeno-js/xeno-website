@@ -30,7 +30,7 @@ export type XenoVueRegistry<TExtensions object> = {
   mediator: IClientMediator
   cache: ICache
   cacheKeyBuilder: ICacheKeyBuilder
-  authService: IExtendendService
+  authService: IExtendendAuthService
 } & TExtensions
 
 ```
