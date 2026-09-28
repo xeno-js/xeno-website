@@ -3,43 +3,50 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer class="bg-[var(--bg-secondary)] pt-16 pb-12 relative overflow-hidden">
-  
   {/* Background Glow Accent */}
-  <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-[var(--color-primary)] opacity-5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
+  <div
+    class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-[var(--color-primary)] opacity-5 blur-[120px] rounded-full pointer-events-none -z-10"
+  >
+  </div>
 
   <div class="max-w-[var(--container-max)] mx-auto px-6">
-    
     {/* Main Footer Grid */}
-    <div class="grid grid-cols-1 md:grid-cols-8 gap-12 pb-16 border-b border-[var(--border-color)]">
-      
+    <div
+      class="grid grid-cols-1 md:grid-cols-8 gap-12 pb-16 border-b border-[var(--border-color)]"
+    >
       {/* Brand & Description Column (Width: 4/12) */}
       <div class="md:col-span-4 text-left">
         <a href="/" class="flex items-center gap-3 mb-4 group">
-          <img 
-            src="/img/logo.png" 
-            alt="Xeno Framework Logo" 
-            class="w-7 h-7 object-contain transition-transform group-hover:scale-105" 
+          <img
+            src="/img/logo.png"
+            alt="Xeno Framework Logo"
+            class="w-7 h-7 object-contain transition-transform group-hover:scale-105"
           />
-          <span class="text-[var(--text-main)] font-[number:var(--h2-weight)] tracking-tight text-lg font-[family-name:var(--font-sans)]">
+          <span
+            class="text-[var(--text-main)] font-[number:var(--h2-weight)] tracking-tight text-lg font-[family-name:var(--font-sans)]"
+          >
             Xeno<span class="text-[var(--color-primary)]">.JS</span>
           </span>
         </a>
-        <p class="text-sm text-[var(--text-muted)] leading-relaxed mb-6 max-w-sm">
-          An enterprise-grade, type-safe architectural framework built on Domain-Driven Design (DDD) and CQRS for modern Node.js applications.
+        <p
+          class="text-sm text-[var(--text-muted)] leading-relaxed mb-6 max-w-sm"
+        >
+          Application architecture for TypeScript.
         </p>
-        
+        <p>Shared language. Explicit boundaries. Composable execution.</p>
+
         {/* Social Icons */}
         <div class="flex items-center gap-3">
-          <a 
-            href="https://github.com/xeno-js/xeno-js" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+          <a
+            href="https://github.com/xeno-js/xeno-js"
+            target="_blank"
+            rel="noopener noreferrer"
             class="w-10 h-10 rounded-[var(--border-radius)] bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-all"
             aria-label="GitHub"
           >
             <i class="bi bi-github text-lg"></i>
           </a>
-          <a 
+          <a
             href="mailto:xeno-js@outlook.it"
             class="w-10 h-10 rounded-[var(--border-radius)] bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-all"
             aria-label="GMAIL"
@@ -51,35 +58,65 @@ const currentYear = new Date().getFullYear();
 
       {/* Navigation Links Columns (Width: 4/12 total) */}
       <div class="md:col-span-2 text-left">
-        <h4 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
+        <h4
+          class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4"
+        >
           Documentation
         </h4>
         <ul class="flex flex-col gap-2.5 text-sm">
           <li>
-            <a href="/docs/core/getting-started" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Xeno.JS Core</a>
+            <a
+              href="/docs/core/getting-started"
+              class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors"
+              >xeno-js/core</a
+            >
           </li>
           <li>
-            <a href="/docs/vue/overview" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Xeno.JS Vue</a>
+            <a
+              href="/docs/vue/overview"
+              class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors"
+              >xeno-js/vue</a
+            >
           </li>
           <li>
-            <a href="/docs/shared/overview" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Xeno.JS Shared</a>
+            <a
+              href="/docs/shared/overview"
+              class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors"
+              >xeno-js/shared</a
+            >
           </li>
           <li>
-            <a href="/docs/cli/overview" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Xeno.JS CLI</a>
+            <a
+              href="/docs/cli/overview"
+              class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors"
+              >xeno-js/cli</a
+            >
           </li>
         </ul>
       </div>
 
       <div class="md:col-span-2 text-left">
-        <h4 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
+        <h4
+          class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4"
+        >
           Community
         </h4>
         <ul class="flex flex-col gap-2.5 text-sm">
           <li>
-            <a href="/docs/contributing-guide" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Contributing</a>
+            <a
+              href="/docs/contributing-guide"
+              class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors"
+              >Contributing</a
+            >
           </li>
           <li>
-            <a href="/docs/support-us" target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors">Support</a>
+            <a
+              href="/docs/support-us"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors"
+              >Support</a
+            >
           </li>
         </ul>
       </div>
@@ -109,22 +146,30 @@ const currentYear = new Date().getFullYear();
         </button>
         </form>
       </div> -->
-
     </div>
 
     {/* Bottom Copyright Row */}
-    <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-[var(--text-muted)]">
+    <div
+      class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-[var(--text-muted)]"
+    >
       <p>
-        © {currentYear} Xeno. Released under the MIT License. Created by <a href="https://github.com/xeno-js" class="text-[var(--color-primary)] hover:underline" target="_blank" rel="noopener noreferrer">Mattia Carcione</a>
-
+        © {currentYear} Xeno. Released under the MIT License. Created by <a
+          href="https://github.com/xeno-js"
+          class="text-[var(--color-primary)] hover:underline"
+          target="_blank"
+          rel="noopener noreferrer">Mattia Carcione</a
+        >
       </p>
       <div class="flex items-center gap-6">
-        <span class="flex items-center gap-1.5 text-[var(--color-primary)] font-mono">
-          <span class="w-2 h-2 rounded-full bg-[var(--color-primary)] inline-block animate-pulse"></span>
+        <span
+          class="flex items-center gap-1.5 text-[var(--color-primary)] font-mono"
+        >
+          <span
+            class="w-2 h-2 rounded-full bg-[var(--color-primary)] inline-block animate-pulse"
+          ></span>
           Actively maintained and open-source
         </span>
       </div>
     </div>
-
   </div>
 </footer>

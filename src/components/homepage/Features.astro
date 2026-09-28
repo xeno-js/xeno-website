@@ -15,13 +15,13 @@ import Button from "../ui/Button.astro";
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6" data-aos="fade-right">
       <div class="max-w-2xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
-        <i class="bi bi-boxes"></i> More than a framework
+        <i class="bi bi-boxes"></i> THE ECOSYSTEM
       </div>
         <h2 class="text-[var(--h2-size)] font-[var(--h1-weight)] text-[var(--text-main)] mb-3 tracking-tight">
-          Modular <span class="text-[var(--color-primary)]">Ecosystem</span>
+          One architecture. <span class="text-[var(--color-primary)]">Different responsibilities</span>
         </h2>
-        <p class="text-[var(--body-size)] text-[var(--text-muted)] m-0">
-          <strong class="text-[var(--text-main)] font-medium">Pay-for-what-you-use</strong> architecture. Integrate only the necessary packages to structure your domain without infrastructure overhead.
+        <p>
+          Explore Xeno.Js Ecosystem
         </p>
       </div>
     </div>
@@ -39,7 +39,7 @@ import Button from "../ui/Button.astro";
         <div class="mt-auto flex flex-col flex-grow">
           <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/core</h3>
           <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            The backend kernel. Provides the IoC container, context isolation using AsyncLocalStorage, and CQRS server-side pipelines.
+            Dependency Injection, scopes, request context, CQRS execution, pipelines, modules, transactions, repositories, and infrastructure composition.
           </p>
           <div class="flex items-center gap-3 mt-auto">
             <Button href="/docs/core/introduction" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
@@ -67,7 +67,7 @@ import Button from "../ui/Button.astro";
         <div class="mt-auto flex flex-col flex-grow">
           <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/vue</h3>
           <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            The frontend engine. Brings explicit Dependency Injection, resilient data-fetching, and native CQRS patterns to the browser.
+            Use explicit frontend composition, CQRS-style commands and queries, pipelines, context, validation, and data sources inside Vue applications.
           </p>
           <div class="flex items-center gap-3 mt-auto">
             <Button href="/docs/vue/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
@@ -95,7 +95,7 @@ import Button from "../ui/Button.astro";
         <div class="mt-auto flex flex-col flex-grow">
           <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/shared</h3>
           <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            The isomorphic foundation. Ensures synchronization of contracts, constants, error monads, and utilities between Node.js and Vue.js.
+            Domain primitives, value objects, aggregates, domain events, Result types, errors, and application contracts.
           </p>
           <div class="flex items-center gap-3 mt-auto">
             <Button href="/docs/shared/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
@@ -123,7 +123,7 @@ import Button from "../ui/Button.astro";
         <div class="mt-auto flex flex-col flex-grow">
           <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/cli</h3>
           <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            The enterprise generator. Automates the creation of boilerplate, instantly configuring architectural boundaries for Commands and Queries.
+            Scaffold projects and generate application components instead of rebuilding the same structure by hand.
           </p>
           <div class="flex items-center gap-3 mt-auto">
             <Button href="/docs/cli/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">

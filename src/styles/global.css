@@ -2,15 +2,15 @@
 
 :root {
   /* Dark theme default, matching Starlight dark mode */
-  --color-primary: #c9f51b;
+  --color-primary: rgb(201, 245, 27);
   --color-primary-hover: #b5dc15;
 
   --bg-primary: #0a0a0a;
   --bg-secondary: #121212;
   --bg-tertiary: #1a1a1a;
 
-  --border-color: #262626;
-  --border-color-hover: #404040;
+  --border-color: rgb(38, 38, 38);
+  --border-color-hover: rgb(64, 64, 64);
 
   --accent-glow: rgba(201, 245, 27, 0.12);
 

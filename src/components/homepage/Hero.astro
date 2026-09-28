@@ -1,45 +1,617 @@
 ---
-import Button from '../ui/Button.astro'
+import Button from "../ui/Button.astro";
 ---
 
-{/* Hero Section (NestJS Modern Style with Glassmorphism & Primary Green Glow) */}
+{
+  /* Hero Section (NestJS Modern Style with Glassmorphism & Primary Green Glow) */
+}
 <section
   class="relative min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-24 pb-16 px-6"
 >
   {/* Background Mirror / Glass Glow Effect using Brand Primary Color */}
-  <div
-    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-[var(--color-primary)] opacity-10 blur-[120px] sm:blur-[140px] rounded-full pointer-events-none -z-10"
-  >
-  </div>
-  <div
-    class="absolute top-1/4 left-1/4 w-[200px] h-[200px] bg-[var(--color-primary)] opacity-5 blur-[90px] rounded-full pointer-events-none -z-10"
-  >
+  <div id="hexagons">
+    <svg viewBox="0 0 1379.9589 955.68878" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(89.3561,145.58269)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(185.3561,201.58269)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(185.7717,89.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(281.7717,145.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(185.7717,313.91712)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(281.7717,369.91712)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(282.1873,258.15707)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(378.1873,314.15707)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(376.9405,201.24826)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(472.9405,257.24826)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(473.3561,145.48821)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(569.3561,201.4882)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(473.3561,369.58269)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(569.3561,425.58269)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(569.7717,313.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(665.77165,369.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(281.7717,481.91712)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(377.7717,537.91714)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(378.1873,426.15707)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(474.1873,482.15706)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(378.1873,650.25154)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(474.1873,706.25154)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(474.6029,594.49154)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(570.6029,650.49154)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(569.3561,537.58274)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(665.35605,593.58274)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(665.77165,481.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(761.77165,537.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(665.77165,705.91714)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(761.77165,761.91714)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(762.18725,650.15704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(858.18725,706.15704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(760.52485,425.10279)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(856.52485,481.10279)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(856.94045,369.34274)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(952.94045,425.34273)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(856.94045,593.43724)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(952.94045,649.43724)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(953.35605,537.67714)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(1049.35605,593.67714)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(1049.35605,481.67718)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(1145.35605,537.67724)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(1145.77165,425.91713)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(1241.77165,481.91713)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(665.35605,257.67717)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(761.35605,313.67717)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(761.77165,201.91712)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(857.77165,257.91712)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(955.95895,203.35434)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(568.9405,89.34275)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(664.94045,145.34274)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(665.35605,33.58269)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(761.35605,89.58269)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(89.7717,593.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(185.7717,649.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(186.1873,538.06264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(282.1873,594.06264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(-5.8127,426.25155)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(90.1873,482.25155)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(90.6029,370.4915)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(186.6029,426.4915)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(186.1873,762.15704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(282.1873,818.15704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(282.6029,706.39704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(378.6029,762.39704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(857.77165,817.91714)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(953.77165,873.91714)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(954.18725,762.15704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(1050.18725,818.15704)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(473.7717,817.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(569.7717,873.82264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(570.1873,762.06264)"
+        class="hexagon"></path>
+      <path
+        d="m104,80-64.4156-.23995-32-55.90552 32.4156-55.66557 64.4156.23995 32,55.90552-32.4156,55.66557z"
+        fill="none"
+        stroke="#a3a3a3"
+        stroke-linecap="round"
+        stroke-width="0.5"
+        transform="translate(666.18725,818.06264)"
+        class="hexagon"></path>
+    </svg>
   </div>
 
   <div
-    class="w-full max-w-[var(--container-max)] mx-auto text-center relative z-10 flex flex-col items-center"
+    class="w-full mx-auto text-center relative z-10 flex flex-col items-center py-16 px-12 rounded-full"
+    style="background: radial-gradient(circle at center, var(--bg-primary) 0%, transparent 95%);"
   >
-  
-
     {/* Main Title */}
-    <div class="flex items-center justify-center gap-2 mb-4">
-      <img
-        src="/img/logo.png"
-        alt="Xeno Logo"
-        class="w-12 h-12 sm:w-16 sm:h-16 animate-spin-slow"
-      />
-
-    </div>
-    <h1>
-      Xeno<span class="text-[var(--color-primary)]">.JS</span>
-    </h1>
-    <h2
+    <h1
       data-aos="fade-up"
       data-aos-delay="120"
       class="text-3xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] max-w-5xl mx-auto leading-[1.1]"
     >
-    Architecture that survives <span class="text-[var(--color-primary)]">CHANGE</span>.
-</h2>
+      Architecture that survives <span class="text-[var(--color-primary)]"
+        >CHANGE</span
+      >
+    </h1>
 
     {/* Payoff description featuring Xeno */}
     <p
@@ -47,7 +619,8 @@ import Button from '../ui/Button.astro'
       data-aos-delay="220"
       class="text-base sm:text-xl text-[var(--text-muted)] max-w-3xl mx-auto font-normal leading-relaxed mb-10"
     >
-      <strong class="text-[var(--text-main)] font-semibold">Xeno.JS</strong> is an enterprise-grade TypeScript framework for building mission-critical systems with <strong class="text-[var(--text-main)] font-semibold">DDD</strong>, <strong class="text-[var(--text-main)] font-semibold">CQRS</strong>, and explicit <strong class="text-[var(--text-main)] font-semibold">Dependency Injection</strong> across backend and browser.
+      The application framework for building scalable and testable application
+      in typescript
     </p>
 
     {/* Action Buttons (Docs Index & Source Code) */}
@@ -73,7 +646,7 @@ import Button from '../ui/Button.astro'
     </div>
 
     {/* Glassmorphism Terminal Preview Box (Mirror Effect Style) */}
-    <div
+    <!-- <div
       data-aos="zoom-in"
       data-aos-delay="420"
       class="mt-16 w-full max-w-3xl rounded-[var(--border-radius)] bg-[var(--bg-secondary)]/50 border border-[var(--border-color)] backdrop-blur-2xl p-5 sm:p-6 text-left shadow-2xl relative overflow-hidden group"
@@ -96,6 +669,59 @@ import Button from '../ui/Button.astro'
         class="font-[family-name:var(--font-mono)] text-xs sm:text-sm text-[var(--text-main)] overflow-x-auto"><code class="language-bash"><span class="text-[var(--color-primary)]">$</span> npm install @xeno-js/cli
 <span class="text-[var(--color-primary)]">$</span> xeno-js new my-xeno-app --core
 <span class="text-emerald-400">✔ Scaffolding completed successfully!</span></code></pre>
+    </div> -->
+    {/* Micro-copy */}
+    <div
+      data-aos="fade-up"
+      data-aos-delay="360"
+      class="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs sm:text-sm font-medium text-[var(--text-muted)]"
+    >
+      <span>TypeScript</span>
+      <span aria-hidden="true" class="text-[var(--color-primary)]">·</span>
+      <span>Node.js</span>
+      <span aria-hidden="true" class="text-[var(--color-primary)]">·</span>
+      <span>DDD</span>
+      <span aria-hidden="true" class="text-[var(--color-primary)]">·</span>
+      <span>CQRS</span>
+      <span aria-hidden="true" class="text-[var(--color-primary)]">·</span>
+      <span>Explicit Dependency Injection</span>
     </div>
   </div>
 </section>
+
+<style>
+  #hexagons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0 solid var(--color-primary);
+    margin-bottom: 0;
+    background: var(--bg-primary);
+    /*     color: #676767; */
+    background-size: 400% 100%;
+    background-position: 0 0;
+    background-clip: content-box;
+    -webkit-animation: g 10s linear infinite;
+    animation: bgc 10s linear infinite;
+  }
+
+  .hexagon {
+    fill: rgba(255, 255, 255, 0);
+    -webkit-transition: fill 3000ms linear;
+    -moz-transition: fill 3000ms linear;
+    -o-transition: fill 3000ms linear;
+    -ms-transition: fill 3000ms linear;
+    transition: fill 3000ms linear;
+  }
+
+  .hexagon:hover {
+    fill: rgba(201, 245, 27, 1);
+    -webkit-transition: fill 1000ms linear;
+    -moz-transition: fill 1000ms linear;
+    -o-transition: fill 1000ms linear;
+    -ms-transition: fill 1000ms linear;
+    transition: fill 1000ms linear;
+  }
+</style>

@@ -4,62 +4,98 @@
 
 <section class="py-24 bg-[var(--bg-secondary)]">
   <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-6 lg:px-8">
-    
     <!-- Section Header -->
     <div class="mb-16 max-w-3xl" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
-        <i class="bi bi-gem"></i> Why Xeno.JS
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase"
+      >
+        <i class="bi bi-gem"></i> The core idea
       </div>
-      <h2 class="text-[var(--h2-size)] font-[var(--h2-weight)] text-[var(--text-main)] mb-4 tracking-tight leading-tight">
-        Designed for long-term <span class="text-[var(--color-primary)]">Maintainability</span>.
+      <h2
+        class="text-[var(--h2-size)] font-[var(--h2-weight)] text-[var(--text-main)] mb-4 tracking-tight leading-tight"
+      >
+        Why Xeno.<span class="text-[var(--color-primary)]">JS</span>
       </h2>
-      <p class="text-[var(--body-size)] text-[var(--text-muted)] leading-relaxed">
-        Xeno is a framework with an enterprise-grade architecture that eliminates technical debt by enforcing strict boundaries, Inversion of Control, and native CQRS patterns throughout the stack.
+      <p
+        class="text-[var(--body-size)] text-[var(--text-muted)] leading-relaxed"
+      >
+Xeno makes the application architecture explicit. <br>
+
+It gives TypeScript applications clear boundaries for domain logic,
+use cases, dependencies, request context, and cross-cutting execution. <br>
+
+Keep the HTTP framework, UI framework, and infrastructure you already use.
+Xeno sits underneath them and gives the application layer a structure
+that remains visible as the codebase grows.
       </p>
     </div>
 
     <!-- List of 3 Features -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-10">
-      
       <!-- Feature 1 -->
-      <div class="flex flex-col pb-8 border-b border-[var(--color-primary)]" data-aos="fade-up" data-aos-delay="100">
+      <div
+        class="flex flex-col pb-8 border-b border-[var(--color-primary)]"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
         <div class="text-[var(--color-primary)] text-3xl mb-5">
           <i class="bi bi-box-seam"></i>
         </div>
-        <h3 class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0">
+        <h3
+          class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0"
+        >
           Zero-Magic Inversion of Control
         </h3>
         <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          No experimental decorators or directory auto-scanning. Xeno uses an explicit and deterministic IoC container that prevents memory leaks, ensures safe type resolution at compile time, and protects domain boundaries.
+          No experimental decorators or directory auto-scanning. Xeno uses an
+          explicit and deterministic IoC container that prevents memory leaks,
+          ensures safe type resolution at compile time, and protects domain
+          boundaries.
         </p>
       </div>
 
       <!-- Feature 2 -->
-      <div class="flex flex-col pb-8 border-b border-[var(--color-primary)]" data-aos="fade-up" data-aos-delay="200">
+      <div
+        class="flex flex-col pb-8 border-b border-[var(--color-primary)]"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
         <div class="text-[var(--color-primary)] text-3xl mb-5">
           <i class="bi bi-arrow-left-right"></i>
         </div>
-        <h3 class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0">
+        <h3
+          class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0"
+        >
           Native CQRS & Pipeline
         </h3>
         <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          Logically and physically separate state mutations (Commands) from data retrieval (Queries). Manage schema validation, caching, telemetry, and resilience through cross-cutting middleware executed before business logic.
+          Logically and physically separate state mutations (Commands) from data
+          retrieval (Queries). Manage schema validation, caching, telemetry, and
+          resilience through cross-cutting middleware executed before business
+          logic.
         </p>
       </div>
 
       <!-- Feature 3 -->
-      <div class="flex flex-col pb-8 border-b border-[var(--color-primary)]" data-aos="fade-up" data-aos-delay="300">
+      <div
+        class="flex flex-col pb-8 border-b border-[var(--color-primary)]"
+        data-aos="fade-up"
+        data-aos-delay="300"
+      >
         <div class="text-[var(--color-primary)] text-3xl mb-5">
           <i class="bi bi-layers"></i>
         </div>
-        <h3 class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0">
+        <h3
+          class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0"
+        >
           Full-Stack Isomorphic Architecture
         </h3>
         <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          Bridge the gap between backend and frontend. Share the same rigor of Domain-Driven Design, primitives, pipelines, and error monads (Result) across the Node.js server and distributed client.
+          Bridge the gap between backend and frontend. Share the same rigor of
+          Domain-Driven Design, primitives, pipelines, and error monads (Result)
+          across the Node.js server and distributed client.
         </p>
       </div>
-
     </div>
   </div>
 </section>
