@@ -1,17 +1,16 @@
 ---
-title: 'Introduction to Xeno.JS: Enterprise Backend & Full-Stack Architecture'
+title: 'Introduction to Xeno.JS: The application framework for building scalable and testable application in typescript'
 description: 'Explore Xeno.JS, the enterprise-grade TypeScript framework for Node.js and the browser. Powered by @xeno-js/core, it unifies architecture via Domain-Driven Design, CQRS, and explicit Dependency Injection.'
 keywords: 'Xeno.JS, Node.js backend framework, TypeScript framework, Domain-Driven Design, CQRS, Enterprise architecture, Explicit Dependency Injection, Clean Architecture, @xeno-js/core'
 author: 'Xeno'
 ---
-
-# Welcome to Xeno
-
 ## What is the Xeno Framework?
 
-**Xeno** is an enterprise-grade, deterministic architectural framework for TypeScript. Built for both backend runtime environments and modern browser clients, Xeno aims to solve one of the most pervasive challenges in modern software engineering: the architectural divide between the server and the client.
+**Xeno** is an application framework for building scalable and testable application in typescript. Built for both backend runtime environments and modern browser clients, Xeno aims to solve one of the most pervasive challenges in modern software engineering: the architectural divide between the server and the client.
 
 By natively enforcing **Domain-Driven Design (DDD)**, **Command Query Responsibility Segregation (CQRS)**, and **Pure Dependency Injection (DI)** across the entire stack, Xeno empowers engineering teams to build robust, testable, and highly scalable applications. It is not a tool for rapid prototyping or weekend MVPs; Xeno is a structural foundation designed for mission-critical systems where long-term maintainability and the aggressive reduction of technical debt are paramount.
+
+---
 
 ## The Architectural Problem
 
@@ -23,11 +22,15 @@ This asymmetry leads to:
 - **Untestable UI Layers:** Testing frontend logic requires mounting the DOM and mocking complex browser APIs.
 - **Unmanageable Technical Debt:** As systems grow, changing a database structure or migrating to a new UI framework requires rewriting core application logic.
 
+---
+
 ## The Xeno Vision: Unifying the Full-Stack Experience
 
 Xeno bridges this divide by providing a unified, isomorphic architectural contract. With Xeno, a Software Engineer applies the exact same structural design patterns whether they are writing a backend microservice in Node.js or a complex Single Page Application (SPA) in the browser.
 
 By treating the frontend not merely as a document viewer, but as a complex distributed client, Xeno allows teams to share generic primitives, constants, pipeline behaviors, and error-handling monads across the network boundary. The result is a cohesive engineering culture, a shared ubiquitous language, and a drastically flattened learning curve for full-stack developers crossing the stack.
+
+---
 
 ## Why Choose Xeno?
 
@@ -48,6 +51,8 @@ Xeno structures operations into Commands (state mutations) and Queries (idempote
 ### 4. Mission-Critical Resiliency
 The network is inherently unreliable. Xeno provides out-of-the-box resiliency patterns (Circuit Breakers, Bulkheads, and Fallbacks) across the entire stack. Whether your backend is communicating with a third-party payment gateway, or your frontend is dealing with an unstable mobile connection, the framework handles transient faults safely and returns predictable functional Monads (`Result`), eliminating scattered `try/catch` blocks.
 
+---
+
 ## The Ecosystem at a Glance
 
 The Xeno ecosystem is modular and pay-for-what-you-use. It is composed of interconnected packages designed to work in harmony:
@@ -55,17 +60,6 @@ The Xeno ecosystem is modular and pay-for-what-you-use. It is composed of interc
 - **Client Engine:** The frontend counterpart bringing dependency injection, resilient data-fetching, and decoupled handlers to the browser.
 - **Shared Primitives:** The isomorphic foundation guaranteeing that contracts, error codes, and utilities are strictly synchronized across environments.
 - **Scaffolding CLI:** An enterprise code generator that automates boilerplate creation, instantly spinning up architectural boundaries and keeping developers focused on business logic.
-
-## Next Steps
-
-Xeno is a commitment to engineering excellence. Ready to explore the architecture?
-
-* **[Read the Core Fundamentals](./core/fundamentals/overview)** to dive into the Dependency Injection and Request Context mechanisms.
-* **[Explore the CQRS Architecture](./core/cqrs/overview)** to understand how Xeno handles Commands, Queries, and Pipelines.
-* **[Learn about Frontend Integration](./vue/overview)** to see how Xeno brings enterprise patterns to the browser.
-* **[Discover the Scaffolding CLI](./cli/overview)** to streamline your development process and focus on business logic.
-* **[Explore the Shared Primitives](./shared-primitives/overview)** to understand the core contracts and utilities that power Xeno.
-* **[Contribute to Xeno](./contributing-guide)** to join the community and help shape the future of Xeno-JS.
 
 ---
 
