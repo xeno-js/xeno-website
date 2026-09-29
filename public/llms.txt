@@ -1,41 +1,325 @@
-# Xeno.JS
+Xeno.JS
 
-> Xeno.JS is an open-source, enterprise-grade, deterministic architectural framework for TypeScript, designed for both backend runtime environments (Node.js) and modern browser clients (Vue.js). It natively enforces Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), and pure Dependency Injection (DI) across the entire full-stack.
+Xeno.JS is an application architecture framework for TypeScript.
+Your HTTP framework handles HTTP. Xeno handles the application.
 
-## Ecosystem Architecture
+Xeno provides explicit boundaries for domain logic, application use cases, dependencies, request context, and cross-cutting execution.
 
-Xeno.JS is structured as a modular monorepo ecosystem where packages serve distinct architectural layers:
+Xeno is designed to sit underneath an existing transport or UI framework rather than replace it.
 
-- **@xeno-js/core**: The backend kernel providing an explicit IoC container, context isolation via `AsyncLocalStorage`, server-side CQRS pipelines (exception, logging, performance, validation, idempotency, concurrency retry, and query caching), robust security middleware (CSRF dual-token, rate limiting, CORS, method checks), and Drizzle ORM persistence integrations.
-- **@xeno-js/vue**: The frontend counterpart bringing strict Dependency Injection (`XenoAppBuilder`), frontend CQRS via `ClientMediator`, pipeline behaviors, and agnostic remote data sources (`RemoteDataSource`) with Axios transport and Cockatiel resilience delegation.
-- **@xeno-js/shared**: The isomorphic foundation supplying universal contracts, DTO envelopes (`ResponseDto`), error codes, and zero-dependency utilities (`Guards`, `GuidHelper`, `HttpHelper`, `DateHelper`, `MathHelper`, `StringHelper`, `PromiseHelper`, `Enumerable`).
-- **@xeno-js/cli**: Enterprise code generator automating scaffolding for projects, commands, queries, and handlers.
+What Xeno Is
 
-## Classification
+Xeno provides an explicit application architecture and execution model for TypeScript applications.
 
-- Category: Enterprise Backend & Full-Stack Framework
-- Runtime Environment: Node.js (v20+)
-- Language: TypeScript (v5+)
-- Architecture: Domain-Driven Design (DDD) & Clean Architecture
-- Application Pattern: CQRS (Command Query Responsibility Segregation)
-- Dependency Injection: Explicit, Decorator-Free IoC Container
-- HTTP Layer: Transport-Agnostic (Fastify, Hono, AWS Lambda)
+Its primary responsibilities include:
 
-## Key Technical Features
+* application and domain boundaries
+* explicit dependency injection
+* application use cases
+* commands and queries
+* request-scoped application context
+* cross-cutting execution pipelines
+* infrastructure composition
+* transport-independent business logic
 
-- **Zero-Magic IoC**: Explicit programmatic container registration ensuring compile-time type safety and predictable execution graphs.
-- **Transport Decoupling**: Business logic and core domain rules are strictly isolated from HTTP engines (Fastify, Hono, Vercel) and UI renderers.
-- **Request Context Isolation**: Thread-safe tracing (`correlationId`, `requestId`) and multi-tenant security headers managed seamlessly.
-- **Resiliency & Security**: Built-in cryptographic nonce generation, HMAC SHA-256 signature validation for CSRF, and GDPR-compliant log redaction and IP masking.
+Xeno makes the application dependency graph and execution flow explicit in code.
 
-## Documentation & Navigation Links
+What Xeno Is Not
 
-- [Official Documentation Home](https://xeno-js.it/introduction)
-- [Core Getting Started](https://xeno-js.it/core/getting-started)
-- [Core Fundamentals](https://xeno-js.it/core/fundamentals/overview)
-- [Vue Frontend Architecture](https://xeno-js.it/vue/overview)
-- [Shared Primitives](https://xeno-js.it/shared/overview)
-- [CLI Scaffolding Guide](https://xeno-js.it/cli/overview)
-- [Contributing Guide](https://xeno-js.it/contributing-guide)
-- [Project Support](https://xeno-js.it/support-us)
-- [GitHub Repository](https://github.com/xeno-js/xeno-js)
+Xeno is not:
+
+* an HTTP server
+* an HTTP router
+* a replacement for Fastify, Express, or Hono
+* a UI framework
+* a replacement for Vue
+* a database ORM
+
+The HTTP framework remains responsible for HTTP and transport concerns.
+
+The UI framework remains responsible for UI concerns.
+
+Xeno provides the application architecture and execution model underneath them.
+
+Architecture
+
+Xeno organizes application execution around explicit architectural boundaries:
+
+Transport
+    ↓
+Application
+    ↓
+Domain
+    ↓
+Infrastructure
+
+Transport handles external communication and request translation.
+
+The application layer coordinates use cases and application workflows.
+
+The domain layer contains business rules, domain primitives, aggregates, value objects, and domain events.
+
+Infrastructure implements external dependencies such as databases, HTTP clients, authentication providers, caches, and other adapters.
+
+Xeno’s primary role is to make the application layer and its boundaries explicit while keeping business logic independent from transport and infrastructure details.
+
+Application Execution
+
+Xeno provides an explicit application execution model built around dependency injection, commands, queries, mediators, pipelines, request context, and modules.
+
+A typical execution flow is:
+
+Request / Transport
+        ↓
+Request Context
+        ↓
+Mediator
+        ↓
+Pipeline
+        ↓
+Command / Query Handler
+        ↓
+Application Logic
+        ↓
+Domain / Infrastructure
+
+Application execution can be composed through pipelines that surround command and query handlers.
+
+Cross-cutting concerns can therefore be implemented outside business logic.
+
+Examples include:
+
+* validation
+* authorization
+* logging
+* performance monitoring
+* caching
+* idempotency
+* resilience
+
+Explicit Dependency Injection
+
+Xeno uses explicit programmatic dependency registration.
+
+Dependencies are not discovered through directory scanning or required decorator metadata.
+
+Application services and their dependencies are registered explicitly so that the dependency graph remains visible in application code.
+
+Xeno supports explicit service lifetimes including:
+
+* singleton
+* scoped
+* transient
+
+The container also provides dependency resolution, scope management, circular dependency detection, and lifecycle disposal.
+
+Request Context
+
+Xeno provides request-scoped application context.
+
+Context can carry information such as:
+
+* requestId
+* correlationId
+* spanId
+* user identity
+* tenant identity
+* network metadata
+
+Request context allows application services and cross-cutting pipelines to access request-specific information without coupling domain logic directly to a particular HTTP framework.
+
+Commands and Queries
+
+Xeno supports Command Query Responsibility Segregation (CQRS).
+
+Commands represent application operations that may change application state.
+
+Queries represent application operations that retrieve data without representing a state mutation.
+
+Commands and queries are executed through handlers and can pass through application pipelines.
+
+CQRS is an application execution pattern within Xeno’s architecture, not the primary definition of Xeno.
+
+Domain-Driven Design
+
+Xeno provides building blocks for Domain-Driven Design (DDD), including:
+
+* aggregates
+* value objects
+* domain events
+* domain errors
+* application contracts
+* repositories
+* Result types
+
+These primitives help define domain and application boundaries without requiring domain logic to depend directly on a transport framework.
+
+Cross-Cutting Execution
+
+Xeno uses pipelines to keep cross-cutting concerns separate from application and domain logic.
+
+Pipeline behaviors can be used for concerns such as:
+
+* validation
+* authorization
+* logging
+* performance monitoring
+* caching
+* resilience
+* idempotency
+
+This allows cross-cutting behavior to be composed around application execution rather than embedded directly into individual handlers.
+
+Framework Integration
+
+Xeno is designed to work underneath an existing application stack.
+
+It can be used alongside technologies such as:
+
+* Fastify
+* Express
+* Hono
+* Vue
+
+The transport or UI framework remains responsible for its own concerns.
+
+Xeno provides the application architecture beneath those technologies.
+
+The goal is to keep the existing stack while making the application’s internal architecture explicit.
+
+Ecosystem
+
+Xeno.JS is organized as a modular ecosystem where each package has a distinct responsibility.
+
+@xeno-js/shared
+
+Defines framework-neutral domain primitives and application contracts.
+
+Includes concepts such as:
+
+* value objects
+* aggregates
+* domain events
+* Result types
+* errors
+* application contracts
+
+Shared provides the language used to describe domain and application boundaries.
+
+@xeno-js/core
+
+Executes the application architecture on Node.js.
+
+Core provides:
+
+* explicit dependency injection
+* service lifetimes and scopes
+* request context
+* commands and queries
+* mediator-based execution
+* application pipelines
+* modules
+* repositories
+* transactions
+* infrastructure composition
+
+Core is the primary runtime for executing the Xeno application architecture on the backend.
+
+@xeno-js/vue
+
+Brings Xeno’s application model to Vue applications.
+
+It provides application composition and execution patterns including:
+
+* explicit dependency injection
+* commands and queries
+* pipelines
+* request context
+* validation
+* caching
+* remote data sources
+
+Vue remains responsible for the UI.
+
+Xeno provides the application architecture and composition model around it.
+
+@xeno-js/cli
+
+Provides project scaffolding and application generators for Xeno projects.
+
+The CLI helps developers start projects and generate application components without rebuilding the same structural conventions manually.
+
+Backend and Frontend
+
+Xeno can apply the same architectural language across backend and frontend applications.
+
+The backend can use @xeno-js/core to execute the application architecture on Node.js.
+
+Vue applications can use @xeno-js/vue to apply similar application composition patterns in the browser.
+
+This does not require domain logic to become coupled to Vue or browser-specific APIs.
+
+The purpose is to share architectural concepts while keeping transport, infrastructure, and UI concerns separated from the domain.
+
+When to Use Xeno
+
+Xeno is particularly relevant when a TypeScript application needs:
+
+* explicit application and domain boundaries
+* visible dependency composition
+* structured command and query execution
+* request-scoped application context
+* reusable cross-cutting pipelines
+* transport-independent business logic
+* explicit infrastructure boundaries
+* an application architecture that can span backend and frontend
+
+Xeno can be useful when an application is expected to grow beyond simple request handlers and needs a more explicit application execution model.
+
+Xeno may be unnecessary for a minimal application that only requires a small HTTP server, router, or simple request handling layer.
+
+Core Principles
+
+The main architectural principles of Xeno are:
+
+1. Explicit boundaries — application, domain, and infrastructure responsibilities are visible in code.
+2. Explicit dependencies — dependency registration is deliberate rather than discovered implicitly.
+3. Transport independence — business logic does not need to depend directly on a specific HTTP transport.
+4. Composable execution — commands, queries, handlers, and pipelines form an explicit application execution model.
+5. Request-aware application execution — request-specific context is available without coupling domain logic to transport infrastructure.
+6. Modular responsibilities — packages and modules have distinct architectural roles.
+
+Technology
+
+* Language: TypeScript
+* Backend runtime: Node.js
+* Frontend integration: Vue.js
+* Dependency injection: Explicit, decorator-free
+* Application pattern: CQRS
+* Domain approach: Domain-Driven Design
+* Execution model: Commands, Queries, Handlers, Mediator, Pipelines
+* Context model: Request-scoped application context
+* Transport: Framework-independent
+
+Documentation
+
+* Official Documentation
+* Core Documentation
+* Core Getting Started
+* Core Fundamentals
+* Vue Documentation
+* Shared Documentation
+* CLI Documentation
+* Contributing Guide
+* Project Support
+
+Source Repositories
+
+* Xeno.JS Core
+* Xeno.JS Vue
+* Xeno.JS Shared
+* Xeno.JS CLI
+
+License
+
+Xeno.JS is open-source software released under the MIT License.
