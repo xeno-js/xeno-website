@@ -1,6 +1,6 @@
 ---
 title: 'Introduction to Xeno.JS: The application framework for building scalable and testable application in typescript'
-description: 'Explore Xeno.JS, the enterprise-grade TypeScript framework for Node.js and the browser. Powered by @xeno-js/core, it unifies architecture via Domain-Driven Design, CQRS, and explicit Dependency Injection.'
+description: 'Explore Xeno.JS, an application architecture framework for TypeScript with explicit dependency injection, DDD, CQRS and modular application boundaries.'
 keywords: 'Xeno.JS, Node.js backend framework, TypeScript framework, Domain-Driven Design, CQRS, Enterprise architecture, Explicit Dependency Injection, Clean Architecture, @xeno-js/core'
 author: 'Xeno'
 ---
