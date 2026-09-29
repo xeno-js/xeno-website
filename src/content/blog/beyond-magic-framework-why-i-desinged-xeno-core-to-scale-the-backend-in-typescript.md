@@ -1,170 +1,423 @@
 ---
-title: "Beyond \"Magic\" Frameworks: Why I Designed Xeno Core to Scale the Backend (and the Entire Ecosystem) in TypeScript"
-description: "Discover why Xeno Core was designed to scale TypeScript backends without \"magic\" or hidden decorators, focusing instead on DDD, CQRS, and explicit Dependency Injection."
-keywords: 'Xeno.JS, Xeno Core, TypeScript backend framework, Domain-Driven Design, CQRS, Explicit Dependency Injection, Clean Architecture, AsyncLocalStorage, AppBuilder, @xeno-js/core'
+title: "What Is Xeno.JS? A Different Way to Structure TypeScript Applications"
+description: "Xeno.JS is a TypeScript application framework for making use cases, dependencies, lifetimes, pipelines, and application boundaries explicit—without replacing your HTTP framework."
+slug: "what-is-xeno-js"
+date: "2026-09-28"
 author: "Xeno"
-pubDate: 2026-09-24
-robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+type: "article"
+category: "Architecture"
+tags: "TypeScript, Node.js, Application Architecture, Dependency Injection, CQRS, Clean Architecture, Hexagonal,rchitecture, DDD, HTTP, Software Architecture"
+keywords: "TypeScript application architecture, Node.js application architecture, HTTP framework architecture, TypeScript dependency injection, CQRS TypeScript, clean architecture TypeScript, transport independent application, application layer TypeScript, Fastify architecture, Express architecture, Hono architecture"
+canonical: "https://www.xeno-js.it/blog/what-is-xeno-js"
+og_title: "What Is Xeno.JS? A Different Way to Structure TypeScript Applications"
+og_description: "Discover Xeno.JS, a TypeScript application framework designed to make application architecture, dependencies, lifetimes, and use cases explicit."
+og_type: "article"
+robots: "index,follow"
+pubDate: 2026-09-28
 ---
 
-## Beyond "Magic" Frameworks: Why I Designed Xeno Core to Scale the Backend (and the Entire Ecosystem) in TypeScript
+# Your TypeScript Application Is Growing. Where Does the Logic Go?
 
-When managing the development of complex software systems in Node.js, the choice of architectural framework determines the long-term fate of the code. Developers often face a crossroads: relying on monolithic, "magical" frameworks that make heavy use of experimental decorators and reflection (such as `reflect-metadata`)—thereby accepting their global rules—or building everything from scratch, risking a descent into "spaghetti code" and structural inconsistency.
+A new TypeScript application usually starts with a simple structure:
 
-As Tech Leads and developers, we know that enterprise maintainability requires deterministic control, zero runtime surprises, and clear architectural boundaries.
-
-It is precisely from this need that Xeno.JS—and specifically its core engine, Xeno Core (`@xeno-js/core`)—was born.
-
----
-
-## What is Xeno Core, and what sets it apart?
-
-Xeno Core is an enterprise architectural framework—runtime-agnostic and strictly typed in TypeScript—designed from the ground up to implement Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), and pure, explicit Dependency Injection (DI).
-
-Unlike other tools, Xeno Core stands out thanks to three fundamental pillars:
-* **Zero Magic Decorators:** No hidden magic or directory auto-scanning based on `reflect-metadata`. The Inversion of Control container (`ServiceContainer`) relies on explicit, functional factories, ensuring total control over the dependency graph at compile time.
-* **Complete Decoupling from the Transport Layer:** Xeno does not mandate a specific HTTP server. Whether you are using Fastify, Hono, or a serverless architecture on AWS Lambda, your business logic remains intact and isolated thanks to clean presentation contracts.
-* **Asynchronous Context Isolation:** By natively leveraging `AsyncLocalStorage`, the engine manages request-scoped lifecycles, tracking tracing metadata (`correlationId`, `requestId`) and multi-tenant identities in a thread-safe manner.
-
----
-
-## The Full-Stack Philosophy: Beyond the Backend
-
-Although Xeno Core handles the server-side backbone, the Xeno ecosystem was conceived with an isomorphic and holistic vision.
-
-Fragmentation between client and server is a major source of technical debt. To address this, the ecosystem consists of integrated modules:
-* **`@xeno-js/shared`:** The isomorphic foundation uniting server and client through universal contracts, standardized DTOs (`ResponseDto`), and runtime validation utilities.
-* **`@xeno-js/vue`:** The native browser extension bringing DDD, CQRS, and Dependency Injection (`XenoAppBuilder`) directly into Vue.js applications, featuring reactive composables and cooperative cancellation (`AbortSignal`).
-* **`@xeno-js/cli`:** An enterprise-grade code generator that automates the scaffolding of projects, commands, queries, and handlers in seconds.
-
----
-
-## Architecture in Action: Configuring Xeno Core with AppBuilder
-
-The heart of Xeno Core is the `AppBuilder`, a fluent bootstrapper that orchestrates modules, registrations, and execution priorities in a clean, sequential manner. 
-
-Here is a practical example of how to configure the IoC container, enable security middleware, set up CQRS pipelines (including idempotency and concurrency management), and register services within a Node.js application:
-
-```typescript
-import { AppBuilder, LOG_LEVEL, TOKENS, XenoRegistry } from '@xeno-js/core'
-import { FindUserQueryHandler } from './user/cqrs/handlers/find-user.handler'
-import { FindUserController } from './user/controllers/find-user.controller'
-import { UserMapper } from './user/mappers/user.mapper'
-import { UserWriteRepository } from './user/repositories/user-write.repository'
-import { UserDataSource } from './user/datasources/user.datasource'
-
-// 1. Declare the strongly typed register.
-type AppRegistry = XenoRegistry<{ /* Schema Database */ }, {
-  USER_MAPPER_TOKEN: UserMapper
-  USER_DS_TOKEN: UserDataSource
-  USER_REPOSITORY_TOKEN: UserWriteRepository
-  FIND_USER_QUERY_HANDLER_TOKEN: FindUserQueryHandler
-  FIND_USER_CONTROLLER_TOKEN: FindUserController
-}>
-
-// 2. Build the container using AppBuilder.
-export async function bootstrap() {
-  const builder = new AppBuilder<AppRegistry>()
-    
-    // Configuration of presentation and security middleware
-    .addMiddlewares((opts, config) => {
-      opts.routeRegistry = {
-        '/api/v1/users/:id': ['GET', 'DELETE'],
-      }
-      opts.rateLimit = {
-        maxRequests: 30,
-        windowSeconds: 60
-      }
-      opts.isSSR = true
-      opts.cors = true
-      opts.optionsMiddleware = true
-      opts.allowOrigins = ['http://localhost:5173']
-      opts.withCredentials = true
-      opts.allowHeaders = [
-        'Content-Type',
-      ]
-      opts.csrf = {
-        secret: config.getOrThrow('CSRF_SECRET'),
-        cookieName: config.getOrThrow('CSRF_COOKIE_NAME'),
-        headerName: config.getOrThrow('CSRF_COOKIE_HEADER'),
-        cookieMaxAgeSeconds: 3600,
-        sameSite: 'lax',
-      }
-    })
-
-    // Configuring CQRS pipelines and cross-cutting behaviors
-    .addPipeline((config) => {
-      // Defining authorization policies for intents
-      config.authorization.policies = {
-        'FIND_USER_QUERY_HANDLER_TOKEN': {
-          userId: true,
-          tenantId: true,
-          roles: ['admin', 'manager'],
-        },
-      }
-      // Idempotency and retries with jitter for command concurrency
-      config.commandBus.idempotency = { lockTtlSeconds: 30, processedTtlSeconds: 60 }
-      config.commandBus.concurrency = { maxRetries: 3, delayConfig: { baseDelayMs: 100, maxJitterMs: 500 } }
-      // Enabling in-memory caching for queries
-      config.queryBus.isEnabled = true
-    })
-
-    // Configuring Database (es. Drizzle ORM)
-    .addDb((opts, config) => {
-      opts.connectionString = config.getOrThrow('DATABASE_URL')
-    })
-
-    // Security configuration and authentication (es. Supabase)
-    .addAuth((opts, config) => {
-      opts.url = config.getOrThrow('SUPABASE_URL')
-      opts.key = config.getOrThrow('SUPABASE_KEY')
-    })
-
-    // Configuration of the composite logging system
-    .addLogger((opts, config) => {
-      opts.level = LOG_LEVEL.INFO
-      opts.console = true
-      opts.sentry.config = config.get('NODE_ENV') !== 'development' ? { dsn: config.getOrThrow('SENTRY_DSN'), environment: config.getOrThrow('SENTRY_ENVIRONMENT') } : undefined
-    })
-
-    // Explicit registration of services in the IoC container
-    .addServices((services) => {
-      services.addScoped('USER_MAPPER_TOKEN', () => new UserMapper())
-      services.addScoped('USER_DS_TOKEN', (c) => new UserDataSource(c.resolve(TOKENS.DB_CONTEXT)))
-      services.addScoped('USER_REPOSITORY_TOKEN', (c) => new UserWriteRepository(c.resolve('USER_DS_TOKEN'), c.resolve('USER_MAPPER_TOKEN')))
-      
-      services.addScoped('FIND_USER_QUERY_HANDLER_TOKEN', (c) => {
-        return new FindUserQueryHandler(c.resolve('USER_REPOSITORY_TOKEN'), c.resolve(TOKENS.USER_CONTEXT_FACTORY))
-      })
-
-      services.addTransient('FIND_USER_CONTROLLER_TOKEN', (c) => {
-        return new FindUserController(c.resolve(TOKENS.CONTEXT_ACCESSOR), c.resolve(TOKENS.MEDIATOR))
-      })
-    })
-
-  return await builder.build()
-}
-
+```text
+Controller
+    ↓
+Service
+    ↓
+Repository
 ```
 
----
+It works.
 
-## Why adopt Xeno for your next project?
+The controller receives the request.
 
-If you are tired of chasing the latest "magic" framework that breaks compatibility with every minor release, Xeno.JS offers a solution focused on industrial-grade stability:
+The service does the work.
 
-* **Predictability** — no hidden behaviors; every component is explicit and testable in isolation.
-* **Full-stack alignment** — enables the team to use the same architectural patterns (Handlers, Commands, Queries, Result Monads) across both the Node.js backend and the Vue.js frontend.
+The repository talks to the database.
 
-* **Production-ready** — includes native resilience management (circuit breakers, retries), advanced security (dual-token CSRF, GDPR-compliant log masking), and long-term maintainability.
+For a small application, this can be perfectly reasonable.
 
-The packages are fully open-source, modular, and available on npm:
+Then the application grows.
 
-* Core: `npm install @xeno-js/core`
-* Vue: `npm install @xeno-js/vue`
-* Shared: `npm install @xeno-js/shared`
-* CLI: `npx @xeno-js/cli`
+And eventually you have to answer a less obvious question:
+
+> **Where does an application use case actually live?**
 
 ---
 
-Head over to the GitHub repository [Xeno GitHub Repository](https://github.com/xeno-js/xeno-js), leave a ⭐ if you appreciate the engineering approach, and try integrating Xeno into your next clean TypeScript architecture!
+## 1. The easy beginning
+
+Imagine a simple user API.
+
+You start with something like:
+
+```typescript
+class UserService {
+  constructor(
+    private readonly users: UserRepository,
+  ) {}
+
+  async createUser(email: string) {
+    const user = User.create(email)
+
+    await this.users.save(user)
+
+    return user
+  }
+}
+```
+
+Your controller calls the service:
+
+```typescript
+app.post('/users', async (request, reply) => {
+  const user = await userService.createUser(
+    request.body.email,
+  )
+
+  return reply.status(201).send(user)
+})
+```
+
+The structure is easy to understand.
+
+```text
+HTTP request
+     ↓
+Controller
+     ↓
+UserService
+     ↓
+UserRepository
+     ↓
+Database
+```
+
+There is very little architecture to think about.
+
+And that's a good thing.
+
+The problem usually doesn't appear at the beginning.
+
+It appears when the application starts accumulating behavior.
+
+---
+
+## 2. What happens as the application grows
+
+A `UserService` that initially contained one operation can gradually become responsible for everything related to users:
+
+```typescript
+class UserService {
+  createUser()
+  updateUser()
+  deleteUser()
+  inviteUser()
+  activateUser()
+  suspendUser()
+  changePassword()
+  resetPassword()
+  changeEmail()
+}
+```
+
+The class is still called a service.
+
+But what does "service" actually mean?
+
+More importantly, where is each application action defined?
+
+Soon individual methods start accumulating different responsibilities:
+
+```text
+createUser
+    ├── validation
+    ├── authorization
+    ├── business rules
+    ├── repository access
+    ├── transaction
+    ├── notification
+    └── audit
+```
+
+Then another method needs a slightly different combination:
+
+```text
+suspendUser
+    ├── authorization
+    ├── business rules
+    ├── repository access
+    ├── audit
+    └── notification
+```
+
+And another:
+
+```text
+changeEmail
+    ├── validation
+    ├── authorization
+    ├── repository access
+    ├── external API
+    └── notification
+```
+
+The problem isn't that the service has too many methods.
+
+The deeper problem is that **the application has no explicit place for its use cases**.
+
+---
+
+# 3. The real problem
+
+Consider the application conceptually:
+
+```text
+CreateUser
+SuspendUser
+ChangeEmail
+ResetPassword
+...
+```
+
+These are not HTTP concepts.
+
+They are application actions.
+
+But in a traditional structure they can end up hidden inside:
+
+```text
+Controller
+    ↓
+Generic Service
+    ↓
+Repository
+```
+
+The transport becomes the visible entry point to the application.
+
+And the service becomes a generic container for everything that happens after the request arrives.
+
+This creates an architectural ambiguity:
+
+> Is `UserService.createUser()` a service method, or is it the application's `CreateUser` use case?
+
+The code may work either way.
+
+But the distinction becomes important as the application grows.
+
+---
+
+# 4. Give use cases a home
+
+Instead of organizing application behavior primarily around technical services, you can organize it around application actions.
+
+For example:
+
+```text
+Application
+├── CreateUser
+├── SuspendUser
+├── ChangeEmail
+└── ResetPassword
+```
+
+Now the application has an explicit boundary.
+
+Conceptually:
+
+```text
+Presentation
+    ↓
+Application
+    ↓
+Domain
+    ↓
+Infrastructure
+```
+
+The controller is no longer where the application logic lives.
+
+It translates an external request into an application operation.
+
+The application operation owns the use case.
+
+The domain owns business rules.
+
+Infrastructure provides technical capabilities.
+
+The distinction is small in code.
+
+It becomes significant in a larger system.
+
+---
+
+# 5. How Xeno approaches it
+
+This is one of the problems Xeno.JS is designed around.
+
+Xeno models application execution around requests, handlers, and an explicit composition root.
+
+For example, the current Xeno Core API exposes `BaseHandler` as an application handler abstraction:
+
+```typescript
+export abstract class BaseHandler<
+  TRequest extends IRequest<TResponse>,
+  TResponse,
+> implements IHandler<TRequest, TResponse> {
+  public async handle(
+    request: TRequest,
+    signal: AbortSignal,
+  ): Promise<ResultType<TResponse>> {
+    AppError.throwIfAborted(
+      signal,
+      this.constructor.name,
+    )
+
+    return await this.executeAsync(request)
+  }
+
+  protected abstract executeAsync(
+    request: TRequest,
+    signal?: AbortSignal,
+  ): Promise<ResultType<TResponse>>
+}
+```
+
+The important part here is not the base class itself.
+
+It is the boundary.
+
+An application operation can have its own handler rather than being just another method on a large technical service.
+
+The composition root then makes the application's dependencies explicit.
+
+For example, the Xeno README currently shows registrations such as:
+
+```typescript
+const app = new AppBuilder()
+  .addServices((services) => {
+    services.addScoped(
+      'USER_REPOSITORY',
+      (container) => {
+        return new UserRepository(
+          container.resolve('USER_DATA_SOURCE'),
+        )
+      },
+    )
+
+    services.addScoped(
+      'FIND_USER_HANDLER',
+      (container) => {
+        return new FindUserHandler(
+          container.resolve('USER_REPOSITORY'),
+        )
+      },
+    )
+  })
+
+await app.build()
+```
+
+The important change is what this code makes visible.
+
+The application now has an explicit composition:
+
+```text
+FindUserHandler
+       ↓
+UserRepository
+       ↓
+UserDataSource
+```
+
+Instead of discovering that dependency chain indirectly by following a large service class, the composition root describes it directly.
+
+---
+
+# 6. Why this matters
+
+Once application actions have an explicit boundary, the transport no longer has to define where the application lives.
+
+For example:
+
+```text
+HTTP
+  ↓
+Application
+  ↓
+FindUser
+```
+
+The same application operation can conceptually be entered through another transport:
+
+```text
+CLI
+  ↓
+Application
+  ↓
+FindUser
+```
+
+Or:
+
+```text
+Worker
+  ↓
+Application
+  ↓
+FindUser
+```
+
+The point isn't that every application needs multiple transports.
+
+The point is that the use case is no longer inherently an HTTP concept.
+
+This is why Xeno describes its application architecture as transport-independent. The current Core README explicitly places HTTP, CLI, workers, and Lambda-style entry points above the application layer rather than inside it.
+
+That gives the application a boundary of its own:
+
+```text
+        Transport
+            ↓
+      Application
+            ↓
+         Domain
+            ↓
+     Infrastructure
+```
+
+And that boundary is the actual problem Xeno is trying to make explicit.
+
+---
+
+# 7. Try it
+
+If your TypeScript application is still small, you may not need this distinction yet.
+
+But if your services are becoming collections of unrelated application actions, it may be worth asking:
+
+> **Do my use cases have a place of their own?**
+
+That's the problem Xeno.JS is built to address.
+
+Xeno Core provides the application composition and execution building blocks.
+
+You can explore the implementation and the current API in the repository:
+
+**Xeno.JS Core**
+
+https://github.com/xeno-js/xeno-js
+
+And start from the documentation:
+
+**Xeno.JS**
+
+https://www.xeno-js.it/
+
+The goal isn't to add another layer because architecture is fashionable.
+
+It's to make an existing concept visible:
+
+> **Your application has use cases. Give them a boundary.**
