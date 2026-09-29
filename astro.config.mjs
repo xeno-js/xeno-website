@@ -10,7 +10,7 @@ export default defineConfig({
     starlight({
       title: 'Xeno.JS',
       favicon: '/favicon.ico',
-      description: 'Xeno.JS is an enterprise backend framework for Node.js and TypeScript. Powered by @xeno-js/core, it delivers DDD, CQRS, and explicit dependency injection.',
+      description: 'Xeno.JS is an application architecture framework for TypeScript with explicit dependency injection, DDD, CQRS and modular application boundaries.',
       customCss: ['./src/styles/global.css'],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/xeno-js/xeno-js' }],
       logo: {
