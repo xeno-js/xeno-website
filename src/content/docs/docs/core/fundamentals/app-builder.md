@@ -1,7 +1,7 @@
 ---
 title: 'AppBuilder: Fluent Bootstrapping and Module Orchestration'
 description:
-  'Learn how Xeno AppBuilder configures modules, orders asynchronous
+  'Learn how Xeno.JS AppBuilder configures modules, orders asynchronous
   bootstrapping, and registers services through SetupAction callbacks.'
 keywords:
   [
@@ -24,14 +24,14 @@ sidebar:
 Bootstrapping a decoupled, layered application requires coordinating diverse
 infrastructure modules—such as logging channels, database connection pools,
 authentication clients, and CQRS pipeline behaviors—without tightly coupling
-them together. Xeno resolves this coordination challenge through the
+them together. Xeno.JS resolves this coordination challenge through the
 **AppBuilder** primitive, which serves as a centralized, fluent bootstrapper.
 
 ---
 
 ## What is the AppBuilder and How Does It Structure Bootstrapping?
 
-The `AppBuilder` is a fluent, programmatic bootstrapper for Xeno applications.
+The `AppBuilder` is a fluent, programmatic bootstrapper for Xeno.JS applications.
 It collects module registration actions, applies configuration callbacks, and
 initializes the registered modules in priority order inside a
 `ServiceContainer`.
@@ -127,7 +127,7 @@ execution of `.build()`:
 
 ## Decoupling Configurations with the SetupAction Functional Paradigm
 
-`SetupAction` is a typed callback contract used to configure Xeno modules. It
+`SetupAction` is a typed callback contract used to configure Xeno.JS modules. It
 receives a mutable configuration value and the shared `IConfigurationService`,
 enabling application settings to be read from the environment without exposing
 module instances to the caller.
@@ -198,6 +198,6 @@ async function bootstrap() {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

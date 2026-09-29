@@ -1,7 +1,7 @@
 ---
 title: 'BaseController: Presentation Layer Primitives & Media Routing'
 description:
-  'Technical guide to the Xeno BaseController specification, detailing generic
+  'Technical guide to the Xeno.JS BaseController specification, detailing generic
   extension structures, CQRS mediator dispatch channels, and container bootstrap
   orchestration.'
 keywords:
@@ -19,7 +19,7 @@ author: 'Xeno'
 
 ## Presentation Layer Orchestration with BaseController
 
-The presentation layer of Xeno separates delivery networks—such as HTTP engines,
+The presentation layer of Xeno.JS separates delivery networks—such as HTTP engines,
 WebSockets, or distributed event consumers—from core application use cases. This
 layer uses the **BaseController** abstract primitive, which standardizes
 incoming request collection, isolates request handling, and uniformizes outbound
@@ -29,7 +29,7 @@ response serialization.
 
 ## Understanding the Role and Management of BaseController
 
-The Xeno `BaseController` is an abstract presentation primitive that unifies
+The Xeno.JS `BaseController` is an abstract presentation primitive that unifies
 request processing across delivery channels. It encapsulates context accessors
 and a mediator client to execute type-safe interaction contracts while
 standardizing lifecycle response mapping without coupling business routines to
@@ -253,7 +253,7 @@ async function startServer() {
   })
 
   await server.listen({ port: 3000 })
-  console.log('Xeno runtime listening safely on http://localhost:3000')
+  console.log('Xeno.JS runtime listening safely on http://localhost:3000')
 }
 
 startServer().catch(console.error)
@@ -304,6 +304,6 @@ sequenceDiagram
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

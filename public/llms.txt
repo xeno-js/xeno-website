@@ -1,15 +1,15 @@
 Xeno.JS
 
 Xeno.JS is an application architecture framework for TypeScript.
-Your HTTP framework handles HTTP. Xeno handles the application.
+Your HTTP framework handles HTTP. Xeno.JS handles the application.
 
-Xeno provides explicit boundaries for domain logic, application use cases, dependencies, request context, and cross-cutting execution.
+Xeno.JS provides explicit boundaries for domain logic, application use cases, dependencies, request context, and cross-cutting execution.
 
-Xeno is designed to sit underneath an existing transport or UI framework rather than replace it.
+Xeno.JS is designed to sit underneath an existing transport or UI framework rather than replace it.
 
-What Xeno Is
+What Xeno.JS Is
 
-Xeno provides an explicit application architecture and execution model for TypeScript applications.
+Xeno.JS provides an explicit application architecture and execution model for TypeScript applications.
 
 Its primary responsibilities include:
 
@@ -22,11 +22,11 @@ Its primary responsibilities include:
 * infrastructure composition
 * transport-independent business logic
 
-Xeno makes the application dependency graph and execution flow explicit in code.
+Xeno.JS makes the application dependency graph and execution flow explicit in code.
 
-What Xeno Is Not
+What Xeno.JS Is Not
 
-Xeno is not:
+Xeno.JS is not:
 
 * an HTTP server
 * an HTTP router
@@ -39,11 +39,11 @@ The HTTP framework remains responsible for HTTP and transport concerns.
 
 The UI framework remains responsible for UI concerns.
 
-Xeno provides the application architecture and execution model underneath them.
+Xeno.JS provides the application architecture and execution model underneath them.
 
 Architecture
 
-Xeno organizes application execution around explicit architectural boundaries:
+Xeno.JS organizes application execution around explicit architectural boundaries:
 
 Transport
     ↓
@@ -65,7 +65,7 @@ Xeno’s primary role is to make the application layer and its boundaries explic
 
 Application Execution
 
-Xeno provides an explicit application execution model built around dependency injection, commands, queries, mediators, pipelines, request context, and modules.
+Xeno.JS provides an explicit application execution model built around dependency injection, commands, queries, mediators, pipelines, request context, and modules.
 
 A typical execution flow is:
 
@@ -99,13 +99,13 @@ Examples include:
 
 Explicit Dependency Injection
 
-Xeno uses explicit programmatic dependency registration.
+Xeno.JS uses explicit programmatic dependency registration.
 
 Dependencies are not discovered through directory scanning or required decorator metadata.
 
 Application services and their dependencies are registered explicitly so that the dependency graph remains visible in application code.
 
-Xeno supports explicit service lifetimes including:
+Xeno.JS supports explicit service lifetimes including:
 
 * singleton
 * scoped
@@ -115,7 +115,7 @@ The container also provides dependency resolution, scope management, circular de
 
 Request Context
 
-Xeno provides request-scoped application context.
+Xeno.JS provides request-scoped application context.
 
 Context can carry information such as:
 
@@ -130,7 +130,7 @@ Request context allows application services and cross-cutting pipelines to acces
 
 Commands and Queries
 
-Xeno supports Command Query Responsibility Segregation (CQRS).
+Xeno.JS supports Command Query Responsibility Segregation (CQRS).
 
 Commands represent application operations that may change application state.
 
@@ -142,7 +142,7 @@ CQRS is an application execution pattern within Xeno’s architecture, not the p
 
 Domain-Driven Design
 
-Xeno provides building blocks for Domain-Driven Design (DDD), including:
+Xeno.JS provides building blocks for Domain-Driven Design (DDD), including:
 
 * aggregates
 * value objects
@@ -156,7 +156,7 @@ These primitives help define domain and application boundaries without requiring
 
 Cross-Cutting Execution
 
-Xeno uses pipelines to keep cross-cutting concerns separate from application and domain logic.
+Xeno.JS uses pipelines to keep cross-cutting concerns separate from application and domain logic.
 
 Pipeline behaviors can be used for concerns such as:
 
@@ -172,7 +172,7 @@ This allows cross-cutting behavior to be composed around application execution r
 
 Framework Integration
 
-Xeno is designed to work underneath an existing application stack.
+Xeno.JS is designed to work underneath an existing application stack.
 
 It can be used alongside technologies such as:
 
@@ -183,7 +183,7 @@ It can be used alongside technologies such as:
 
 The transport or UI framework remains responsible for its own concerns.
 
-Xeno provides the application architecture beneath those technologies.
+Xeno.JS provides the application architecture beneath those technologies.
 
 The goal is to keep the existing stack while making the application’s internal architecture explicit.
 
@@ -223,7 +223,7 @@ Core provides:
 * transactions
 * infrastructure composition
 
-Core is the primary runtime for executing the Xeno application architecture on the backend.
+Core is the primary runtime for executing the Xeno.JS application architecture on the backend.
 
 @xeno-js/vue
 
@@ -241,17 +241,17 @@ It provides application composition and execution patterns including:
 
 Vue remains responsible for the UI.
 
-Xeno provides the application architecture and composition model around it.
+Xeno.JS provides the application architecture and composition model around it.
 
 @xeno-js/cli
 
-Provides project scaffolding and application generators for Xeno projects.
+Provides project scaffolding and application generators for Xeno.JS projects.
 
 The CLI helps developers start projects and generate application components without rebuilding the same structural conventions manually.
 
 Backend and Frontend
 
-Xeno can apply the same architectural language across backend and frontend applications.
+Xeno.JS can apply the same architectural language across backend and frontend applications.
 
 The backend can use @xeno-js/core to execute the application architecture on Node.js.
 
@@ -263,7 +263,7 @@ The purpose is to share architectural concepts while keeping transport, infrastr
 
 When to Use Xeno
 
-Xeno is particularly relevant when a TypeScript application needs:
+Xeno.JS is particularly relevant when a TypeScript application needs:
 
 * explicit application and domain boundaries
 * visible dependency composition
@@ -274,13 +274,13 @@ Xeno is particularly relevant when a TypeScript application needs:
 * explicit infrastructure boundaries
 * an application architecture that can span backend and frontend
 
-Xeno can be useful when an application is expected to grow beyond simple request handlers and needs a more explicit application execution model.
+Xeno.JS can be useful when an application is expected to grow beyond simple request handlers and needs a more explicit application execution model.
 
-Xeno may be unnecessary for a minimal application that only requires a small HTTP server, router, or simple request handling layer.
+Xeno.JS may be unnecessary for a minimal application that only requires a small HTTP server, router, or simple request handling layer.
 
 Core Principles
 
-The main architectural principles of Xeno are:
+The main architectural principles of Xeno.JS are:
 
 1. Explicit boundaries — application, domain, and infrastructure responsibilities are visible in code.
 2. Explicit dependencies — dependency registration is deliberate rather than discovered implicitly.

@@ -21,7 +21,7 @@ author: 'Xeno'
 
 Within Domain-Driven Design (DDD), an entity represents a business object
 defined not by its transitory data attributes, but by a continuous thread of
-identity. Xeno provides an explicit **Entity** abstract base class to help
+identity. Xeno.JS provides an explicit **Entity** abstract base class to help
 developers build pure domain models that encapsulate business logic and protect
 structural invariants independently of persistence frameworks.
 
@@ -29,7 +29,7 @@ structural invariants independently of persistence frameworks.
 
 ## Extending the Abstract Entity Base Class
 
-Extending the Xeno abstract Entity class establishes a stateful domain model
+Extending the Xeno.JS abstract Entity class establishes a stateful domain model
 with a persistent identity context. It binds mutable or immutable property
 schemas using TypeScript generics, separating pure core enterprise business
 rules from persistent data transfer objects and database-specific identifiers.
@@ -75,7 +75,7 @@ export class User extends Entity<UserProps> {
 
 ## Understanding Property Encapsulation and Identity Access
 
-Accessing domain properties and identifiers in Xeno relies on strict
+Accessing domain properties and identifiers in Xeno.JS relies on strict
 encapsulation methods to protect internal state patterns. The framework exposes
 dedicated data retrieval hooks to output property schemas or retrieve primary
 identity values safely without exposing raw internal variables to external
@@ -359,6 +359,6 @@ export const bootstrap = async () => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

@@ -1,7 +1,7 @@
 ---
 title: 'Logging Subsystem Architecture & Composite Logger Overview'
 description:
-  'An architectural overview of the Xeno composite logging subsystem, detailing
+  'An architectural overview of the Xeno.JS composite logging subsystem, detailing
   multi-driver telemetry aggregation, AppBuilder registration, and
   framework-level integration.'
 keywords:
@@ -22,7 +22,7 @@ author: 'Xeno'
 
 Application observability requires capturing telemetry data across diverse
 execution environments without coupling business logic to specific logging
-vendors. Xeno resolves this by providing a unified, composite logging subsystem
+vendors. Xeno.JS resolves this by providing a unified, composite logging subsystem
 that aggregates diagnostic outputs, enriches telemetry with request-scoped
 tracing context, and distributes log entries simultaneously across multiple
 targets.
@@ -31,7 +31,7 @@ targets.
 
 ## Understanding the Base Logger Composite Architecture
 
-The Base Logger in Xeno acts as a composite log aggregator that broadcasts
+The Base Logger in Xeno.JS acts as a composite log aggregator that broadcasts
 telemetry events simultaneously across multiple registered log drivers. It
 unifies logging streams across diverse destinations without duplicating dispatch
 calls or coupling domain services to specific logging providers.
@@ -90,7 +90,7 @@ graph TD
 
 ## Supported Framework Logger Drivers and Extensions
 
-Xeno offers out-of-the-box support for Console, Pino, and Sentry logger drivers,
+Xeno.JS offers out-of-the-box support for Console, Pino, and Sentry logger drivers,
 alongside an extensible custom logger registration interface. This modular
 driver ecosystem enables enterprise applications to combine local stdout
 debugging outputs with distributed error tracking platforms seamlessly.
@@ -172,7 +172,7 @@ within request middleware execution boundaries and tracks handler timing metrics
 and payload telemetry inside the CQRS logging and performance pipeline behavior
 stack.
 
-Xeno relies on the primary `LOGGER` service internally to enforce system
+Xeno.JS relies on the primary `LOGGER` service internally to enforce system
 observability across three primary execution zones:
 
 ### 1. Request Context Middleware
@@ -270,7 +270,7 @@ export const bootstrap = async () => {
 
 ## Understanding the Numeric Log Level Mapping Matrix
 
-Log levels in Xeno are managed numerically via the frozen `LOG_LEVEL` constant
+Log levels in Xeno.JS are managed numerically via the frozen `LOG_LEVEL` constant
 map. Assigning discrete integer values ranging from 0 to 3 establishes an
 explicit severity hierarchy, enabling composite loggers and client drivers to
 execute high-performance threshold filtering using straightforward numeric
@@ -355,6 +355,6 @@ console.log(formatLogPrefix(LOG_LEVEL.WARN)) // Output: "[WARN]"
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

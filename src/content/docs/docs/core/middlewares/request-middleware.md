@@ -1,6 +1,6 @@
 ---
 title: 'RequestContextMiddleware: Request Context Management in Xeno'
-description: 'Learn how Xeno RequestContextMiddleware extracts request metadata, creates
+description: 'Learn how Xeno.JS RequestContextMiddleware extracts request metadata, creates
   an asynchronous request context, assigns tracing identifiers, and handles
   unexpected request errors.'
 keywords: [
@@ -52,7 +52,7 @@ authenticate the caller itself. Authentication is handled later by
 ## Which Metadata Does It Extract?
 
 The injected `IServiceExtractor` returns `Metadata` from the request headers.
-The metadata can provide request information used by the Xeno context, such as
+The metadata can provide request information used by the Xeno.JS context, such as
 correlation, request, span, network, and format data.
 
 The middleware applies these fallback rules:
@@ -166,6 +166,6 @@ rate limiting, and method-check error handling.
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

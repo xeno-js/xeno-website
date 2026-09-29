@@ -1,6 +1,6 @@
 ---
 title: 'MethodCheckMiddleware: HTTP Method Authorization in Xeno'
-description: 'Learn how Xeno MethodCheckMiddleware validates request paths and HTTP methods through routeRegistry before forwarding requests to the next middleware.'
+description: 'Learn how Xeno.JS MethodCheckMiddleware validates request paths and HTTP methods through routeRegistry before forwarding requests to the next middleware.'
 keywords: [
 		'MethodCheckMiddleware',
 		'Allow Method Middleware',
@@ -18,7 +18,7 @@ sidebar:
 
 ## What Is MethodCheckMiddleware?
 
-`MethodCheckMiddleware` is a Xeno Presentation middleware that checks whether a
+`MethodCheckMiddleware` is a Xeno.JS Presentation middleware that checks whether a
 request path accepts the incoming HTTP method. It reads the route registry
 configured through `MiddlewareConfig` and either forwards the request or returns
 a `405 Method Not Allowed` response.
@@ -124,12 +124,12 @@ The current implementation exposes the following constraints:
 - route configuration is enabled only when `routeRegistry` is defined;
 - rejected requests return `STATUS_CODES.NOT_ALLOWED` and do not call `next()`;
 - the middleware does not provide public-route bypass rules;
-- authentication and authorization are handled by separate Xeno components.
+- authentication and authorization are handled by separate Xeno.JS components.
 
 ---
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

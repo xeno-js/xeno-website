@@ -1,7 +1,7 @@
 ---
 title: 'Data Persistence Primitives: Repository and ReadDao Architectures'
 description:
-  'Technical manual for Xeno data access primitives. Learn how to extend
+  'Technical manual for Xeno.JS data access primitives. Learn how to extend
   Repository and ReadDao, manage UserContext propagation, and execute custom
   domain queries safely.'
 keywords:
@@ -20,7 +20,7 @@ author: 'Xeno'
 
 ## Data Persistence Layers: Repository and ReadDao Primitives
 
-The data persistence layer in Xeno segregates structural modification mechanisms
+The data persistence layer in Xeno.JS segregates structural modification mechanisms
 from idempotent data streaming queries. By separating data layers under distinct
 architectural abstractions, the framework satisfies Command-Query Responsibility
 Segregation (CQRS) boundaries while keeping pure domain models isolated from
@@ -30,13 +30,13 @@ persistent data-store mechanisms.
 
 ## Understanding the Architectural Differences Between Repository and ReadDao
 
-The Repository and ReadDao primitives in Xeno separate command data mutation
+The Repository and ReadDao primitives in Xeno.JS separate command data mutation
 from query data retrieval paths. While the Repository manages complete create,
 read, update, and delete (CRUD) lifecycles for write models, the ReadDao acts as
 a read-only data access object configured strictly to optimize data retrieval
 paths.
 
-Xeno splits data storage mechanics into two abstract classes located behind
+Xeno.JS splits data storage mechanics into two abstract classes located behind
 explicit domain-layer interfaces to optimize operations across data layers:
 
 - **Repository<T, TDto>** — An abstract base class designed for handling
@@ -299,6 +299,6 @@ export const bootstrap = async () => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

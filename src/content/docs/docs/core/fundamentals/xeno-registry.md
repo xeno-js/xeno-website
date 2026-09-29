@@ -11,7 +11,7 @@ keywords:
     'ServiceContainer',
     'TypeScript Registry',
     'Type Safety',
-    'Xeno Bootstrap',
+    'Xeno.JS Bootstrap',
   ]
 author: 'Xeno'
 sidebar:
@@ -19,7 +19,7 @@ sidebar:
 ---
 
 In the dependency injection design pattern, type safety represents one of the
-main challenges for preventing runtime resolution failures. Xeno addresses this
+main challenges for preventing runtime resolution failures. Xeno.JS addresses this
 issue by introducing the concept of **XenoRegistry**, a centralized contract
 based exclusively on TypeScript's static type system.
 
@@ -33,7 +33,7 @@ interfaces, it guarantees compile-time type safety, eliminating runtime
 resolution errors and removing the need for metadata-based reflection.
 
 Unlike other frameworks in the Node.js ecosystem that rely on experimental
-decorators (`reflect-metadata`) or arbitrary strings, Xeno depends on explicit
+decorators (`reflect-metadata`) or arbitrary strings, Xeno.JS depends on explicit
 mapping. This architectural choice removes any "implicit magic," forcing the
 entire dependency graph to conform to a single interface before the code is
 compiled or executed.
@@ -198,7 +198,7 @@ async function bootstrap() {
     await notificationService.sendEmail(
       user.email,
       'Registration Completed',
-      'Your Xeno account is now active.',
+      'Your Xeno.JS account is now active.',
     )
   }
 }
@@ -216,7 +216,7 @@ bootstrap().catch((error) => {
 If you want to use Drizzle ORM with Xeno, yuo can register your db schema in
 XenoRegistry. A core architectural capability of `XenoRegistry` is its
 structural specialization over database engines. Rather than binding database
-contexts to raw, loosely-typed storage clients, Xeno statically couples your
+contexts to raw, loosely-typed storage clients, Xeno.JS statically couples your
 custom database schema definitions directly to the core `ApplicationRegistry`
 type layout via the generic `XenoRegistry` abstraction.
 
@@ -391,6 +391,6 @@ bootstrap().catch((error) => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

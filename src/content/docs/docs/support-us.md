@@ -7,11 +7,11 @@ description:
 keywords:
   [
     'Supporting Xeno',
-    'Xeno Framework Sponsorship',
+    'Xeno.JS Framework Sponsorship',
     'Open Source Node.js',
     'Enterprise Support',
     'Buy Me A Coffee',
-    'Xeno Contributions',
+    'Xeno.JS Contributions',
   ]
 author: 'Xeno'
 ---
@@ -21,20 +21,20 @@ author: 'Xeno'
 **Xeno** is an MIT-licensed, open-source framework.
 
 Building an enterprise-grade framework is a challenging labor of love. I develop
-Xeno in my spare time—late nights, early mornings, and weekends—driven by the
+Xeno.JS in my spare time—late nights, early mornings, and weekends—driven by the
 vision of a cleaner, more performant architecture for Node.js.
 
 ## Why support Xeno?
 
-Xeno is an independent, side-project born from the need to solve real-world
+Xeno.JS is an independent, side-project born from the need to solve real-world
 architectural problems. I don't have a large corporation behind me funding the
 hours spent on research, coding, documentation, and maintenance.
 
 **Your support is a direct investment in the project's longevity:**
 
-- **Bridging the Gap**: I am balancing Xeno with a full-time job. Your support
+- **Bridging the Gap**: I am balancing Xeno.JS with a full-time job. Your support
   helps me dedicate more energy to this framework without sacrificing its
-  quality. It is the bridge that allows Xeno to evolve from a "side-project" to
+  quality. It is the bridge that allows Xeno.JS to evolve from a "side-project" to
   a project with the care and pace of an enterprise-grade tool.
 - **Stability & Maintenance**: By sponsoring Xeno, you ensure that the framework
   your product relies on is actively maintained, updated, and secured against
@@ -46,7 +46,7 @@ hours spent on research, coding, documentation, and maintenance.
 If you are running a business that uses Xeno, or if you simply appreciate the
 engineering effort that went into decoupling your core logic, please consider
 sponsoring this project. Your support makes a tangible difference in keeping
-Xeno independent and sustainable for the long term.
+Xeno.JS independent and sustainable for the long term.
 
 ### How can you help?
 
@@ -59,7 +59,7 @@ sponsorship, buys the most precious resource: **time**.
 - **Star the Repository**: Give us a ⭐ on our
   [GitHub repository](https://github.com/xeno-js/xeno-js)! It costs
   nothing, but it boosts our visibility and helps more developers discover Xeno.
-- **Direct Contact & Project Support**: If you are using Xeno in your
+- **Direct Contact & Project Support**: If you are using Xeno.JS in your
   application and need dedicated support, architectural advice, or guidance with
   your implementation, feel free to contact me directly at <xeno-js@outlook.it>.
 
@@ -70,7 +70,7 @@ you can still be a massive help by:
 
 - **Reporting issues** or suggesting features on GitHub.
 - **Writing documentation** or tutorials based on your experience.
-- **Spreading the word** about Xeno in your tech community.
+- **Spreading the word** about Xeno.JS in your tech community.
 
 Thank you for being part of this decoupled, open-source journey. Your support
 keeps the engine running and helps me focus on delivering the best possible

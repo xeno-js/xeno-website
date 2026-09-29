@@ -1,6 +1,6 @@
 ---
 title: 'AllowOriginMiddleware: Request Origin Validation in Xeno'
-description: 'Learn how Xeno AllowOriginMiddleware checks incoming request origins against a configured whitelist supporting exact matches, subdomains, wildcards, and global asterisks.'
+description: 'Learn how Xeno.JS AllowOriginMiddleware checks incoming request origins against a configured whitelist supporting exact matches, subdomains, wildcards, and global asterisks.'
 keywords: [
   'AllowOriginMiddleware',
   'CORS origin validation',
@@ -16,7 +16,7 @@ sidebar:
 
 ## What Is AllowOriginMiddleware?
 
-`AllowOriginMiddleware` is a Xeno Presentation middleware that validates whether the origin of an incoming request is authorized to access the resource. It evaluates the sanitized request origin stored in the execution context against a configurable whitelist (`IAllowOrigin`). If the origin is not permitted, the middleware short-circuits the pipeline and returns a structured `403 Forbidden` response.
+`AllowOriginMiddleware` is a Xeno.JS Presentation middleware that validates whether the origin of an incoming request is authorized to access the resource. It evaluates the sanitized request origin stored in the execution context against a configurable whitelist (`IAllowOrigin`). If the origin is not permitted, the middleware short-circuits the pipeline and returns a structured `403 Forbidden` response.
 
 ---
 
@@ -107,6 +107,6 @@ Current implementation constraints include:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

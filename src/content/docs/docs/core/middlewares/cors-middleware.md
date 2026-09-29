@@ -1,6 +1,6 @@
 ---
 title: 'CORSMiddleware: Cross-Origin Resource Sharing Header Injection'
-description: 'Learn how Xeno CORSMiddleware dynamically injects standard CORS headers into response DTOs across agnostic runtime adapters.'
+description: 'Learn how Xeno.JS CORSMiddleware dynamically injects standard CORS headers into response DTOs across agnostic runtime adapters.'
 keywords: [
   'CORSMiddleware',
   'CORS headers',
@@ -16,7 +16,7 @@ sidebar:
 
 ## What Is CORSMiddleware?
 
-`CORSMiddleware` is a Xeno Presentation middleware responsible for enriching the application's unified `ResponseDto` envelope with standard Cross-Origin Resource Sharing (CORS) response headers. By leveraging Xeno's runtime-agnostic architecture, it operates purely on the response headers map rather than manipulating transport-specific objects (such as Node.js `res.setHeader`), ensuring full portability across serverless adapters (like Vercel) and traditional HTTP engines (like Fastify or Hono).
+`CORSMiddleware` is a Xeno.JS Presentation middleware responsible for enriching the application's unified `ResponseDto` envelope with standard Cross-Origin Resource Sharing (CORS) response headers. By leveraging Xeno's runtime-agnostic architecture, it operates purely on the response headers map rather than manipulating transport-specific objects (such as Node.js `res.setHeader`), ensuring full portability across serverless adapters (like Vercel) and traditional HTTP engines (like Fastify or Hono).
 
 ---
 
@@ -80,6 +80,6 @@ Current implementation constraints include:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

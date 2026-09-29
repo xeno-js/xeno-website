@@ -3,7 +3,7 @@ slug: core/database/base-datasource
 title: Base Data Sources and Type Safety in Xeno
 description: Learn how to implement data sources using Xeno's BasePostgresSqlDataSource and BaseSqliteSqlDataSource to ensure strict Drizzle ORM type safety in Clean Architecture.
 authors:
-  - Xeno Team
+  - Xeno.JS Team
 tags:
   - database
   - clean-architecture
@@ -14,7 +14,7 @@ tags:
 
 ## Base Data Sources & Type Safety
 
-In a Clean Architecture setup, the infrastructure layer is responsible for database communication.To maintain strict type safety with Drizzle ORM while avoiding union - type resolution conflicts between different SQL engines, Xeno provides specialized base classes: **`BasePostgresSqlDataSource`** and **`BaseSqliteSqlDataSource`**.
+In a Clean Architecture setup, the infrastructure layer is responsible for database communication.To maintain strict type safety with Drizzle ORM while avoiding union - type resolution conflicts between different SQL engines, Xeno.JS provides specialized base classes: **`BasePostgresSqlDataSource`** and **`BaseSqliteSqlDataSource`**.
 
 This guide explains how to implement domain contracts and choose the correct base data source according to your target database driver.
 
@@ -98,6 +98,6 @@ export class UserDataSource extends BasePostgresSqlDataSource<DbSchema> implemen
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

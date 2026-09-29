@@ -1,6 +1,6 @@
 ---
 title: 'SSR & Platform Adapters: Server-Side Cookie Handling in Xeno'
-description: 'Learn how Xeno implements framework-agnostic SSR cookie handling using ISsrCookieHandler and platform-specific adapters like VercelSsrCookieHandler for Supabase SSR.'
+description: 'Learn how Xeno.JS implements framework-agnostic SSR cookie handling using ISsrCookieHandler and platform-specific adapters like VercelSsrCookieHandler for Supabase SSR.'
 keywords: [
   'SSR adapters',
   'ISsrCookieHandler',
@@ -8,7 +8,7 @@ keywords: [
   'Supabase SSR',
   'Vercel cookies',
   'Transport decoupling',
-  'Xeno security',
+  'Xeno.JS security',
 ]
 author: 'Xeno'
 sidebar:
@@ -34,13 +34,13 @@ Xeno's core engine is intentionally runtime-agnostic and completely decoupled fr
 
 
 
-To bridge platform-specific transport mechanics without polluting the core domain logic, Xeno introduces the **`ISsrCookieHandler`** contract and platform adapter pattern.
+To bridge platform-specific transport mechanics without polluting the core domain logic, Xeno.JS introduces the **`ISsrCookieHandler`** contract and platform adapter pattern.
 
 ---
 
 ## The `ISsrCookieHandler` Contract
 
-Xeno defines a standardized, framework-agnostic interface called `ISsrCookieHandler` under domain configurations. Any platform adapter must implement this contract to be fully compatible with Supabase SSR integration factories:
+Xeno.JS defines a standardized, framework-agnostic interface called `ISsrCookieHandler` under domain configurations. Any platform adapter must implement this contract to be fully compatible with Supabase SSR integration factories:
 
 ```typescript
 export interface ISsrCookie {
@@ -168,6 +168,6 @@ export async function bootstrap() {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

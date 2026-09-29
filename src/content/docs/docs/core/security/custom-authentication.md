@@ -2,7 +2,7 @@
 title: 'Custom Authentication Service Integration Guide'
 description:
   'Technical manual detailing how to extend, implement, and programmatically
-  register a custom authentication service inside the Xeno dependency injection
+  register a custom authentication service inside the Xeno.JS dependency injection
   container using AppBuilder.'
 keywords:
   [
@@ -19,7 +19,7 @@ author: 'Xeno'
 
 ## Integrating Custom Authentication Services
 
-While Xeno provides native integration strategies for external vendors like
+While Xeno.JS provides native integration strategies for external vendors like
 Supabase, enterprise architectures frequently necessitate completely bespoke
 identity verification workflows. The framework supports an entirely decoupled
 security architecture, allowing developers to plug custom identity validation
@@ -29,7 +29,7 @@ logic directly into the application kernel.
 
 ## Understanding Custom Authentication Services in Xeno
 
-Custom authentication in Xeno enables developers to bypass default providers and
+Custom authentication in Xeno.JS enables developers to bypass default providers and
 implement tailored identity validation workflows. By decoupling the core engine
 from third-party ecosystems, the framework permits seamless integration with
 bespoke OAuth tokens, internal LDAP repositories, or custom JWT verification
@@ -202,6 +202,6 @@ export const bootstrapApplication = async () => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

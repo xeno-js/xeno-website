@@ -6,7 +6,7 @@ import Button from "../ui/Button.astro";
   /* Hero Section (NestJS Modern Style with Glassmorphism & Primary Green Glow) */
 }
 <section
-  class="relative min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-24 pb-16 px-6"
+  class="relative min-h-[90vh] flex items-center justify-center relative overflow-hidden md:pt-24 pb-16 px-6"
 >
   {/* Background Mirror / Glass Glow Effect using Brand Primary Color */}
   <div id="hexagons">
@@ -599,7 +599,7 @@ import Button from "../ui/Button.astro";
   </div>
 
   <div
-    class="w-full mx-auto text-center relative z-10 flex flex-col items-center py-16 px-12 rounded-full"
+    class="w-full mx-auto text-center relative z-10 flex flex-col items-center md:py-16 px-12 rounded-full"
     style="background: radial-gradient(circle at center, var(--bg-primary) 0%, transparent 95%);"
   >
     {/* Main Title */}
@@ -608,19 +608,32 @@ import Button from "../ui/Button.astro";
       data-aos-delay="120"
       class="text-3xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] max-w-5xl mx-auto leading-[1.1]"
     >
-      Architecture that survives <span class="text-[var(--color-primary)]"
-        >CHANGE</span
-      >
+      Application <span class="text-[var(--color-primary)]">
+        architecture
+      </span> for Typescript
     </h1>
+    <h2
+      data-aos="fade-up"
+      data-aos-delay="120">
+      Your HTTP framework handles HTTP. <br />
+     <span class="underline">Xeno.<span class="text-[var(--color-primary)]">JS</span> handles the application.</span> 
+    </h2>
 
-    {/* Payoff description featuring Xeno */}
+    {/* Payoff description featuring Xeno.JS*/}
     <p
       data-aos="fade-up"
       data-aos-delay="220"
       class="text-base sm:text-xl text-[var(--text-muted)] max-w-3xl mx-auto font-normal leading-relaxed mb-10"
     >
-      The application framework for building scalable and testable application
-      in typescript
+      Xeno.JS gives TypeScript applications explicit boundaries for domain
+      logic, use cases, dependencies, request context, and cross-cutting
+      execution.
+    </p>
+    <p
+      data-aos="fade-up"
+      data-aos-delay="220">
+      Keep Fastify, Express, Hono, Vue, or the transport you already use. Build <br />
+      the application layer underneath it.
     </p>
 
     {/* Action Buttons (Docs Index & Source Code) */}

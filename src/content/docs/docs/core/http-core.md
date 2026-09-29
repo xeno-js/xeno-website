@@ -7,7 +7,7 @@ author: 'Xeno'
 
 ## Resilient Outgoing HTTP Communications with HTTP Core
 
-The **HTTP Core** module in Xeno configures outgoing HTTP requests to external
+The **HTTP Core** module in Xeno.JS configures outgoing HTTP requests to external
 REST APIs and remote services. It combines an `IHttpClient` implementation based
 on Axios with an `IServiceResilience` implementation based on Cockatiel.
 `RemoteDataSource` uses both services and returns remote payloads inside
@@ -334,13 +334,13 @@ The current implementation has these constraints:
 >
 > ```
 >
-> If either dependency is missing, module resolution fails when Xeno creates the
+> If either dependency is missing, module resolution fails when Xeno.JS creates the
 > HTTP client or resilience implementation.
 
 ---
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

@@ -2,7 +2,7 @@
 title:
   'ServiceContainer & Inversion of Control: Lifetimes and Resource Management'
 description:
-  'An architectural deep-dive into the Xeno ServiceContainer, detailing
+  'An architectural deep-dive into the Xeno.JS ServiceContainer, detailing
   singleton, scoped, and transient lifetimes, core safeguards, and native
   resource disposal.'
 keywords:
@@ -23,16 +23,16 @@ sidebar:
 
 ## Managing Component Lifecycles with the ServiceContainer
 
-The dependency injection subsystem of Xeno revolves around an explicit,
+The dependency injection subsystem of Xeno.JS revolves around an explicit,
 deterministic Inversion of Control (IoC) container. This component is
 responsible for orchestrating the creation, lifecycle execution, and structured
 resource disposal of all registered domain services and infrastructure modules.
 
 ---
 
-## What is the Xeno ServiceContainer?
+## What is the Xeno.JS ServiceContainer?
 
-The Xeno ServiceContainer is a zero-magic Inversion of Control (IoC) engine
+The Xeno.JS ServiceContainer is a zero-magic Inversion of Control (IoC) engine
 engineered for strict runtime dependency resolution. It manages instantiation
 lifecycles deterministically without decorator-based metadata reflection,
 utilizing explicit factory functions and static type registries to guarantee
@@ -63,13 +63,13 @@ the compiler that every resolved service is type-safe and structurally sound.
 
 ## How to Configure Service Lifetimes: Singleton, Scoped, and Transient
 
-Xeno governs object lifetimes through three explicit registration modes:
+Xeno.JS governs object lifetimes through three explicit registration modes:
 singletons for globally shared stateless instances, scoped dependencies bound to
 asynchronous request lifecycles, and transients for short-lived stateful
 entities. These lifetimes prevent state pollution and optimize memory allocation
 across complex application layers.
 
-Every service registered within Xeno belongs to one of three lifecycle scopes.
+Every service registered within Xeno.JS belongs to one of three lifecycle scopes.
 Selecting the correct lifetime guarantees optimal resource usage and preserves
 the integrity of state boundaries.
 
@@ -187,7 +187,7 @@ execution with a `[DI Captive Dependency Error]`.
 
 ## Managing Scoped Resources and Graceful Scope Disposal
 
-Resource management in Xeno relies on a programmatic disposal engine governed by
+Resource management in Xeno.JS relies on a programmatic disposal engine governed by
 the IDisposable interface contract. Upon scope closure, the container
 automatically evaluates and terminates tracked resources in reverse registration
 order, ensuring leak-free connections and clean memory recycling.
@@ -241,6 +241,6 @@ specific scope.
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

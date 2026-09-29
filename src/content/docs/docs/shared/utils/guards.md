@@ -8,7 +8,7 @@ description:
 keywords:
   [
     'Guards',
-    'Xeno Utilities',
+    'Xeno.JS Utilities',
     'Type Narrowing',
     'Runtime Guards',
     'Invariant Enforcement',
@@ -31,7 +31,7 @@ across application boundaries.
 ## Technical Overview & Design Characteristics
 
 Located under `shared/utils/guards.utils.ts`, `Guards` acts as the primary
-runtime validation tool used internally by Xeno pipelines, extractors, and
+runtime validation tool used internally by Xeno.JS pipelines, extractors, and
 repositories, while remaining fully accessible to developers building domain
 logic.
 
@@ -167,6 +167,6 @@ export class OrderService {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

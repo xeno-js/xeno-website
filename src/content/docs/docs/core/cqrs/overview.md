@@ -19,7 +19,7 @@ author: 'Xeno'
 
 ## Command-Query Responsibility Segregation (CQRS) Architecture Overview
 
-Command-Query Responsibility Segregation (CQRS) in Xeno separates
+Command-Query Responsibility Segregation (CQRS) in Xeno.JS separates
 state-modifying operations (Commands) from read-only data operations (Queries).
 Rather than calling business logic directly from HTTP controllers, all
 operations are dispatched as strongly-typed messages through a central mediator
@@ -31,7 +31,7 @@ behaviors before reaching the handler.
 
 ## The End-to-End CQRS Execution Flow
 
-The CQRS request processing lifecycle in Xeno spans transport middleware,
+The CQRS request processing lifecycle in Xeno.JS spans transport middleware,
 controller invocation, scope-isolated mediator resolution, pipeline behavior
 chains, and final handler execution.
 
@@ -179,7 +179,7 @@ registers three core behaviors into both the command and query behavior chains:
 
 ## Overview of Configurable Pipeline Behaviors
 
-Xeno includes an array of built-in pipeline behaviors that can be conditionally
+Xeno.JS includes an array of built-in pipeline behaviors that can be conditionally
 enabled within the `.addPipeline()` setup action. Each behavior addresses a
 specific cross-cutting concern without altering domain handlers.
 
@@ -210,6 +210,6 @@ section._
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

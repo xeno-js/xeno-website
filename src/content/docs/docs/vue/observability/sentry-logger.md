@@ -1,7 +1,7 @@
 ---
 title: 'Sentry Logger: Remote Error Tracking & Observability'
-description: 'Learn how to integrate Sentry into Xeno Vue for distributed tracing, session replays, and remote error tracking without impacting initial bundle sizes.'
-keywords: 'Sentry Vue, Error Tracking, APM, Observability, Code-Splitting, Frontend Telemetry, Distributed Tracing, Xeno Vue'
+description: 'Learn how to integrate Sentry into Xeno.JS Vue for distributed tracing, session replays, and remote error tracking without impacting initial bundle sizes.'
+keywords: 'Sentry Vue, Error Tracking, APM, Observability, Code-Splitting, Frontend Telemetry, Distributed Tracing, Xeno.JS Vue'
 author: 'Xeno'
 sidebar:
   order: 1
@@ -11,7 +11,7 @@ sidebar:
 
 Unlike backend servers where logs can be easily streamed to `stdout` and collected by an aggregator, the end-user's browser is an operational black box. When an API call fails or an unhandled exception breaks the UI state, standard `console.error` logs are completely invisible to the engineering team.
 
-Xeno Vue provides native, enterprise-grade integration with **Sentry** to capture remote exceptions, performance bottlenecks, and user session replays, bridging the observability gap between the client and the server.
+Xeno.JS Vue provides native, enterprise-grade integration with **Sentry** to capture remote exceptions, performance bottlenecks, and user session replays, bridging the observability gap between the client and the server.
 
 ---
 
@@ -19,7 +19,7 @@ Xeno Vue provides native, enterprise-grade integration with **Sentry** to captur
 
 A common issue with robust Application Performance Monitoring (APM) SDKs like `@sentry/vue` is their footprint. Bundling a heavy SDK directly into your application's entry point negatively impacts your Core Web Vitals (specifically increasing the Javascript payload and blocking the main thread during initial parsing).
 
-Xeno Vue solves this architecturally through **lazy initialization**. 
+Xeno.JS Vue solves this architecturally through **lazy initialization**. 
 
 The internal `LoggerModule` utilizes ECMAScript dynamic imports (`await import()`) to load the `SentryLoggerFactory` and the Sentry SDK *only* if Sentry is explicitly enabled in your `XenoAppBuilder` configuration. If you choose not to configure Sentry, the SDK is completely excluded from the browser bundle, resulting in a zero-byte performance tax for unconfigured applications.
 
@@ -83,7 +83,7 @@ When an exception is thrown in your application (or intercepted by the `Exceptio
 
 ### Context Enrichment via Scopes
 
-To make debugging actionable, raw stack traces are insufficient. Xeno seamlessly marries the frontend's `RequestContext` with Sentry's tracking envelope.
+To make debugging actionable, raw stack traces are insufficient. Xeno.JS seamlessly marries the frontend's `RequestContext` with Sentry's tracking envelope.
 
 Before capturing an exception, the `SentryLogger` isolates the event using `Sentry.withScope()`. It automatically extracts the context object (which contains the `correlationId`, `requestId`, `tenantId`, and network path) and binds it to the Sentry event via `scope.setExtras()`.
 
@@ -99,6 +99,6 @@ By passing your Vue `router` instance into the Sentry configuration, `SentryLogg
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

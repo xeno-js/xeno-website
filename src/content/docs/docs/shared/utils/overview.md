@@ -7,7 +7,7 @@ description:
 keywords:
   [
     'Shared Utils',
-    'Xeno Utilities',
+    'Xeno.JS Utilities',
     'Guards',
     'DateHelper',
     'GuidHelper',
@@ -25,7 +25,7 @@ author: 'Xeno'
 
 The `@xeno-js/core` framework exposes a centralized set of **Shared Utilities**
 located under the `shared/utils/` namespace. These helpers provide immutable,
-timezone-agnostic, type-safe primitives used internally across Xeno modules
+timezone-agnostic, type-safe primitives used internally across Xeno.JS modules
 (such as pipelines, controllers, and middleware) and exposed to application
 developers to streamline domain and infrastructure implementations.
 
@@ -33,7 +33,7 @@ developers to streamline domain and infrastructure implementations.
 
 ## Utility Architecture & Design Principles
 
-All utility objects in Xeno strictly adhere to three architectural rules:
+All utility objects in Xeno.JS strictly adhere to three architectural rules:
 
 1. **Object Immutability (`Object.freeze`)**: Utility namespaces are frozen at
    runtime to prevent prototype pollution or method tampering.
@@ -163,6 +163,6 @@ if (Guards.isDefined(payload)) {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

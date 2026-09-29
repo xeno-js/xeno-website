@@ -1,7 +1,7 @@
 ---
 title: 'Client Mediator: The Frontend CQRS Nervous System'
-description: 'Discover how the Xeno Vue ClientMediator orchestrates Command and Query pipelines, decoupling UI components from API logic and cross-cutting concerns.'
-keywords: 'ClientMediator, Frontend CQRS, Vue Mediator pattern, CompositePipeline, Frontend Architecture, Xeno Vue'
+description: 'Discover how the Xeno.JS Vue ClientMediator orchestrates Command and Query pipelines, decoupling UI components from API logic and cross-cutting concerns.'
+keywords: 'ClientMediator, Frontend CQRS, Vue Mediator pattern, CompositePipeline, Frontend Architecture, Xeno.JS Vue'
 author: 'Xeno'
 sidebar:
   order: 1
@@ -11,7 +11,7 @@ sidebar:
 
 In traditional Vue applications, components often communicate directly with API clients (like Axios) or state management stores (like Pinia). This creates a tangled web of dependencies, making the UI responsible for error handling, performance tracking, and payload validation.
 
-Xeno Vue fundamentally alters this dynamic by introducing the **`ClientMediator`**. Acting as the central nervous system of your frontend architecture, it intercepts every business operation, ensuring that cross-cutting concerns are executed predictably before any network request is made.
+Xeno.JS Vue fundamentally alters this dynamic by introducing the **`ClientMediator`**. Acting as the central nervous system of your frontend architecture, it intercepts every business operation, ensuring that cross-cutting concerns are executed predictably before any network request is made.
 
 ---
 
@@ -100,6 +100,6 @@ By channeling all UI intents through the `ClientMediator`, you achieve absolute 
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

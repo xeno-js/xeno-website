@@ -1,6 +1,6 @@
 ---
 title: 'OptionsMiddleware: HTTP OPTIONS Handling in Xeno'
-description: 'Learn how Xeno OptionsMiddleware handles HTTP OPTIONS requests by returning
+description: 'Learn how Xeno.JS OptionsMiddleware handles HTTP OPTIONS requests by returning
   a 204 No Content response before the request reaches later middleware or the
   application layer.'
 keywords: [
@@ -19,7 +19,7 @@ sidebar:
 
 ## What Is OptionsMiddleware?
 
-`OptionsMiddleware` is a Xeno Presentation middleware that handles HTTP
+`OptionsMiddleware` is a Xeno.JS Presentation middleware that handles HTTP
 `OPTIONS` requests before they reach the remaining middleware chain or the
 application controller. It returns a `204 No Content` response for an
 `OPTIONS` request and does not call `next()`.
@@ -116,6 +116,6 @@ The current implementation has these constraints:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

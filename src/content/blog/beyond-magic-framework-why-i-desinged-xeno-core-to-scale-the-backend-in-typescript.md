@@ -1,36 +1,36 @@
 ---
-title: "Beyond \"Magic\" Frameworks: Why I Designed Xeno Core to Scale the Backend (and the Entire Ecosystem) in TypeScript"
-description: "Discover why Xeno Core was designed to scale TypeScript backends without \"magic\" or hidden decorators, focusing instead on DDD, CQRS, and explicit Dependency Injection."
-keywords: 'Xeno.JS, Xeno Core, TypeScript backend framework, Domain-Driven Design, CQRS, Explicit Dependency Injection, Clean Architecture, AsyncLocalStorage, AppBuilder, @xeno-js/core'
+title: "Beyond \"Magic\" Frameworks: Why I Designed Xeno.JS Core to Scale the Backend (and the Entire Ecosystem) in TypeScript"
+description: "Discover why Xeno.JS Core was designed to scale TypeScript backends without \"magic\" or hidden decorators, focusing instead on DDD, CQRS, and explicit Dependency Injection."
+keywords: 'Xeno.JS, Xeno.JS Core, TypeScript backend framework, Domain-Driven Design, CQRS, Explicit Dependency Injection, Clean Architecture, AsyncLocalStorage, AppBuilder, @xeno-js/core'
 author: "Xeno"
 pubDate: 2026-09-24
 robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 ---
 
-## Beyond "Magic" Frameworks: Why I Designed Xeno Core to Scale the Backend (and the Entire Ecosystem) in TypeScript
+## Beyond "Magic" Frameworks: Why I Designed Xeno.JS Core to Scale the Backend (and the Entire Ecosystem) in TypeScript
 
 When managing the development of complex software systems in Node.js, the choice of architectural framework determines the long-term fate of the code. Developers often face a crossroads: relying on monolithic, "magical" frameworks that make heavy use of experimental decorators and reflection (such as `reflect-metadata`)—thereby accepting their global rules—or building everything from scratch, risking a descent into "spaghetti code" and structural inconsistency.
 
 As Tech Leads and developers, we know that enterprise maintainability requires deterministic control, zero runtime surprises, and clear architectural boundaries.
 
-It is precisely from this need that Xeno.JS—and specifically its core engine, Xeno Core (`@xeno-js/core`)—was born.
+It is precisely from this need that Xeno.JS—and specifically its core engine, Xeno.JS Core (`@xeno-js/core`)—was born.
 
 ---
 
-## What is Xeno Core, and what sets it apart?
+## What is Xeno.JS Core, and what sets it apart?
 
-Xeno Core is an enterprise architectural framework—runtime-agnostic and strictly typed in TypeScript—designed from the ground up to implement Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), and pure, explicit Dependency Injection (DI).
+Xeno.JS Core is an enterprise architectural framework—runtime-agnostic and strictly typed in TypeScript—designed from the ground up to implement Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), and pure, explicit Dependency Injection (DI).
 
-Unlike other tools, Xeno Core stands out thanks to three fundamental pillars:
+Unlike other tools, Xeno.JS Core stands out thanks to three fundamental pillars:
 * **Zero Magic Decorators:** No hidden magic or directory auto-scanning based on `reflect-metadata`. The Inversion of Control container (`ServiceContainer`) relies on explicit, functional factories, ensuring total control over the dependency graph at compile time.
-* **Complete Decoupling from the Transport Layer:** Xeno does not mandate a specific HTTP server. Whether you are using Fastify, Hono, or a serverless architecture on AWS Lambda, your business logic remains intact and isolated thanks to clean presentation contracts.
+* **Complete Decoupling from the Transport Layer:** Xeno.JS does not mandate a specific HTTP server. Whether you are using Fastify, Hono, or a serverless architecture on AWS Lambda, your business logic remains intact and isolated thanks to clean presentation contracts.
 * **Asynchronous Context Isolation:** By natively leveraging `AsyncLocalStorage`, the engine manages request-scoped lifecycles, tracking tracing metadata (`correlationId`, `requestId`) and multi-tenant identities in a thread-safe manner.
 
 ---
 
 ## The Full-Stack Philosophy: Beyond the Backend
 
-Although Xeno Core handles the server-side backbone, the Xeno ecosystem was conceived with an isomorphic and holistic vision.
+Although Xeno.JS Core handles the server-side backbone, the Xeno.JS ecosystem was conceived with an isomorphic and holistic vision.
 
 Fragmentation between client and server is a major source of technical debt. To address this, the ecosystem consists of integrated modules:
 * **`@xeno-js/shared`:** The isomorphic foundation uniting server and client through universal contracts, standardized DTOs (`ResponseDto`), and runtime validation utilities.
@@ -39,9 +39,9 @@ Fragmentation between client and server is a major source of technical debt. To 
 
 ---
 
-## Architecture in Action: Configuring Xeno Core with AppBuilder
+## Architecture in Action: Configuring Xeno.JS Core with AppBuilder
 
-The heart of Xeno Core is the `AppBuilder`, a fluent bootstrapper that orchestrates modules, registrations, and execution priorities in a clean, sequential manner. 
+The heart of Xeno.JS Core is the `AppBuilder`, a fluent bootstrapper that orchestrates modules, registrations, and execution priorities in a clean, sequential manner. 
 
 Here is a practical example of how to configure the IoC container, enable security middleware, set up CQRS pipelines (including idempotency and concurrency management), and register services within a Node.js application:
 
@@ -149,7 +149,7 @@ export async function bootstrap() {
 
 ---
 
-## Why adopt Xeno for your next project?
+## Why adopt Xeno.JS for your next project?
 
 If you are tired of chasing the latest "magic" framework that breaks compatibility with every minor release, Xeno.JS offers a solution focused on industrial-grade stability:
 
@@ -167,4 +167,4 @@ The packages are fully open-source, modular, and available on npm:
 
 ---
 
-Head over to the GitHub repository [Xeno GitHub Repository](https://github.com/xeno-js/xeno-js), leave a ⭐ if you appreciate the engineering approach, and try integrating Xeno into your next clean TypeScript architecture!
+Head over to the GitHub repository [Xeno.JS GitHub Repository](https://github.com/xeno-js/xeno-js), leave a ⭐ if you appreciate the engineering approach, and try integrating Xeno.JS into your next clean TypeScript architecture!

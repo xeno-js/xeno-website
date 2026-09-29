@@ -1,7 +1,7 @@
 ---
 title: 'Unit of Work: Atomic Transaction Coordination and Consistency'
 description:
-  'Technical manual for the Xeno Unit of Work pattern. Learn how to manage
+  'Technical manual for the Xeno.JS Unit of Work pattern. Learn how to manage
   atomic transaction boundaries, coordinate multi-repository updates, and ensure
   database consistency.'
 keywords:
@@ -21,7 +21,7 @@ author: 'Xeno'
 ## Transactional Consistency with the Unit of Work Pattern
 
 Maintaining a consistent state across a distributed system requires grouping
-multiple repository mutations into a single, indivisible operation. Xeno manages
+multiple repository mutations into a single, indivisible operation. Xeno.JS manages
 this consistency through an explicit application-layer primitive that implements
 the **Unit of Work** pattern, abstracting transactional logic away from domain
 models and repository boundaries.
@@ -30,7 +30,7 @@ models and repository boundaries.
 
 ## Understanding the Unit of Work and Transaction Coordination
 
-The Unit of Work in Xeno is an application-layer primitive that coordinates
+The Unit of Work in Xeno.JS is an application-layer primitive that coordinates
 atomic transaction boundaries across multiple repository operations. By wrapping
 data-mutation processes within a single database transaction context, it
 guarantees data integrity, automates rollbacks on execution failures, and
@@ -103,7 +103,7 @@ sequenceDiagram
 
 ## Registering the Database Context and Schema within the AppRegistry
 
-Registering the database context within Xeno requires mapping a compiled Drizzle
+Registering the database context within Xeno.JS requires mapping a compiled Drizzle
 ORM schema to a customized AppRegistry type boundary. This configuration allows
 the host container to enforce compile-time type safety over database tables,
 ensuring that transaction states inherit matching structural definitions during
@@ -373,6 +373,6 @@ export class UpdateProfileCommandHandler extends BaseHandler<
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

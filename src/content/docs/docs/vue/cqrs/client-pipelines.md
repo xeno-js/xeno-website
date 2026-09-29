@@ -1,7 +1,7 @@
 ---
 title: 'Client-Side Behaviors & CQRS Pipelines in Vue'
-description: 'Explore Xeno Vue CQRS pipeline behaviors. Learn how Exception, Logging, Performance, Validation, and Caching pipelines protect the browser runtime.'
-keywords: 'Vue CQRS, Pipeline Behaviors, Frontend Middleware, QueryCachingPipeline, ValidationPipeline, Zod Vue, Performance Tracking, Xeno Vue'
+description: 'Explore Xeno.JS Vue CQRS pipeline behaviors. Learn how Exception, Logging, Performance, Validation, and Caching pipelines protect the browser runtime.'
+keywords: 'Vue CQRS, Pipeline Behaviors, Frontend Middleware, QueryCachingPipeline, ValidationPipeline, Zod Vue, Performance Tracking, Xeno.JS Vue'
 author: 'Xeno'
 sidebar:
   order: 3
@@ -11,7 +11,7 @@ sidebar:
 
 In a conventional Vue.js application, cross-cutting concerns—such as error catching, input validation, performance monitoring, and response caching—are typically hardcoded into individual Vue components or duplicated across Pinia stores. This scatters infrastructure logic across the presentation layer, making the application brittle and nearly impossible to audit.
 
-Xeno Vue eradicates this technical debt by adapting the backend **Pipeline Behavior Pattern** for the browser. By routing all intents through the `ClientMediator`, Xeno executes a strict sequence of interceptors (Pipelines) *before* and *after* your business Handlers run.
+Xeno.JS Vue eradicates this technical debt by adapting the backend **Pipeline Behavior Pattern** for the browser. By routing all intents through the `ClientMediator`, Xeno.JS executes a strict sequence of interceptors (Pipelines) *before* and *after* your business Handlers run.
 
 ---
 
@@ -21,7 +21,7 @@ During the application bootstrap phase, the `XenoAppBuilder` registers multiple 
 
 When a Vue Composable dispatches a Command or Query, the `CompositePipeline` recursively executes these behaviors in a Russian-doll model (`next()`). This guarantees that network requests are only fired if the payload is valid, and that exceptions are caught before they can crash the UI thread.
 
-Here are the five native pipeline behaviors provided by Xeno Vue:
+Here are the five native pipeline behaviors provided by Xeno.JS Vue:
 
 ### 1. Exception Pipeline: Safety & Monadic Mapping
 The browser runtime is unpredictable; third-party scripts, network drops, or corrupted payloads can throw unexpected JavaScript `Error` objects. 
@@ -55,7 +55,7 @@ Before hitting the Handler (and consequently, the network), this pipeline inspec
 
 ## Configuring Pipelines via AppBuilder
 
-Xeno Vue makes it incredibly simple to toggle and configure these behaviors globally during the application bootstrap. By hooking into the `.addPipeline()` method, you dictate exactly how strict the frontend execution should be.
+Xeno.JS Vue makes it incredibly simple to toggle and configure these behaviors globally during the application bootstrap. By hooking into the `.addPipeline()` method, you dictate exactly how strict the frontend execution should be.
 
 ```typescript
 // src/bootstrap.ts
@@ -84,12 +84,12 @@ export async function bootstrap() {
 
 ```
 
-By abstracting these five pillars of application stability into pipelines, Xeno Vue ensures that your developers can focus 100% of their effort on writing business logic and rich UI experiences, resting assured that the framework is guarding the execution environment.
+By abstracting these five pillars of application stability into pipelines, Xeno.JS Vue ensures that your developers can focus 100% of their effort on writing business logic and rich UI experiences, resting assured that the framework is guarding the execution environment.
 
 ---
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

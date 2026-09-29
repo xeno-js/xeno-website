@@ -1,7 +1,7 @@
 ---
 title: 'Browser Context: Managing Telemetry and Tracing in Vue'
-description: 'Learn how Xeno Vue handles execution context, distributed tracing, and telemetry extraction in the browser without Node.js AsyncLocalStorage.'
-keywords: 'RequestContextAccessor, Browser Context, AsyncLocalStorage, Vue Telemetry, Distributed Tracing, Xeno Vue, Frontend Architecture'
+description: 'Learn how Xeno.JS Vue handles execution context, distributed tracing, and telemetry extraction in the browser without Node.js AsyncLocalStorage.'
+keywords: 'RequestContextAccessor, Browser Context, AsyncLocalStorage, Vue Telemetry, Distributed Tracing, Xeno.JS Vue, Frontend Architecture'
 author: 'Xeno'
 sidebar:
   order: 3
@@ -9,15 +9,15 @@ sidebar:
 
 ## Browser Context: Managing Telemetry and Tracing
 
-In a strict Domain-Driven Design and CQRS architecture, maintaining a consistent execution context is critical for logging, distributed tracing, and security. In a Node.js backend environment, Xeno leverages `AsyncLocalStorage` to securely isolate this metadata across asynchronous execution threads. 
+In a strict Domain-Driven Design and CQRS architecture, maintaining a consistent execution context is critical for logging, distributed tracing, and security. In a Node.js backend environment, Xeno.JS leverages `AsyncLocalStorage` to securely isolate this metadata across asynchronous execution threads. 
 
-However, modern browsers lack a direct equivalent to `AsyncLocalStorage`. To ensure architectural symmetry and provide downstream components (like HTTP Clients and Loggers) with the exact same interfaces they expect on the server, Xeno Vue implements a dedicated browser context layer via the `RequestContextAccessor`.
+However, modern browsers lack a direct equivalent to `AsyncLocalStorage`. To ensure architectural symmetry and provide downstream components (like HTTP Clients and Loggers) with the exact same interfaces they expect on the server, Xeno.JS Vue implements a dedicated browser context layer via the `RequestContextAccessor`.
 
 ---
 
 ## The Role of `RequestContextAccessor`
 
-The `RequestContextAccessor` bridges the gap between the server's thread-local storage and the browser's global execution environment. It implements the standard Xeno interfaces `IContextAccessor<RequestContext>`, `IIdentityAccessor`, and `INetworkContextAccessor`.
+The `RequestContextAccessor` bridges the gap between the server's thread-local storage and the browser's global execution environment. It implements the standard Xeno.JS interfaces `IContextAccessor<RequestContext>`, `IIdentityAccessor`, and `INetworkContextAccessor`.
 
 Whenever a Command, Query, or Logger requests the current execution context, this accessor dynamically generates a highly structured `RequestContext` object that captures the current state of the browser, ensuring every API call is tagged with precise telemetry.
 
@@ -80,6 +80,6 @@ Once built, any CQRS pipeline behavior, remote data source, or custom logger reg
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

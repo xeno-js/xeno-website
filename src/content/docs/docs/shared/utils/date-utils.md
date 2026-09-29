@@ -9,7 +9,7 @@ description:
 keywords:
   [
     'DateHelper',
-    'Xeno Utilities',
+    'Xeno.JS Utilities',
     'Date Manipulation',
     'Timezone Agnostic',
     'ISO 8601',
@@ -167,6 +167,6 @@ export class TokenValidationService {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

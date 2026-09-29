@@ -1,13 +1,13 @@
 ---
 title: 'Middleware Architecture in Xeno'
 description:
-  'Learn how Xeno composes request middleware for context creation,
+  'Learn how Xeno.JS composes request middleware for context creation,
   authentication, CSRF protection, rate limiting, method checks, and OPTIONS
   handling.'
 keywords:
   [
     'Middleware',
-    'Xeno Middleware',
+    'Xeno.JS Middleware',
     'Request Lifecycle',
     'AsyncLocalStorage',
     'CSRF Middleware',
@@ -28,12 +28,12 @@ sidebar:
 
 Within a decoupled software architecture, cross-cutting concerns such as
 security, traceability, and request validation require an interception system.
-Xeno provides a configurable middleware stack that runs before the application
+Xeno.JS provides a configurable middleware stack that runs before the application
 controller and handler boundary.
 
 ## Understanding the Framework's Middleware Architecture
 
-A middleware in Xeno is an interception component positioned within the request
+A middleware in Xeno.JS is an interception component positioned within the request
 execution pipeline. It can create request context, validate request properties,
 apply security checks, enforce traffic limits, or return a response before the
 request reaches the application controller.
@@ -49,7 +49,7 @@ Later middleware can read correlation, request, span, network, and identity
 data from that context. `AuthenticationMiddleware` updates the identity after
 successful authentication.
 
-## Which Middleware Does Xeno Provide?
+## Which Middleware Does Xeno.JS Provide?
 
 `MiddlewareModule` always registers `RequestContextMiddleware` and
 `AuthenticationMiddleware`. The other middleware are registered when their
@@ -58,7 +58,7 @@ corresponding `MiddlewareConfig` option is enabled or configured.
 ### [RequestContextMiddleware](../middlewares/request.middleware)
 
 `RequestContextMiddleware` extracts metadata from HTTP headers, assigns fallback
-identifiers when required, maps the request into the Xeno request context, and
+identifiers when required, maps the request into the Xeno.JS request context, and
 executes the remaining chain inside `runAsync()`. It logs unsuccessful response
 data and converts unexpected exceptions into a `500 Internal Server Error`
 response.
@@ -250,6 +250,6 @@ expose a separate development stack-trace response.
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

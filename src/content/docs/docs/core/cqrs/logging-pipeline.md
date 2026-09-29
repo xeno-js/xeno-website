@@ -22,7 +22,7 @@ author: 'Xeno'
 
 In event-driven and CQRS architectures, tracking inbound message execution and
 capturing operational telemetry are critical for debugging, auditing, and
-observability. Xeno provides the `LoggingPipeline` behavior as an automatic
+observability. Xeno.JS provides the `LoggingPipeline` behavior as an automatic
 cross-cutting concern that records every command and query transaction
 dispatched through the mediator bus.
 
@@ -96,7 +96,7 @@ sequenceDiagram
 Calling `.addPipeline()` on `AppBuilder` automatically registers the
 `LoggingPipeline` behavior into both command and query behavior execution
 stacks. To ensure logging is available out of the box without requiring manual
-setup, Xeno includes an automatic fallback mechanism.
+setup, Xeno.JS includes an automatic fallback mechanism.
 
 ### Default ConsoleLogger Fallback
 
@@ -189,6 +189,6 @@ standard telemetry attributes:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

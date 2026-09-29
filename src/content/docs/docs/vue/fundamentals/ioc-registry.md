@@ -1,6 +1,6 @@
 ---
 title: 'IoC & Vue Inject: The Frontend Service Registry'
-description: 'Learn how Xeno implements strict Inversion of Control in Vue using XenoVueRegistry, Provider/Inject boundaries, and type-safe Composable utilities.'
+description: 'Learn how Xeno.JS implements strict Inversion of Control in Vue using XenoVueRegistry, Provider/Inject boundaries, and type-safe Composable utilities.'
 keywords: 'XenoVueRegistry, Inversion of Control, Dependency Injection Vue, Provide Inject, ServicesUtils, Frontend Architecture, Xeno'
 author: 'Xeno'
 sidebar:
@@ -11,13 +11,13 @@ sidebar:
 
 In many Vue applications, dependencies like API clients, loggers, or state stores are either imported directly as global singletons or injected via untyped Vue plugins. This approach creates tight coupling, makes unit testing difficult, and obscures the application's dependency graph.
 
-Xeno Vue enforces **Inversion of Control (IoC)** natively in the browser. By combining a strictly-typed registry (`XenoVueRegistry`) with Vue's native `Provide/Inject` API and a centralized resolution utility, the framework guarantees that your Vue components remain decoupled from concrete infrastructure implementations.
+Xeno.JS Vue enforces **Inversion of Control (IoC)** natively in the browser. By combining a strictly-typed registry (`XenoVueRegistry`) with Vue's native `Provide/Inject` API and a centralized resolution utility, the framework guarantees that your Vue components remain decoupled from concrete infrastructure implementations.
 
 ---
 
 ## The `XenoVueRegistry` Base Contract
 
-At the heart of the frontend DI system is the `XenoVueRegistry` type. Unlike string-based registries that can lead to runtime lookup failures, Xeno relies on a static TypeScript contract.
+At the heart of the frontend DI system is the `XenoVueRegistry` type. Unlike string-based registries that can lead to runtime lookup failures, Xeno.JS relies on a static TypeScript contract.
 
 The base registry automatically enforces the presence of the framework's core infrastructural services:
 
@@ -41,7 +41,7 @@ When the `XenoAppBuilder` completes its bootstrapping phase, it resolves these c
 
 ## Extending the Registry (`MyRegistry`)
 
-To register your application's custom Data Sources and CQRS Handlers, you extend the base `XenoVueRegistry` by declaring a custom `MyRegistry` interface. This is typically scaffolded by the Xeno CLI into `src/registry.ts`.
+To register your application's custom Data Sources and CQRS Handlers, you extend the base `XenoVueRegistry` by declaring a custom `MyRegistry` interface. This is typically scaffolded by the Xeno.JS CLI into `src/registry.ts`.
 
 By supplying your custom types to the registry extension, you instruct the TypeScript compiler to validate all dependency injections across your frontend codebase.
 
@@ -64,7 +64,7 @@ This interface is then passed as a generic parameter to the `XenoAppBuilder` (`X
 
 ## Providing the Container to the Vue App
 
-Once the builder generates the frozen IoC container, it must be distributed to the Vue component tree. Xeno utilizes Vue's native dependency injection mechanism (`app.provide`) alongside the unique symbol `XENO_SERVICES_KEY`.
+Once the builder generates the frozen IoC container, it must be distributed to the Vue component tree. Xeno.JS utilizes Vue's native dependency injection mechanism (`app.provide`) alongside the unique symbol `XENO_SERVICES_KEY`.
 
 In your application's entry point (`src/main.ts`), the container is provided at the root level, making it accessible to any nested component or composable:
 
@@ -100,7 +100,7 @@ mountApp();
 
 Vue's `inject()` function is designed to be used synchronously within the `setup()` function of a component. However, CQRS flows often require accessing the container asynchronously or from within standalone Composable files.
 
-To solve this and ensure flawless type inference, Xeno generates a `ServicesUtils` helper (`src/use-app.ts`). This utility encapsulates the resolution logic, providing a fail-fast mechanism if the container is missing.
+To solve this and ensure flawless type inference, Xeno.JS generates a `ServicesUtils` helper (`src/use-app.ts`). This utility encapsulates the resolution logic, providing a fail-fast mechanism if the container is missing.
 
 ```typescript
 // src/use-app.ts
@@ -123,7 +123,7 @@ export const ServicesUtils = Object.freeze({
         const services = inject<MyRegistry>(XENO_SERVICES_KEY);
         if (!services) {
             throw new Error(
-                '[Xeno Error]: XenoServices not found. Did you provide them using app.provide(XENO_SERVICES_KEY, services)?',
+                '[Xeno.JS Error]: XenoServices not found. Did you provide them using app.provide(XENO_SERVICES_KEY, services)?',
             );
         }
         return services;
@@ -168,6 +168,6 @@ This architectural boundary guarantees that UI components never directly constru
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

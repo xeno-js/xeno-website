@@ -1,14 +1,14 @@
 ---
 title: 'Contributing to Xeno.JS: Developer Workflow & Contribution Guidelines'
 description: 'Comprehensive guide for open-source contributors to Xeno.JS. Details local setup, Git branching strategies, Conventional Commit specifications, and validation scripts.'
-keywords: 'Xeno.JS, Contributing to Xeno, Xeno Developer Guide, Git Flow, Conventional Commits, Vitest, TypeScript Scaffolding, Open Source Node.js'
+keywords: 'Xeno.JS, Contributing to Xeno, Xeno.JS Developer Guide, Git Flow, Conventional Commits, Vitest, TypeScript Scaffolding, Open Source Node.js'
 author: 'Xeno'
 ---
 
 ## Contributing to Xeno
 
 Thank you for your interest in contributing to **Xeno**! As an open-source,
-enterprise-grade framework for Node.js, Xeno relies on clean architectural
+enterprise-grade framework for Node.js, Xeno.JS relies on clean architectural
 principles, strict type safety, and robust community contributions.
 
 To maintain code quality and structural integrity across `@xeno-js/core` and
@@ -20,7 +20,7 @@ branching models, and testing protocols outlined below.
 ## 1. Branching Strategy & Git Flow
 
 Direct pushes to the `main` and `develop` branches are **strictly prohibited**.
-Xeno employs a modified Git Flow strategy:
+Xeno.JS employs a modified Git Flow strategy:
 
 ```text
 [ Feature Branch ]  ──>  (Pull Request)  ──>  [ develop ]  ──>  (Release)  ──>  [ main ]
@@ -37,7 +37,7 @@ Xeno employs a modified Git Flow strategy:
 
 ### Step-by-Step Workflow
 
-1. **Fork & Clone**: Fork the Xeno repository and clone it to your local
+1. **Fork & Clone**: Fork the Xeno.JS repository and clone it to your local
    environment.
 
 2. **Branch off from `develop**`: Always target `develop` as your base branch:
@@ -64,7 +64,7 @@ npm run check
 
 ## 2. Commit Message Standards (Conventional Commits)
 
-Xeno strictly enforces
+Xeno.JS strictly enforces
 [Conventional Commits](https://www.conventionalcommits.org/). Commit messages
 are validated automatically via Husky hooks prior to acceptance.
 
@@ -112,7 +112,7 @@ code quality:
 
 ## 4. Automated Code Quality Guards (Husky & Git Hooks)
 
-To ensure code safety before changes leave your machine, Xeno executes
+To ensure code safety before changes leave your machine, Xeno.JS executes
 pre-configured Git hooks managed by Husky:
 
 - **`pre-commit`**: Runs `lint-staged` to format and lint staged files
@@ -144,6 +144,6 @@ development tracks:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](./support-us)

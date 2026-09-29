@@ -1,7 +1,7 @@
 ---
 title: 'Error Handling with the Functional Result Monad'
 description:
-  'In-depth guide to deterministic error handling in Xeno using the functional
+  'In-depth guide to deterministic error handling in Xeno.JS using the functional
   Result monad, AppError factories, and strict TypeScript types.'
 keywords:
   [
@@ -17,7 +17,7 @@ author: 'Xeno'
 ---
 
 In complex, multi-layered enterprise architectures, error handling dictates the
-long-term maintainability and predictability of the codebase. Xeno replaces
+long-term maintainability and predictability of the codebase. Xeno.JS replaces
 traditional, unstructured exception throwing with a deterministic, type-safe
 functional monad pattern.
 
@@ -46,7 +46,7 @@ In standard Node.js applications, errors are typically propagated using the
   requires brittle runtime type guarding (e.g., `instanceof`), which is prone to
   breaking during refactoring.
 
-Xeno strongly discourages using `try/catch` blocks for expected business rule
+Xeno.JS strongly discourages using `try/catch` blocks for expected business rule
 violations (such as validation failures, resource conflicts, or unauthorized
 operations). Exceptions should be reserved exclusively for unpredictable system
 catastrophes, such as database socket disconnections or out-of-memory states.
@@ -57,7 +57,7 @@ data values.
 
 ## Navigating the Structural Design of the Result Class
 
-The Xeno Result class represents a generic monad designed to encapsulate either
+The Xeno.JS Result class represents a generic monad designed to encapsulate either
 a successful value or a typed failure error. Its private constructor prevents
 direct instantiation, routing creation through static ok and fail factory
 methods to guarantee structurally sound, immutably bound execution states.
@@ -375,6 +375,6 @@ export class UserController {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

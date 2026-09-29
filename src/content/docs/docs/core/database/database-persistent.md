@@ -1,7 +1,7 @@
 ---
 title: 'Database Persistence Layer & Data Source Architectures'
 description:
-  'An architectural manual for the Xeno database layer, detailing Drizzle ORM
+  'An architectural manual for the Xeno.JS database layer, detailing Drizzle ORM
   integration, peer dependencies installation, AppBuilder registration, and Data
   Source interface specifications.'
 keywords:
@@ -20,7 +20,7 @@ author: 'Xeno'
 
 ## Database Persistence Layer & Data Source Architectures
 
-The database persistence layer in Xeno decouples core application business logic
+The database persistence layer in Xeno.JS decouples core application business logic
 from underlying storage structures and database execution drivers. By providing
 explicit data access abstractions, the framework satisfies Command-Query
 Responsibility Segregation (CQRS) boundaries, allowing read and write data
@@ -36,7 +36,7 @@ tables directly to TypeScript types, it removes reflection overhead and enforces
 strict object-relational mapping without black-box runtime abstractions.
 
 Unlike traditional, heavy object-relational mappers that rely on complex
-metadata caches and global background tracking loops, Xeno adopts an explicit
+metadata caches and global background tracking loops, Xeno.JS adopts an explicit
 SQL-first philosophy. Drizzle ORM acts as an thin, non-intrusive compilation
 layer. Database tables are declared as native TypeScript schemas, allowing the
 compiler to perform type-safety validation over raw query inputs and database
@@ -54,7 +54,7 @@ optimize connection pooling and protocol streams, ensuring that the application
 runtime lazy-loads only the database libraries declared within your project
 configuration setup.
 
-Xeno relies on a **pay-for-what-you-use** optional peer dependency model. If
+Xeno.JS relies on a **pay-for-what-you-use** optional peer dependency model. If
 your software boundary does not interact with a physical SQL server, you do not
 bring unnecessary node modules into your environment. To enable the SQL database
 persistence layer, execute the package installation commands within your project
@@ -309,14 +309,14 @@ export class UserDataSource {
 
 ## Deep Dive into Data Source Interfaces and Operational Capabilities
 
-Xeno decouples data layer interaction into distinct query, mutation, and
+Xeno.JS decouples data layer interaction into distinct query, mutation, and
 external transport interfaces. This architectural separation enforces
 single-responsibility patterns across repositories, ensuring that persistent
 read paths operate without write-heavy transaction overhead while isolating
 remote HTTP networking infrastructures entirely.
 
 To enforce clean architectural boundaries between distinct operational
-capabilities, Xeno organizes data access behaviors into three formal interface
+capabilities, Xeno.JS organizes data access behaviors into three formal interface
 specifications:
 
 ### 1. IReadDataSource Interface
@@ -362,6 +362,6 @@ use cases that modify data states.
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

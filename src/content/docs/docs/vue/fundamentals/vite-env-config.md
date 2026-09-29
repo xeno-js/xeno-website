@@ -1,7 +1,7 @@
 ---
 title: 'Vite Environment: Type-Safe Configuration Management'
-description: 'Learn how Xeno Vue abstracts import.meta.env through ViteConfigurationService, providing fail-fast validation, type casting, and framework-agnostic environment variables.'
-keywords: 'ViteConfigurationService, import.meta.env, Vue Environment Variables, Type-Safe Config, Fail-Fast, Xeno Vue, Frontend Architecture'
+description: 'Learn how Xeno.JS Vue abstracts import.meta.env through ViteConfigurationService, providing fail-fast validation, type casting, and framework-agnostic environment variables.'
+keywords: 'ViteConfigurationService, import.meta.env, Vue Environment Variables, Type-Safe Config, Fail-Fast, Xeno.JS Vue, Frontend Architecture'
 author: 'Xeno'
 sidebar:
   order: 4
@@ -11,7 +11,7 @@ sidebar:
 
 In typical Single Page Applications, developers often scatter raw environment variables (e.g., `import.meta.env.VITE_API_URL`) directly inside UI components or API clients. This practice tightly couples the application's business logic to the specific bundler (Vite), bypasses strict type checking, and creates brittle architectures where missing configuration keys silently crash the app in production.
 
-Xeno Vue eradicates this technical debt through the **`ViteConfigurationService`**, a dedicated layer that encapsulates environment variable reading for Vite and browser environments.
+Xeno.JS Vue eradicates this technical debt through the **`ViteConfigurationService`**, a dedicated layer that encapsulates environment variable reading for Vite and browser environments.
 
 ---
 
@@ -34,7 +34,7 @@ Environment variables are inherently injected as strings. `ViteConfigurationServ
 ### 3. Fail-Fast Execution via `getOrThrow`
 A missing critical environment variable (such as a Supabase URL or a remote API gateway path) should never result in a silent UI failure or undefined behavior. 
 
-Xeno Vue enforces a **fail-fast** design paradigm. Using the `getOrThrow(key)` method, the service actively validates the presence of the requested key. If the variable is missing, it immediately halts execution and throws an explicit `[Configuration Error]`. This guarantees that deployment configuration errors are caught immediately during the application bootstrap sequence.
+Xeno.JS Vue enforces a **fail-fast** design paradigm. Using the `getOrThrow(key)` method, the service actively validates the presence of the requested key. If the variable is missing, it immediately halts execution and throws an explicit `[Configuration Error]`. This guarantees that deployment configuration errors are caught immediately during the application bootstrap sequence.
 
 ---
 
@@ -67,12 +67,12 @@ export async function bootstrap() {
 
 ```
 
-By abstracting environment interactions, Xeno Vue ensures that your frontend container remains fully testable, predictable, and structurally aligned with enterprise security patterns.
+By abstracting environment interactions, Xeno.JS Vue ensures that your frontend container remains fully testable, predictable, and structurally aligned with enterprise security patterns.
 
 ---
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

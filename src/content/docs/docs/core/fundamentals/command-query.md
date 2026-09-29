@@ -1,7 +1,7 @@
 ---
 title: 'CQRS Primitives: Command and Query Pipeline Architecture'
 description:
-  'Learn how Xeno Command and Query base classes define CQRS requests, assign
+  'Learn how Xeno.JS Command and Query base classes define CQRS requests, assign
   request types, configure query caching, and integrate with mediator
   pipelines.'
 keywords:
@@ -32,7 +32,7 @@ application intents from underlying infrastructure configurations.
 
 ## Understanding the Command Primitive and State Mutation
 
-A Command in Xeno is a CQRS request that represents an operation which can
+A Command in Xeno.JS is a CQRS request that represents an operation which can
 change application state. The abstract `Command<TResponse>` base class already
 implements `ICommand<TResponse>` and assigns `REQUEST_TYPE.COMMAND` to the
 request. A concrete Command therefore supplies its intent and its own payload
@@ -53,7 +53,7 @@ handled by the corresponding Handler.
   `REQUEST_TYPE.COMMAND`. Concrete Commands do not need to assign it.
 
 - **custom properties** — Application-specific readonly values that carry the
-  Command payload. Xeno does not require a `props` property in the base class.
+  Command payload. Xeno.JS does not require a `props` property in the base class.
 
 ### Programmatic Definition of a Command Contract
 
@@ -79,7 +79,7 @@ export class CreateUserCommand extends Command<void> {
 
 ## Executing Read Operations and Caching Configurations with Queries
 
-A Query in Xeno represents a read operation tailored for data retrieval. The
+A Query in Xeno.JS represents a read operation tailored for data retrieval. The
 abstract `BaseQuery<TResponse>` base class already implements `IQuery<TResponse>` and
 assigns `REQUEST_TYPE.QUERY`. Its constructor requires the Query intent and
 `ICacheableOptions`, so concrete Queries only need to provide those common
@@ -224,6 +224,6 @@ export const appHost = new AppBuilder<AppRegistry>()
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

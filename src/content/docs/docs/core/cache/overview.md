@@ -1,17 +1,17 @@
 ---
 title: 'Cache Subsystem Architecture & Storage Strategies Overview'
 description:
-  'An architectural overview of the Xeno caching subsystem, detailing In-Memory
+  'An architectural overview of the Xeno.JS caching subsystem, detailing In-Memory
   and Redis storage drivers, AppBuilder setup, framework pipeline integration,
   and ICache resolution.'
-keywords: 'Caching Subsystem, Cache Drivers, AppBuilder Caching, QueryCachingPipeline, IdempotencyPipeline, Xeno Caching'
+keywords: 'Caching Subsystem, Cache Drivers, AppBuilder Caching, QueryCachingPipeline, IdempotencyPipeline, Xeno.JS Caching'
 author: 'Xeno'
 ---
 
 ## Caching Subsystem Architecture & Storage Overview
 
 High-throughput applications require caching strategies to minimize database
-workload, decrease query latency, and manage distributed locks. Xeno provides a
+workload, decrease query latency, and manage distributed locks. Xeno.JS provides a
 unified caching subsystem backed by a standardized `ICache` interface, allowing
 applications to seamlessly alternate between local process memory and
 distributed out-of-process data stores.
@@ -20,13 +20,13 @@ distributed out-of-process data stores.
 
 ## Supported Caching Engines: In-Memory and Redis
 
-The Xeno caching subsystem supports two primary storage implementations: an
+The Xeno.JS caching subsystem supports two primary storage implementations: an
 lightweight In-Memory driver for process-local caching and a Redis driver for
 distributed, multi-instance environments. Both drivers implement the agnostic
 `ICache` contract, ensuring application logic remains decoupled from the storage
 layer.
 
-Xeno provides two out-of-the-box cache providers:
+Xeno.JS provides two out-of-the-box cache providers:
 
 - **In-Memory Cache (`InMemoryCache`)** — A process-local, lightweight key-value
   store. It requires no external dependencies and is ideal for single-instance
@@ -93,7 +93,7 @@ builder.addCache((opts, config) => {
 
 ## Framework Integration Across CQRS Pipelines
 
-Xeno integrates the caching subsystem directly into its internal CQRS behavioral
+Xeno.JS integrates the caching subsystem directly into its internal CQRS behavioral
 pipelines. This enables cross-cutting concerns like query result caching and
 distributed idempotency locking to operate automatically without dirtying
 business handlers.
@@ -228,6 +228,6 @@ export const registerCatalogServices = async () => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

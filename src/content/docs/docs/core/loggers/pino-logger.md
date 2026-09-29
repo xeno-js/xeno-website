@@ -13,7 +13,7 @@ keywords:
     'Pino Configuration',
     'Sensitive Data Redaction',
     'AppBuilder Logger',
-    'Xeno Logging',
+    'Xeno.JS Logging',
     'Pino Factory',
   ]
 author: 'Xeno'
@@ -23,14 +23,14 @@ author: 'Xeno'
 
 Production environments demand high-throughput, structured log outputs that can
 be easily parsed by log aggregators (e.g., ElasticSearch, Datadog, or AWS
-CloudWatch) without introducing event loop blocking. Xeno provides native
+CloudWatch) without introducing event loop blocking. Xeno.JS provides native
 integration with the Pino logging library through the `PinoLogger` driver.
 
 ---
 
 ## How to Register and Configure PinoLogger via AppBuilder
 
-Registering PinoLogger in Xeno involves calling the fluent addLogger method on
+Registering PinoLogger in Xeno.JS involves calling the fluent addLogger method on
 AppBuilder and populating the options.pino.config property object. This
 activates the PinoLoggerFactory during host bootstrapping, binding a structured
 JSON logging client driver to the composite logger framework container.
@@ -75,7 +75,7 @@ export const bootstrap = async () => {
 
 ## Understanding Pino Configuration Settings and Execution Parameters
 
-Pino configuration settings in Xeno govern runtime output targets,
+Pino configuration settings in Xeno.JS govern runtime output targets,
 pretty-printing modes, and environment behavior flags. Configured via the
 LoggerConfig interface, parameters such as destination, filePath, env, and
 prettyPrint dictate whether log entries stream as formatted terminal output or
@@ -237,6 +237,6 @@ npm install --save-dev pino-pretty
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

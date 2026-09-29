@@ -1,13 +1,13 @@
 ---
 title: 'CsrfTokenService: Cryptographic Nonce & HMAC Token Management'
-description: 'Explore the technical specification of Xeno CsrfTokenService, detailing secure nonce generation, HMAC SHA-256 signing, and timing-safe token validation.'
+description: 'Explore the technical specification of Xeno.JS CsrfTokenService, detailing secure nonce generation, HMAC SHA-256 signing, and timing-safe token validation.'
 keywords: [
   'CsrfTokenService',
   'CSRF token generation',
   'HMAC SHA-256',
   'timingSafeEqual',
   'ICryptoService',
-  'Xeno security',
+  'Xeno.JS security',
 ]
 author: 'Xeno'
 sidebar:
@@ -115,6 +115,6 @@ export class CsrfTokenService implements ICsrfTokenService {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

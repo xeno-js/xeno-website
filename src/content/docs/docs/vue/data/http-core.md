@@ -1,7 +1,7 @@
 ---
 title: 'HTTP Core: Managing Browser Network Requests'
-description: 'Learn how Xeno Vue implements enterprise-grade HTTP communication using Axios, delegating network resilience and retry policies to the backend.'
-keywords: 'Vue HTTP, Axios Vue, Frontend Network, Xeno Vue, HTTP Core, RemoteDataSource'
+description: 'Learn how Xeno.JS Vue implements enterprise-grade HTTP communication using Axios, delegating network resilience and retry policies to the backend.'
+keywords: 'Vue HTTP, Axios Vue, Frontend Network, Xeno.JS Vue, HTTP Core, RemoteDataSource'
 author: 'Xeno'
 sidebar:
   order: 1
@@ -11,15 +11,15 @@ sidebar:
 
 The browser operates in an inherently hostile networking environment. Standard Vue.js applications typically rely on bare `fetch` or `axios` calls scattered across components, which leads to duplicated configuration, inconsistent error handling, and tightly coupled UI logic.
 
-Xeno Vue mitigates this through the **HTTP Core** subsystem. By cleanly wrapping `Axios` as the transport layer, it ensures that your frontend interacts with remote APIs through isolated, predictable, and strongly-typed network ecosystems.
+Xeno.JS Vue mitigates this through the **HTTP Core** subsystem. By cleanly wrapping `Axios` as the transport layer, it ensures that your frontend interacts with remote APIs through isolated, predictable, and strongly-typed network ecosystems.
 
 ---
 
 ## The Architectural Anatomy of HTTP Core
 
-In Xeno Vue, you never inject raw HTTP clients directly into your UI components or CQRS Handlers. Instead, the framework constructs isolated network clients defined by strict boundaries.
+In Xeno.JS Vue, you never inject raw HTTP clients directly into your UI components or CQRS Handlers. Instead, the framework constructs isolated network clients defined by strict boundaries.
 
-When you configure an HTTP Core module via the `XenoAppBuilder`, Xeno securely wires two components:
+When you configure an HTTP Core module via the `XenoAppBuilder`, Xeno.JS securely wires two components:
 1.  **`AxiosHttpClient`**: The underlying transport engine handling base URLs, default headers, interceptors, and strict timeouts.
 2.  **`RemoteDataSource`**: Your custom abstract class that consumes the HTTP Client, yielding type-safe `ResultType<T>` monads to your Application Handlers.
 
@@ -27,11 +27,11 @@ When you configure an HTTP Core module via the `XenoAppBuilder`, Xeno securely w
 
 ## Delegating Resilience to the Backend
 
-Unlike previous iterations or heavy client-heavy frameworks, **Xeno Vue deliberately delegates retry logic and circuit-breaking to the backend API**. 
+Unlike previous iterations or heavy client-heavy frameworks, **Xeno.JS Vue deliberately delegates retry logic and circuit-breaking to the backend API**. 
 
 Implementing complex resilience policies (like exponential backoff with jitter or circuit breakers) in the browser introduces unnecessary overhead and can lead to edge cases, such as the frontend bombarding a struggling backend service during a partial outage. 
 
-Instead, Xeno Vue acts as a pure, deterministic client:
+Instead, Xeno.JS Vue acts as a pure, deterministic client:
 * If the network connection drops or the backend returns a `500/503` status, the frontend immediately surfaces a clean `Result.fail()` monad.
 * The UI can then gracefully inform the user to try again later, while the backend API manages its own internal retries and database circuit breakers safely behind the firewall.
 
@@ -82,7 +82,7 @@ export async function bootstrap() {
 
 ## Isolation by Design
 
-Because Xeno explicitly links `opts.client` and `opts.factory` under a unique registry token (e.g., `BFF_REMOTE_DS`), you can define multiple HTTP Cores with entirely different behaviors.
+Because Xeno.JS explicitly links `opts.client` and `opts.factory` under a unique registry token (e.g., `BFF_REMOTE_DS`), you can define multiple HTTP Cores with entirely different behaviors.
 
 For instance, you might have one HTTP Core for your primary Backend-For-Frontend (BFF) with specific authorization headers and a 10-second timeout, and another completely isolated HTTP Core for an external third-party analytics tracker with a strict 2-second timeout and no credentials. Each operates in complete isolation, preventing cross-contamination of headers or configurations.
 
@@ -90,6 +90,6 @@ For instance, you might have one HTTP Core for your primary Backend-For-Frontend
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

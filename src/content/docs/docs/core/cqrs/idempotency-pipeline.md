@@ -24,7 +24,7 @@ In distributed environments and network-sensitive architectures, clients or API
 gateways often retry HTTP requests due to transient network timeouts, client
 disconnects, or retry policies. Processing a state-modifying Command multiple
 times can cause critical data anomalies—such as duplicate billing, duplicate
-order creation, or corrupted record states. Xeno resolves this by providing
+order creation, or corrupted record states. Xeno.JS resolves this by providing
 `IdempotencyPipeline`, a built-in CQRS command pipeline behavior that enforces
 transactional idempotency using lock primitives and cached response payloads.
 
@@ -239,6 +239,6 @@ $$\text{Key} = \text{\texttt{idempotency\_lock:command:req\_998877}}$$
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

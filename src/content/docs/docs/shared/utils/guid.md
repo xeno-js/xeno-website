@@ -9,7 +9,7 @@ keywords:
     'GuidHelper',
     'Guid',
     'UUID v4',
-    'Xeno Utilities',
+    'Xeno.JS Utilities',
     'Correlation ID',
     'Request ID',
     'Shared Utils',
@@ -164,6 +164,6 @@ export class CorrelationExtractor {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

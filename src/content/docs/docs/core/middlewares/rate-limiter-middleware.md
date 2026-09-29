@@ -1,6 +1,6 @@
 ---
 title: 'RateLimitMiddleware: Dynamic Key-Based Request Rate Limiting in Xeno'
-description: 'Learn how Xeno RateLimitMiddleware leverages IRateLimitKeyBuilder to throttle incoming requests based on tenant, user, or IP contexts, preventing traffic abuse in distributed systems.'
+description: 'Learn how Xeno.JS RateLimitMiddleware leverages IRateLimitKeyBuilder to throttle incoming requests based on tenant, user, or IP contexts, preventing traffic abuse in distributed systems.'
 keywords: [
 		'RateLimitMiddleware',
 		'rate limiting',
@@ -19,7 +19,7 @@ sidebar:
 
 ## What Is RateLimitMiddleware?
 
-`RateLimitMiddleware` is an enterprise-grade presentation middleware in Xeno designed to control traffic flow and prevent system abuse by limiting the number of requests a client can execute within a specified time window. 
+`RateLimitMiddleware` is an enterprise-grade presentation middleware in Xeno.JS designed to control traffic flow and prevent system abuse by limiting the number of requests a client can execute within a specified time window. 
 
 Unlike traditional rate limiters that bind strictly to raw client IP addresses, Xeno's rate limiter delegates key generation to the **`IRateLimitKeyBuilder`** interface. This allows rate-limiting policies to adapt dynamically to complex multi-tenant and user-scoped environments (e.g., partitioning limits by tenant ID, user ID, or IP address).
 
@@ -57,7 +57,7 @@ const container = await builder.build()
 
 ```
 
-If only one property is specified, Xeno applies default values for the omitted parameter:
+If only one property is specified, Xeno.JS applies default values for the omitted parameter:
 
 * **`maxRequests`**: Defaults to `30` requests.
 
@@ -128,6 +128,6 @@ RequestContextMiddleware
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

@@ -1,7 +1,7 @@
 ---
 title: 'CQRS Generators: Domain Automation'
-description: 'Discover how the Xeno CLI generate command eliminates architectural boilerplate by creating type-safe Controllers, Handlers, Commands, Queries, and Composables.'
-keywords: 'CQRS Generator, Xeno CLI, scaffolding handler, vue composable generator, code generation, Clean Architecture, Command Query Responsibility Segregation'
+description: 'Discover how the Xeno.JS CLI generate command eliminates architectural boilerplate by creating type-safe Controllers, Handlers, Commands, Queries, and Composables.'
+keywords: 'CQRS Generator, Xeno.JS CLI, scaffolding handler, vue composable generator, code generation, Clean Architecture, Command Query Responsibility Segregation'
 author: 'Xeno'
 sidebar:
   order: 3
@@ -11,7 +11,7 @@ sidebar:
 
 The rigorous implementation of **Command Query Responsibility Segregation (CQRS)** and **Clean Architecture** patterns dictates a strict separation of concerns. In a manual workflow, this translates into creating numerous files (Intent, Handler, Controller/Composable, Models, Validation Schemas) and correctly wiring them into the Inversion of Control container.
 
-The Xeno CLI eliminates this friction ("Blank Page Syndrome") through the `GenerateCommandQuery` command, automating the scaffolding of entire operational flows in a *type-safe* manner that is deterministically compliant with the framework's standards.
+The Xeno.JS CLI eliminates this friction ("Blank Page Syndrome") through the `GenerateCommandQuery` command, automating the scaffolding of entire operational flows in a *type-safe* manner that is deterministically compliant with the framework's standards.
 
 ---
 
@@ -72,7 +72,7 @@ When invoked with the `--vue` flag, the `CqrsVueGenerator` scaffolds a pattern d
 
 ## Architectural Warnings and Token Mapping
 
- The Xeno CLI does more than just generate dead code; it acts as an active architectural guide. Within the generated files (e.g., `*.handler.ts`, `*.module.ts`, or Composables), the CLI injects comment blocks highlighted as `⚠️ WARNING: ACTION REQUIRED ⚠️`.
+ The Xeno.JS CLI does more than just generate dead code; it acts as an active architectural guide. Within the generated files (e.g., `*.handler.ts`, `*.module.ts`, or Composables), the CLI injects comment blocks highlighted as `⚠️ WARNING: ACTION REQUIRED ⚠️`.
 
 These comments explicitly instruct the developer on the steps necessary to integrate the new component into the project's *XenoRegistry*, providing the exact snippets to paste into the `src/registry.ts` file and the `.addServices()` block of the `AppBuilder`. This ensures that adding new features never compromises the system's dependency graph or type-safety.
 
@@ -80,6 +80,6 @@ These comments explicitly instruct the developer on the steps necessary to integ
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

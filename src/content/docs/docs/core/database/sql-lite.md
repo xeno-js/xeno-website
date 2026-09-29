@@ -2,7 +2,7 @@
 title: 'SQLite Database Integration & Security Manual'
 description:
   'Comprehensive technical documentation for configuring, schema-binding, and
-  securing SQLite database instances within the Xeno framework using Drizzle
+  securing SQLite database instances within the Xeno.JS framework using Drizzle
   ORM.'
 keywords:
   [
@@ -29,7 +29,7 @@ database context primitives and transactional safety boundaries.
 
 ## How to Register and Configure SQLite with Drizzle
 
-Registering SQLite within Xeno involves activating the polymorphic database
+Registering SQLite within Xeno.JS involves activating the polymorphic database
 module via the AppBuilder fluent interface. By supplying a database
 configuration object with the enableSqlLite flag activated, the bootstrapper
 instantiates an underlying libSQL client driver, securely mapping the compiled
@@ -177,6 +177,6 @@ scripts.
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

@@ -1,7 +1,7 @@
 ---
 title: 'Authorization Pipeline Architecture & Policy Configuration'
 description:
-  'Learn how Xeno configures authorization policies by request intent and
+  'Learn how Xeno.JS configures authorization policies by request intent and
   evaluates user, tenant, role, permission, and custom strategies in the CQRS
   pipeline.'
 keywords:
@@ -23,7 +23,7 @@ author: 'Xeno'
 
 ## Architectural Overview of the Authorization Subsystem
 
-The application safety architecture of Xeno enforces strict access management
+The application safety architecture of Xeno.JS enforces strict access management
 patterns directly within the execution track of the mediator bus. By placing
 security evaluation directly behind messaging boundaries, the framework ensures
 that business handlers remain completely decoupled from presentation-layer
@@ -34,7 +34,7 @@ access boundaries.
 
 ## Understanding the CQRS Authorization Flow
 
-The Xeno authorization subsystem evaluates Commands and Queries inside the CQRS
+The Xeno.JS authorization subsystem evaluates Commands and Queries inside the CQRS
 mediator pipeline. Authorization is based on the request `intent` and the
 identity stored in the active `RequestContext`; it is independent of HTTP route
 configuration.
@@ -50,7 +50,7 @@ delegates to the next behavior.
 
 > [!WARNING]
 >
-> Xeno does not define a `publicRoutes` bypass in `MiddlewareConfig`. Route
+> Xeno.JS does not define a `publicRoutes` bypass in `MiddlewareConfig`. Route
 > accessibility and Command or Query authorization are separate concerns. A
 > request can be reachable through HTTP and still fail a policy evaluation.
 
@@ -58,7 +58,7 @@ delegates to the next behavior.
 
 ## Mapping the Four Foundational Authorization Pipeline Strategies
 
-Xeno provides four built-in authorization strategies and supports custom
+Xeno.JS provides four built-in authorization strategies and supports custom
 strategies. Strategies are created from the configured policy fields and are
 evaluated before Handler execution.
 
@@ -142,7 +142,7 @@ policies and custom strategy factories. These advanced execution paths evaluate
 specific permission tokens or custom evaluation functions, providing granular
 access control detailed further in dedicated sub-manuals.
 
-For applications requiring more than identity and tenant checks, Xeno supports
+For applications requiring more than identity and tenant checks, Xeno.JS supports
 policy-driven role and permission controls, as well as custom strategy
 factories. Policies are associated with message intent tokens and can define
 role lists, permission lists, or identity requirements.
@@ -185,7 +185,7 @@ this section.
 
 ## Understanding User and Tenant Context (Guest Fallback Strategy)
 
-A common misconception in backend architecture is that `userId` and `tenantId` exist solely to protect individual HTTP routes via authentication middlewares. In **Xeno Core**, the security context is designed as a foundational, thread-safe boundary managed via `AsyncLocalStorage`.
+A common misconception in backend architecture is that `userId` and `tenantId` exist solely to protect individual HTTP routes via authentication middlewares. In **Xeno.JS Core**, the security context is designed as a foundational, thread-safe boundary managed via `AsyncLocalStorage`.
 
 ### Why Authentication Yields a "Guest" Instead of Undefined
 When a request hits your application, Xeno's auth layer attempts to resolve the identity (e.g., via Supabase tokens). 
@@ -206,6 +206,6 @@ This design guarantees that security is handled declaratively and deterministica
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

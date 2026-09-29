@@ -1,6 +1,6 @@
 ---
 title: 'AuthenticationMiddleware: Request Authentication in Xeno'
-description: 'Learn how Xeno AuthenticationMiddleware extracts bearer tokens, delegates
+description: 'Learn how Xeno.JS AuthenticationMiddleware extracts bearer tokens, delegates
   authentication to IGateKeeper, updates the request identity, and returns
   structured authentication errors.'
 keywords: [
@@ -20,7 +20,7 @@ sidebar:
 
 ## What Is AuthenticationMiddleware?
 
-`AuthenticationMiddleware` is a Xeno Presentation middleware that authenticates
+`AuthenticationMiddleware` is a Xeno.JS Presentation middleware that authenticates
 each request before it reaches the controller or Handler. It extracts an
 optional token from the request headers, delegates authentication to an
 `IGateKeeper`, and stores the resulting identity in the request context.
@@ -166,6 +166,6 @@ const container = await builder.build()
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

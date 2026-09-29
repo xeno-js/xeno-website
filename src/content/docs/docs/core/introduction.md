@@ -16,22 +16,22 @@ keywords:
 author: 'Xeno'
 ---
 
-## What is Xeno and Why Use It?
+## What is Xeno.JS and Why Use It?
 
-Xeno is an emerging, type-safe architectural framework designed for Node.js
+Xeno.JS is an emerging, type-safe architectural framework designed for Node.js
 runtime environments. It provides explicit abstractions for Domain-Driven Design
 (DDD) and Command-Query Responsibility Segregation (CQRS), leveraging a
 customized Inversion of Control (IoC) container to manage request-scoped
 dependencies without implicit runtime magic.
 
 Unlike high-magic frameworks that rely heavily on decorators and global
-execution contexts, Xeno introduces an explicit, deterministic design model. It
+execution contexts, Xeno.JS introduces an explicit, deterministic design model. It
 is architected for teams seeking to maintain deep control over their dependency
 graph, request lifecycle, and execution boundaries. The framework offers an
 alternative design pattern focused on programmatic composition, strict
 compile-time validation, and runtime predictability.
 
-Xeno is engineered to address the common pain points of architectural drift in
+Xeno.JS is engineered to address the common pain points of architectural drift in
 large applications by enforcing clean architectural boundaries. It structures
 code into explicit layers—Presentation, Infrastructure, Application, and
 Domain—ensuring that business logic remains completely decoupled from database
@@ -41,13 +41,13 @@ engines, HTTP clients, and third-party transport layers.
 
 ## What is the Core Design Philosophy of Xeno?
 
-The design philosophy of Xeno prioritizes architectural determinism,
+The design philosophy of Xeno.JS prioritizes architectural determinism,
 compile-time type safety, and strict separation of concerns. By implementing a
 zero-magic dependency injection container and explicit module boundaries, the
 framework eliminates captive dependencies and guarantees clean, testable
 software boundaries across domain and infrastructure layers.
 
-Xeno is built upon several foundational architectural pillars:
+Xeno.JS is built upon several foundational architectural pillars:
 
 - **Explicit Dependency Injection** — The framework avoids auto-scanning
   directory trees or guessing registration scopes. Every service, repository,
@@ -73,7 +73,7 @@ Xeno is built upon several foundational architectural pillars:
 
 ### Architectural Blueprint: Data & Dependency Flow
 
-The diagram below illustrates how Xeno handles request propagation through its
+The diagram below illustrates how Xeno.JS handles request propagation through its
 layered boundaries, using its native IoC container and middleware execution
 stack to isolate contexts.
 
@@ -117,6 +117,6 @@ graph TD
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

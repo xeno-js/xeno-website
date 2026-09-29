@@ -9,7 +9,7 @@ author: 'Xeno'
 
 In modern Single Page Applications (SPAs), bundle size directly impacts Core Web Vitals (such as Largest Contentful Paint and Time to Interactive). Loading heavy infrastructural dependencies (like logging SDKs, caching engines, or resilience libraries) during the initial browser parse phase degrades the user experience.
 
-Xeno Vue solves this through the **`XenoAppBuilder`**: a fluent composition root that enforces pure Dependency Injection (DI) while aggressively utilizing dynamic imports (`import()`) to defer the resolution of non-critical infrastructure modules until the actual bootstrap execution.
+Xeno.JS Vue solves this through the **`XenoAppBuilder`**: a fluent composition root that enforces pure Dependency Injection (DI) while aggressively utilizing dynamic imports (`import()`) to defer the resolution of non-critical infrastructure modules until the actual bootstrap execution.
 
 ---
 
@@ -158,6 +158,6 @@ If any configuration is missing (e.g., a missing environment variable flagged by
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

@@ -1,7 +1,7 @@
 ---
 title: 'Supabase Auth: Agnostic Identity Management'
-description: 'Learn how Xeno Vue integrates Supabase authentication using an Anti-Corruption Layer, lazy loading, and the agnostic IExtendendAuthService contract.'
-keywords: 'Supabase Vue, Authentication, Anti-Corruption Layer, Identity Management, IExtendendAuthService, Code-Splitting, Xeno Vue'
+description: 'Learn how Xeno.JS Vue integrates Supabase authentication using an Anti-Corruption Layer, lazy loading, and the agnostic IExtendendAuthService contract.'
+keywords: 'Supabase Vue, Authentication, Anti-Corruption Layer, Identity Management, IExtendendAuthService, Code-Splitting, Xeno.JS Vue'
 author: 'Xeno'
 sidebar:
   order: 1
@@ -11,7 +11,7 @@ sidebar:
 
 In many Vue projects, developers import the `@supabase/supabase-js` client directly into their components, stores, or router guards. While convenient for rapid prototyping, this creates severe **vendor lock-in**. If the business later decides to migrate from Supabase to Auth0, Firebase, or a custom OAuth2 provider, the engineering team must rewrite authentication logic scattered across the entire presentation layer.
 
-Xeno Vue prevents this architectural drift by enforcing an **Anti-Corruption Layer (ACL)**. Your Vue application never interacts with Supabase directly; instead, it relies entirely on the framework-agnostic `IExtendendAuthService` contract exposed by the `XenoVueRegistry`.
+Xeno.JS Vue prevents this architectural drift by enforcing an **Anti-Corruption Layer (ACL)**. Your Vue application never interacts with Supabase directly; instead, it relies entirely on the framework-agnostic `IExtendendAuthService` contract exposed by the `XenoVueRegistry`.
 
 ---
 
@@ -52,7 +52,7 @@ If the required URL or Key are missing from your environment, the `AuthModule` i
 
 The `@supabase/supabase-js` SDK is a robust but heavy library. Bundling it into your initial `main.ts` file severely degrades your initial page load metrics (Core Web Vitals).
 
-Xeno Vue manages Supabase as an **optional peer dependency**. When you configure `.addAuth()`, the `XenoAppBuilder` does not load the SDK immediately. Instead, it queues an asynchronous task that utilizes dynamic imports (`await import('../modules/auth.module')`) to load the authentication module and its Supabase dependencies *only* when `.build()` is executed.
+Xeno.JS Vue manages Supabase as an **optional peer dependency**. When you configure `.addAuth()`, the `XenoAppBuilder` does not load the SDK immediately. Instead, it queues an asynchronous task that utilizes dynamic imports (`await import('../modules/auth.module')`) to load the authentication module and its Supabase dependencies *only* when `.build()` is executed.
 
 This guarantees that Vite automatically code-splits the authentication engine, keeping your initial application bundle aggressively optimized.
 
@@ -60,7 +60,7 @@ This guarantees that Vite automatically code-splits the authentication engine, k
 
 ## The Anti-Corruption Layer: Mappers and Factories
 
-To completely isolate your application from Supabase's proprietary data structures, Xeno utilizes a dedicated `SupabaseAuthFactory`.
+To completely isolate your application from Supabase's proprietary data structures, Xeno.JS utilizes a dedicated `SupabaseAuthFactory`.
 
 When the factory initializes the `SupabaseClient` (integrating the customized `StorageHelper` for session persistence), it wraps the SDK alongside two critical mapping classes:
 
@@ -108,6 +108,6 @@ This strict architectural boundary guarantees that your UI components, CQRS Hand
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

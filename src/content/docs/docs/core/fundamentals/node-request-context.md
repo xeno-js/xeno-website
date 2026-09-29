@@ -1,7 +1,7 @@
 ---
 title: 'NodeRequestContext: Isolated Request State Management'
 description:
-  'Learn how Xeno NodeRequestContext isolates request state with AsyncLocalStorage,
+  'Learn how Xeno.JS NodeRequestContext isolates request state with AsyncLocalStorage,
   exposes context accessors, and propagates identity, network, and tracing data.'
 keywords:
   [
@@ -27,7 +27,7 @@ sidebar:
 Within modern, highly concurrent server applications, maintaining
 request-specific state (such as user identity, tenant identifier, or tracing
 data) throughout the entire asynchronous call chain represents a complex
-architectural challenge. Xeno solves this problem natively through the
+architectural challenge. Xeno.JS solves this problem natively through the
 **NodeRequestContext** class, leveraging the asynchronous mechanisms of the
 Node.js runtime.
 
@@ -35,7 +35,7 @@ Node.js runtime.
 
 ## Understanding How NodeRequestContext Works
 
-`NodeRequestContext` is the Xeno execution-context implementation built on
+`NodeRequestContext` is the Xeno.JS execution-context implementation built on
 Node.js `AsyncLocalStorage`. It isolates request-specific data across an
 asynchronous execution chain and exposes typed accessors for the active context,
 identity, network data, and service scope.
@@ -117,9 +117,9 @@ as a prerequisite. Other modules do not necessarily queue it automatically.
 
 ---
 
-## Detailed Structure of the Xeno Execution Context
+## Detailed Structure of the Xeno.JS Execution Context
 
-The Xeno execution context is structured into specialized sub-contexts that
+The Xeno.JS execution context is structured into specialized sub-contexts that
 describe the active request or operation. The contracts include `Identity` for
 authentication and authorization data, `NetworkContext` for request metadata,
 `TracingContext` for observability, and optional `MessagingContext` data for
@@ -213,7 +213,7 @@ export interface MessageSequence {
 
 ## Accessing Contexts and Injecting Context Accessors
 
-Xeno avoids exposing the native `AsyncLocalStorage` instance directly to
+Xeno.JS avoids exposing the native `AsyncLocalStorage` instance directly to
 application services. Instead, `ContextModule` registers granular,
 single-responsibility **Accessor Interfaces** as singletons.
 
@@ -307,6 +307,6 @@ export class BillingService {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

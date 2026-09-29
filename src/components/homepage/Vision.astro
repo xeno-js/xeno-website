@@ -4,53 +4,93 @@
 
 <section class="py-24 overflow-hidden">
   <div class="max-w-[var(--container-max)] mx-auto px-6 relative z-10">
-    
     <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-      
       {/* Left Column: Text Content */}
       <div data-aos="fade-right" class="md:col-span-6 text-left">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
-        <i class="bi bi-diagram-3-fill"></i> The full-stack vision
-      </div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 leading-[1.15]">
-          Treat the browser as a <br/><span class="text-[var(--color-primary)]">distributed client</span>—not a view layer.
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase"
+        >
+          <i class="bi bi-diagram-3-fill"></i> The full-stack vision
+        </div>
+        <h2
+          class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 leading-[1.15]"
+        >
+          Bring the application model to the <span
+            class="text-[var(--color-primary)]">browser</span
+          >.
         </h2>
-        <p class="text-[length:var(--body-size)] text-[var(--text-muted)] leading-relaxed">
-          Xeno brings bounded contexts, commands, queries, and explicit application state into Vue. Backend and frontend teams share one architectural language while the domain stays insulated from databases, transports, and UI churn.
+        <p
+          class="text-[length:var(--body-size)] text-[var(--text-muted)] leading-relaxed"
+        >
+          Xeno brings commands, queries, pipelines, context, and explicit
+          application composition into Vue.
+        </p>
+        <p>
+          The result is one architectural language across backend and frontend,
+          while domain logic remains independent from transports, databases, and
+          UI concerns.
         </p>
       </div>
 
       {/* Right Column: Integration Cards */}
-      <div data-aos="fade-left" data-aos-delay="150" class="md:col-span-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative mt-8 md:mt-0">
-        
+      <div
+        data-aos="fade-left"
+        data-aos-delay="150"
+        class="md:col-span-6 flex flex-col sm:flex-row items-center justify-center gap-4 relative mt-8 md:mt-0"
+      >
         {/* Sottile linea di connessione visiva (visibile solo su desktop) */}
-        <div class="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[200px] h-px bg-gradient-to-r from-[var(--border-color)] via-[var(--color-primary)] to-[var(--border-color)] opacity-50 -z-10"></div>
+        <div
+          class="hidden sm:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[200px] h-px bg-gradient-to-r from-[var(--border-color)] via-[var(--color-primary)] to-[var(--border-color)] opacity-50 -z-10"
+        >
+        </div>
 
         {/* Backend Card */}
-        <div class="w-full sm:w-56 p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 shadow-xl flex flex-col items-center text-center group">
-          <div class="w-14 h-14 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 mb-5 shadow-sm">
+        <div
+          class="w-full sm:w-56 p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 shadow-xl flex flex-col items-center text-center group"
+        >
+          <div
+            class="w-14 h-14 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 mb-5 shadow-sm"
+          >
             <i class="bi bi-cpu text-2xl"></i>
           </div>
-          <h4 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold text-sm mb-1">@xeno-js/core</h4>
-          <span class="text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider">Backend</span>
+          <h4
+            class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold text-sm mb-1"
+          >
+            @xeno-js/core
+          </h4>
+          <span
+            class="text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider"
+            >Backend</span
+          >
         </div>
 
         {/* Plus Icon / Connector */}
-        <div class="w-12 h-12 rounded-full bg-[var(--bg-primary)] border border-[var(--color-primary)]/30 flex items-center justify-center text-[var(--color-primary)] shrink-0 z-10 shadow-[0_0_15px_var(--accent-glow)]">
+        <div
+          class="w-12 h-12 rounded-full bg-[var(--bg-primary)] border border-[var(--color-primary)]/30 flex items-center justify-center text-[var(--color-primary)] shrink-0 z-10 shadow-[0_0_15px_var(--accent-glow)]"
+        >
           <i class="bi bi-lightning text-lg"></i>
         </div>
 
         {/* Frontend Card */}
-        <div class="w-full sm:w-56 p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 shadow-xl flex flex-col items-center text-center group">
-          <div class="w-14 h-14 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 mb-5 shadow-sm">
+        <div
+          class="w-full sm:w-56 p-6 rounded-2xl bg-[var(--bg-primary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 shadow-xl flex flex-col items-center text-center group"
+        >
+          <div
+            class="w-14 h-14 rounded-xl bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 mb-5 shadow-sm"
+          >
             <i class="bi bi-browser-edge text-2xl"></i>
           </div>
-          <h4 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold text-sm mb-1">@xeno-js/vue</h4>
-          <span class="text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider">Frontend</span>
+          <h4
+            class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold text-sm mb-1"
+          >
+            @xeno-js/vue
+          </h4>
+          <span
+            class="text-[var(--text-muted)] text-xs font-medium uppercase tracking-wider"
+            >Frontend</span
+          >
         </div>
-
       </div>
-
     </div>
   </div>
 </section>

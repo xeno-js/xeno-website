@@ -1,7 +1,7 @@
 ---
 title: 'Authentication Architecture & Supabase Integration Guide'
 description:
-  'Learn how Xeno configures authentication, how GateKeeper uses the base auth
+  'Learn how Xeno.JS configures authentication, how GateKeeper uses the base auth
   contract, and how application services resolve the extended auth service for
   sessions and provider flows.'
 keywords:
@@ -25,7 +25,7 @@ author: 'Xeno'
 
 Securing access endpoints and tracking cross-layer credentials across an
 asynchronous execution stack requires a reliable approach to identity
-verification. Xeno separates transport delivery layers from core security
+verification. Xeno.JS separates transport delivery layers from core security
 mechanisms through a pipeline that extracts, validates, and propagates client
 identity contexts securely.
 
@@ -33,7 +33,7 @@ identity contexts securely.
 
 ## Understanding the Authentication Mechanism and Security GateKeeper
 
-The authentication subsystem in Xeno separates token verification from the
+The authentication subsystem in Xeno.JS separates token verification from the
 application-facing authentication API. `AuthenticationMiddleware` extracts the
 token, `GateKeeper` uses the base `IBaseAuthService` contract to obtain claims,
 and `ClaimsIdentityMapper` converts those claims into the internal `Identity`
@@ -119,7 +119,7 @@ sequenceDiagram
 
 ## Handling Missing or Invalid Bearer Tokens and Error Serialization
 
-When an `IGateKeeper` returns a failed authentication Result, Xeno halts
+When an `IGateKeeper` returns a failed authentication Result, Xeno.JS halts
 execution early. `AuthenticationMiddleware` short-circuits the pipeline and
 returns a standardized, machine-readable error response. The default status is
 `401 Unauthorized` when the returned application error does not provide another
@@ -162,13 +162,13 @@ For the request-level execution details, see
 
 ## Configuring Supabase Authentication via the AppBuilder Utility
 
-Integrating Supabase authentication within Xeno requires programmatically
+Integrating Supabase authentication within Xeno.JS requires programmatically
 binding endpoint credentials using the fluent AppBuilder interface. The built-in
 authentication client factory initializes the native client stream, registers
 custom identity mappers, and injects the verified provider directly into the
 framework security gatekeeper loop.
 
-Xeno includes a built-in Supabase integration. When enabled, the framework
+Xeno.JS includes a built-in Supabase integration. When enabled, the framework
 creates a `SupabaseAuthService` through `SupabaseServerAuthFactory`. The service
 implements both `IBaseAuthService` and `IAuthService`, so the same provider can
 support GateKeeper authentication and application-level session operations.
@@ -219,7 +219,7 @@ export const bootstrap = async () => {
 
 ## Base and Extended Authentication Services
 
-Xeno exposes two authentication contracts with different responsibilities.
+Xeno.JS exposes two authentication contracts with different responsibilities.
 
 ### `IBaseAuthService`: The GateKeeper Contract
 
@@ -301,6 +301,6 @@ the empty implementation in the example is only a structural placeholder.
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

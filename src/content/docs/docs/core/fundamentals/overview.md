@@ -1,12 +1,12 @@
 ---
-title: 'Xeno Core Architectural Fundamentals'
+title: 'Xeno.JS Core Architectural Fundamentals'
 description:
   'An architectural deep-dive into the foundational pillars of Xeno, including
   XenoRegistry, ServiceContainer, AppBuilder, unified request contexts,
   functional monads, and CQRS primitives.'
 keywords:
   [
-    'Xeno Fundamentals',
+    'Xeno.JS Fundamentals',
     'Inversion of Control',
     'Dependency Injection container',
     'XenoRegistry',
@@ -23,7 +23,7 @@ sidebar:
 ## Architectural Fundamentals of Xeno
 
 This document introduces the core programmatic primitives and design patterns
-that compose the Xeno framework. These foundational elements decouple your
+that compose the Xeno.JS framework. These foundational elements decouple your
 domain rules from underlying transport mechanisms and infrastructural
 modifications. Detailed, individual implementation specifications for each
 component are found in dedicated sub-manuals within this directory.
@@ -32,7 +32,7 @@ component are found in dedicated sub-manuals within this directory.
 
 ## How does the Strongly-Typed Service Registry Ensure Type Safety?
 
-The strongly-typed service registry in Xeno establishes compile-time type safety
+The strongly-typed service registry in Xeno.JS establishes compile-time type safety
 across the application dependency graph. By mapping unique runtime tokens to
 static type interfaces, it eliminates accidental mismatched dependency injection
 and provides strict compilation boundaries between domain abstractions and
@@ -40,7 +40,7 @@ infrastructure implementations.
 
 In many Node.js architectures, dependencies are registered using strings or
 loose symbols, increasing the risk of runtime errors when refactoring or
-renaming services. Xeno solves this by requiring an explicit application
+renaming services. Xeno.JS solves this by requiring an explicit application
 registry definition [XenoRegistry](./xeno-registry). This mapping structure
 leverages TypeScript's type system to ensure that every dependency resolved via
 a token is structurally compatible with its declared interface, preventing type
@@ -60,7 +60,7 @@ pollution across layer boundaries.
 
 ## Managing Lifetimes Natively inside the Inversion of Control Container
 
-The Xeno Inversion of Control container coordinates explicit lifecycle
+The Xeno.JS Inversion of Control container coordinates explicit lifecycle
 management without relying on experimental decorators or metadata reflection. It
 deterministically tracks singleton, scoped, and transient dependencies,
 preventing architectural degradation such as captive dependencies through
@@ -148,7 +148,7 @@ parameter drilling through your application layers.
 
 ## Designing Extensible Middlewares for Request Processing Chains
 
-Middlewares in Xeno act as an interceptive processing stack for extracting
+Middlewares in Xeno.JS act as an interceptive processing stack for extracting
 inbound request metadata, managing authorization policies, and setting up
 isolated tracking boundaries. Operating outside specific transport delivery
 engines, they offer an agnostic framework for executing cross-cutting behaviors
@@ -195,7 +195,7 @@ layers to specific framework implementations.
 ## Processing Business Logics and Contracts via the BaseHandler
 
 The [BaseHandler](./base-handler) is the fundamental execution layer for command
-and query messages inside the Xeno framework. Connected natively to the mediator
+and query messages inside the Xeno.JS framework. Connected natively to the mediator
 bus, it intercepts payloads within a request-scoped lifecycle, extracting
 identity contexts and monitoring cooperative cancellation paths to ensure
 predictable data processing.
@@ -245,7 +245,7 @@ footprints to enforce multi-tenant logical keyspace partitioning across
 persistent database engines and datasources.
 
 By splitting persistence architectures into distinct mutation and query paths,
-Xeno optimizes execution efficiency based on structural context.
+Xeno.JS optimizes execution efficiency based on structural context.
 
 - **State-Mutation Repository** — Manages comprehensive write lifecycle
   boundaries for domain aggregates, handling data creation, updates, and
@@ -266,7 +266,7 @@ propagation. By wrapping outputs inside standardized success or failure
 envelopes, it forces application layers to evaluate error codes and edge cases
 safely through structured conditional code blocks.
 
-Xeno discourages using arbitrary `try/catch` logic blocks for predictable
+Xeno.JS discourages using arbitrary `try/catch` logic blocks for predictable
 business rule violations. The `Result` construct models operation outcomes
 explicitly, providing structural safety across design layer boundaries.
 
@@ -283,6 +283,6 @@ explicitly, providing structural safety across design layer boundaries.
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

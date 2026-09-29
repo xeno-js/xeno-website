@@ -4,7 +4,7 @@ description:
   'Technical guide to configuring the RedisCache driver in Xeno, covering
   ioredis integration, connection pooling options, AppBuilder registration, and
   ICache dependency resolution.'
-keywords: 'RedisCache, ICache, Distributed Caching, AppBuilder Caching, TOKENS.CACHE, Xeno Caching'
+keywords: 'RedisCache, ICache, Distributed Caching, AppBuilder Caching, TOKENS.CACHE, Xeno.JS Caching'
 author: 'Xeno'
 ---
 
@@ -12,7 +12,7 @@ author: 'Xeno'
 
 When scaling microservices horizontally or running multi-instance application
 servers, process-local memory caches cannot share state across cluster nodes.
-Xeno addresses this by providing `RedisCache`, an out-of-process, distributed
+Xeno.JS addresses this by providing `RedisCache`, an out-of-process, distributed
 cache provider powered by the `ioredis` engine.
 
 ---
@@ -53,7 +53,7 @@ graph TD
     A[App Instance 1] -->|Query / Lock| C[(Centralized Redis Cluster)]
     B[App Instance 2] -->|Query / Lock| C
 
-    subgraph Xeno Redis Cache Layer
+    subgraph Xeno.JS Redis Cache Layer
         C -->|SET NX EX| D[Idempotency Locks]
         C -->|GET / SET| E[Cached Query Results]
     end
@@ -231,7 +231,7 @@ export const configureServices = async () => {
 ## Installing Mandatory Peer Dependencies for Redis
 
 To use the `RedisCache` driver, you must explicitly install the `ioredis`
-package in your project. Because Xeno uses an **optional peer dependency
+package in your project. Because Xeno.JS uses an **optional peer dependency
 model**, external drivers are lazy-loaded to prevent bloating application
 bundles that only require in-memory caching.
 
@@ -252,6 +252,6 @@ npm install ioredis
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

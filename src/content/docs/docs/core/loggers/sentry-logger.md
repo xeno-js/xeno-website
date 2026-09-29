@@ -12,7 +12,7 @@ keywords:
     'SentryLoggerFactory',
     'AppBuilder Logger',
     'Exception Telemetry',
-    'Xeno Logging',
+    'Xeno.JS Logging',
   ]
 author: 'Xeno'
 ---
@@ -21,14 +21,14 @@ author: 'Xeno'
 
 Capturing unhandled exceptions and performance anomalies in production
 distributed systems requires real-time telemetry forwarding to centralized
-Application Performance Monitoring (APM) platforms. Xeno provides native
+Application Performance Monitoring (APM) platforms. Xeno.JS provides native
 integration with Sentry through the `SentryLogger` driver.
 
 ---
 
 ## How to Register and Configure SentryLogger via AppBuilder
 
-Registering SentryLogger in Xeno requires populating the options.sentry.config
+Registering SentryLogger in Xeno.JS requires populating the options.sentry.config
 property object within the addLogger configuration block on AppBuilder. This
 triggers the SentryLoggerFactory during bootstrap, instantiating the Sentry SDK
 and binding a remote exception tracking driver to the framework's primary
@@ -72,7 +72,7 @@ export const bootstrap = async () => {
 
 ## Understanding Sentry Configuration Parameters and Initialization
 
-Sentry configuration parameters in Xeno govern remote project targeting,
+Sentry configuration parameters in Xeno.JS govern remote project targeting,
 environment isolation, and payload filtering. Managed through
 SentryLoggerFactory, options like dsn and environment dictate error reporting
 destinations, while native beforeSend hooks automatically filter out expected
@@ -164,7 +164,7 @@ graph TD
 ## Installing Mandatory Peer Dependencies for Sentry
 
 Integrating SentryLogger requires explicitly installing the @sentry/node peer
-dependency in your project workspace. Because Xeno follows a
+dependency in your project workspace. Because Xeno.JS follows a
 pay-for-what-you-use peer dependency model, external monitoring libraries are
 lazy-loaded and must be added manually before activating Sentry logging within
 the AppBuilder host configuration.
@@ -192,6 +192,6 @@ npm install @sentry/node
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

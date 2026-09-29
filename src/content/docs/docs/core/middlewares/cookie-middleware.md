@@ -1,6 +1,6 @@
 ---
 title: 'CsrfCookieMiddleware: Automated Security Cookie Provisioning in Xeno'
-description: 'Discover how Xeno CsrfCookieMiddleware automatically provisions secure CSRF tokens as browser cookies for authenticated sessions, detailing its underlying mechanics and AppBuilder configuration.'
+description: 'Discover how Xeno.JS CsrfCookieMiddleware automatically provisions secure CSRF tokens as browser cookies for authenticated sessions, detailing its underlying mechanics and AppBuilder configuration.'
 keywords: [
    'CsrfCookieMiddleware',
    'Cookie middleware',
@@ -17,7 +17,7 @@ sidebar:
 
 ## What Is `CsrfCookieMiddleware`?
 
-`CsrfCookieMiddleware` is a specialized presentation-layer middleware in Xeno responsible for automating the lifecycle of security cookies—specifically, **Cross-Site Request Routing Protection (CSRF) cookies**.
+`CsrfCookieMiddleware` is a specialized presentation-layer middleware in Xeno.JS responsible for automating the lifecycle of security cookies—specifically, **Cross-Site Request Routing Protection (CSRF) cookies**.
 
 While incoming request headers and cookies are parsed and mapped into the request context via extractors (such as `HttpCookieExtractor`), `CsrfCookieMiddleware` operates proactively on the **outgoing response stream**. It ensures that once a user successfully establishes an authenticated session, a secure, cryptographically bound CSRF token cookie is automatically provisioned and sent back to the browser.
 
@@ -44,7 +44,7 @@ It formats the cookie string using enterprise security best practices (enforcing
 
 ## Relationship with Cookie Extractors
 
-The cookie workflow in Xeno bridges inbound parsing and outbound provisioning:
+The cookie workflow in Xeno.JS bridges inbound parsing and outbound provisioning:
 
 * **Inbound (`HttpCookieExtractor`)**: When a browser sends a subsequent state-changing request (`POST`, `PUT`, `DELETE`), the low-level `HttpCookieExtractor` scans the raw `Cookie` header string, isolates the target cookie (e.g., `__Host-xeno-csrf`), decodes it safely using `decodeURIComponent`, and maps it into `network.csrfCookie`.
 * **Outbound (`CsrfCookieMiddleware`)**: If that cookie is missing during an authenticated session lifecycle, `CsrfCookieMiddleware` steps in to generate and set it via `Set-Cookie`.
@@ -98,6 +98,6 @@ When `config.csrf` is defined, `MiddlewareModule` performs the following automat
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

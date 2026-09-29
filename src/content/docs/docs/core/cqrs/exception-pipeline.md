@@ -22,7 +22,7 @@ author: 'Xeno'
 
 In a robust CQRS architecture, unexpected execution exceptions must be
 intercepted at the outer framework boundary to prevent process crashes,
-unhandled promise rejections, and raw error leaks. Xeno provides the
+unhandled promise rejections, and raw error leaks. Xeno.JS provides the
 `ExceptionPipeline` behavior as the outermost guard rail of the mediator
 pipeline, ensuring all runtime exceptions are safely caught and transformed into
 functional failure monads (`Result.fail`).
@@ -248,6 +248,6 @@ headers for distributed tracing and cache control:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

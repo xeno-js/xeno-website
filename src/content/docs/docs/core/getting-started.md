@@ -7,7 +7,7 @@ author: 'Xeno'
 
 ## How to Manually Install and Bootstrap Xeno?
 
-Manual installation of Xeno requires configuring the core npm package along with
+Manual installation of Xeno.JS requires configuring the core npm package along with
 key peer dependencies like TypeScript. Developers initialize the application
 lifecycle using the fluent AppBuilder API, which programmatically registers
 modules and establishes the asynchronous local storage boundary for scoped
@@ -30,7 +30,7 @@ npm install --save-dev typescript @types/node
 
 ### 2. TypeScript Configuration
 
-Xeno leverages modern TypeScript capabilities. Ensure your `tsconfig.json` is
+Xeno.JS leverages modern TypeScript capabilities. Ensure your `tsconfig.json` is
 configured to support ECMAScript 2023 target, modern module resolution, and
 decorator metadata if you intend to utilize explicit decorators:
 
@@ -54,7 +54,7 @@ decorator metadata if you intend to utilize explicit decorators:
 
 ### 3. Implementing the Strongly-Typed Registry
 
-Every Xeno application requires a custom registry definition that maps injection
+Every Xeno.JS application requires a custom registry definition that maps injection
 tokens to concrete typings. This ensures strict compile-time type safety across
 your dependency injection hierarchy:
 
@@ -124,6 +124,6 @@ bootstrap().catch((error) => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

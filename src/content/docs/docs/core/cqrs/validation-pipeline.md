@@ -1,7 +1,7 @@
 ---
 title: 'Validation Behavior: Schema Enforcement & Input Protection'
 description:
-  'Technical specification for input validation in Xeno using Zod schemas and
+  'Technical specification for input validation in Xeno.JS using Zod schemas and
   custom validation strategies within the CQRS mediator pipeline.'
 keywords:
   [
@@ -21,7 +21,7 @@ author: 'Xeno'
 In domain-driven applications and CQRS architectures, business handlers and
 domain entities rely on strict structural invariants. Processing malformed,
 incomplete, or unvalidated message payloads pollutes domain logic and risks
-runtime exceptions deep within application boundaries. Xeno resolves this by
+runtime exceptions deep within application boundaries. Xeno.JS resolves this by
 introducing the `ValidationPipeline` behavior as an automated interceptor that
 validates command and query requests before they reach application handlers.
 
@@ -104,7 +104,7 @@ sequenceDiagram
 
 ## Configuring Zod Schema Validation
 
-Xeno includes native integration with the Zod validation library via
+Xeno.JS includes native integration with the Zod validation library via
 `ZodValidatorService` and `SchemaValidationStrategy`. Schema validation maps
 request intent strings directly to Zod schemas, automatically validating
 incoming payloads against their corresponding schema definition.
@@ -393,6 +393,6 @@ response returns a structured 400 error payload:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

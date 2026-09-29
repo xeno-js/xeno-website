@@ -1,7 +1,7 @@
 ---
 title: 'Remote Data Sources: Typed API Communication in Vue'
-description: 'Learn how to extend RemoteDataSource in Xeno Vue to encapsulate external API calls, manage AbortSignals, and return type-safe Result monads.'
-keywords: 'RemoteDataSource, Vue API client, Axios encapsulation, Frontend DDD, Result monad, AbortSignal, Xeno Vue'
+description: 'Learn how to extend RemoteDataSource in Xeno.JS Vue to encapsulate external API calls, manage AbortSignals, and return type-safe Result monads.'
+keywords: 'RemoteDataSource, Vue API client, Axios encapsulation, Frontend DDD, Result monad, AbortSignal, Xeno.JS Vue'
 author: 'Xeno'
 sidebar:
   order: 2
@@ -11,7 +11,7 @@ sidebar:
 
 In standard frontend development, UI components or state managers often interact directly with endpoints using hardcoded `axios.get('/api/data')` calls. This creates tight coupling, makes refactoring API versions incredibly tedious, and scatters network cancellation logic throughout the presentation layer.
 
-Xeno Vue enforces strict Data Access boundaries through the **`RemoteDataSource`** abstract primitive. By isolating all network interactions behind domain-specific data sources, your application Handlers communicate through semantic, strongly-typed methods (e.g., `getUserProfile`) rather than raw HTTP verbs.
+Xeno.JS Vue enforces strict Data Access boundaries through the **`RemoteDataSource`** abstract primitive. By isolating all network interactions behind domain-specific data sources, your application Handlers communicate through semantic, strongly-typed methods (e.g., `getUserProfile`) rather than raw HTTP verbs.
 
 ---
 
@@ -29,13 +29,13 @@ To interact with an external API, you create a concrete class extending `RemoteD
 
 ### Strict Encapsulation (`private _httpClient`)
 
-In Xeno Vue, the underlying `IHttpClient` is deliberately injected into the base class as `private readonly _httpClient`. 
+In Xeno.JS Vue, the underlying `IHttpClient` is deliberately injected into the base class as `private readonly _httpClient`. 
 
-This is a strict architectural safeguard. By making the client `private`, Xeno prevents subclasses from bypassing the standard monadic wrappers (`this.get()`, `this.post()`) to access the raw Axios instance. This enforces the **Dependency Inversion Principle**: the `RemoteDataSource` remains an agnostic conduit that knows nothing about the underlying Axios library.
+This is a strict architectural safeguard. By making the client `private`, Xeno.JS prevents subclasses from bypassing the standard monadic wrappers (`this.get()`, `this.post()`) to access the raw Axios instance. This enforces the **Dependency Inversion Principle**: the `RemoteDataSource` remains an agnostic conduit that knows nothing about the underlying Axios library.
 
 ### Handling Advanced Scenarios (e.g., Binary Downloads or FormData)
 
-Because the client is private, you cannot pass raw Axios configuration objects. Instead, Xeno provides a clean, agnostic interface called `HttpBaseRequest`.
+Because the client is private, you cannot pass raw Axios configuration objects. Instead, Xeno.JS provides a clean, agnostic interface called `HttpBaseRequest`.
 
 If your Handler needs to upload a `FormData` object or download a binary stream (e.g., a PDF `Blob`), you pass the payload and agnostic options directly into the standard base class methods. The underlying adapter will translate these agnostic properties (like `responseType`) into the appropriate Axios configurations automatically.
 
@@ -123,6 +123,6 @@ By confining endpoint URLs, HTTP verbs, and custom payload formatting strictly w
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

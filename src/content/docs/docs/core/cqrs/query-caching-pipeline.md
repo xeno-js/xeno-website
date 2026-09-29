@@ -12,7 +12,7 @@ keywords:
     'CacheKeyBuilder',
     'AppBuilder Pipeline',
     'InMemoryCache',
-    'Xeno Caching',
+    'Xeno.JS Caching',
   ]
 author: 'Xeno'
 ---
@@ -21,7 +21,7 @@ author: 'Xeno'
 
 Executing repetitive database read operations or complex aggregation queries
 places unnecessary load on persistence infrastructure and introduces processing
-latency into client response times. Xeno resolves this by providing
+latency into client response times. Xeno.JS resolves this by providing
 `QueryCachingPipeline`, an automated CQRS query pipeline behavior that
 intercepts query executions, evaluates context-built cache keys, and serves
 pre-calculated result monads directly from cache stores.
@@ -262,6 +262,6 @@ export class CatalogController extends BaseController<
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

@@ -21,7 +21,7 @@ author: 'Xeno'
 
 Monitoring execution latency across Command and Query handlers is essential for
 identifying performance degradation, unoptimized database queries, and slow
-downstream service dependencies before they impact end users. Xeno provides the
+downstream service dependencies before they impact end users. Xeno.JS provides the
 `PerformancePipeline` behavior as a built-in cross-cutting behavior that
 measures message processing duration and automatically flags slow-running
 operations.
@@ -188,6 +188,6 @@ structured diagnostic metadata to aid in identifying slow application routines:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

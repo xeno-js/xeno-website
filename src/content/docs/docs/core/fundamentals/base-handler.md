@@ -1,7 +1,7 @@
 ---
 title: 'BaseHandler: Application Layer Implementation and Messaging Contracts'
 description:
-  'Technical specification for the Xeno BaseHandler primitive. Learn how to
+  'Technical specification for the Xeno.JS BaseHandler primitive. Learn how to
   implement command and query handlers, manage AbortSignals, and bind execution
   contexts.'
 keywords:
@@ -20,7 +20,7 @@ author: 'Xeno'
 
 ## Application Layer Implementation with BaseHandler
 
-The application layer of Xeno coordinates business workflows, maps user intents
+The application layer of Xeno.JS coordinates business workflows, maps user intents
 to domain entities, and enforces transactional execution boundaries. This
 orchestration is anchored by the **BaseHandler** abstract primitive, which
 standardizes message processing across commands and queries while decoupling
@@ -30,7 +30,7 @@ core domain logic from transport protocols.
 
 ## Understanding the Core Role of the BaseHandler Primitive
 
-The Xeno BaseHandler is an abstract application-layer primitive that serves as
+The Xeno.JS BaseHandler is an abstract application-layer primitive that serves as
 the execution anchor for commands and queries. It encapsulates identity context
 factories, facilitates runtime state evaluation, and manages asynchronous
 cancellation flows natively, isolating domain logic from the underlying delivery
@@ -293,7 +293,7 @@ export class UserController extends BaseController<UserProps, void> {
 >
 > ### Enforcing Intent Alignment in `XenoRegistry` and Bootstrap
 >
-> Every Command or Query handler within Xeno must be explicitly registered
+> Every Command or Query handler within Xeno.JS must be explicitly registered
 > inside your custom `AppRegistry` using a literal string key that matches
 > **exactly** the `intent` property declared on the corresponding message.
 >
@@ -371,6 +371,6 @@ export class UserController extends BaseController<UserProps, void> {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

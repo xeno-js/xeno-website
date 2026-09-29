@@ -2,7 +2,7 @@
 title: 'Role-Based and Permission-Based Authorization Strategy Guide'
 description:
   'In-depth guide to configuring role-based access control (RBAC) and
-  permission-based access control (PBAC) in Xeno using declarative intent-mapped
+  permission-based access control (PBAC) in Xeno.JS using declarative intent-mapped
   policies.'
 keywords:
   [
@@ -30,14 +30,14 @@ business logic.
 
 ## Introduction to Role and Permission Authorization Policies
 
-Role-based and permission-based authorization in Xeno secures CQRS message
+Role-based and permission-based authorization in Xeno.JS secures CQRS message
 handlers by evaluating explicit user identities against a centralized policy
 registry. These strategies intercept incoming command and query intents within
 the mediator execution stack, validating access privileges prior to triggering
 core business domain transformations.
 
 By moving security boundaries away from HTTP delivery endpoints and embedding
-them within the mediator bus, Xeno enforces consistent security across any
+them within the mediator bus, Xeno.JS enforces consistent security across any
 ingress channel (e.g., HTTP REST, WebSockets, or background workers). This
 declarative approach leverages an `IPolicyRegistry` to track application
 policies, validating inbound message parameters against claims extracted from
@@ -235,6 +235,6 @@ export const bootstrapApplication = async () => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

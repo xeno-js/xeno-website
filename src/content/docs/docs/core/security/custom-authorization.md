@@ -2,7 +2,7 @@
 title: 'Custom Authorization Strategies: Extending Access Control Boundaries'
 description:
   'Advanced guide to authoring and registering custom authorization strategies
-  in Xeno by extending BaseAuthorizationStrategy and injecting factories via
+  in Xeno.JS by extending BaseAuthorizationStrategy and injecting factories via
   AppBuilder.'
 keywords:
   [
@@ -22,14 +22,14 @@ author: 'Xeno'
 For enterprise applications, rigid role-based or permission-based matrices are
 often insufficient to cover complex business logic—such as dynamic resource
 ownership checks, time-based operational windows, or fine-grained data-layer
-access constraints. Xeno addresses this by providing a fully extensible
+access constraints. Xeno.JS addresses this by providing a fully extensible
 authorization pipeline that accepts custom security strategies.
 
 ---
 
 ## How Custom Authorization Strategies Expand Access Control
 
-Custom authorization strategies in Xeno allow engineers to implement complex,
+Custom authorization strategies in Xeno.JS allow engineers to implement complex,
 domain-specific security constraints beyond standard role or permission checks.
 By implementing the IStrategy interface or inheriting from
 BaseAuthorizationStrategy, developers can execute arbitrary logic blocks that
@@ -223,6 +223,6 @@ export const initializeApplicationHost = async () => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

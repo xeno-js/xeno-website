@@ -4,7 +4,7 @@ description:
   'Technical guide to using InMemoryCache in Xeno, covering process-local
   storage mechanics, TTL expiration handling, AppBuilder registration, and
   ICache dependency resolution.'
-keywords: 'InMemoryCache, ICache, Process-Local Caching, AppBuilder Caching, TOKENS.CACHE, Xeno Caching'
+keywords: 'InMemoryCache, ICache, Process-Local Caching, AppBuilder Caching, TOKENS.CACHE, Xeno.JS Caching'
 author: 'Xeno'
 ---
 
@@ -12,7 +12,7 @@ author: 'Xeno'
 
 For single-instance applications, unit testing environments, or low-latency
 local lookup scenarios, external distributed caching stores introduce
-unnecessary infrastructure complexity and network hop overhead. Xeno addresses
+unnecessary infrastructure complexity and network hop overhead. Xeno.JS addresses
 this by providing `InMemoryCache`, a process-local implementation of the
 framework's standard `ICache` contract.
 
@@ -179,6 +179,6 @@ export const configureServices = async () => {
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)

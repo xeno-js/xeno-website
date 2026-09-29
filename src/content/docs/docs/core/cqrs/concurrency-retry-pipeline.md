@@ -14,7 +14,7 @@ In high-concurrency systems, multiple execution threads or service instances
 frequently attempt to update the same domain aggregate or database record
 simultaneously. When optimistic locking or row-level state verification rejects
 a state modification, throwing an unhandled conflict error directly to the
-client degrades user experience. Xeno provides `ConcurrencyRetryPipeline`, a
+client degrades user experience. Xeno.JS provides `ConcurrencyRetryPipeline`, a
 command pipeline behavior that automatically catches state concurrency conflicts
 and executes retry attempts using exponential backoff and randomized jitter.
 
@@ -203,6 +203,6 @@ standardized 409 API response envelope:
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../../support-us)
