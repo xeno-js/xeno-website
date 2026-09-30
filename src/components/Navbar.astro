@@ -12,6 +12,7 @@ const navItems = [
   { href: '/', label: 'Home', isActive: currentPath === '/' },
   { href: '/docs/introduction', label: 'Docs', isActive: currentPath.startsWith('/docs') },
   { href: '/blog', label: 'Blog', isActive: currentPath.startsWith('/blog') },
+  { href: '/support-us', label: 'Support', isActive: currentPath.startsWith('/support-us') },
 ];
 ---
 
@@ -22,7 +23,7 @@ const navItems = [
     <NavLink href="/" class="flex items-center gap-2 group">
       <img 
         src="/img/logo.png" 
-        alt="Xeno Framework Logo" 
+        alt="Xeno.JS Framework Logo" 
         class="w-8 h-8 object-contain transition-transform group-hover:scale-105" 
       />
       <span class="text-[var(--text-main)] font-[number:var(--h2-weight)] tracking-tight text-[length:var(--h3-size)] font-[family-name:var(--font-sans)]">

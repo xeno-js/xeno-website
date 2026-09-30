@@ -13,12 +13,25 @@ import '@fontsource/inter/800.css';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface ArticleMeta {
+  pubDate: Date;
+  author?: string;
+}
+
 interface Props {
   title: string;
   description: string;
   image?: string;
   canonicalURL?: string;
-  type?: 'website' | 'article';
+  type?: 'website' | 'article' | 'faq';
+  keywords?: string[];
+  faqs?: FAQItem[];
+  articleMeta?: ArticleMeta;
 }
 
 const {
@@ -26,10 +39,111 @@ const {
   description,
   image = '/img/logo.png',
   canonicalURL = Astro.url.href,
-  type = 'website'
+  type = 'website',
+  keywords = ['TypeScript', 'Application Framework', 'Node.js', 'Domain-Driven Design', 'CQRS', 'Dependency Injection', 'Backend'],
+  faqs = [],
+  articleMeta
 } = Astro.props;
 
-// Ottieni il path corrente per evidenziare correttamente i link nella Navbar
+// Costruzione dinamica del grafo JSON-LD in base al tipo di pagina
+const graphNodes: any[] = [
+  {
+    "@type": "WebSite",
+    "@id": "https://xeno-js.it/#website",
+    "url": "https://xeno-js.it",
+    "name": "Xeno.JS",
+    "description": description,
+    "inLanguage": "it-IT",
+    "publisher": {
+      "@id": "https://xeno-js.it/#organization"
+    }
+  },
+  {
+    "@type": "Organization",
+    "@id": "https://xeno-js.it/#organization",
+    "name": "Xeno.JS",
+    "url": "https://xeno-js.it",
+    "logo": {
+      "@type": "ImageObject",
+      "url": new URL(image, Astro.site).href
+    },
+    "sameAs": [
+      "https://github.com/xeno-js/xeno-js"
+    ]
+  }
+];
+
+// Se è la Homepage o una pagina applicativa generale
+if (type === 'website') {
+  graphNodes.push(
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://xeno-js.it/#application",
+      "name": "Xeno.JS",
+      "operatingSystem": "Node.js, Browser",
+      "applicationCategory": "DeveloperApplication",
+      "programmingLanguage": "TypeScript",
+      "softwareVersion": "1.0",
+      "description": description,
+      "url": canonicalURL,
+      "keywords": keywords,
+      "author": {
+        "@id": "https://xeno-js.it/#organization"
+      }
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": "Xeno.JS Source Code",
+      "programmingLanguage": "TypeScript",
+      "codeRepository": "https://github.com/xeno-js/xeno-js",
+      "license": "https://opensource.org/licenses/MIT",
+      "targetProduct": {
+        "@id": "https://xeno-js.it/#application"
+      }
+    }
+  );
+}
+
+// Se è un articolo del blog
+if (type === 'article' && articleMeta) {
+  graphNodes.push({
+    "@type": "TechArticle",
+    "headline": title,
+    "description": description,
+    "url": canonicalURL,
+    "datePublished": articleMeta.pubDate.toISOString(),
+    "inLanguage": "it-IT",
+    "author": {
+      "@type": "Organization",
+      "name": articleMeta.author || "Xeno.JS"
+    },
+    "publisher": {
+      "@id": "https://xeno-js.it/#organization"
+    },
+    "keywords": keywords
+  });
+}
+
+// Se sono presenti FAQ nella pagina
+if (faqs.length > 0) {
+  graphNodes.push({
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  });
+}
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": graphNodes
+};
+
 const currentPath = Astro.url.pathname;
 ---
 
@@ -40,36 +154,33 @@ const currentPath = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-
-    {/* Primary SEO Meta Tags */}
+    
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords.join(', ')} />
     <link rel="canonical" href={canonicalURL} />
 
-    {/* Open Graph / Facebook / LinkedIn */}
+    {/* JSON-LD Dinamico */}
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {<meta property="og:image" content={new URL(image, Astro.site)} />}
+    <meta property="og:image" content={new URL(image, Astro.site).href} />
     <meta property="og:locale" content="it_IT" />
 
-    {/* Twitter Cards */}
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    {<meta property="twitter:image" content={new URL(image, Astro.site)} />}
+    <meta property="twitter:image" content={new URL(image, Astro.site).href} />
 
-    {/* Google / Search Console & Indexing Rules */}
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
-
-    {/* Preload dei font critici per ottimizzare i Cumulative Layout Shift (CLS) */}
   </head>
   <body class="bg-[var(--bg-primary)] text-[var(--text-main)] min-h-screen flex flex-col font-[family-name:var(--font-sans)] antialiased selection:bg-[var(--color-primary)] selection:text-[var(--bg-primary)]">
-    
     {/* Global Top Navbar */}
     <Navbar currentPath={currentPath} />
 
@@ -92,6 +203,5 @@ const currentPath = Astro.url.pathname;
         disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches
       });
     </script>
-
   </body>
 </html>

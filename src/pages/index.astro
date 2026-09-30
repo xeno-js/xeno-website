@@ -7,6 +7,7 @@ import CodeShowCase from '../components/homepage/CodeShowCase.astro';
 import DemoCTA from '../components/homepage/DemoCTA.astro';
 import SupportSection from '../components/homepage/SupportSection.astro';
 import Vision from '../components/homepage/Vision.astro';
+import WhenXenoFits from '../components/homepage/WhenXenoFits.astro';
 
 // Current page path for active state handling
 const currentPath = Astro.url.pathname;
@@ -16,8 +17,10 @@ const currentPath = Astro.url.pathname;
   title="Xeno.JS - Home" 
   description="Xeno.JS is an application architecture framework for TypeScript with explicit dependency injection, DDD, CQRS and modular application boundaries."
   canonicalURL={Astro.url.href}
+  faqs={[]}
 >
   <Hero />
+  <WhenXenoFits />
   <ValueProposition />
   <Features />
   <CodeShowCase />

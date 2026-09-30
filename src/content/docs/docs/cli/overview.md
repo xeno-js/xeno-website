@@ -1,15 +1,15 @@
 ---
-title: 'Xeno CLI: Enterprise Scaffolding Toolkit'
-description: 'Official overview of @xeno-js/cli, the command-line tool for automating the architectural scaffolding of Xeno projects.'
-keywords: 'Xeno CLI, scaffolding, DDD, CQRS, code generator, @xeno-js/cli, architectural automation'
+title: 'Xeno.JS CLI: Enterprise Scaffolding Toolkit'
+description: 'Official overview of @xeno-js/cli, the command-line tool for automating the architectural scaffolding of Xeno.JS projects.'
+keywords: 'Xeno.JS CLI, scaffolding, DDD, CQRS, code generator, @xeno-js/cli, architectural automation'
 author: 'Xeno'
 sidebar:
   order: 1
 ---
 
-## Xeno CLI: Enterprise Scaffolding Toolkit
+## Xeno.JS CLI: Enterprise Scaffolding Toolkit
 
-**Xeno CLI** (`@xeno-js/cli`) is the official command-line interface designed to initialize, configure, and manage projects based on the Xeno framework. Its primary goal is to automate infrastructural scaffolding to natively enforce **Domain-Driven Design (DDD)** and **Command Query Responsibility Segregation (CQRS)** patterns, eliminating boilerplate for both Node.js backend environments (`@xeno-js/core`) and frontend applications (`@xeno-js/vue`).
+**Xeno.JS CLI** (`@xeno-js/cli`) is the official command-line interface designed to initialize, configure, and manage projects based on the Xeno.JS framework. Its primary goal is to automate infrastructural scaffolding to natively enforce **Domain-Driven Design (DDD)** and **Command Query Responsibility Segregation (CQRS)** patterns, eliminating boilerplate for both Node.js backend environments (`@xeno-js/core`) and frontend applications (`@xeno-js/vue`).
 
 Through the CLI, the development team eliminates human error in Dependency Injection wiring and ensures that every new component respects the framework's strict architectural conventions.
 
@@ -58,6 +58,6 @@ Adopting `@xeno-js/cli` is not just a convenience (Developer Experience), but a 
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

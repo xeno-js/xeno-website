@@ -11,7 +11,14 @@ export const collections = {
 			title: z.string(),
 			description: z.string(),
 			pubDate: z.date(),
-			author: z.string().default('Xeno'),
+			author: z.string().default('Xeno.JS'),
+			keywords: z.string(),
+			faqs: z.array(z.object({
+				question: z.string(),
+				answer: z.string()
+			})),
+			image: z.string(),
+			canonical: z.string()
 		}),
 	}),
 };

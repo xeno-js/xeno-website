@@ -1,146 +1,115 @@
 ---
+// src/components/homepage/PackagesExplore.astro
 import Button from "../ui/Button.astro";
 
-// src/components/homepage/PackagesExplore.astro
+interface PackageItem {
+  name: string;
+  description: string;
+  icon: string;
+  docsUrl: string;
+  githubUrl: string;
+  delay: number;
+}
+
+const packages: PackageItem[] = [
+  {
+    name: "@xeno-js/core",
+    description: "Dependency Injection, scopes, request context, CQRS execution, pipelines, modules, transactions, repositories, and infrastructure composition.",
+    icon: "bi-cpu",
+    docsUrl: "/docs/core/introduction",
+    githubUrl: "https://github.com/xeno-js/xeno-js",
+    delay: 0,
+  },
+  {
+    name: "@xeno-js/vue",
+    description: "Use explicit frontend composition, CQRS-style commands and queries, pipelines, context, validation, and data sources inside Vue applications.",
+    icon: "bi-browser-edge",
+    docsUrl: "/docs/vue/overview",
+    githubUrl: "https://github.com/xeno-js/xeno-fe",
+    delay: 100,
+  },
+  {
+    name: "@xeno-js/shared",
+    description: "Domain primitives, value objects, aggregates, domain events, Result types, errors, and application contracts.",
+    icon: "bi-layers-half",
+    docsUrl: "/docs/shared/overview",
+    githubUrl: "https://github.com/xeno-js/xeno-shared",
+    delay: 200,
+  },
+  {
+    name: "@xeno-js/cli",
+    description: "Scaffold projects and generate application components instead of rebuilding the same structure by hand.",
+    icon: "bi-terminal",
+    docsUrl: "/docs/cli/overview",
+    githubUrl: "https://github.com/xeno-js/xeno-cli",
+    delay: 300,
+  },
+];
 ---
 
 <section class="py-32 bg-[var(--bg-tertiary)] relative overflow-hidden" id="packages">
   
-  <!-- Sottile linea di accento superiore per separare visivamente le sezioni -->
+  <!-- Sottile linea di accento superiore -->
   <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent opacity-20"></div>
 
   <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
     
-    <!-- Intestazione orizzontale compatta -->
+    <!-- Intestazione -->
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6" data-aos="fade-right">
       <div class="max-w-2xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
-        <i class="bi bi-boxes"></i> THE ECOSYSTEM
-      </div>
+          <i class="bi bi-boxes"></i> THE ECOSYSTEM
+        </div>
         <h2 class="text-[var(--h2-size)] font-[var(--h1-weight)] text-[var(--text-main)] mb-3 tracking-tight">
           One architecture. <span class="text-[var(--color-primary)]">Different responsibilities</span>
         </h2>
-        <p>
+        <p class="text-[var(--text-muted)]">
           Explore Xeno.Js Ecosystem
         </p>
       </div>
     </div>
 
-    <!-- Griglia 2x2 stile Dashboard/Pannelli -->
+    <!-- Griglia 2x2 -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      
-      <!-- Pacchetto Core -->
-      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="0">
-        <div class="flex justify-between items-start mb-8">
-          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
-            <i class="bi bi-cpu"></i>
+      {packages.map((pkg) => (
+        <div 
+          class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" 
+          data-aos="fade-up" 
+          data-aos-delay={pkg.delay}
+        >
+          <div class="flex justify-between items-start mb-8">
+            <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
+              <i class={`bi ${pkg.icon}`}></i>
+            </div>
+          </div>
+          <div class="mt-auto flex flex-col flex-grow">
+            <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">
+              {pkg.name}
+            </h3>
+            <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
+              {pkg.description}
+            </p>
+            <div class="flex items-center gap-3 mt-auto">
+              <Button 
+                href={pkg.docsUrl} 
+                variant="primary" 
+                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm"
+              >
+                <i class="bi bi-book"></i> Docs
+              </Button>
+              <Button
+                href={pkg.githubUrl}
+                variant="secondary"
+                class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
+                target="_blank"
+              >
+                <i class="bi bi-github"></i> GitHub
+              </Button>
+            </div>
           </div>
         </div>
-        <div class="mt-auto flex flex-col flex-grow">
-          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/core</h3>
-          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            Dependency Injection, scopes, request context, CQRS execution, pipelines, modules, transactions, repositories, and infrastructure composition.
-          </p>
-          <div class="flex items-center gap-3 mt-auto">
-            <Button href="/docs/core/introduction" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
-              <i class="bi bi-book"></i> Docs
-            </Button>
-            <Button
-        href="https://github.com/xeno-js/xeno-js"
-        variant="secondary"
-        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
-        target="_blank"
-      >
-        <i class="bi bi-github"></i> Codespace
-      </Button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pacchetto Vue -->
-      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="100">
-        <div class="flex justify-between items-start mb-8">
-          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
-            <i class="bi bi-browser-edge"></i>
-          </div>
-        </div>
-        <div class="mt-auto flex flex-col flex-grow">
-          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/vue</h3>
-          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            Use explicit frontend composition, CQRS-style commands and queries, pipelines, context, validation, and data sources inside Vue applications.
-          </p>
-          <div class="flex items-center gap-3 mt-auto">
-            <Button href="/docs/vue/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
-              <i class="bi bi-book"></i> Docs
-            </Button>
-            <Button
-        href="https://github.com/xeno-js/xeno-fe"
-        variant="secondary"
-        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
-        target="_blank"
-      >
-        <i class="bi bi-github"></i> Codespace
-      </Button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pacchetto Shared -->
-      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="200">
-        <div class="flex justify-between items-start mb-8">
-          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
-            <i class="bi bi-layers-half"></i>
-          </div>
-        </div>
-        <div class="mt-auto flex flex-col flex-grow">
-          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/shared</h3>
-          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            Domain primitives, value objects, aggregates, domain events, Result types, errors, and application contracts.
-          </p>
-          <div class="flex items-center gap-3 mt-auto">
-            <Button href="/docs/shared/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
-              <i class="bi bi-book"></i> Docs
-            </Button>
-            <Button
-        href="https://github.com/xeno-js/xeno-shared"
-        variant="secondary"
-        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
-        target="_blank"
-      >
-        <i class="bi bi-github"></i> Codespace
-      </Button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pacchetto CLI -->
-      <div class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" data-aos="fade-up" data-aos-delay="300">
-        <div class="flex justify-between items-start mb-8">
-          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
-            <i class="bi bi-terminal"></i>
-          </div>
-        </div>
-        <div class="mt-auto flex flex-col flex-grow">
-          <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">@xeno-js/cli</h3>
-          <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-            Scaffold projects and generate application components instead of rebuilding the same structure by hand.
-          </p>
-          <div class="flex items-center gap-3 mt-auto">
-            <Button href="/docs/cli/overview" variant="primary" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
-              <i class="bi bi-book"></i> Docs
-            </Button>
-            <Button
-        href="https://github.com/xeno-js/xeno-cli"
-        variant="secondary"
-        class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
-        target="_blank"
-      >
-        <i class="bi bi-github"></i> Codespace
-      </Button>
-          </div>
-        </div>
-      </div>
-
+      ))}
     </div>
+
   </div>
 </section>

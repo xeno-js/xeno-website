@@ -1,0 +1,213 @@
+---
+// Section: Split Layout Pinned Scroll with Responsive Behaviors (Stack on Desktop/Tablet, Single Item Carousel on Mobile)
+const steps = [
+  {
+    id: 1,
+    tag: "Architecture",
+    icon: "bi-boxes",
+    title: "Build a large TypeScript application without framework coupling.",
+    description: "Xeno.JS gives you a cohesive set of decoupled primitives designed for long-lived systems, keeping your domain pure and maintainable.",
+    items: [
+      "Explicit dependency injection",
+      "Native CQRS (Commands & Queries)",
+      "Strict application boundaries",
+      "Request-scoped execution context",
+      "Modular infrastructure adapters",
+      "Full-stack Vue integration"
+    ]
+  },
+  {
+    id: 2,
+    tag: "Ideal Use Cases",
+    icon: "bi-bullseye",
+    title: "Xeno.JS is for you if...",
+    description: "Recognize the exact inflection point where standard framework conventions start slowing your team down.",
+    items: [
+      "Your backend is becoming large and difficult to scale.",
+      "Your domain logic is getting mixed with database code.",
+      "You want CQRS without assembling 10 different libraries.",
+      "You don't want decorator-driven DI or hidden magic.",
+      "You want the same architectural model on Node & Vue."
+    ]
+  }
+];
+---
+
+<section id="split-scroll-section" class="relative h-[250vh]">
+  
+  {/* Viewport bloccato con layout a due colonne */}
+  <div class="sticky top-24 h-[calc(100vh-6rem)] flex items-center max-w-7xl mx-auto px-6 overflow-hidden">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-16 w-full items-center">
+      
+      {/* COLONNA SINISTRA: Testi dinamici sovrapposti nella stessa cella */}
+      <div class="lg:col-span-5 grid grid-cols-1 grid-rows-1">
+        {steps.map((step, idx) => (
+          <div 
+            id={`text-block-${step.id}`} 
+            class={`col-start-1 row-start-1 transition-all duration-500 ${idx === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6 pointer-events-none'}`}
+          >
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
+              <i class={`bi ${step.icon}`}></i> {step.tag}
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--text-main)] leading-tight mb-4">
+              {step.title}
+            </h2>
+            <p class="text-[var(--text-muted)] text-base sm:text-lg">
+              {step.description}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* COLONNA DESTRA: Liste dinamiche (Gestisce il multi-item da tablet/desktop e il singolo item da mobile) */}
+      <div class="lg:col-span-7 grid grid-cols-1 grid-rows-1">
+        {steps.map((step, idx) => (
+          <div 
+            id={`list-container-${step.id}`} 
+            class={`col-start-1 row-start-1 space-y-3 md:space-y-3 transition-opacity duration-300 ${idx === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          >
+            {step.items.map((item, itemIdx) => (
+              <div 
+                id={`item-${step.id}-${itemIdx}`} 
+                class={`reveal-item-${step.id} opacity-0 translate-y-6 transition-all duration-500 flex items-center gap-3 bg-[var(--bg-primary)] p-4 rounded-[var(--border-radius)] border border-[var(--border-color)]`}
+              >
+                <span class="text-[var(--color-primary)] font-bold text-lg">✓</span>
+                <span class="text-[var(--text-main)] font-medium">{item}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const section = document.getElementById('split-scroll-section');
+    if (!section) return;
+
+    const rect = section.getBoundingClientRect();
+    const sectionHeight = section.offsetHeight - window.innerHeight;
+    const progress = Math.max(0, Math.min(1, -rect.top / sectionHeight));
+
+    const text1 = document.getElementById('text-block-1');
+    const text2 = document.getElementById('text-block-2');
+    const list1 = document.getElementById('list-container-1');
+    const list2 = document.getElementById('list-container-2');
+
+    const items1 = document.querySelectorAll('.reveal-item-1');
+    const items2 = document.querySelectorAll('.reveal-item-2');
+
+    if (!text1 || !text2 || !list1 || !list2) return;
+
+    // Se siamo su Tablet o Desktop (md >= 768px), manteniamo il tuo script originale (accumulo/rivelazione elenco)
+    // Se siamo su Mobile (< 768px), attiviamo la visualizzazione di un solo item alla volta (stile carousel)
+    const isMobile = window.innerWidth < 768;
+
+    if (progress > 0.5) {
+      // Step 2 attivo
+      text1.style.opacity = '0';
+      text1.style.transform = 'translateY(-15px)';
+      text1.style.pointerEvents = 'none';
+
+      text2.style.opacity = '1';
+      text2.style.transform = 'translateY(0)';
+      text2.style.pointerEvents = 'auto';
+
+      list1.style.opacity = '0';
+      list1.style.pointerEvents = 'none';
+
+      list2.style.opacity = '1';
+      list2.style.pointerEvents = 'auto';
+
+      const subProgress = (progress - 0.5) * 2;
+      
+      if (isMobile) {
+        // Logica Mobile: Un solo item alla volta
+        const activeIdx = Math.min(Math.floor(subProgress * items2.length), items2.length - 1);
+        items2.forEach((item, index) => {
+          const el = item as HTMLElement;
+          if (index === activeIdx) {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+            el.style.pointerEvents = 'auto';
+            el.style.position = 'relative';
+          } else {
+            el.style.opacity = '0';
+            el.style.transform = index < activeIdx ? 'translateY(-15px)' : 'translateY(15px)';
+            el.style.pointerEvents = 'none';
+            el.style.position = 'absolute';
+          }
+        });
+      } else {
+        // Logica Tablet/Desktop: Il tuo script originale con accumulo progressivo
+        const activeIndex = Math.floor(subProgress * items2.length);
+        items2.forEach((item, index) => {
+          const el = item as HTMLElement;
+          el.style.position = 'relative';
+          if (index <= activeIndex) {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          } else {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(16px)';
+          }
+        });
+      }
+
+    } else {
+      // Step 1 attivo
+      text1.style.opacity = '1';
+      text1.style.transform = 'translateY(0)';
+      text1.style.pointerEvents = 'auto';
+
+      text2.style.opacity = '0';
+      text2.style.transform = 'translateY(15px)';
+      text2.style.pointerEvents = 'none';
+
+      list1.style.opacity = '1';
+      list1.style.pointerEvents = 'auto';
+
+      list2.style.opacity = '0';
+      list2.style.pointerEvents = 'none';
+
+      const subProgress = progress * 2;
+
+      if (isMobile) {
+        // Logica Mobile: Un solo item alla volta
+        const activeIdx = Math.min(Math.floor(subProgress * items1.length), items1.length - 1);
+        items1.forEach((item, index) => {
+          const el = item as HTMLElement;
+          if (index === activeIdx) {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+            el.style.pointerEvents = 'auto';
+            el.style.position = 'relative';
+          } else {
+            el.style.opacity = '0';
+            el.style.transform = index < activeIdx ? 'translateY(-15px)' : 'translateY(15px)';
+            el.style.pointerEvents = 'none';
+            el.style.position = 'absolute';
+          }
+        });
+      } else {
+        // Logica Tablet/Desktop: Il tuo script originale con accumulo progressivo
+        const activeIndex = Math.floor(subProgress * items1.length);
+        items1.forEach((item, index) => {
+          const el = item as HTMLElement;
+          el.style.position = 'relative';
+          if (index <= activeIndex) {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          } else {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(16px)';
+          }
+        });
+      }
+    }
+  });
+</script>

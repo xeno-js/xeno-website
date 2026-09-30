@@ -142,7 +142,7 @@ h3 {
 p {
   font-size: var(--body-size);
   font-weight: var(--body-weight);
-  color: var(--text-muted);
+  color: var(--text-main);
   margin: 0 0 1rem 0;
   line-height: 1.6;
 }
@@ -173,4 +173,16 @@ p strong {
   background-color: var(--color-primary);
   font-weight: 600;
   text-decoration: underline 2px var(--color-primary);
+}
+
+.astro-vdxcvpsm h1,
+.astro-vdxcvpsm h2,
+.astro-vdxcvpsm h3,
+.astro-vdxcvpsm a[aria-current="true"] {
+  color: var(--color-primary)
+}
+
+.astro-vdxcvpsm a[aria-current="page"]
+{
+  background-color: var(--color-primary);
 }

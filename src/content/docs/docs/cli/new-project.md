@@ -1,7 +1,7 @@
 ---
 title: 'New Project Scaffolding: Architectural Initialization'
-description: 'Discover how the Xeno CLI NewProjectCommand performs interactive scaffolding using CoreScaffoldStrategy and VueScaffoldStrategy.'
-keywords: 'NewProjectCommand, Scaffolding, CLI Architecture, CoreScaffoldStrategy, VueScaffoldStrategy, CommandRunner, Xeno CLI'
+description: 'Discover how the Xeno.JS CLI NewProjectCommand performs interactive scaffolding using CoreScaffoldStrategy and VueScaffoldStrategy.'
+keywords: 'NewProjectCommand, Scaffolding, CLI Architecture, CoreScaffoldStrategy, VueScaffoldStrategy, CommandRunner, Xeno.JS CLI'
 author: 'Xeno'
 sidebar:
   order: 2
@@ -9,7 +9,7 @@ sidebar:
 
 ## New Project Scaffolding: Architectural Initialization
 
-Creating enterprise infrastructure usually requires days of configuration to align linters, bundlers, IoC containers, and system modules. The `NewProjectCommand` in the Xeno CLI automates this process in seconds, ensuring that every new ecosystem (backend or frontend) is born already adhering to the framework's strict architectural standards.
+Creating enterprise infrastructure usually requires days of configuration to align linters, bundlers, IoC containers, and system modules. The `NewProjectCommand` in the Xeno.JS CLI automates this process in seconds, ensuring that every new ecosystem (backend or frontend) is born already adhering to the framework's strict architectural standards.
 
 ---
 
@@ -90,6 +90,6 @@ The final result is a complete, typed architecture, wired for Dependency Injecti
 
 ## Support Us
 
-Xeno is an MIT-licensed open source project. It can grow thanks to the support
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
 of these awesome people. If you'd like to join them, please read more at
 [support section](../support-us)

@@ -1,7 +1,6 @@
 ---
 
 ---
-
 <section class="py-24 bg-[var(--bg-secondary)]">
   <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Section Header -->
@@ -19,13 +18,13 @@
       <p
         class="text-[var(--body-size)] text-[var(--text-muted)] leading-relaxed"
       >
-Xeno makes the application architecture explicit. <br>
+Xeno.JS makes the application architecture explicit. <br>
 
 It gives TypeScript applications clear boundaries for domain logic,
 use cases, dependencies, request context, and cross-cutting execution. <br>
 
 Keep the HTTP framework, UI framework, and infrastructure you already use.
-Xeno sits underneath them and gives the application layer a structure
+Xeno.JS sits underneath them and gives the application layer a structure
 that remains visible as the codebase grows.
       </p>
     </div>
@@ -47,10 +46,7 @@ that remains visible as the codebase grows.
           Zero-Magic Inversion of Control
         </h3>
         <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          No experimental decorators or directory auto-scanning. Xeno uses an
-          explicit and deterministic IoC container that prevents memory leaks,
-          ensures safe type resolution at compile time, and protects domain
-          boundaries.
+          No decorators or directory scanning. Dependencies are registered explicitly, making application composition visible and deterministic.
         </p>
       </div>
 
@@ -69,10 +65,7 @@ that remains visible as the codebase grows.
           Native CQRS & Pipeline
         </h3>
         <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          Logically and physically separate state mutations (Commands) from data
-          retrieval (Queries). Manage schema validation, caching, telemetry, and
-          resilience through cross-cutting middleware executed before business
-          logic.
+          Commands and Queries make application intent explicit. Pipelines keep validation, logging, caching, resilience, and other cross-cutting concerns outside business logic.
         </p>
       </div>
 
@@ -88,12 +81,10 @@ that remains visible as the codebase grows.
         <h3
           class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0"
         >
-          Full-Stack Isomorphic Architecture
+          One Application Model
         </h3>
         <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          Bridge the gap between backend and frontend. Share the same rigor of
-          Domain-Driven Design, primitives, pipelines, and error monads (Result)
-          across the Node.js server and distributed client.
+          Use the same architectural language across Node.js and Vue: domain primitives, application contracts, commands, queries, pipelines, and explicit context.
         </p>
       </div>
     </div>
