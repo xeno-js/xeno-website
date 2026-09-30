@@ -303,22 +303,18 @@ Technology
 
 Documentation
 
-* Official Documentation
-* Core Documentation
-* Core Getting Started
-* Core Fundamentals
-* Vue Documentation
-* Shared Documentation
-* CLI Documentation
-* Contributing Guide
-* Project Support
+* [Official Documentation](https://www.xeno-js.it/docs/introduction)
+* [Getting Started](https://www.xeno-js.it/docs/getting_started/installation)
+* [Overview](https://www.xeno-js.it/docs/introduction/why-xeno-js)
+* [Fundamentals](https://www.xeno-js.it/docs/fundamentals/overview)
+* [CLI](https://www.xeno-js.it/docs/cli/overview)
 
 Source Repositories
 
-* Xeno.JS Core
-* Xeno.JS Vue
-* Xeno.JS Shared
-* Xeno.JS CLI
+* [Xeno.JS Core](https://github.com/xeno-js/xeno-js)
+* [Xeno.JS Vue](https://github.com/xeno-js/xeno-fe)
+* [Xeno.JS Shared](https://github.com/xeno-js/xeno-shared)
+* [Xeno.JS CLI](https://github.com/xeno-js/xeno-cli)
 
 License
 
