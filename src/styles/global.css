@@ -2,7 +2,7 @@
 
 :root {
   /* Dark theme default, matching Starlight dark mode */
-  --color-primary: rgb(201, 245, 27);
+  --color-primary: #c9f51b;
   --color-primary-hover: #b5dc15;
 
   --bg-primary: #0a0a0a;
@@ -185,4 +185,23 @@ p strong {
 .astro-vdxcvpsm a[aria-current="page"]
 {
   background-color: var(--color-primary);
+}
+
+#blog-post a,
+#blog-post h2,
+#blog-post h3,
+#blog-post strong {
+  color: var(--color-primary)
+}
+
+#blog-post table {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+  border: 2px solid var(--color-primary);
+}
+
+#blog-post table th, 
+#blog-post table td {
+  border-left: 1px solid var(--color-primary);
 }

@@ -26,7 +26,10 @@ interface ArticleMeta {
 interface Props {
   title: string;
   description: string;
-  image?: string;
+  image?: {
+    src: string;
+    alt: string;
+  } | null;
   canonicalURL?: string;
   type?: 'website' | 'article' | 'faq';
   keywords?: string[];
@@ -37,7 +40,7 @@ interface Props {
 const {
   title,
   description,
-  image = '/img/logo.png',
+  image = { src: '/img/logo.png', alt: 'Xeno.JS Logo' },
   canonicalURL = Astro.url.href,
   type = 'website',
   keywords = ['TypeScript', 'Application Framework', 'Node.js', 'Domain-Driven Design', 'CQRS', 'Dependency Injection', 'Backend'],
@@ -65,7 +68,7 @@ const graphNodes: any[] = [
     "url": "https://xeno-js.it",
     "logo": {
       "@type": "ImageObject",
-      "url": new URL(image, Astro.site).href
+      "url": new URL(image.src, Astro.site).href
     },
     "sameAs": [
       "https://github.com/xeno-js/xeno-js"
@@ -168,14 +171,14 @@ const currentPath = Astro.url.pathname;
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.site).href} />
+    <meta property="og:image" content={new URL(image.src, Astro.site).href} />
     <meta property="og:locale" content="it_IT" />
 
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, Astro.site).href} />
+    <meta property="twitter:image" content={new URL(image.src, Astro.site).href} />
 
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />

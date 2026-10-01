@@ -13,12 +13,18 @@ export const collections = {
 			pubDate: z.date(),
 			author: z.string().default('Xeno.JS'),
 			keywords: z.string(),
+			canonical: z.string().url(),
+			category: z.string().optional(),
+			tags: z.array(z.string()).optional(),
+			featured: z.boolean().optional(),
 			faqs: z.array(z.object({
 				question: z.string(),
 				answer: z.string()
-			})),
-			image: z.string(),
-			canonical: z.string()
+			})).default([]),
+			image: z.union([
+				z.string(),
+				z.object({ src: z.string(), alt: z.string() })
+			]).optional(),
 		}),
 	}),
 };
