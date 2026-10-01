@@ -178,7 +178,8 @@ p strong {
 .astro-vdxcvpsm h1,
 .astro-vdxcvpsm h2,
 .astro-vdxcvpsm h3,
-.astro-vdxcvpsm a[aria-current="true"] {
+.astro-vdxcvpsm a[aria-current="true"],
+.astro-vdxcvpsm strong {
   color: var(--color-primary)
 }
 

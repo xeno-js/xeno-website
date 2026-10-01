@@ -47,7 +47,8 @@ export default defineConfig({
           items: [
             { label: 'Overview', link: '/docs/fundamentals/overview'},
             { label: 'XenoRegistry', link: '/docs/fundamentals/xeno-registry'},
-            { label: 'Xeno AppBuilder', link: '/docs/fundamentals/app-builder'},
+            { label: 'Xeno AppBuilder', link: '/docs/fundamentals/app-builder' },
+            { label: 'Service Container', link: '/docs/fundamentals/service-container' },
           ]
         },
         {
