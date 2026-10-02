@@ -51,7 +51,7 @@ keyFacts:
 
 ---
 
-## Installation
+## Introduction
 
 Before creating a Xeno.JS project, make sure you have:
 

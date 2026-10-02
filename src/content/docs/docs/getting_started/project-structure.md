@@ -50,7 +50,7 @@ keyFacts:
 
 ---
 
-## Project Structure
+## Introduction
 
 When you create a project with the Xeno CLI, the CLI generates a concrete starting project rather than an abstract architecture template.
 

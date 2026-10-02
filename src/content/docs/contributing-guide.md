@@ -49,7 +49,7 @@ keyFacts:
 - "Pull requests should focus on a clear and reviewable change."
 ---
 
-## Contributing to Xeno.JS
+## Introduction
 
 Thank you for your interest in contributing to Xeno.JS.
 

@@ -7,7 +7,7 @@ sidebar:
   order: 2
 ---
 
-## New Project Scaffolding: Architectural Initialization
+## Introduction
 
 Creating enterprise infrastructure usually requires days of configuration to align linters, bundlers, IoC containers, and system modules. The `NewProjectCommand` in the Xeno.JS CLI automates this process in seconds, ensuring that every new ecosystem (backend or frontend) is born already adhering to the framework's strict architectural standards.
 

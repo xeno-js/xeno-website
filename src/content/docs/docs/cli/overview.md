@@ -7,7 +7,7 @@ sidebar:
   order: 1
 ---
 
-## Xeno.JS CLI: Enterprise Scaffolding Toolkit
+## Introduction
 
 **Xeno.JS CLI** (`@xeno-js/cli`) is the official command-line interface designed to initialize, configure, and manage projects based on the Xeno.JS framework. Its primary goal is to automate infrastructural scaffolding to natively enforce **Domain-Driven Design (DDD)** and **Command Query Responsibility Segregation (CQRS)** patterns, eliminating boilerplate for both Node.js backend environments (`@xeno-js/core`) and frontend applications (`@xeno-js/vue`).
 

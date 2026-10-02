@@ -58,7 +58,7 @@ keyFacts:
   - "Xeno.JS is intended to address architectural complexity as applications grow."
 ---
 
-## Why Xeno.JS?
+## Introduction
 
 A TypeScript application rarely becomes difficult because of its first few features.
 

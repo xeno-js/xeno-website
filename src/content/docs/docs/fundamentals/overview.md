@@ -55,7 +55,7 @@ keyFacts:
   - "Context and scopes define execution context and scoped dependency boundaries."
 --- 
 
-## Overview
+## Introduction
 
 Fundamentals introduces the core building blocks that Xeno.JS provides for composing an application.
 
@@ -166,7 +166,7 @@ This creates a clear distinction between:
 2. **composition** — configuring those registrations;
 3. **resolution** — obtaining the required dependency at runtime.
 
-See [Service Container](./service-container) for more information.
+See [Service Container](../dependency-injection/service-container) for more information.
 
 ---
 
@@ -209,8 +209,6 @@ Xeno.JS supports explicit service lifetimes such as:
 * **Transient** — a new instance created when the dependency is resolved.
 
 Choosing a lifetime is therefore part of application composition, rather than an implementation detail hidden from the developer.
-
-See [Service Lifetimes](./service-lifetimes) for more information.
 
 ---
 
@@ -279,11 +277,8 @@ If you are new to Xeno.JS, the recommended order is:
 
 1. [Xeno Registry](./xeno-registry)
 2. [App Builder](./app-builder)
-3. [Service Container](./service-container)
-4. [Dependency Injection](./dependency-injection)
-5. [Service Lifetimes](./service-lifetimes)
-6. [Modules](./modules)
-7. [Context & Scopes](./context-and-scopes)
+3. [Service Container](../dependency-injection/service-container)
+4. [Context & Scopes](./context-and-scopes)
 
 These concepts form the foundation for understanding the rest of the framework.
 

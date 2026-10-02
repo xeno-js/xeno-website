@@ -28,9 +28,7 @@ related:
 prerequisites:
   - "/docs/fundamentals"
 relatedTopics:
-  - "/docs/fundamentals/service-container"
-  - "/docs/fundamentals/dependency-injection"
-  - "/docs/fundamentals/service-lifetimes"
+  - "/docs/dependency-injection/service-container"
 faqs:
   - question: "What is the Xeno Registry?"
     answer: "The Xeno Registry defines and organizes the dependency vocabulary used by a Xeno.JS application, including application-specific dependency tokens."
@@ -55,13 +53,13 @@ keyFacts:
   - "The Registry should not be used to store runtime application state."
 ---
 
-## Xeno Registry
+## Introduction
 
 The **Xeno Registry** is the mechanism used by Xeno.JS to define the application's dependency vocabulary.
 
 It provides a centralized place for application-specific tokens and registrations, allowing different parts of an application to refer to dependencies explicitly rather than relying on implicit names or global state.
 
-The registry works together with the [App Builder](./app-builder.md) and the [Service Container](./service-container.md) to turn those definitions into runtime dependencies.
+The registry works together with the [App Builder](./app-builder) and the [Service Container](../dependency-injection/service-container) to turn those definitions into runtime dependencies.
 
 ## Why a Registry?
 
@@ -241,7 +239,7 @@ The application service does not need to know how the repository was constructed
 
 The composition layer connects the token to the implementation.
 
-For more information about resolving dependencies, see [Dependency Injection](./dependency-injection.md).
+For more information about resolving dependencies, see [Dependency Injection](./dependency-injection).
 
 ## Registry and Infrastructure
 
@@ -306,7 +304,7 @@ The generated registry extends `XenoRegistry` and provides the starting point fo
 
 As the application grows, this file can become part of the application's composition model alongside `bootstrap.ts`.
 
-See [Project Structure](../getting-started/project-structure.md) for more information about the generated project.
+See [Project Structure](../getting-started/project-structure) for more information about the generated project.
 
 ## Summary
 
@@ -335,7 +333,7 @@ Service Container
 Resolved Dependencies
 ```
 
-Once the Registry is understood, the next step is to understand how the application composition is assembled through the [App Builder](./app-builder.md).
+Once the Registry is understood, the next step is to understand how the application composition is assembled through the [App Builder](./app-builder).
 
 ---
 

@@ -24,13 +24,11 @@ breadcrumbs:
   url: "https://www.xeno-js.it/docs/fundamentals/app-builder"
 related:
   next:
-  - "/docs/fundamentals/service-container"
+  - "/docs/dependency-injection/service-container"
 prerequisites:
 - "/docs/fundamentals/xeno-registry"
 relatedTopics:
-- "/docs/fundamentals/service-container"
-- "/docs/fundamentals/dependency-injection"
-- "/docs/fundamentals/modules"
+- "/docs/dependency-injection/service-container"
 - "/docs/application/pipelines"
 faqs:
 - question: "What is AppBuilder in Xeno.JS?"
@@ -58,7 +56,7 @@ keyFacts:
 
 ---
 
-## What is AppBuilder
+## Introduction
 
 `AppBuilder` is the **composition root** of a Xeno.JS application.
 
@@ -191,7 +189,7 @@ USER_SERVICE
      └── USER_REPOSITORY
 ```
 
-For more information about service registration and lifetimes, see [Service Container](/docs/fundamentals/service-container).
+For more information about service registration and lifetimes, see [Service Container](../dependency-injection/service-container).
 
 ---
 

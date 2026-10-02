@@ -70,9 +70,7 @@ related:
 - "/docs/overview"
 - "/docs/xeno-registry"
 - "/docs/app-builder"
-- "/docs/service-container"
-- "/docs/service-lifetimes"
-- "/docs/modules"
+- "/docs/dependency-injection/service-container"
 - "/docs/context-and-scopes"
 
 schema:
@@ -82,7 +80,7 @@ schema:
   mainEntityOfPage: "https://www.xeno-js.it/docs/dependency-injection"
 ---
 
-## Dependency Injection
+## Introduction
 
 Xeno.JS uses **explicit dependency injection** to compose application services.
 

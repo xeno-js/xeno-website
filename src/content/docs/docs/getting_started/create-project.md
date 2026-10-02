@@ -49,7 +49,7 @@ keyFacts:
 
 ---
 
-## Create a Project
+## Introduction
 
 The Xeno.JS CLI can scaffold a new application with the initial Xeno.JS architecture.
 

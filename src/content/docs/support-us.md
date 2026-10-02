@@ -48,7 +48,7 @@ keyFacts:
 
 ---
 
-## Support Xeno.JS
+## Introduction
 
 Xeno.JS is an open-source project built for developers who want explicit application architecture for TypeScript.
 

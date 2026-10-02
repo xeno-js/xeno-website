@@ -46,7 +46,7 @@ faqs:
 related:
 - "/docs/introduction/overview"
 - "/docs/fundamentals/app-builder"
-- "/docs/fundamentals/service-container"
+- "/docs/dependency-injection/service-container"
 - "/docs/application/cqrs"
 
 schema:
@@ -95,7 +95,6 @@ Xeno.JS provides HTTP infrastructure, middleware, authentication, security-relat
 The architectural distinction is that **HTTP is not the boundary that defines the application model**.
 
 With Xeno.JS, HTTP can remain one delivery mechanism for an application that is also accessible through workers, CLI commands, queues, scheduled jobs, or other entry points.
-
 
 The important difference is not the number of features.
 

@@ -77,7 +77,7 @@ keyFacts:
 - "@xeno-js/cli scaffolds projects and generates architecture-aligned application components."
 ---
 
-## Architecture Overview
+## Introduction
 
 Xeno.JS is built around an **application-centered architecture**.
 

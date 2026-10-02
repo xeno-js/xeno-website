@@ -61,7 +61,7 @@ keyFacts:
 - "Frameworks and transports are treated as boundaries around the application rather than as the application architecture itself."
 ---
 
-## Xeno.JS Core Principles
+## Introduction
 
 Xeno.JS is built around a simple architectural idea:
 

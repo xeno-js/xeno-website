@@ -7,7 +7,7 @@ sidebar:
   order: 3
 ---
 
-## CQRS Generators: Domain Automation
+## Introduction
 
 The rigorous implementation of **Command Query Responsibility Segregation (CQRS)** and **Clean Architecture** patterns dictates a strict separation of concerns. In a manual workflow, this translates into creating numerous files (Intent, Handler, Controller/Composable, Models, Validation Schemas) and correctly wiring them into the Inversion of Control container.
 
