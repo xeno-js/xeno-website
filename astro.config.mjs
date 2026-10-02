@@ -53,6 +53,22 @@ export default defineConfig({
           ]
         },
         {
+          label: 'Application',
+          items: [
+            { label: 'Overview', link: '/docs/application/overview' },
+            {
+              label: 'Pipelines',
+              items: [
+                { label: 'Exception Pipeline', link: '/docs/application/pipelines/exception' },
+                { label: 'Logging Pipeline', link: '/docs/application/pipelines/logging' },
+                { label: 'Performance Pipeline', link: '/docs/application/pipelines/performance' },
+                { label: 'Validation Pipeline', link: '/docs/application/pipelines/validation' },
+                { label: 'Concurrency Pipeline', link: '/docs/application/pipelines/concurrency' },
+              ]
+            },
+          ]
+        },
+        {
           label: 'CLI',
           items: [
             { label: 'Overview', link: '/docs/cli/overview'},

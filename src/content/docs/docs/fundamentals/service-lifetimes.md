@@ -883,3 +883,11 @@ For scopes and execution context, see [Context & Scopes](./context-and-scopes).
 ## For service registration and resolution, see [Service Container](./service-container).
 
 [Non verificato] I dettagli sul comportamento di disposal e sul collegamento concreto tra HTTP execution e scope dipendono dall'implementazione/runtime corrente e vanno mantenuti allineati ai test del repository quando questa pagina viene aggiornata.
+
+---
+
+## Support Us
+
+Xeno.JS is an MIT-licensed open source project. It can grow thanks to the support
+of these awesome people. If you'd like to join them, please read more at
+[support section](../../support-us)

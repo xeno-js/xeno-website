@@ -307,6 +307,7 @@ Documentation
 * [Getting Started](https://www.xeno-js.it/docs/getting_started/installation)
 * [Overview](https://www.xeno-js.it/docs/introduction/why-xeno-js)
 * [Fundamentals](https://www.xeno-js.it/docs/fundamentals/overview)
+* [Application](https://www.xeno-js.it/docs/application/overview)
 * [CLI](https://www.xeno-js.it/docs/cli/overview)
 
 Source Repositories
