@@ -112,6 +112,7 @@ export default defineConfig({
             { label: 'Node PostgreSQL', link: '/docs/data/node-postgresql' },
             { label: 'SQLite', link: '/docs/data/sqllite' },
             { label: 'Unit of Work', link: '/docs/data/unit-of-work' },
+            { label: 'Db Schema', link: '/docs/data/db-schema' },
           ]
         },
         {
