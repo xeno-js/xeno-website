@@ -123,6 +123,22 @@ export default defineConfig({
             { label: 'SQLite', link: '/docs/data/sqllite' },
             { label: 'Unit of Work', link: '/docs/data/unit-of-work' },
             { label: 'Db Schema', link: '/docs/data/db-schema' },
+            {
+              label: 'Repositories',
+              collapsed: true,
+              items: [
+                { label: 'Repository', link: '/docs/data/repositories/repository' },
+                { label: 'Read Dao', link: '/docs/data/repositories/read-dao' },
+              ]
+            },
+            {
+              label: 'Datasources',
+              collapsed: true,
+              items: [
+                { label: 'Base PostgreSQL Data Source', link: '/docs/data/datasources/base-postgresql-datasource' },
+                { label: 'Base Sqlite Data Source', link: '/docs/data/datasources/base-sqlite-datasource' },
+              ]
+            },
           ]
         },
         {
