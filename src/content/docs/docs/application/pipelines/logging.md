@@ -432,6 +432,8 @@ config.pino.config = {
 }
 ```
 
+**[Pino Logger Documentation](../logging/pino-logger)**
+
 ## Sentry logging is failing during startup
 
 If Sentry logging is enabled, verify that the configuration contains a DSN:
@@ -448,11 +450,13 @@ If the Sentry configuration is enabled without a DSN, application initialization
 Sentry DSN is required when Sentry logging is enabled.
 ```
 
+**[Sentry Node Logger Documentation](../logging/sentry-node)**
+
 ---
 
 ## See Loggers Documentation
 
-* [Loggers Documentation](../../observability/overview)
+* [Loggers Documentation](../logging/overview)
 
 ---
 
@@ -464,7 +468,7 @@ Sentry DSN is required when Sentry logging is enabled.
 * [Creating Commands](../cqrs/command)
 * [Creating Queries](../cqrs/query)
 * [Creating Handlers](../cqrs/handler)
-* [Loggers Documentation](../../observability/overview)
+* [Loggers Documentation](../logging/overview)
 
 ---
 

@@ -102,6 +102,16 @@ export default defineConfig({
                 { label: 'Handlers', link: '/docs/application/cqrs/handler' },
               ]
             },
+            {
+              label: 'Logging',
+              collapsed: true,
+              items: [
+                { label: 'Overview', link: '/docs/application/logging/overview' },
+                { label: 'Pino Logger', link: '/docs/application/logging/pino-logger' },
+                { label: 'Sentry Node', link: '/docs/application/logging/sentry-node' },
+                { label: 'Custom Logger', link: '/docs/application/logging/custom-logger' },
+              ]
+            },
           ]
         },
         {
