@@ -150,6 +150,21 @@ export default defineConfig({
           ]
         },
         {
+          label: 'Security',
+          collapsed: true,
+          items: [
+            {
+              label: 'Authentication',
+              collapsed: false,
+              items: [
+                { label: 'Overview', link: '/docs/security/authentication/overview' },
+                { label: 'Supabase', link: '/docs/security/authentication/supabase' },
+                { label: 'Custom Auth', link: '/docs/security/authentication/custom' },
+              ]
+            },
+          ]
+        },
+        {
           label: 'CLI',
           collapsed: true,
           items: [
