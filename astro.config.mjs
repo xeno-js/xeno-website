@@ -61,7 +61,7 @@ export default defineConfig({
             { label: 'Registration', link: '/docs/dependency-injection/registration' },
             {
               label: 'Lifetimes',
-              collapsed: true,
+              collapsed: false,
               items: [
                 { label: 'Singleton', link: '/docs/dependency-injection/lifetimes/singleton' },
                 { label: 'Scoped', link: '/docs/dependency-injection/lifetimes/scoped' },
@@ -80,7 +80,7 @@ export default defineConfig({
             { label: 'Overview', link: '/docs/application/overview' },
             {
               label: 'Pipelines',
-              collapsed: true,
+              collapsed: false,
               items: [
                 { label: 'Exception Pipeline', link: '/docs/application/pipelines/exception' },
                 { label: 'Logging Pipeline', link: '/docs/application/pipelines/logging' },
@@ -93,7 +93,7 @@ export default defineConfig({
             },
             {
               label: 'CQRS',
-              collapsed: true,
+              collapsed: false,
               items: [
                 { label: 'Overview', link: '/docs/application/cqrs/overview' },
                 { label: 'Command', link: '/docs/application/cqrs/command' },
@@ -104,7 +104,7 @@ export default defineConfig({
             },
             {
               label: 'Logging',
-              collapsed: true,
+              collapsed: false,
               items: [
                 { label: 'Overview', link: '/docs/application/logging/overview' },
                 { label: 'Pino Logger', link: '/docs/application/logging/pino-logger' },
@@ -125,7 +125,7 @@ export default defineConfig({
             { label: 'Db Schema', link: '/docs/data/db-schema' },
             {
               label: 'Repositories',
-              collapsed: true,
+              collapsed: false,
               items: [
                 { label: 'Repository', link: '/docs/data/repositories/repository' },
                 { label: 'Read Dao', link: '/docs/data/repositories/read-dao' },
@@ -133,12 +133,20 @@ export default defineConfig({
             },
             {
               label: 'Datasources',
-              collapsed: true,
+              collapsed: false,
               items: [
                 { label: 'Base PostgreSQL Data Source', link: '/docs/data/datasources/base-postgresql-datasource' },
                 { label: 'Base Sqlite Data Source', link: '/docs/data/datasources/base-sqlite-datasource' },
               ]
             },
+          ]
+        },
+        {
+          label: 'Cache',
+          collapsed: true,
+          items: [
+            { label: 'Overview', link: '/docs/cache/overview' },
+            { label: 'Redis Cache', link: '/docs/cache/redis' },
           ]
         },
         {
