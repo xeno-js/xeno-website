@@ -11,7 +11,7 @@ export default defineConfig({
       title: 'Xeno.JS',
       favicon: '/favicon.ico',
       editLink: {
-        baseUrl: 'https://github.com/xeno-js/xeno-website'
+        baseUrl: 'https://github.com/xeno-js/xeno-website/tree/main'
       },
       description: 'Xeno.JS is an application architecture framework for TypeScript with explicit dependency injection, DDD, CQRS and modular application boundaries.',
       customCss: ['./src/styles/global.css'],
