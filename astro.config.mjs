@@ -153,6 +153,7 @@ export default defineConfig({
           label: 'Security',
           collapsed: true,
           items: [
+            { label: 'Overview', link: '/docs/security/overview' },
             {
               label: 'Authentication',
               collapsed: false,
@@ -160,6 +161,13 @@ export default defineConfig({
                 { label: 'Overview', link: '/docs/security/authentication/overview' },
                 { label: 'Supabase', link: '/docs/security/authentication/supabase' },
                 { label: 'Custom Auth', link: '/docs/security/authentication/custom' },
+              ]
+            },
+            {
+              label: 'Authorization',
+              collapsed: false,
+              items: [
+                { label: 'Overview', link: '/docs/security/authorization/overview' },
               ]
             },
           ]
