@@ -118,7 +118,7 @@ A concrete data source extends `BaseSqliteSqlDataSource`.
 // src/infrastructure/datasources/user.datasource.ts
 
 import { eq } from 'drizzle-orm'
-import type { BaseSqliteSqlDataSource } from '@xeno-js/core'
+import type { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
 
 import { users } from '../db/schema'
 import type { ProjectDbSchema } from '../db/schema'
@@ -296,17 +296,17 @@ The token should therefore be added to the application's registry.
 
 ## Type the Application Registry
 
-Use `XenoRegistry` with the application's Drizzle schema.
+Use `XenoDbRegistry` with the application's Drizzle schema.
 
 ```ts
 // src/infrastructure/xeno-registry/app-registry.ts
 
-import type { XenoRegistry } from '@xeno-js/core'
+import type { XenoDbRegistry } from '@xeno-js/core/db'
 
 import type { ProjectDbSchema } from '../db/schema'
 import type { UserDataSource } from '../datasources/user.datasource'
 
-export interface AppRegistry extends XenoRegistry<ProjectDbSchema> {
+export interface AppRegistry extends XenoDbRegistry<ProjectDbSchema> {
   USER_DATA_SOURCE: UserDataSource
 }
 ```
@@ -314,7 +314,7 @@ export interface AppRegistry extends XenoRegistry<ProjectDbSchema> {
 The database schema is supplied as the generic parameter:
 
 ```ts
-XenoRegistry<ProjectDbSchema>
+XenoDbRegistry<ProjectDbSchema>
 ```
 
 The registry can then contain application-specific dependency injection tokens such as:
@@ -399,12 +399,12 @@ export type ProjectDbSchema = typeof dbSchema
 ```ts
 // src/infrastructure/xeno-registry/app-registry.ts
 
-import type { XenoRegistry } from '@xeno-js/core'
+import type { XenoDbRegistry } from '@xeno-js/core/db'
 
 import type { ProjectDbSchema } from '../db/schema'
 import type { UserDataSource } from '../datasources/user.datasource'
 
-export interface AppRegistry extends XenoRegistry<ProjectDbSchema> {
+export interface AppRegistry extends XenoDbRegistry<ProjectDbSchema> {
   USER_DATA_SOURCE: UserDataSource
 }
 ```
@@ -415,7 +415,7 @@ export interface AppRegistry extends XenoRegistry<ProjectDbSchema> {
 // src/infrastructure/datasources/user.datasource.ts
 
 import { eq } from 'drizzle-orm'
-import { BaseSqliteSqlDataSource } from '@xeno-js/core'
+import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
 
 import { users } from '../db/schema'
 import type { ProjectDbSchema } from '../db/schema'
@@ -748,7 +748,7 @@ To implement a SQLite/libSQL DataSource:
 * install `@libsql/client`;
 * define the Drizzle SQLite tables;
 * create the application database schema type;
-* specialize `XenoRegistry<ProjectDbSchema>`;
+* specialize `XenoDbRegistry<ProjectDbSchema>`;
 * create a class extending `BaseSqliteSqlDataSource<ProjectDbSchema>`;
 * use `this.db` for Drizzle queries;
 * configure `addDb()`;

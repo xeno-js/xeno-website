@@ -186,7 +186,7 @@ Xeno.JS exposes `BaseSqliteSqlDataSource` as the provider-specific base class fo
 Create a concrete data source in your application:
 
 ```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core'
+import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
 
 export class UserDataSource extends BaseSqliteSqlDataSource {
   async findUserById(id: string) {
@@ -198,7 +198,7 @@ export class UserDataSource extends BaseSqliteSqlDataSource {
 The base class receives the database context through its constructor:
 
 ```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core'
+import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
 
 export class UserDataSource extends BaseSqliteSqlDataSource {
   constructor(db: ConstructorParameters<typeof BaseSqliteSqlDataSource>[0]) {
@@ -222,7 +222,7 @@ A typical application keeps SQLite access behind a data source or repository ins
 For example:
 
 ```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core'
+import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
 
 export class UserDataSource extends BaseSqliteSqlDataSource {
   async findUserById(id: string) {
@@ -347,7 +347,7 @@ src/
 ### `src/users/user.data-source.ts`
 
 ```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core'
+import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
 
 export class UserDataSource extends BaseSqliteSqlDataSource {
   async createUser(user: {

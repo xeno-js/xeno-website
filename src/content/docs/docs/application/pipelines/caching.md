@@ -140,9 +140,9 @@ The caching pipeline reads caching information from the Query's `cacheOptions`.
 A Query can be created like this:
 
 ```ts
-import { BaseQuery } from '@xeno-js/shared'
+import { Query } from '@xeno-js/shared'
 
-export class GetUserQuery extends BaseQuery<User> {
+export class GetUserQuery extends Query<User> {
   constructor(
     public readonly userId: string,
   ) {

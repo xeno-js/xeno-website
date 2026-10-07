@@ -95,7 +95,7 @@ export type ProjectDbSchema = typeof dbSchema
 
 ```
 
-The schema is then used as the parameter of `XenoRegistry`.
+The schema is then used as the parameter of `XenoDbRegistry`.
 
 This allows `TOKENS.DB_CONTEXT` to be typed as `DbContext<ProjectDbSchema>`.
 
@@ -107,7 +107,7 @@ A concrete data source extends `BasePostgresSqlDataSource`.
 // src/infrastructure/datasources/user.datasource.ts
 
 import { eq } from 'drizzle-orm'
-import type { DbContext, BasePostgresSqlDataSource } from '@xeno-js/core'
+import type { DbContext, BasePostgresSqlDataSource } from '@xeno-js/core/db'
 
 import { users } from '../db/schema'
 import type { ProjectDbSchema } from '../db/schema'
@@ -214,23 +214,23 @@ The token must be added to the application registry.
 
 ## Type the Application Registry
 
-Use `XenoRegistry` with the application's Drizzle schema.
+Use `XenoDbRegistry` with the application's Drizzle schema.
 
 ```ts
 // src/infrastructure/xeno-registry/app-registry.ts
 
-import type { XenoRegistry } from '@xeno-js/core'
+import type { XenoDbRegistry } from '@xeno-js/core/db'
 
 import type { ProjectDbSchema } from '../db/schema'
 import type { UserDataSource } from '../datasources/user.datasource'
 
-export interface AppRegistry extends XenoRegistry<ProjectDbSchema> {
+export interface AppRegistry extends XenoDbRegistry<ProjectDbSchema> {
   USER_DATA_SOURCE: UserDataSource
 }
 
 ```
 
-The first parameter of `XenoRegistry` represents the database schema.
+The first parameter of `XenoDbRegistry` represents the database schema.
 
 The second parameter can be used to add application-specific tokens.
 
@@ -513,7 +513,7 @@ To implement a PostgreSQL DataSource:
 * install `pg`;
 * define the Drizzle tables;
 * create the `ProjectDbSchema`;
-* specialize `XenoRegistry<ProjectDbSchema>`;
+* specialize `XenoDbRegistry<ProjectDbSchema>`;
 * create a class that extends `BasePostgresSqlDataSource<ProjectDbSchema>`;
 * use `this.db` for queries;
 * configure `addDb()`;

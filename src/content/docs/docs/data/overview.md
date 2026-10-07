@@ -201,7 +201,7 @@ These base classes give your Data Source access to the configured database throu
 ### PostgreSQL
 
 ```ts
-import { BasePostgresSqlDataSource } from '@xeno-js/core'
+import { BasePostgresSqlDataSource } from '@xeno-js/core/db'
 
 export class UserDataSource extends BasePostgresSqlDataSource {
   async findUserById(id: string) {
@@ -215,7 +215,7 @@ export class UserDataSource extends BasePostgresSqlDataSource {
 ### SQLite
 
 ```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core'
+import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
 
 export class UserDataSource extends BaseSqliteSqlDataSource {
   async findUserById(id: string) {
@@ -335,10 +335,8 @@ The database provider remains infrastructure. Your application services, handler
 The following example shows the basic composition of a PostgreSQL application.
 
 ```ts
-import {
-  AppBuilder,
-  BasePostgresSqlDataSource,
-} from '@xeno-js/core'
+import { AppBuilder } from '@xeno-js/core'
+import { BasePostgresSqlDataSource } from '@xeno-js/core/db'
 
 class UserDataSource extends BasePostgresSqlDataSource {
   async findUserById(id: string) {

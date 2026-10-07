@@ -1,11 +1,11 @@
 ---
 title: Database Schema
-description: Learn how to define your database tables with Drizzle, group them into a DbSchema type, and use that schema with XenoRegistry and typed data sources.
+description: Learn how to define your database tables with Drizzle, group them into a DbSchema type, and use that schema with XenoDbRegistry and typed data sources.
 keywords:
 - Xeno.JS
 - database schema
 - DbSchema
-- XenoRegistry
+- XenoDbRegistry
 - ApplicationRegistry
 - Drizzle
 - PostgreSQL
@@ -22,13 +22,13 @@ faqs:
 - question: What is DbSchema in Xeno.JS?
   answer: DbSchema is an application-defined TypeScript type that groups the Drizzle table definitions used by the database context.
 - question: Does Xeno.JS provide a DbSchema type?
-  answer: No. Xeno.JS provides the generic DbContext and XenoRegistry types, while the application defines its own DbSchema.
+  answer: No. Xeno.JS provides the generic DbContext and XenoDbRegistry types, while the application defines its own DbSchema.
 - question: How do I define a database table?
   answer: Define the table with the Drizzle table builder for the database provider, such as pgTable for PostgreSQL.
 - question: How do I group multiple tables into one schema?
   answer: Create a DbSchema type whose properties map table names to the corresponding Drizzle table definitions.
-- question: How do I connect DbSchema to XenoRegistry?
-  answer: Pass DbSchema as the first generic parameter of XenoRegistry, for example XenoRegistry<DbSchema, MyExtensions>.
+- question: How do I connect DbSchema to XenoDbRegistry?
+  answer: Pass DbSchema as the first generic parameter of XenoDbRegistry, for example XenoDbRegistry<DbSchema, MyExtensions>.
 - question: Does DbSchema register the database with Xeno.JS?
   answer: No. DbSchema provides the compile-time schema used by the typed database context; database connectivity is configured separately with AppBuilder.addDb().
 - question: Can I use the same DbSchema for PostgreSQL and SQLite?
@@ -48,7 +48,7 @@ Individual table definitions
         ↓
       DbSchema
         ↓
-XenoRegistry<DbSchema, ApplicationServices>
+XenoDbRegistry<DbSchema, ApplicationServices>
         ↓
      DB_CONTEXT
         ↓
@@ -64,10 +64,10 @@ type DbSchema = {
 }
 ```
 
-That type can then be supplied to `XenoRegistry`:
+That type can then be supplied to `XenoDbRegistry`:
 
 ```ts
-type MyAppRegistry = XenoRegistry<
+type MyAppRegistry = XenoDbRegistry<
   DbSchema,
   {
     USER_REPOSITORY: IUserRepository
@@ -177,12 +177,12 @@ users
 profiles
 ```
 
-## Use DbSchema with XenoRegistry
+## Use DbSchema with XenoDbRegistry
 
 Xeno.JS exposes:
 
 ```ts
-export type XenoRegistry<
+export type XenoDbRegistry<
   TSchema extends Dictionary = Dictionary,
   TExtensions = object,
 > = ApplicationRegistry<DbContext<TSchema>, DbTransaction> & ...
@@ -195,13 +195,13 @@ Your application registry can therefore specialize it with `DbSchema`.
 For example:
 
 ```ts
-import type { XenoRegistry } from '@xeno-js/core'
+import type { XenoDbRegistry } from '@xeno-js/core/db'
 
 import type { DbSchema } from './data/schema'
 import type { IProfileRepository } from './data/profile.repository'
 import type { IUserRepository } from './data/user.repository'
 
-export type MyAppRegistry = XenoRegistry<
+export type MyAppRegistry = XenoDbRegistry<
   DbSchema,
   {
     USER_REPOSITORY: IUserRepository
@@ -213,7 +213,7 @@ export type MyAppRegistry = XenoRegistry<
 The structure is:
 
 ```text
-XenoRegistry<
+XenoDbRegistry<
   DbSchema,
   Application-specific DI tokens
 >
@@ -226,7 +226,7 @@ The second parameter extends the application registry with application-specific 
 For example:
 
 ```ts
-type MyAppRegistry = XenoRegistry<
+type MyAppRegistry = XenoDbRegistry<
   DbSchema,
   {
     USER_REPOSITORY: IUserRepository
@@ -245,7 +245,7 @@ This keeps database schema typing and application dependency typing in the same 
 readonly DB_CONTEXT: T
 ```
 
-`XenoRegistry` specializes `ApplicationRegistry` with:
+`XenoDbRegistry` specializes `ApplicationRegistry` with:
 
 ```ts
 ApplicationRegistry<DbContext<TSchema>, DbTransaction>
@@ -254,7 +254,7 @@ ApplicationRegistry<DbContext<TSchema>, DbTransaction>
 Therefore, when you define:
 
 ```ts
-type MyAppRegistry = XenoRegistry<DbSchema>
+type MyAppRegistry = XenoDbRegistry<DbSchema>
 ```
 
 the `DB_CONTEXT` token is typed using:
@@ -271,7 +271,7 @@ The relationship is:
 DbSchema
    │
    ▼
-XenoRegistry<DbSchema>
+XenoDbRegistry<DbSchema>
    │
    ▼
 ApplicationRegistry<DbContext<DbSchema>>
@@ -354,7 +354,7 @@ Xeno.JS provides provider-specific base data sources.
 For PostgreSQL:
 
 ```ts
-import { BasePostgresSqlDataSource } from '@xeno-js/core'
+import { BasePostgresSqlDataSource } from '@xeno-js/core/db'
 
 import type { DbSchema } from './schema'
 
@@ -408,7 +408,7 @@ The exact registration token must also exist in the application's registry.
 For example:
 
 ```ts
-type MyAppRegistry = XenoRegistry<
+type MyAppRegistry = XenoDbRegistry<
   DbSchema,
   {
     USER_DATA_SOURCE: UserDataSource
@@ -421,7 +421,7 @@ This gives the application a consistent type flow:
 ```text
 DbSchema
    ↓
-XenoRegistry<DbSchema, ...>
+XenoDbRegistry<DbSchema, ...>
    ↓
 DB_CONTEXT: DbContext<DbSchema>
    ↓
@@ -614,11 +614,11 @@ export type DbSchema = {
 ```ts
 // src/registry.ts
 
-import type { XenoRegistry } from '@xeno-js/core'
+import type { XenoDbRegistry } from '@xeno-js/core/db'
 
 import type { DbSchema } from './data/schema'
 
-export type MyAppRegistry = XenoRegistry<
+export type MyAppRegistry = XenoDbRegistry<
   DbSchema,
   {
     USER_DATA_SOURCE: UserDataSource
@@ -629,7 +629,7 @@ export type MyAppRegistry = XenoRegistry<
 The application-specific token types can be expanded as the application grows:
 
 ```ts
-export type MyAppRegistry = XenoRegistry<
+export type MyAppRegistry = XenoDbRegistry<
   DbSchema,
   {
     USER_DATA_SOURCE: UserDataSource
@@ -679,7 +679,7 @@ profile.schema.ts
     DbSchema
        │
        ▼
-MyAppRegistry = XenoRegistry<DbSchema, ...>
+MyAppRegistry = XenoDbRegistry<DbSchema, ...>
        │
        ▼
  DB_CONTEXT: DbContext<DbSchema>
@@ -692,16 +692,16 @@ MyAppRegistry = XenoRegistry<DbSchema, ...>
 
 ### `DbSchema` is defined but `DB_CONTEXT` is not typed
 
-Make sure the application registry uses the schema as the first `XenoRegistry` generic:
+Make sure the application registry uses the schema as the first `XenoDbRegistry` generic:
 
 ```ts
-type MyAppRegistry = XenoRegistry<DbSchema>
+type MyAppRegistry = XenoDbRegistry<DbSchema>
 ```
 
 Not:
 
 ```ts
-type MyAppRegistry = XenoRegistry
+type MyAppRegistry = XenoDbRegistry
 ```
 
 The latter falls back to the default schema type.
@@ -764,7 +764,7 @@ type DbSchema = {
   profiles: typeof profiles
 }
 
-type MyAppRegistry = XenoRegistry<DbSchema>
+type MyAppRegistry = XenoDbRegistry<DbSchema>
 
 class UserDataSource extends BasePostgresSqlDataSource<DbSchema> {
   // ...

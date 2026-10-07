@@ -205,7 +205,7 @@ Xeno.JS exports `BasePostgresSqlDataSource` as the base class for application-sp
 The base class accepts the database context:
 
 ```ts
-import { BasePostgresSqlDataSource } from '@xeno-js/core'
+import { BasePostgresSqlDataSource } from '@xeno-js/core/db'
 
 export class UserDataSource extends BasePostgresSqlDataSource {
   async findAll() {
@@ -230,7 +230,7 @@ For example:
 import {
   BasePostgresSqlDataSource,
   type DbContext,
-} from '@xeno-js/core'
+} from '@xeno-js/core/db'
 
 export class UserDataSource extends BasePostgresSqlDataSource {
   async findByEmail(email: string) {
@@ -407,7 +407,7 @@ export const users = pgTable('users', {
 
 ```ts
 import { eq } from 'drizzle-orm'
-import { BasePostgresSqlDataSource } from '@xeno-js/core'
+import { BasePostgresSqlDataSource } from '@xeno-js/core/db'
 
 import { users } from './schema'
 
