@@ -3,7 +3,7 @@ title: "Why I Created Xeno.JS: Architectural Rigor and Zero Infrastructure Const
 description: "Discover why Xeno.JS was created to solve technical debt and infrastructure lock-in in modern TypeScript applications, combining clean architecture with runtime-agnostic flexibility."
 keywords: "Xeno.JS, TypeScript framework, clean architecture, dependency injection, edge functions, backend development, open source"
 tags: ["TypeScript", "Architecture", "Open Source", "Backend", "Web Development"]
-canonical: "https://example.com/blog/why-i-created-xeno-js"
+canonical: "https://www.xeno-js.it/blog/why-i-create-xeno"
 faqs:
   - question: "What is Xeno.JS?"
     answer: "Xeno.JS is an application architecture framework for TypeScript designed to combine clean architecture patterns with modern JavaScript lightness and runtime agnosticism."
