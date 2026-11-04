@@ -10,7 +10,7 @@ keywords:
 - DB_CONTEXT
 - database
 - transactions
--XenoAppBuilder
+- XenoAppBuilder
 - TypeScript
 tags:
 - data
@@ -18,7 +18,7 @@ tags:
 - transaction
 - database
 - dependency-injection
--XenoAppBuilder
+- XenoAppBuilder
 - typescript
 faqs:
 - question: How do I use Unit of Work in Xeno.JS?
