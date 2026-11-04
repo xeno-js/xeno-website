@@ -57,7 +57,7 @@ faqs:
   answer: "Xeno.JS detects the specific case where a singleton resolution attempts to resolve a scoped service, because the scoped instance would otherwise be captured by the longer-lived singleton."
 
 - question: "Can dependencies be resolved asynchronously?"
-  answer: "Service resolution itself is synchronous. AsyncLocalStorage is used internally to isolate the resolution context across asynchronous execution flows."
+  answer: "Service resolution is synchronous. The container tracks the active resolution path while factories are being executed."
 
 - question: "Can Xeno.JS services be disposed automatically?"
   answer: "Yes. Services implementing the disposable contract can be tracked by the container or scope and disposed when the corresponding lifecycle boundary is disposed."
@@ -221,13 +221,11 @@ Applications can extend the Xeno registry with their own services.
 For example:
 
 ```ts
-type AppRegistry = XenoRegistry<
-  Dictionary,
-  {
+type AppRegistry extends XenoRegistry {
     USER_REPOSITORY: UserRepository
     USER_SERVICE: UserService
   }
->
+
 ```
 
 The resulting registry becomes the type contract for the application's Service Container.
@@ -276,8 +274,8 @@ Each method receives:
 
 ```ts
 container.addSingleton(
-  'CONFIGURATION',
-  () => new ConfigurationService(),
+  'USER_REPOSITORY',
+  () => new UserRepository(),
 )
 ```
 
@@ -302,8 +300,10 @@ A new instance is produced on every resolution.
 
 ```ts
 container.addScoped(
-  'REQUEST_CONTEXT',
-  () => new RequestContext(),
+  'USER_SERVICE',
+  (scope) => new UserService(
+    scope.resolve('USER_REPOSITORY'),
+  ),
 )
 ```
 
@@ -320,7 +320,7 @@ The `resolve()` method is the explicit dependency resolution mechanism.
 From a container:
 
 ```ts
-const logger = container.resolve('LOGGER')
+const logger = container.resolve('logger')
 ```
 
 From a scope:
@@ -328,8 +328,8 @@ From a scope:
 ```ts
 const scope = container.createScope()
 
-const context =
-  scope.resolve('REQUEST_CONTEXT')
+const service =
+  scope.resolve('USER_SERVICE')
 ```
 
 The difference is important.
@@ -340,15 +340,17 @@ A scoped service requires an active scope:
 
 ```ts
 container.addScoped(
-  'REQUEST_CONTEXT',
-  () => new RequestContext(),
+  'USER_SERVICE',
+  (scope) => new UserService(
+    scope.resolve('USER_REPOSITORY'),
+  ),
 )
 ```
 
 This is invalid:
 
 ```ts
-container.resolve('REQUEST_CONTEXT')
+container.resolve('USER_SERVICE')
 ```
 
 Xeno.JS throws an error indicating that the scoped service requires an active scope.
@@ -358,8 +360,8 @@ The correct form is:
 ```ts
 const scope = container.createScope()
 
-const context =
-  scope.resolve('REQUEST_CONTEXT')
+const service =
+  scope.resolve('USER_SERVICE')
 ```
 
 ---
@@ -474,15 +476,17 @@ For example:
 
 ```ts
 container.addScoped(
-  'REQUEST_CONTEXT',
-  () => new RequestContext(),
+  'USER_SERVICE',
+  (scope) => new UserService(
+    scope.resolve('USER_REPOSITORY'),
+  ),
 )
 
 container.addSingleton(
   'GLOBAL_SERVICE',
   (scope) => {
     return new GlobalService(
-      scope.resolve('REQUEST_CONTEXT'),
+      scope.resolve('USER_SERVICE'),
     )
   },
 )
@@ -549,10 +553,10 @@ A scoped service is cached within that scope:
 
 ```ts
 const first =
-  scope.resolve('REQUEST_CONTEXT')
+  scope.resolve('USER_SERVICE')
 
 const second =
-  scope.resolve('REQUEST_CONTEXT')
+  scope.resolve('USER_SERVICE')
 ```
 
 Both resolutions return the same instance within the scope.
@@ -563,11 +567,11 @@ Another scope receives another instance:
 const scopeA = container.createScope()
 const scopeB = container.createScope()
 
-const contextA =
-  scopeA.resolve('REQUEST_CONTEXT')
+const serviceA =
+  scopeA.resolve('USER_SERVICE')
 
-const contextB =
-  scopeB.resolve('REQUEST_CONTEXT')
+const serviceB =
+  scopeB.resolve('USER_SERVICE')
 ```
 
 The instances are isolated:
@@ -576,10 +580,10 @@ The instances are isolated:
 Container
    │
    ├── Scope A
-   │     └── REQUEST_CONTEXT #1
+   │     └── USER_SERVICE #1
    │
    └── Scope B
-         └── REQUEST_CONTEXT #2
+         └── USER_SERVICE #2
 ```
 
 Singleton instances remain shared between these scopes.
@@ -614,21 +618,11 @@ The same composition model can be used by other application entry points where a
 
 ---
 
-## AsyncLocalStorage and resolution context
+## Resolution context
 
-The Xeno.JS Service Container uses Node.js `AsyncLocalStorage` internally to maintain resolution context.
+The Service Container tracks the current resolution stack and active lifetime while it synchronously invokes registration factories. It uses this state to detect circular dependencies and singleton-to-scoped captive dependencies, then clears the resolution context when the resolution call completes.
 
-The resolution context tracks information such as:
-
-* the current dependency resolution stack
-* the active lifetime
-* the execution flow in which resolution is occurring
-
-This is used primarily for correctness mechanisms such as circular dependency detection and lifetime validation.
-
-For example, two parallel resolution flows should not accidentally share the same dependency-resolution stack.
-
-The repository contains tests specifically covering parallel asynchronous resolution isolation.
+`AsyncLocalStorage` belongs to the request-context implementation, not to the Service Container's dependency-resolution mechanism.
 
 ---
 
@@ -673,22 +667,30 @@ This makes service lifetime and resource ownership part of the same composition 
 
 ---
 
-## Dependency injection through AppBuilder
+## Dependency injection through XenoAppBuilder
 
 Most applications do not need to instantiate `ServiceContainer` manually.
 
-`AppBuilder` exposes dependency registration through `addServices()`:
+`XenoAppBuilder` exposes dependency registration through `addServices()`. Add custom service keys to the application's registry so that registrations and resolutions remain typed:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import type { XenoRegistry } from '@xeno-js/shared'
 
-app.addServices((container) => {
+interface AppRegistry extends XenoRegistry {
+    USER_REPOSITORY: UserRepository
+    USER_SERVICE: UserService
+}
+
+const builder = new XenoAppBuilder<AppRegistry>()
+
+builder.addServices((container) => {
   container.addSingleton(
     'USER_REPOSITORY',
     () => new UserRepository(),
   )
 
-  container.addTransient(
+  container.addScoped(
     'USER_SERVICE',
     (scope) => {
       return new UserService(
@@ -704,10 +706,25 @@ The registrations are queued as part of application composition.
 They are applied during:
 
 ```ts
-await app.build()
+const application = await builder.build()
 ```
 
-The resulting container is then available to the application runtime.
+`build()` returns the runtime `XenoApplication`, not the `ServiceContainer`. Resolve root registrations through `getServices()` using the registry keys:
+
+```ts
+const { USER_REPOSITORY } = application.getServices()
+```
+
+Resolve `USER_SERVICE` through an active scope. For work outside an existing scope, use `runInScope()`:
+
+```ts
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+  // Use the service within this scope.
+})
+```
+
+`getScopedServices()` provides the same registry-key access when the current execution already has an active scope.
 
 ---
 
@@ -716,7 +733,7 @@ The resulting container is then available to the application runtime.
 For larger applications, dependency registrations can be grouped into modules.
 
 ```ts
-app.addModule(
+builder.addModule(
   'UsersModule',
   async () => ({
     async configure(container) {
@@ -787,10 +804,10 @@ It also means there is less runtime metadata involved in dependency discovery.
 
 Because the model is explicit, Xeno.JS does not need to infer:
 
-* which constructor parameters are dependencies
-* which class should implement an interface
-* which decorator metadata describes a service
-* which lifetime should be assigned automatically
+- which constructor parameters are dependencies
+- which class should implement an interface
+- which decorator metadata describes a service
+- which lifetime should be assigned automatically
 
 The application declares these decisions at the composition boundary.
 
@@ -873,9 +890,9 @@ over hidden global access.
 
 Use:
 
-* `singleton` for shared application-wide resources
-* `scoped` for state that belongs to one logical execution scope
-* `transient` for short-lived services that should be recreated on resolution
+- `singleton` for shared application-wide resources
+- `scoped` for state that belongs to one logical execution scope
+- `transient` for short-lived services that should be recreated on resolution
 
 ### Avoid singleton-to-scoped dependencies
 

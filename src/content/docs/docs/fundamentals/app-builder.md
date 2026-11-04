@@ -1,9 +1,9 @@
 ---
 title: App Builder
-description: Learn how to compose and bootstrap a Xeno.JS application with AppBuilder.
+description: Learn how to compose and bootstrap a Xeno.JS application with XenoAppBuilder.
 keywords:
 - Xeno.JS
-- AppBuilder
+- XenoAppBuilder
 - application composition
 - application bootstrap
 - ServiceContainer
@@ -21,41 +21,41 @@ tags:
 - dependency-injection
 - bootstrap
 faqs:
-- question: What is AppBuilder in Xeno.JS?
-  answer: AppBuilder is the composition root used to configure application services, modules, middleware, pipelines, infrastructure integrations, and the runtime ServiceContainer.
-- question: How do I create a Xeno.JS application with AppBuilder?
-  answer: Create an AppBuilder instance, configure the capabilities and services required by the application, then call build().
+- question: What is XenoAppBuilder in Xeno.JS?
+  answer: XenoAppBuilder is the composition root used to configure services, modules, middleware, pipelines, and infrastructure integrations before startup.
+- question: How do I create a Xeno.JS application with XenoAppBuilder?
+  answer: Create an XenoAppBuilder instance, configure the capabilities and services required by the application, then call build().
 - question: What does build() do?
-  answer: build() initializes the modules queued by AppBuilder in priority order and returns the configured ServiceContainer.
+  answer: build() initializes queued modules in ascending priority order and returns the configured runtime application instance.
 - question: How do I register application services?
-  answer: Use addServices() to register services in the application ServiceContainer.
+  answer: Use addServices() to register services in the dependency-injection container during bootstrap.
 - question: How do I add a custom module?
-  answer: Use addModule() with a module name, an asynchronous factory, and optional module configuration.
-- question: How do I resolve a service from AppBuilder?
-  answer: Call resolve() with the registered dependency token after the application has been built.
-- question: Does AppBuilder automatically add dependencies for pipelines and middleware?
-  answer: Yes. addPipeline() and addMiddlewares() automatically enable Context, Logger, and Cache when they have not already been configured.
-- question: What cache does AppBuilder use by default?
+  answer: Use addModule() with a name, an asynchronous module factory, optional configuration, and an optional priority.
+- question: How do I resolve a service from XenoAppBuilder?
+  answer: After build(), call resolve() with a registered token. Scoped services must be resolved from an active service scope, not from the builder's root container.
+- question: Does XenoAppBuilder automatically add dependencies for pipelines and middleware?
+  answer: The builder adds the default Node context during build when no context has been configured. CQRS and middleware modules add a logger when needed; the default cache is added when query caching, idempotency, or rate limiting requires it.
+- question: What cache does XenoAppBuilder use by default?
   answer: The default cache configuration uses the in-memory cache.
 ---
 
 ## Introduction
 
-`AppBuilder` is the composition root of a Xeno.JS application.
+`XenoAppBuilder` is the composition root of a Xeno.JS application.
 
 Use it to configure the application before startup:
 
-* application services
-* custom modules
-* context
-* middleware
-* CQRS pipelines
-* cache
-* database
-* authentication
-* logging
-* HTTP infrastructure
-* concurrency services
+- application services
+- custom modules
+- context
+- middleware
+- CQRS pipelines
+- cache
+- database
+- authentication
+- logging
+- HTTP infrastructure
+- concurrency services
 
 The typical lifecycle is:
 
@@ -66,29 +66,36 @@ configure
     ↓
 build()
     ↓
-ServiceContainer
+configured runtime application
     ↓
 application runtime
 ```
 
 ## Create an Application
 
-Create an `AppBuilder` and configure the capabilities your application needs:
+Create an `XenoAppBuilder` and configure the capabilities your application needs:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import type { XenoRegistry } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+interface AppRegistry extends XenoRegistry { 
+  greeting: { 
+    greet(): string 
+  } 
+}
+
+const app = new XenoAppBuilder<AppRegistry>()
 
 app.addServices((services) => {
-  services.addSingleton('GREETING_SERVICE', () => ({
+  services.addSingleton('greeting', () => ({
     greet: () => 'Hello Xeno!',
   }))
 })
 
-const container = await app.build()
+const application = await app.build()
 
-const greeting = container.resolve('GREETING_SERVICE')
+const { greeting } = app.getServices()
 
 console.log(greeting.greet())
 ```
@@ -99,14 +106,24 @@ There are three main steps:
 2. Configure the application.
 3. Call `build()`.
 
-Configuration methods return the same `AppBuilder`, so they can also be chained.
+Configuration methods return the same `XenoAppBuilder`, so they can also be chained.
 
 ## Register Services
 
-Use `addServices()` to register application-specific dependencies:
+Use `addServices()` to register application-specific dependencies. Its setup callback receives the service container and configuration service. The method's optional second argument sets the module priority, which defaults to `99`.
+
+Custom service tokens used with `addServices()` must also appear in the registry type passed to `XenoAppBuilder`.
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import type { XenoRegistry } from '@xeno-js/shared'
+
+interface UserRegistry extends XenoRegistry { 
+  USER_REPOSITORY: UserRepository; 
+  USER_SERVICE: UserService 
+}
+
+const app = new XenoAppBuilder<UserRegistry>()
 
 app.addServices((services) => {
   services.addSingleton('USER_REPOSITORY', () => {
@@ -123,7 +140,15 @@ app.addServices((services) => {
 await app.build()
 ```
 
-The callback receives the application's `ServiceContainer`.
+In the example, `services` is the application's service container.
+
+Choose a lifetime based on how long an instance should be reused:
+
+- `addSingleton()` creates one instance shared by the container.
+- `addScoped()` reuses an instance within a service scope. Resolve it through a scope; resolving a scoped registration from the builder's root container throws.
+- `addTransient()` creates a new instance for each resolution.
+
+Avoid injecting a scoped service into a singleton: the container rejects this captive dependency. Disposable instances are disposed with their owning scope or container.
 
 For service lifetimes and dependency registration, see the dependency injection documentation.
 
@@ -132,7 +157,7 @@ For service lifetimes and dependency registration, see the dependency injection 
 Use `addModule()` when a feature needs to register several related services or perform its own configuration.
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder<UserRegistry>()
 
 app.addModule(
   'UsersModule',
@@ -150,7 +175,7 @@ await app.build()
 
 The module factory is executed during `build()`.
 
-An optional configuration object can be passed as the third argument:
+An optional configuration object can be passed as the third argument. A fourth argument sets the module priority; the default is `50`, and modules run in ascending priority order:
 
 ```ts
 app.addModule(
@@ -165,39 +190,50 @@ app.addModule(
   {
     enabled: true,
   },
+  40,
 )
 ```
 
+Use `addRoutes()` to queue route definitions for the route module. Route registration runs during bootstrap at priority `5`.
+
+HTTP server integrations are supplied as plugins to `addHttpServer()`; their specific setup is defined by the integration package.
+
 ## Enable Context
 
-Context is enabled automatically when the builder is created.
+If no context has been configured, `build()` adds the default context module when using the Node configuration service. The builder does not configure context in its constructor.
 
-You can therefore use:
+For a Node application, the default is added automatically:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 ```
 
-without explicitly calling `addContext()`.
+This does not configure context in the constructor; the default Node context is queued by `build()` if you have not called `addContext()`.
 
-Calling `addContext()` is also safe and keeps the method available when composing application configuration explicitly:
+You can also configure it explicitly:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addContext()
 ```
+
+When using the Vite configuration service, configure an explicit context plugin with `addContext()`; `build()` does not substitute the Node context in that environment.
+
+The constructor optionally accepts a service container as its first argument. Its second argument selects the configuration service: it defaults to Node, and also accepts `'vite'` or a custom `IConfigurationService` instance. Select Vite when composing a browser application and provide its context plugin explicitly.
 
 ## Configure Middleware
 
 Use `addMiddlewares()` to configure Xeno.JS middleware:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addMiddlewares((options) => {
-  options.cors = true
-  options.withCredentials = true
+  options.cors = {
+    enabled: true,
+    withCredentials: true,
+  }
 })
 
 await app.build()
@@ -207,18 +243,14 @@ Middleware configuration can also enable authentication-related behavior when au
 
 ### Automatic Dependencies
 
-Calling `addMiddlewares()` automatically enables the following capabilities when they have not already been queued:
+During configuration, `addMiddlewares()` queues the middleware module. During `build()`, that module adds a logger if one has not been registered. The default middleware settings enable rate limiting, which also configures the default in-memory cache if no cache has been registered. Context is added by the build process for Node configurations, as described above.
 
-* Context
-* Logger
-* Cache
-
-You therefore do not need to manually call `addLogger()` or `addCache()` just to satisfy middleware dependencies.
+You do not need to call `addLogger()` or `addCache()` merely to use the default middleware configuration. Add either explicitly when you need to customize its provider or settings.
 
 If you want to configure them explicitly, configure them before or after `addMiddlewares()`:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.console = true
@@ -229,68 +261,59 @@ app.addCache((options) => {
 })
 
 app.addMiddlewares((options) => {
-  options.cors = true
+  options.cors = {
+    enabled: true,
+  }
 })
 ```
 
 ## Configure the CQRS Pipeline
 
-Use `addPipeline()` to enable the CQRS pipeline:
+Use `addPipeline()` to register one or more CQRS pipeline plugins:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
 
-app.addPipeline((config) => {
-  config.queryBus.isEnabled = true
-  config.performance.thresholdMs = 100
-})
+const app = new XenoAppBuilder()
+
+app.addPipeline(withQueryCaching())
 
 await app.build()
 ```
 
-The pipeline configuration includes:
+Plugins configure pipeline behavior, including:
 
-* performance
-* authorization
-* validation
-* command bus
-* query bus
+- performance
+- authorization
+- validation
+- command and query behaviors
+
+For example, `withQueryCaching()` enables query caching:
+
+```ts
+app.addPipeline(withQueryCaching())
+```
+
+### Dependencies configured by the CQRS module
+
+The CQRS module adds a logger if none has been registered. It also adds the default in-memory cache if query caching or command idempotency is enabled and no cache has been registered. If context is not explicitly configured, the build process adds the default Node context; Vite requires an explicit context plugin.
 
 For example:
 
 ```ts
-app.addPipeline((config) => {
-  config.queryBus.isEnabled = true
-  config.performance.thresholdMs = 100
-})
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+
+app.addPipeline(withQueryCaching())
 ```
 
-### Automatic Dependencies Injection
-
-Calling `addPipeline()` automatically enables:
-
-* Context
-* Logger
-* Cache
-
-when they have not already been queued.
-
-For example, this:
-
-```ts
-const app = new AppBuilder()
-
-app.addPipeline((config) => {
-  config.queryBus.isEnabled = true
-})
-```
-
-also queues the default logger and cache configuration.
+This enables query caching and its cache dependency; it does not turn on unrelated pipeline behaviors.
 
 If you need custom logging or cache configuration, configure those capabilities explicitly:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.console = true
@@ -300,9 +323,7 @@ app.addCache((options) => {
   options.inMemory = true
 })
 
-app.addPipeline((config) => {
-  config.queryBus.isEnabled = true
-})
+app.addPipeline(withQueryCaching())
 ```
 
 ## Configure the Cache
@@ -310,17 +331,17 @@ app.addPipeline((config) => {
 Use `addCache()` to configure application caching:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addCache((options) => {
   options.inMemory = true
 })
 ```
 
-The default AppBuilder cache configuration is in-memory:
+The default `XenoAppBuilder` cache configuration uses the in-memory implementation:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addCache()
 ```
@@ -331,28 +352,19 @@ See [Cache Overview](../cache/overview) and [Redis Cache](../cache/redis) for th
 
 ## Configure the Database
 
-Use `addDb()` to configure the database:
+`addDb()` accepts a database plugin. The plugin configures and queues the provider-specific database module; `addDb()` does not accept a configuration callback directly.
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import type { DbPlugin } from '@xeno-js/shared'
 
-app.addDb((options) => {
-  options.connectionString = process.env.DATABASE_URL ?? ''
-})
+declare const databasePlugin: DbPlugin
 
-await app.build()
+const app = new XenoAppBuilder()
+app.addDb(databasePlugin)
 ```
 
-SQLite can be enabled through the same configuration:
-
-```ts
-app.addDb((options) => {
-  options.connectionString = './database.db'
-  options.enableSqlLite = true
-})
-```
-
-The database is initialized during `build()`.
+Here, `databasePlugin` is provided by the database integration selected by the application. Its options and initialization behavior are provider-specific.
 
 Configure the database once at the application composition root and inject the required database services into application components.
 
@@ -361,151 +373,120 @@ Configure the database once at the application composition root and inject the r
 Use `addAuth()` to configure authentication:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
 
 app.addAuth((options, config) => {
-  options.url = config.getOrThrow('SUPABASE_URL')
-  options.key = config.getOrThrow('SUPABASE_KEY')
+  // ApplicationAuthService is the application's implementation of the auth contract.
+  options.authService = (scope) => new ApplicationAuthService(scope)
 })
 ```
 
-Authentication is initialized during `build()`.
+The callback configures `AuthModuleOptions`; `authService` is required. Authentication integration details belong to the service implementation or its provider package.
 
 ## Configure Logging
 
 Use `addLogger()` to configure logging:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.console = true
 })
 ```
 
-The logger configuration supports the logging providers exposed by Xeno.JS, including:
+The setup callback configures the core logger settings, including:
 
-* Console
-* Pino
-* Sentry
-* custom loggers
+- log level;
+- console output;
+- custom logger clients.
 
-For example:
-
-```ts
-app.addLogger((options) => {
-  options.console = true
-
-  options.pino.config = {
-    level: 'info',
-  }
-})
-```
+`addLogger()` also accepts one logger plugin or an array of logger plugins. Provider-specific options belong to those plugins; the callback above only configures the core logger settings.
 
 See the observability documentation for provider-specific configuration.
 
-## Configure HTTP Infrastructure
+## Configure HTTP Clients
 
-Use `addHttpCore()` to configure HTTP infrastructure:
+Use `addHttpClient()` to register HTTP clients. It accepts an HTTP plugin or a setup callback. The callback receives a `HttpConfig` whose `clients` entries contain a name, an `IHttpClient` factory, and an optional resilience factory.
 
-```ts
-const app = new AppBuilder()
+HTTP clients are infrastructure dependencies; registering an HTTP client does not configure an inbound server.
 
-app.addHttpCore((options, config) => {
-  options.http.client.baseURL = config.get(
-    'API_BASE_URL',
-    'https://api.example.com',
-  )
+## Configure the HTTP Server
 
-  options.http.client.timeoutMs = 5000
-})
-```
-
-HTTP configuration includes the HTTP client and resilience settings exposed by the current `HttpCoreConfig`.
-
-HTTP is an infrastructure capability of Xeno.JS. It does not make HTTP the application boundary.
-
-## Configure an HTTP Adapter
-
-Use `addAdapter()` to configure the transport adapter:
-
-```ts
-const app = new AppBuilder()
-
-app.addAdapter((options) => {
-  options.native = true
-})
-```
-
-The current adapter configuration supports:
-
-* native
-* Vercel
-* Fastify
-* custom adapters
-
-Configure the adapter that matches the transport used by the application.
+Use `addHttpServer()` with an HTTP server plugin from the selected transport integration. Use `addRoutes()` to queue route definitions. Server and transport options are integration-specific.
 
 ## Add the Concurrency Service
 
-Use `addConcurrencyService()` when application code needs the Xeno.JS concurrency service:
+Use `addConcurrencyService()` when application code needs the Xeno.JS concurrency service. It registers a singleton available through `TOKENS.CONCURRENCY_SERVICE`:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder, TOKENS } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
 
 app.addConcurrencyService()
 
 await app.build()
+
+const { concurrencyService } = app.getServices()
 ```
 
-The service is registered in the application container and can then be resolved through its dependency token.
+This service is separate from the command retry behavior configured with a CQRS pipeline plugin.
 
 ## Resolve Services
 
-`AppBuilder` exposes `resolve()` as a convenience for resolving a registered dependency:
+`XenoAppBuilder` exposes `resolve()` as a convenience for resolving a registered dependency:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import type { XenoRegistry } from '@xeno-js/shared'
+
+interface AppRegistry extends XenoRegistry { 
+  greeting: { 
+    greet(): string 
+  } 
+}
+
+const app = new XenoAppBuilder<AppRegistry>()
 
 app.addServices((services) => {
-  services.addSingleton('GREETING_SERVICE', () => ({
+  services.addSingleton('greeting', () => ({
     greet: () => 'Hello Xeno!',
   }))
 })
 
 await app.build()
 
-const greeting = app.resolve('GREETING_SERVICE')
+const { greeting } = app.getServices()
 
 console.log(greeting.greet())
 ```
 
-You can also use the `ServiceContainer` returned by `build()`:
+`build()` does not return the `ServiceContainer`; it returns the configured runtime application instance. Use the builder's `resolve()` method for root-container registrations:
 
 ```ts
-const container = await app.build()
-
-const greeting = container.resolve('GREETING_SERVICE')
+const greeting = app.resolve('GREETING_SERVICE')
 ```
 
-For application code, prefer dependency injection rather than repeatedly reaching back into `AppBuilder`.
+Root resolution cannot retrieve scoped services. Resolve those from an active service scope instead. For application code, prefer dependency injection rather than repeatedly reaching back into `XenoAppBuilder`.
 
 ## Build the Application
 
 Call `build()` when configuration is complete:
 
 ```ts
-const container = await app.build()
+const application = await app.build()
 ```
 
-`build()` initializes queued modules according to their priority and returns the configured `ServiceContainer`.
+`build()` initializes queued modules according to their priority and returns the configured runtime application instance (by default, a `XenoApplication`). It does not expose the container as its return value.
 
 The important behavior is:
 
 1. Modules are ordered by priority.
 2. Each module is initialized.
-3. If initialization succeeds, the application is marked as built.
-4. The configured `ServiceContainer` is returned.
+3. If all modules initialize successfully, the configured runtime application instance is returned.
 
 If module initialization fails, `build()` throws a bootstrap error identifying the module that failed.
 
@@ -515,13 +496,11 @@ For example:
 Bootstrap failed at [CacheModule]: ...
 ```
 
-The original error is preserved as the cause.
+The module failure is logged and wrapped in a bootstrap error; the original error is preserved as its cause.
 
 ## Build Only Once
 
-`AppBuilder` keeps the built application container.
-
-Calling `build()` again returns the same container:
+After a successful build, `XenoAppBuilder` keeps the build promise and returns the same runtime application instance on subsequent calls:
 
 ```ts
 const first = await app.build()
@@ -531,39 +510,44 @@ console.log(first === second)
 // true
 ```
 
-Application bootstrap should therefore normally happen once during application startup.
+If a build fails, the builder clears the failed promise, disposes and recreates its container, and a subsequent `build()` call can retry after that reset. Application bootstrap should normally happen once during startup.
 
 ## Module Ordering
 
-AppBuilder queues modules with priorities so that required infrastructure is initialized before the components that depend on it.
-
-The current built-in ordering includes:
+AppBuilder queues modules with priorities and initializes them in ascending order. Integrations do not declare dependency relationships automatically; choose a priority when a custom module must run before or after another module. The source-defined priorities include:
 
 | Priority | Module                   |
 | -------: | ------------------------ |
 |        0 | Context                  |
 |        1 | Logger                   |
 |        2 | Cache                    |
-|        3 | Authentication           |
-|        4 | Database / Middleware    |
-|        5 | CQRS                     |
-|       30 | HTTP Core                |
+|        2 | Authentication           |
+|        4 | Middleware               |
+|        5 | CQRS and Routes          |
 |       40 | Concurrency Service      |
-|       50 | Adapter / custom modules |
+|       50 | Custom modules (default) |
 |       99 | Application services     |
 
-You normally do not need to manage these priorities yourself.
+The HTTP client module and custom modules use priority `50` unless another priority is specified. Database and HTTP server plugins can queue provider-specific modules, so their priorities depend on the integration.
 
-The important consequence is that application services registered through `addServices()` are initialized after the built-in infrastructure modules.
+`addServices()` uses priority `99` by default, so its registrations run after the built-in modules listed above.
 
 ## A Typical Composition Root
 
 A real application can combine the capabilities it needs:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+import type { DbPlugin, XenoRegistry } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+interface AppRegistry extends XenoRegistry { 
+  USER_REPOSITORY: UserRepository; 
+  USER_SERVICE: UserService 
+}
+
+declare const databasePlugin: DbPlugin<AppRegistry>
+
+const app = new XenoAppBuilder<AppRegistry>()
 
 app.addLogger((options) => {
   options.console = true
@@ -571,13 +555,10 @@ app.addLogger((options) => {
 
 app.addCache()
 
-app.addPipeline((config) => {
-  config.queryBus.isEnabled = true
-})
+app.addPipeline(withQueryCaching())
 
-app.addDb((options, config) => {
-  options.connectionString = config.getOrThrow('DATABASE_URL')
-})
+// databasePlugin is supplied by the selected database integration.
+app.addDb(databasePlugin)
 
 app.addServices((services) => {
   services.addScoped('USER_REPOSITORY', (container) => {
@@ -593,7 +574,7 @@ app.addServices((services) => {
   })
 })
 
-await app.build()
+const application = await app.build()
 ```
 
 The composition root now makes the application's infrastructure and services explicit:
@@ -605,26 +586,26 @@ AppBuilder
     ├── Logging
     ├── Cache
     ├── CQRS Pipeline
-    ├── Database
+    ├── Database integration
     └── Application Services
              │
              ▼
-       ServiceContainer
+configured runtime application
 ```
 
-## AppBuilder and ServiceContainer
+## XenoAppBuilder and ServiceContainer
 
-The two objects have different responsibilities:
+The builder and its internal service container have different responsibilities:
 
 | Component          | Responsibility                            |
 | ------------------ | ----------------------------------------- |
-| `AppBuilder`       | Compose and bootstrap the application     |
+| `XenoAppBuilder`       | Compose and bootstrap the application     |
 | `ServiceContainer` | Register and resolve runtime dependencies |
 
-Use `AppBuilder` during application composition:
+Use `XenoAppBuilder` during application composition:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder<UserRegistry>()
 
 app.addServices((services) => {
   services.addScoped('USER_SERVICE', () => {
@@ -635,22 +616,35 @@ app.addServices((services) => {
 await app.build()
 ```
 
-Use the container to resolve runtime dependencies:
+The builder retains the dependency-injection container internally; `build()` returns the runtime application rather than that container. Resolve root registrations through the builder:
 
 ```ts
-const container = await app.build()
+import { XenoAppBuilder, TOKENS } from '@xeno-js/core'
 
-const service = container.resolve('USER_SERVICE')
+const app = new XenoAppBuilder()
+app.addLogger()
+await app.build()
+
+const { logger } = app.getServices()
 ```
 
-`AppBuilder` is therefore the composition API, while `ServiceContainer` is the runtime dependency mechanism.
+`XenoAppBuilder` is the composition API and uses `ServiceContainer` internally for dependency registration and resolution. A scoped service cannot be resolved through the root builder; it needs an active scope. The returned runtime instance is discussed separately in the XenoApplication documentation.
 
-## AppBuilder and the Registry
+## XenoAppBuilder and the Registry
 
-`AppBuilder` is generic over the application's registry:
+`XenoAppBuilder` is generic over the application's registry. Add custom service tokens to the registry so that registration and resolution remain type-safe:
 
 ```ts
-const app = new AppBuilder<MyRegistry>()
+import { XenoAppBuilder } from '@xeno-js/core'
+import type { XenoRegistry } from '@xeno-js/shared'
+
+interface AppRegistry extends XenoRegistry { 
+  GREETING_SERVICE: { 
+    greet(): string 
+  }
+}
+
+const app = new XenoAppBuilder<AppRegistry>()
 ```
 
 The registry associates dependency tokens with their expected types.
@@ -658,6 +652,8 @@ The registry associates dependency tokens with their expected types.
 This makes calls such as:
 
 ```ts
+import { TOKENS } from '@xeno-js/core'
+
 const logger = app.resolve(TOKENS.LOGGER)
 ```
 
@@ -665,38 +661,38 @@ type-safe when `TOKENS.LOGGER` is part of the registry.
 
 See [Xeno Registry](./xeno-registry) for the registry model.
 
-## When to Use AppBuilder
+## When to Use XenoAppBuilder
 
-Use `AppBuilder` when defining the application's composition root.
+Use `XenoAppBuilder` when defining the application's composition root.
 
 Typical responsibilities include:
 
-* registering application services;
-* enabling application modules;
-* configuring infrastructure;
-* configuring context;
-* configuring middleware;
-* configuring CQRS pipelines;
-* configuring logging;
-* configuring authentication;
-* configuring databases;
-* configuring caches;
-* configuring HTTP infrastructure.
+- registering application services;
+- enabling application modules;
+- configuring infrastructure;
+- configuring context;
+- configuring middleware;
+- configuring CQRS pipelines;
+- configuring logging;
+- configuring authentication;
+- configuring databases;
+- configuring caches;
+- configuring HTTP infrastructure.
 
-Do not use `AppBuilder` as a general-purpose runtime service locator.
+Do not use `XenoAppBuilder` as a general-purpose runtime service locator.
 
 Once the application is built, application components should receive their dependencies through dependency injection.
 
 ## The Key Idea
 
-`AppBuilder` answers one practical question:
+`XenoAppBuilder` answers one practical question:
 
 > **How is this application composed?**
 
 The answer should be visible in one place:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger(...)
 app.addCache(...)
@@ -707,18 +703,18 @@ app.addServices(...)
 await app.build()
 ```
 
-## Configure the application's capabilities and dependencies at the composition root, then hand execution over to the configured runtime
+Configure the application's capabilities and dependencies at the composition root, then hand execution to the configured runtime.
 
 ## Related Documentation
 
-* [Service Container](../dependency-injection/service-container)
-* [Registration](../dependency-injection/registration)
-* [Resolution](../dependency-injection/resolution)
-* [Xeno Registry](./xeno-registry)
-* [CQRS Pipelines](../application/pipelines/overview)
-* [Cache Overview](../cache/overview)
-* [Redis Cache](../cache/redis)
-* [Observability Overview](../observability/overview)
+- [Service Container](../dependency-injection/service-container)
+- [Registration](../dependency-injection/registration)
+- [Resolution](../dependency-injection/resolution)
+- [Xeno Registry](./xeno-registry)
+- [CQRS Pipelines](../application/pipelines/overview)
+- [Cache Overview](../cache/overview)
+- [Redis Cache](../cache/redis)
+- [Observability Overview](../observability/overview)
 
 ---
 

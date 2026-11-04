@@ -1,7 +1,7 @@
 ---
-const codeSnippet = `import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno-js/core'
+const codeSnippet = `import { XenoAppBuilder, LOG_LEVEL, TOKENS } from '@xeno-js/core'
 
-export const XenoApp = new AppBuilder<MyRegistry>()
+export const XenoApp = new XenoAppBuilder<MyRegistry>()
    .addLogger((config) => {
             config.level = LOG_LEVEL.INFO
             config.console = true

@@ -74,7 +74,7 @@ When invoked with the `--vue` flag, the `CqrsVueGenerator` scaffolds a pattern d
 
  The Xeno.JS CLI does more than just generate dead code; it acts as an active architectural guide. Within the generated files (e.g., `*.handler.ts`, `*.module.ts`, or Composables), the CLI injects comment blocks highlighted as `⚠️ WARNING: ACTION REQUIRED ⚠️`.
 
-These comments explicitly instruct the developer on the steps necessary to integrate the new component into the project's *XenoRegistry*, providing the exact snippets to paste into the `src/registry.ts` file and the `.addServices()` block of the `AppBuilder`. This ensures that adding new features never compromises the system's dependency graph or type-safety.
+These comments explicitly instruct the developer on the steps necessary to integrate the new component into the project's *XenoRegistry*, providing the exact snippets to paste into the `src/registry.ts` file and the `.addServices()` block of the `XenoAppBuilder`. This ensures that adding new features never compromises the system's dependency graph or type-safety.
 
 ---
 

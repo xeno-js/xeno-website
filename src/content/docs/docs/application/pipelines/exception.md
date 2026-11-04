@@ -1,6 +1,6 @@
 ---
 title: Exception Pipeline
-description: Learn how Xeno.JS handles exceptions raised while executing commands and queries and how to preserve application errors with AppError.
+description: Learn how the Xeno.JS CQRS exception behavior converts thrown values into failed Results and how to preserve application errors with AppError.
 keywords:
 - Xeno.JS exception handling
 - Xeno.JS exception pipeline
@@ -17,39 +17,43 @@ tags:
 - cqrs
 faqs:
 - question: How do I enable the Exception Pipeline?
-  answer: Enable the CQRS pipeline module by calling addPipeline() on AppBuilder. The Exception Pipeline is included automatically.
+  answer: Enable CQRS by calling addPipeline() on XenoAppBuilder. The ExceptionPipeline is added as a common behavior for commands and queries.
 - question: Do I need to configure an exception option?
   answer: No. The Exception Pipeline does not have a separate exception configuration option.
 - question: What happens when a command or query throws an AppError?
   answer: The existing AppError is preserved and returned as a failed Result.
-- question: What happens when a command or query throws a regular Error?
-  answer: Xeno.JS wraps it in an AppError with the SYSTEM_ERROR code and an HTTP 500 status.
-- question: Is the original exception preserved?
-  answer: Yes. For errors wrapped by the pipeline, the original exception is stored as the AppError cause.
+- question: What happens when a command or query throws a value other than AppError?
+  answer: If the thrown value is not an AppError, Xeno.JS wraps it in an AppError with the SYSTEM_ERROR code and status 500.
+- question: Is the original thrown value preserved?
+  answer: Yes. For non-AppError values wrapped by the behavior, the original thrown value is stored as the AppError cause.
 ---
 
 ## Introduction
 
-The Exception Pipeline provides consistent exception handling for commands and queries executed through the Xeno.JS application pipeline.
+The `ExceptionPipeline` is a CQRS behavior that handles values thrown while
+executing the next command or query behavior, including the handler.
 
-It catches exceptions raised during request processing and converts them into failed `Result` values.
+It returns a failed `Result` for both existing `AppError` instances and other
+thrown values. It does not itself write logs or create an HTTP response.
 
-You do not configure the Exception Pipeline separately. It is included when you enable the CQRS pipeline through `AppBuilder`.
+`XenoAppBuilder.addPipeline()` enables the CQRS module, which adds
+`ExceptionPipeline` as a common behavior for commands and queries. You do not
+configure it separately.
 
 ## Enable the Exception Pipeline
 
-Before using the CQRS pipeline, configure it through `AppBuilder`:
+Before using the CQRS pipeline, configure it through `XenoAppBuilder`:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addPipeline()
 
 await app.build()
 ```
 
-`addPipeline()` initializes the CQRS pipeline used by commands and queries.
+`addPipeline()` queues the CQRS module, which is initialized during `build()`.
 
 The Exception Pipeline is registered automatically as part of this configuration.
 
@@ -63,9 +67,10 @@ config.exception = {
 
 ## How exception handling works
 
-When a command or query is executed, an exception can be raised by application code such as a handler or one of its dependencies.
-
-The Exception Pipeline handles the exception according to its type.
+When a command or query runs through the configured CQRS pipeline, the
+`ExceptionPipeline` awaits the next behavior. This continues through the
+remaining behaviors and the handler. If that execution throws, the behavior
+converts the thrown value according to its type.
 
 ### Existing `AppError`
 
@@ -82,13 +87,14 @@ throw AppError.create({
 })
 ```
 
-The resulting failed `Result` contains the same `AppError`.
+The resulting `Result.fail` contains the same `AppError` instance.
 
-This allows application code to define meaningful application errors without losing their code, message, status, or other metadata.
+This preserves the error instance and its application-defined metadata.
 
-### Regular errors
+### Other thrown values
 
-If the thrown value is not an `AppError`, Xeno.JS creates a system error.
+If the thrown value is not an `AppError` (including non-`Error` values),
+Xeno.JS creates a system error.
 
 For example:
 
@@ -98,12 +104,14 @@ throw new Error('Unexpected database failure')
 
 The Exception Pipeline converts it into an `AppError` with:
 
-* code: `SYSTEM_ERROR`;
-* status: `500 Internal Server Error`;
-* the current request intent as the error name;
-* the original exception as the `cause`.
+- code: `SYSTEM_ERROR`;
+- status: `500` (`STATUS_CODES.INTERNAL_SERVER_ERROR`);
+- the CQRS request's `intent` as the error name;
+- the original thrown value as the `cause`.
 
-The original exception is therefore still available as the cause of the resulting `AppError`.
+The original thrown value is therefore available as the `cause` of the
+resulting `AppError`. The status is error metadata; this behavior does not
+itself create or send an HTTP response.
 
 ## Use `AppError` for expected application errors
 
@@ -158,13 +166,16 @@ If an unexpected exception is thrown by the repository or another dependency:
 throw new Error('Database connection failed')
 ```
 
-the Exception Pipeline converts it into a failed `Result` containing a `SYSTEM_ERROR` with status `500`.
+the Exception Pipeline converts it into a failed `Result` containing a
+`SYSTEM_ERROR` with status `500`.
 
-The original exception is retained as the `cause`.
+The original thrown value is retained as the `cause`.
 
 ## Result of exception handling
 
-The Exception Pipeline returns a failed `Result` rather than propagating the exception as an unhandled rejection.
+When the next behavior or handler throws, the Exception Pipeline returns a
+failed `Result` rather than propagating that thrown value from this pipeline
+call.
 
 Conceptually:
 
@@ -181,17 +192,18 @@ Application execution
             ├── AppError
             │      └─────────────► Result.fail(existing AppError)
             │
-            └── other Error
+            └── other thrown value
                    └─────────────► Result.fail(
                                       AppError(
                                         SYSTEM_ERROR,
-                                        HTTP 500,
-                                        cause = original error
+                                        status = 500,
+                                        cause = original value
                                       )
                                     )
 ```
 
-This gives application code a consistent error result for both expected application failures and unexpected exceptions.
+This gives command and query dispatch a consistent failed `Result` for
+application errors and other thrown values that reach this behavior.
 
 ## Throwing an `AppError`
 
@@ -224,22 +236,24 @@ You should not manually convert every unexpected exception into `SYSTEM_ERROR`. 
 
 ## Command and query execution
 
-The Exception Pipeline is part of the common pipeline used for both commands and queries.
+The CQRS module adds `ExceptionPipeline` as a common behavior at priority `0`,
+so it applies to both command and query pipelines. The logging behavior is
+registered separately; exception conversion itself does not log.
 
-This means the same exception handling behavior applies to:
+This means the behavior is available to:
 
-* commands;
-* queries;
-* their handlers;
-* dependencies executed during request processing.
+- commands;
+- queries;
+- their handlers;
+- dependencies called while those handlers or subsequent behaviors execute.
 
 You therefore do not need separate exception handling configuration for commands and queries.
 
 For creating the request itself, see:
 
-* [Creating Commands](../cqrs/command)
-* [Creating Queries](../cqrs/query)
-* [Creating Handlers](../cqrs/handler)
+- [Creating Commands](../cqrs/command)
+- [Creating Queries](../cqrs/query)
+- [Creating Handlers](../cqrs/handler)
 
 ## Troubleshooting
 
@@ -248,7 +262,7 @@ For creating the request itself, see:
 Check that the application has enabled the CQRS pipeline:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addPipeline()
 
 await app.build()
@@ -271,9 +285,10 @@ throw AppError.create({
 
 The Exception Pipeline preserves errors that are instances of `AppError`.
 
-### My error has status 500
+### My thrown value produces status 500
 
-If the error is a regular `Error`, the Exception Pipeline intentionally converts it to a system error with status `500`.
+If the thrown value is not an `AppError`, the Exception Pipeline converts it
+to a system error with status `500`.
 
 If the error represents an expected application condition, create and throw an appropriate `AppError` instead.
 
@@ -288,29 +303,23 @@ throw AppError.create({
 })
 ```
 
-### I need to inspect the original unexpected exception
+### I need to inspect the original thrown value
 
-Unexpected exceptions are stored as the `cause` of the generated `AppError`.
+Unexpected thrown values are stored as the `cause` of the generated
+`AppError`.
 
-For example:
-
-```ts
-const error = result.getErrorOrThrow()
-
-console.log(error.cause)
-```
-
-The original exception can therefore still be inspected by the application or by the logging infrastructure.
+When handling the failed result, inspect the generated `AppError` and its
+`cause`. Logging is provided separately by the configured logging behavior.
 
 ## Related documentation
 
-* [Application Overview](../overview)
-* [CQRS Overview](../cqrs/overview)
-* [Creating Commands](../cqrs/command)
-* [Creating Queries](../cqrs/query)
-* [Creating Handlers](../cqrs/handler)
-* [Logging Pipeline](./logging)
-* [Performance Pipeline](./performance)
+- [Application Overview](../overview)
+- [CQRS Overview](../cqrs/overview)
+- [Creating Commands](../cqrs/command)
+- [Creating Queries](../cqrs/query)
+- [Creating Handlers](../cqrs/handler)
+- [Logging Pipeline](./logging)
+- [Performance Pipeline](./performance)
 
 ---
 

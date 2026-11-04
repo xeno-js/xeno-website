@@ -19,7 +19,7 @@ faqs:
 - question: How do I register a custom logger?
   answer: Pass a factory returning the ILoggerClient implementation through options.customLoggers in app.addLogger().
 - question: How do I use the configured logger?
-  answer: Resolve TOKENS.LOGGER from AppBuilder after build() and use the ILogger API.
+  answer: After build(), resolve TOKENS.LOGGER through the builder's resolve() method and use the ILogger API.
 ---
 
 ## Introduction
@@ -37,8 +37,8 @@ class MyLogger implements ILoggerClient {
   track<T>(
     level: LogLevel,
     message: string,
-    context: T,
-    error?: unknown,
+    context: T | undefined,
+    error: unknown | undefined,
   ): void {
     console.log({
       level,
@@ -50,16 +50,16 @@ class MyLogger implements ILoggerClient {
 }
 ```
 
-The `track()` method receives the log level, message, logging context, and optional error.
+The `track()` method receives the log level, message, optional logging context, and optional error.
 
 ## Register the Logger
 
 Pass a factory through `customLoggers`:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.customLoggers = [
@@ -68,24 +68,25 @@ app.addLogger((options) => {
 })
 ```
 
-The factory receives the current service scope:
+Provide a factory that returns an `ILoggerClient`:
 
 ```ts
 options.customLoggers = [
-  (container) => new MyLogger(),
+  () => new MyLogger(),
 ]
 ```
 
-Use the container only when the custom logger needs to resolve application services.
+The logger module processes the registered factory during application build. The shown contract does not pass a service scope or container to the factory.
 
 ## Resolve and Use the Logger
 
 After building the application, resolve `TOKENS.LOGGER`:
 
 ```ts
-import { AppBuilder, TOKENS } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { TOKENS } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.customLoggers = [
@@ -95,7 +96,7 @@ app.addLogger((options) => {
 
 await app.build()
 
-const logger = app.resolve(TOKENS.LOGGER)
+const { logger } = app.getServices()
 
 logger.info('Application started')
 logger.error('Something went wrong', new Error('Example error'))
@@ -106,15 +107,16 @@ logger.error('Something went wrong', new Error('Example error'))
 ## Complete Example
 
 ```ts
-import { AppBuilder, TOKENS } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { TOKENS } from '@xeno-js/shared'
 import type { ILoggerClient, LogLevel } from '@xeno-js/shared'
 
 class MyLogger implements ILoggerClient {
   track<T>(
     level: LogLevel,
     message: string,
-    context: T,
-    error?: unknown,
+    context: T | undefined,
+    error: unknown | undefined,
   ): void {
     console.log({
       level,
@@ -125,7 +127,7 @@ class MyLogger implements ILoggerClient {
   }
 }
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.customLoggers = [
@@ -135,7 +137,7 @@ app.addLogger((options) => {
 
 await app.build()
 
-const logger = app.resolve(TOKENS.LOGGER)
+const { logger } = app.getServices()
 
 logger.info('Hello from Xeno.JS')
 ```
@@ -144,9 +146,9 @@ logger.info('Hello from Xeno.JS')
 
 Related
 
-* [Observability Overview](./overview)
-* [Pino Logger](./pino-logger)
-* [Sentry Node Logger](./sentry-node).
+- [Observability Overview](./overview)
+- [Pino Logger](./pino-logger)
+- [Sentry Node Logger](./sentry-node).
 
 ---
 

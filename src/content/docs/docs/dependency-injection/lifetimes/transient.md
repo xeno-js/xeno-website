@@ -30,11 +30,11 @@ faqs:
 - question: Can a transient service depend on a singleton?
   answer: Yes. The transient service can resolve registered singleton services as dependencies.
 - question: Can a transient service depend on a scoped service?
-  answer: Yes, when the transient service is resolved within an active service scope.
+  answer: Resolve it within an active service scope, for example through runInScope() or getScopedServices(), so the scoped dependency belongs to the intended execution scope.
 - question: Does a transient service need an explicit scope?
-  answer: Not by itself. A transient service can be resolved from the root container, but any scoped dependency it resolves requires an active scope.
+  answer: A transient without scoped dependencies can be resolved from root services. If it depends on scoped services, resolve it within an active scope.
 - question: What happens if a transient service implements dispose()?
-  answer: Xeno.JS tracks disposable transient instances in the scope used for resolution and disposes them when that scope is disposed.
+  answer: Xeno.JS tracks disposable transient instances in the scope used for resolution and disposes them when that scope is disposed. Root-resolved instances are tracked by the root scope and disposed with the container.
 - question: When should I use a transient service?
   answer: Use transient lifetime when each resolution should produce an independent service instance without shared instance state.
 ---
@@ -61,14 +61,14 @@ Every call to `resolve('USER_SERVICE')` creates a new `UserService` instance.
 
 You need:
 
-* an Xeno.JS service container;
-* a service token registered in your application registry;
-* a factory that creates the service instance.
+- an `XenoAppBuilder` to configure the service container;
+- a service token registered in your application registry;
+- a factory that creates the service instance.
 
-For an application built with `AppBuilder`, register application services with `addServices()`:
+For an application built with `XenoAppBuilder`, register application services with `addServices()`:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((services) => {
     services.addTransient('USER_SERVICE', (scope) => {
       return new UserService(
@@ -77,10 +77,11 @@ const app = new AppBuilder()
     })
   })
 
-const container = await app.build()
+const application = await app.build()
 ```
 
-`addServices()` configures the application's `IServiceContainer`. The resulting container can then be used to resolve the registered service.
+`build()` returns the runtime application, not the service container. Use its
+service APIs to resolve registered services.
 
 ## Register a transient service
 
@@ -109,19 +110,19 @@ Use the scope to resolve dependencies instead of constructing them manually insi
 
 ## Resolve a transient service
 
-After registration and application build, resolve the service from the container:
+After registration and application build, resolve a transient without scoped
+dependencies from the application's root services:
 
 ```ts
-const container = await app.build()
-
-const userService = container.resolve('USER_SERVICE')
+const application = await app.build()
+const userService = application.getServices().USER_SERVICE
 ```
 
 Each resolution creates a new instance:
 
 ```ts
-const first = container.resolve('USER_SERVICE')
-const second = container.resolve('USER_SERVICE')
+const first = application.getServices().USER_SERVICE
+const second = application.getServices().USER_SERVICE
 
 console.log(first === second) // false
 ```
@@ -147,8 +148,8 @@ services.addTransient('REQUEST_OPERATION', () => {
 Resolving the service twice produces two different instances:
 
 ```ts
-const first = container.resolve('REQUEST_OPERATION')
-const second = container.resolve('REQUEST_OPERATION')
+const first = application.getServices().REQUEST_OPERATION
+const second = application.getServices().REQUEST_OPERATION
 
 console.log(first.id)
 console.log(second.id)
@@ -183,7 +184,7 @@ class UserService {
 Register both services:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((services) => {
     services.addScoped('USER_REPOSITORY', () => {
       return new UserRepository()
@@ -196,10 +197,11 @@ const app = new AppBuilder()
     })
   })
 
-const container = await app.build()
+const application = await app.build()
 ```
 
-The transient `USER_SERVICE` gets its dependencies through the scope supplied to its factory.
+The transient `USER_SERVICE` gets its dependencies through the scope supplied
+to its factory. `build()` returns the runtime application, not the container.
 
 ## Transient services and dependency lifetimes
 
@@ -261,9 +263,14 @@ resolve USER_SERVICE
               └── same scoped instance for this scope
 ```
 
-The transient service is recreated on every resolution, while the scoped dependency follows the lifetime of the active scope.
+The transient service is recreated on every resolution, while the scoped
+dependency follows the lifetime of the active scope. Resolve it through an
+active request or operation scope to keep that boundary explicit.
 
-If there is no active scope when the scoped dependency is required, the resolution fails.
+Do not resolve this transient through root services when it depends on a
+scoped service. The transient factory receives the root scope in that case, so
+the scoped dependency would be associated with the root scope rather than a
+request or operation scope.
 
 See [Scoped](./scoped) for request and scope-based service lifetimes.
 
@@ -272,7 +279,7 @@ See [Scoped](./scoped) for request and scope-based service lifetimes.
 The following example registers a repository as scoped and a service as transient:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 
 class UserRepository {
   async findById(id: string) {
@@ -293,7 +300,7 @@ class UserService {
   }
 }
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((services) => {
     services.addScoped('USER_REPOSITORY', () => {
       return new UserRepository()
@@ -306,16 +313,18 @@ const app = new AppBuilder()
     })
   })
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 When the transient service is resolved repeatedly:
 
 ```ts
-const first = container.resolve('USER_SERVICE')
-const second = container.resolve('USER_SERVICE')
+await application.runInScope(async (services) => {
+  const first = services.USER_SERVICE
+  const second = services.USER_SERVICE
 
-console.log(first === second) // false
+  console.log(first === second) // false
+})
 ```
 
 Each resolution creates a new `UserService`.
@@ -324,42 +333,21 @@ Each resolution creates a new `UserService`.
 
 A transient service does not create or own a scope.
 
-When a transient service is resolved from an active scope, its factory receives that scope and can resolve scoped dependencies from it:
+When a transient service is resolved from an active scope, its factory receives
+that scope and can resolve scoped dependencies from it:
 
 ```ts
-const scope = container.createScope()
-
-try {
-  const first = scope.resolve('USER_SERVICE')
-  const second = scope.resolve('USER_SERVICE')
+await application.runInScope(async (services) => {
+  const first = services.USER_SERVICE
+  const second = services.USER_SERVICE
 
   console.log(first === second) // false
-} finally {
-  await scope.dispose()
-}
+})
 ```
 
-The two `USER_SERVICE` resolutions still produce different instances because the service is transient.
-
-If `USER_SERVICE` depends on a scoped service, both transient instances can resolve the same scoped dependency within this scope.
-
-For example:
-
-```ts
-const scope = container.createScope()
-
-try {
-  const first = scope.resolve('USER_SERVICE')
-  const second = scope.resolve('USER_SERVICE')
-
-  // USER_SERVICE is different for each resolution.
-  console.log(first === second) // false
-} finally {
-  await scope.dispose()
-}
-```
-
-The lifetime of each dependency is independent of the lifetime of `USER_SERVICE`.
+The transient instances differ, while any scoped dependency they resolve is
+shared within this operation's scope. Each dependency retains its registered
+lifetime independently of `USER_SERVICE`.
 
 ## Transient services and disposal
 
@@ -382,18 +370,15 @@ services.addTransient('TEMPORARY_RESOURCE', () => {
 When the service is resolved through a scope, the transient instance can be disposed when that scope is disposed:
 
 ```ts
-const scope = container.createScope()
-
-try {
-  const resource = scope.resolve('TEMPORARY_RESOURCE')
-
-  // Use resource...
-} finally {
-  await scope.dispose()
-}
+await application.runInScope(async (services) => {
+  const resource = services.TEMPORARY_RESOURCE
+  // Use resource within this operation.
+})
 ```
 
-This is particularly useful for transient services that allocate resources during their lifetime.
+The scope tracks disposable transient instances and disposes them when the
+operation completes. Transient instances resolved from root services are
+tracked by the root scope and disposed when the container is disposed.
 
 If the service does not need cleanup, no `dispose()` method is required.
 
@@ -418,8 +403,8 @@ services.addSingleton('USER_OPERATION', () => {
 The difference is observable directly from resolution:
 
 ```ts
-const first = container.resolve('USER_OPERATION')
-const second = container.resolve('USER_OPERATION')
+const first = application.getServices().USER_OPERATION
+const second = application.getServices().USER_OPERATION
 
 console.log(first === second)
 ```
@@ -455,20 +440,16 @@ Transient and scoped services are both created more than once, but they follow d
 For example, with a single scope:
 
 ```ts
-const scope = container.createScope()
+await application.runInScope(async (services) => {
+  const transientA = services.TRANSIENT_SERVICE
+  const transientB = services.TRANSIENT_SERVICE
 
-try {
-  const transientA = scope.resolve('TRANSIENT_SERVICE')
-  const transientB = scope.resolve('TRANSIENT_SERVICE')
-
-  const scopedA = scope.resolve('SCOPED_SERVICE')
-  const scopedB = scope.resolve('SCOPED_SERVICE')
+  const scopedA = services.SCOPED_SERVICE
+  const scopedB = services.SCOPED_SERVICE
 
   console.log(transientA === transientB) // false
   console.log(scopedA === scopedB) // true
-} finally {
-  await scope.dispose()
-}
+})
 ```
 
 Use transient when you need a new instance for every resolution.
@@ -509,14 +490,14 @@ Registering the same token again throws:
 
 Check for duplicate registrations in:
 
-* `addServices()`;
-* custom modules;
-* framework modules;
-* application bootstrap configuration.
+- `addServices()`;
+- custom modules;
+- framework modules;
+- application bootstrap configuration.
 
 If the service should have different behavior, use a different token rather than registering the same token twice.
 
-### A transient service requires a scoped dependency without an active scope
+### Resolve transient services with scoped dependencies in an execution scope
 
 Consider:
 
@@ -532,35 +513,27 @@ services.addTransient('USER_SERVICE', (scope) => {
 })
 ```
 
-If `USER_SERVICE` is resolved from the root container:
+Resolve `USER_SERVICE` within an execution scope:
 
 ```ts
-container.resolve('USER_SERVICE')
+await application.runInScope(async (services) => {
+  const userService = services.USER_SERVICE
+  // Use userService within this scope.
+})
 ```
 
-the transient service attempts to resolve its scoped dependency without an active scope.
-
-The container reports:
-
-```text
-[DI Container Error]: Scoped service 'REQUEST_STATE' requires an active scope.
-```
-
-Resolve the service from an active scope instead:
+`runInScope()` ensures the scoped dependency belongs to the operation's scope.
+The container rejects resolving a scoped token directly from root services:
 
 ```ts
-const scope = container.createScope()
-
-try {
-  const userService = scope.resolve('USER_SERVICE')
-
-  // Use userService...
-} finally {
-  await scope.dispose()
-}
+application.getServices().REQUEST_STATE
 ```
 
-For request-based applications, prefer the request-managed scope instead of creating scopes manually for every request.
+When a transient service is resolved directly from root services, its factory
+receives the root scope. If it resolves a scoped dependency, that dependency is
+therefore associated with the root scope rather than a request or operation
+scope. Avoid relying on this for request-specific services; use the active
+request scope or `runInScope()` instead.
 
 See [Scoped](./scoped).
 
@@ -582,18 +555,18 @@ If it was registered with `addScoped()`, the same instance is intentionally reus
 
 Use transient lifetime when:
 
-* each resolution should produce an independent instance;
-* the service does not need shared instance state;
-* the service is lightweight to construct;
-* the service represents an operation or short-lived object;
-* sharing one instance could introduce unwanted state between consumers.
+- each resolution should produce an independent instance;
+- the service does not need shared instance state;
+- the service is lightweight to construct;
+- the service represents an operation or short-lived object;
+- sharing one instance could introduce unwanted state between consumers.
 
 Typical examples include:
 
-* operation-specific services;
-* lightweight application services;
-* request-independent helper objects;
-* factories or adapters whose instances should not be reused.
+- operation-specific services;
+- lightweight application services;
+- request-independent helper objects;
+- factories or adapters whose instances should not be reused.
 
 ## When not to use transient
 
@@ -602,7 +575,7 @@ Avoid transient lifetime when you explicitly need one shared instance.
 For application-wide shared state or resources, consider a singleton:
 
 ```ts
-services.addSingleton('LOGGER', () => {
+services.addSingleton('MY_LOGGER', () => {
   return new Logger()
 })
 ```
@@ -621,23 +594,23 @@ Do not choose a lifetime only because the service is small or large. Choose it a
 
 Before registering a service as transient, verify:
 
-* [ ] A service token exists in the application registry.
-* [ ] The service is registered with `addTransient()`.
-* [ ] The factory creates a new instance.
-* [ ] Dependencies are resolved through the factory's `scope`.
-* [ ] Any scoped dependency is resolved within an active scope.
-* [ ] The service does not require shared instance state.
-* [ ] Disposable resources are released when the owning scope is disposed.
+- [ ] A service token exists in the application registry.
+- [ ] The service is registered with `addTransient()`.
+- [ ] The factory creates a new instance.
+- [ ] Dependencies are resolved through the factory's `scope`.
+- [ ] Any scoped dependency is resolved within an active scope.
+- [ ] The service does not require shared instance state.
+- [ ] Disposable resources are released when the owning scope is disposed.
 
 ## Related docs
 
-* [Service Container](../service-container) — Learn where services are registered and resolved.
-* [Registration](../registration) — Learn how to register services and choose a lifetime.
-* [Singleton](./singleton) — Share one service instance across the container.
-* [Scoped](./scoped) — Share one service instance within a logical scope.
-* [Resolution](../resolution) — Learn how to resolve registered services.
-* [Dependency Graph](../dependency-graph) — Learn how services depend on one another.
-* [Captive Dependencies](../captive-dependencies) — Learn how incompatible service lifetimes can cause dependency problems.
+- [Service Container](../service-container) — Learn where services are registered and resolved.
+- [Registration](../registration) — Learn how to register services and choose a lifetime.
+- [Singleton](./singleton) — Share one service instance across the container.
+- [Scoped](./scoped) — Share one service instance within a logical scope.
+- [Resolution](../resolution) — Learn how to resolve registered services.
+- [Dependency Graph](../dependency-graph) — Learn how services depend on one another.
+- [Captive Dependencies](../captive-dependencies) — Learn how incompatible service lifetimes can cause dependency problems.
 
 ---
 

@@ -21,18 +21,18 @@ faqs:
 - question: Do I need to set the Command type manually?
   answer: No. Command sets type to REQUEST_TYPE.COMMAND automatically.
 - question: How do I register a Command Handler?
-  answer: Register the handler in the service container using the Command intent as the registration token.
+  answer: Register the handler in the service container using the Command intent as its token.
 - question: How do I execute a Command?
-  answer: Resolve the mediator and call mediator.send(command, signal).
+  answer: Call mediator.send(command, signal) inside an active service scope; use runInScope for operations outside an existing request.
 - question: Can I validate a Command with Zod?
-  answer: Yes. Enable validation with AppBuilder and register a Zod schema using the Command intent as the schema key.
+  answer: Yes. Add the withZodValidation plugin to addPipeline and register a schema under the Command intent.
 - question: Can Commands use idempotency or concurrency handling?
-  answer: Yes. Both features are configured through commandBus and apply to the Command pipeline.
+  answer: Yes. Add withIdempotency or withConcurrency to addPipeline to configure the Command pipeline.
 ---
 
 ## Introduction
 
-Use a Command when you need to execute an application operation through the Xeno.JS CQRS pipeline.
+Use a Command to represent an application operation that the Xeno.JS CQRS pipeline sends to its Handler. A Command can also declare cache keys or patterns to invalidate when query caching is enabled.
 
 A Command consists of:
 
@@ -46,11 +46,11 @@ A Command consists of:
 
 You need:
 
-* an `AppBuilder`;
+* an `XenoAppBuilder`;
 * the CQRS pipeline enabled with `addPipeline()`;
 * a Command class;
 * a Handler registered with the Command intent;
-* access to the mediator where the Command is executed.
+* execution within an active service scope (or use of `runInScope()` outside an existing request).
 
 If you want validation, you also need a Zod schema.
 
@@ -59,15 +59,15 @@ If you want validation, you also need a Zod schema.
 `addPipeline()` registers the CQRS infrastructure used to execute Commands and Queries.
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from 'xeno-js'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addPipeline()
 
 await app.build()
 ```
 
-You can add validation, idempotency, concurrency, and other pipeline features to the same configuration.
+Pass pipeline plugins to `addPipeline()` to enable optional behaviors such as validation, idempotency, concurrency, or performance tracking. The CQRS module also includes exception handling and logging behaviors.
 
 ---
 
@@ -94,9 +94,16 @@ The `Command` base class automatically sets:
 command.type === REQUEST_TYPE.COMMAND
 ```
 
-You only need to define the data required by your application operation.
+Define the data required by the application operation. The optional second constructor argument can also declare cache keys or patterns to invalidate after a successful Command, when query caching is enabled.
 
-The `intent` is important because Xeno.JS uses it to identify the Command and resolve its Handler.
+```ts
+super('CreateUserCommand', {
+  keys: ['users:list'],
+  patterns: ['user:*'],
+})
+```
+
+The `intent` identifies the Command and is used to resolve its Handler and any intent-specific pipeline configuration.
 
 In this example:
 
@@ -146,19 +153,19 @@ You do not need to manually add `intent` or `type` to the class.
 
 ## Add Command validation
 
-If the Command accepts external input, you can validate it before the Handler runs.
+If the Command accepts external input, add a validation plugin to `addPipeline()` to validate it before the Handler runs.
 
 First enable validation:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from 'xeno-js'
+import { withZodValidation } from '@xeno-js/zod'
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {},
-    }
-  })
+const app = new XenoAppBuilder().addPipeline(
+  withZodValidation((options) => {
+    options.schemas = {}
+  }),
+)
 
 await app.build()
 ```
@@ -169,6 +176,8 @@ For example:
 
 ```ts
 import { z } from 'zod'
+import { XenoAppBuilder } from 'xeno-js'
+import { withZodValidation } from '@xeno-js/zod'
 
 const createUserSchema = z.object({
   intent: z.literal('CreateUserCommand'),
@@ -177,14 +186,13 @@ const createUserSchema = z.object({
   name: z.string().min(1),
 })
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CreateUserCommand: createUserSchema,
-      },
+const app = new XenoAppBuilder().addPipeline(
+  withZodValidation((options) => {
+    options.schemas = {
+      CreateUserCommand: createUserSchema,
     }
-  })
+  }),
+)
 
 await app.build()
 ```
@@ -227,18 +235,18 @@ export const createUserSchema = z.object({
 Then register it during application bootstrap:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from 'xeno-js'
+import { withZodValidation } from '@xeno-js/zod'
 
 import { createUserSchema } from './application/users/create-user.schema'
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CreateUserCommand: createUserSchema,
-      },
+const app = new XenoAppBuilder().addPipeline(
+  withZodValidation((options) => {
+    options.schemas = {
+      CreateUserCommand: createUserSchema,
     }
-  })
+  }),
+)
 
 await app.build()
 ```
@@ -269,7 +277,7 @@ A Handler extends `BaseHandler` and implements `executeAsync()`.
 import { BaseHandler } from 'xeno-js'
 import { Result, type ResultType } from '@xeno-js/shared'
 
-import type { CreateUserCommand } from './create-user.command'
+import type { CreateUserCommand, User } from './create-user.command'
 
 export class CreateUserHandler extends BaseHandler<
   CreateUserCommand,
@@ -295,20 +303,21 @@ See [Creating Handlers](./handler) for the complete Handler configuration and de
 
 ## Register the Handler
 
-Register the Handler in the service container using the Command intent.
+Register the Handler in the service container using the Command intent. `BaseHandler` requires a user-context factory; the context module provides it under `TOKENS.USER_CONTEXT_FACTORY`.
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from 'xeno-js'
+import { TOKENS } from '@xeno-js/shared'
 
 import { CreateUserHandler } from './application/users/create-user.handler'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addTransient(
       'CreateUserCommand',
       (scope) => {
         return new CreateUserHandler(
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
@@ -366,12 +375,14 @@ export class CreateUserHandler extends BaseHandler<
 Register the dependencies explicitly:
 
 ```ts
-const app = new AppBuilder()
+import { TOKENS } from '@xeno-js/shared'
+
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addScoped(
       'USER_REPOSITORY',
       (scope) => new UserRepository(
-        scope.resolve('DB_CONTEXT'),
+        scope.resolve(TOKENS.DB_CONTEXT),
       ),
     )
 
@@ -379,7 +390,7 @@ const app = new AppBuilder()
       'CreateUserCommand',
       (scope) => {
         return new CreateUserHandler(
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
           scope.resolve('USER_REPOSITORY'),
         )
       },
@@ -398,18 +409,21 @@ For more information, see [Dependency Injection](../../fundamentals/dependency-i
 
 ## Execute a Command
 
-Once the Command and Handler are registered, execute the Command through the mediator.
+Once the Command and Handler are registered, execute the Command through the mediator inside an active service scope. For non-HTTP work, `runInScope()` creates that scope and disposes it when the operation completes.
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 const command = new CreateUserCommand(
   'john@example.com',
   'John Doe',
 )
 
-const result = await mediator.send(
-  command,
-  new AbortController().signal,
-)
+const application = await app.build()
+const result = await application.runInScope(async (services) => {
+  const mediator = services[TOKENS.MEDIATOR]
+  return mediator.send(command, new AbortController().signal)
+})
 ```
 
 The mediator executes the Command pipeline and eventually resolves the Handler using:
@@ -521,31 +535,38 @@ export class CreateUserHandler extends BaseHandler<
 ```ts
 // bootstrap.ts
 
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from 'xeno-js'
+import { TOKENS } from '@xeno-js/shared'
+import { withZodValidation } from '@xeno-js/zod'
 
 import { createUserSchema } from './application/users/create-user.schema'
 import { CreateUserHandler } from './application/users/create-user.handler'
 
-const app = new AppBuilder()
+const builder = new XenoAppBuilder()
   .addServices((container) => {
     container.addTransient(
       'CreateUserCommand',
       (scope) => {
         return new CreateUserHandler(
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
   })
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CreateUserCommand: createUserSchema,
-      },
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      CreateUserCommand: createUserSchema,
     }
-  })
+  }))
 
-const container = await app.build()
+const application = await builder.build()
+await application.runInScope(async (services) => {
+  const mediator = services[TOKENS.MEDIATOR]
+  return mediator.send(
+    new CreateUserCommand('john@example.com', 'John Doe'),
+    new AbortController().signal,
+  )
+})
 ```
 
 The important relationship is:
@@ -569,21 +590,21 @@ The same intent connects the Command to its Handler and to its validation schema
 
 Idempotency is a Command-specific pipeline feature.
 
-Configure it through `commandBus.idempotency`:
+Add the `withIdempotency` plugin to the Command pipeline:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.idempotency = {
-      lockTtlSeconds: 300,
-      processedTtlSeconds: 86400,
-    }
-  })
+import { XenoAppBuilder, withIdempotency } from 'xeno-js'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withIdempotency((options) => {
+    options.lockTtlSeconds = 300
+    options.processedTtlSeconds = 86400
+  }))
 
 await app.build()
 ```
 
-The idempotency mechanism uses the request `requestId` to identify the operation.
+The idempotency mechanism uses the active network context's `requestId` to identify an operation; it does not read an ID from the Command object. The options also support per-intent settings through `intentRegistry`.
 
 See [Idempotency](../pipelines/idempotency) for the complete configuration and behavior.
 
@@ -594,16 +615,16 @@ See [Idempotency](../pipelines/idempotency) for the complete configuration and b
 Concurrency retry handling is also Command-specific.
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.concurrency = {
-      maxRetries: 3,
-      delayConfig: {
-        baseDelayMs: 100,
-        maxJitterMs: 50,
-      },
+import { XenoAppBuilder, withConcurrency } from 'xeno-js'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withConcurrency((options) => {
+    options.maxRetries = 3
+    options.delayConfig = {
+      baseDelayMs: 100,
+      maxJitterMs: 50,
     }
-  })
+  }))
 
 await app.build()
 ```
@@ -623,7 +644,7 @@ Commands can also use the common CQRS pipeline features:
 * [Idempotency](../pipelines/idempotency)
 * [Concurrency](../pipelines/concurrency)
 
-These features are configured through `addPipeline()`.
+Add the corresponding pipeline plugins to `addPipeline()` where required. `addPipeline()` configures the CQRS module and does not take a configuration callback.
 
 ---
 
@@ -649,10 +670,12 @@ super('CreateUserCommand')
 must correspond to:
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 container.addTransient(
   'CreateUserCommand',
   (scope) => new CreateUserHandler(
-    scope.resolve('USER_CONTEXT_FACTORY'),
+    scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
   ),
 )
 ```
@@ -661,8 +684,8 @@ container.addTransient(
 
 Check that:
 
-1. `addPipeline()` is configured;
-2. `config.validation.zod` is defined;
+1. `addPipeline(withZodValidation(...))` is configured;
+2. the Command runs inside an active service scope;
 3. the schema is registered under the exact Command intent;
 4. the Command is executed through the mediator;
 5. the schema validates the Command request shape.
@@ -670,11 +693,11 @@ Check that:
 For example:
 
 ```ts
-config.validation.zod = {
-  schemas: {
+withZodValidation((options) => {
+  options.schemas = {
     CreateUserCommand: createUserSchema,
-  },
-}
+  }
+})
 ```
 
 must match:

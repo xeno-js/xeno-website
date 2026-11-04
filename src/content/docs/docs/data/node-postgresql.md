@@ -1,16 +1,17 @@
 ---
 title: Node PostgreSQL
-description: Learn how to configure PostgreSQL, register it with AppBuilder, resolve the database context, create a PostgreSQL data source, and use transactions with Xeno.JS.
+description: Learn how to configure PostgreSQL with XenoAppBuilder and withPostgresql(), implement application data-source contracts, use transactions, and run the Outbox worker.
 keywords:
 - Xeno.JS
 - PostgreSQL
 - Node PostgreSQL
 - database
 - data source
-- BasePostgresSqlDataSource
+- IReadDataSource
+- IWriteDataSource
 - DB_CONTEXT
 - Unit of Work
-- AppBuilder
+- XenoAppBuilder
 - Drizzle
 - TypeScript
 tags:
@@ -19,43 +20,45 @@ tags:
 - database
 - data-source
 - unit-of-work
-- appbuilder
+- XenoAppBuilder
 - typescript
 faqs:
 - question: How do I register PostgreSQL in Xeno.JS?
-  answer: Call AppBuilder.addDb() and configure the connectionString while leaving enableSqlLite set to false.
+  answer: Pass withPostgresql() from @xeno-js/postgresql to XenoAppBuilder.addDb().
 - question: What configuration does PostgreSQL require?
-  answer: The PostgreSQL configuration requires a connectionString. The enableSqlLite option must remain false for PostgreSQL.
+  answer: Configure PostgreSQL options through the withPostgresql() setup callback.
 - question: Which service does Xeno.JS register for PostgreSQL?
   answer: Xeno.JS registers DB_CONTEXT as a scoped database service after addDb() is configured and the application is built.
 - question: Does Xeno.JS provide a ready-made application-specific PostgreSQL data source?
-  answer: No. Xeno.JS provides BasePostgresSqlDataSource. Your application creates a concrete data source by extending that class and passing DB_CONTEXT to its constructor.
+  answer: No. Implement the shared IReadDataSource or IWriteDataSource contract for your DTO and inject the PostgreSQL DbContext.
 - question: How do I access PostgreSQL from a data source?
-  answer: Extend BasePostgresSqlDataSource and use its protected db property inside the concrete data source.
+  answer: Inject DB_CONTEXT into your data source and implement the required data-source interface methods.
 - question: How do I use PostgreSQL inside a transaction?
-  answer: Resolve UNIT_OF_WORK and execute the related data operations inside runInTransaction().
+  answer: Resolve UNIT_OF_WORK in an active service scope and execute related operations inside runInTransaction().
 - question: Do I need to call begin(), commit(), or rollback() manually?
-  answer: No. The public Unit of Work API is runInTransaction(callback, signal).
+  answer: No. The public Unit of Work API is runInTransaction(callback, aggregates?, signal?).
 - question: What happens if the transactional callback fails?
   answer: The callback error propagates and the database transaction does not complete successfully.
+- question: How do I run the PostgreSQL Outbox worker?
+  answer: Enable outbox and worker in withPostgresql(), then resolve the registered worker and call start().
 ---
 
 ## Introduction
 
-If your application uses PostgreSQL, Xeno.JS lets you configure the PostgreSQL database during application bootstrap, resolve the registered database context, and build application-specific data sources on top of `BasePostgresSqlDataSource`.
+If your application uses PostgreSQL, Xeno.JS lets you configure the database during application bootstrap, resolve the scoped database context, and implement application-specific data sources using the shared data-source contracts.
 
 The typical flow is:
 
 ```text
 PostgreSQL configuration
         ↓
-AppBuilder.addDb()
+XenoAppBuilder.addDb(withPostgresql())
         ↓
 await app.build()
         ↓
-resolve DB_CONTEXT
+resolve scoped DB_CONTEXT
         ↓
-application-specific Data Source
+application Data Source implementing a shared interface
         ↓
 repository / application service / handler
 ```
@@ -78,48 +81,37 @@ PostgreSQL transaction
 
 Before configuring PostgreSQL, make sure your application has:
 
-* Node.js 20 or later.
-* `@xeno-js/core`.
-* `pg`.
-* `drizzle-orm`.
-* a reachable PostgreSQL database.
-* a PostgreSQL connection string.
+- Node.js 20 or later.
+- `@xeno-js/core`.
+- `@xeno-js/postgresql`.
+- `pg`.
+- `drizzle-orm`.
+- a reachable PostgreSQL database.
+- a PostgreSQL connection string.
 
-`@xeno-js/core` declares `pg` and `drizzle-orm` as optional peer dependencies, so install the PostgreSQL-related dependencies when using this provider.
+Install the PostgreSQL integration and its runtime dependencies:
 
 For example:
 
 ```bash
-npm install @xeno-js/core pg drizzle-orm
+npm install @xeno-js/core @xeno-js/postgresql pg drizzle-orm
 ```
 
 ## Configure PostgreSQL
 
-PostgreSQL is configured through `AppBuilder.addDb()`.
-
-The database configuration exposes:
-
-```ts
-interface DbConfig {
-  connectionString: string
-  enableSqlLite: boolean
-}
-```
-
-For PostgreSQL, configure `connectionString` and leave `enableSqlLite` as `false`.
+Configure PostgreSQL with `withPostgresql()` from `@xeno-js/postgresql` and pass the plugin to `XenoAppBuilder.addDb()`.
 
 A minimal configuration is:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPostgresql } from '@xeno-js/postgresql'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addDb((options) => {
-  options.connectionString =
-    'postgres://username:password@localhost:5432/myapp'
-  options.enableSqlLite = false
-})
+app.addDb(withPostgresql((options) => {
+  options.connectionString = process.env.DATABASE_URL!
+}))
 ```
 
 The connection string is passed to the PostgreSQL provider configured by Xeno.JS.
@@ -131,94 +123,74 @@ The connection string is passed to the PostgreSQL provider configured by Xeno.JS
 This allows the connection string to come from your application's configuration source:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPostgresql } from '@xeno-js/postgresql'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addDb((options, config) => {
-  options.connectionString =
-    config.get('DATABASE_URL') ??
-    'postgres://username:password@localhost:5432/myapp'
-
-  options.enableSqlLite = false
-})
+    app.addDb(withPostgresql((options, config) => {
+      options.connectionString =
+        config.get('DATABASE_URL') ?? process.env.DATABASE_URL!
+    }))
 ```
 
 The configuration key is application-defined. Xeno.JS does not require a specific environment variable name.
 
-## Register PostgreSQL in AppBuilder
+## Register PostgreSQL in XenoAppBuilder
 
 The public registration API is:
 
 ```ts
-app.addDb(...)
+app.addDb(withPostgresql(...))
 ```
 
 Register the database before building the application:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPostgresql } from '@xeno-js/postgresql'
 
-app.addDb((options) => {
-  options.connectionString =
-    'postgres://username:password@localhost:5432/myapp'
-  options.enableSqlLite = false
-})
+const app = new XenoAppBuilder()
 
-const container = await app.build()
+app.addDb(withPostgresql((options) => {
+  options.connectionString = process.env.DATABASE_URL!
+}))
+
+const application = await app.build()
 ```
 
 After `build()` completes, the database services registered by the database module are available through dependency injection.
 
 Do not create a PostgreSQL `Pool` manually when using the Xeno.JS database registration.
 
-The application should configure the provider through `addDb()` and consume the services exposed by Xeno.JS.
+The application should configure the provider through `withPostgresql()` and consume the services exposed by Xeno.JS.
 
 ## Resolve the PostgreSQL database context
 
 Xeno.JS registers the database context under the `DB_CONTEXT` token.
 
-After building the application, resolve it with:
+`DB_CONTEXT` is scoped. Resolve it from the runtime application's active scope:
 
 ```ts
-const db = app.resolve('DB_CONTEXT')
+const application = await app.build()
+
+await application.runInScope(async (services) => {
+  const db = services.DB_CONTEXT
+  // Use the scoped database context here.
+})
 ```
 
-You can also resolve it from an active service scope:
-
-```ts
-const db = scope.resolve('DB_CONTEXT')
-```
-
-`DB_CONTEXT` is scoped, so code that consumes the database as a scoped dependency should run inside an appropriate application scope.
+Do not resolve this scoped service from the builder's root container.
 
 For more information about service resolution and scopes, see:
 
-* [Service Resolution](../dependency-injection/resolution)
-* [Scoped Lifetime](../dependency-injection/lifetimes/scoped)
-* [Service Container](../dependency-injection/service-container)
+- [Service Resolution](../dependency-injection/resolution)
+- [Scoped Lifetime](../dependency-injection/lifetimes/scoped)
+- [Service Container](../dependency-injection/service-container)
 
 ## Create a PostgreSQL Data Source
 
-Xeno.JS exports `BasePostgresSqlDataSource` as the base class for application-specific PostgreSQL data sources.
-
-The base class accepts the database context:
-
-```ts
-import { BasePostgresSqlDataSource } from '@xeno-js/core/db'
-
-export class UserDataSource extends BasePostgresSqlDataSource {
-  async findAll() {
-    return this.db.select()
-  }
-}
-```
-
-The `db` property is protected, so it is available inside your concrete data source but not directly from application code using the data source.
-
-This keeps database-specific access inside the data-access layer.
-
-A data source is application code. Xeno.JS provides the PostgreSQL base class and database context; your application defines the actual queries and domain-specific operations.
+Implement the shared data-source interface required by your application and inject the PostgreSQL `DbContext`. Xeno.JS does not provide a PostgreSQL base data-source class.
 
 ## Use a PostgreSQL Data Source
 
@@ -227,19 +199,42 @@ A concrete data source normally receives `DB_CONTEXT` through dependency injecti
 For example:
 
 ```ts
-import {
-  BasePostgresSqlDataSource,
-  type DbContext,
-} from '@xeno-js/core/db'
+import { AppError, Enumerable } from '@xeno-js/core'
+import type { IReadDataSource, Optional, UserContext } from '@xeno-js/core'
+import type { DbContext } from '@xeno-js/postgresql'
+import { eq } from 'drizzle-orm'
 
-export class UserDataSource extends BasePostgresSqlDataSource {
-  async findByEmail(email: string) {
-    // Use this.db with your application's Drizzle schema.
-    return this.db
+import { users } from './schema'
+
+type UserDto = typeof users.$inferSelect
+
+export class UserDataSource implements IReadDataSource<UserDto> {
+  constructor(private readonly _db: DbContext) {}
+
+  async findAll(
+    _ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
+  ): Promise<UserDto[]> {
+    AppError.throwIfAborted(signal, 'UserDataSource.findAll')
+    return this._db.select().from(users).execute()
+  }
+
+  async findById(
+    id: string | number,
+    _ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
+  ): Promise<Optional<UserDto>> {
+    AppError.throwIfAborted(signal, 'UserDataSource.findById')
+    const result = await this._db
       .select()
       .from(users)
-      .where(eq(users.email, email))
+      .where(eq(users.id, Number(id)))
+      .limit(1)
+      .execute()
+    return Enumerable.firstOrDefault(result)
   }
+
+  async dispose(): Promise<void> {}
 }
 ```
 
@@ -267,7 +262,7 @@ The important Xeno.JS boundary is:
 ```text
 DB_CONTEXT
     ↓
-BasePostgresSqlDataSource
+IReadDataSource<UserDto>
     ↓
 UserDataSource
     ↓
@@ -285,13 +280,14 @@ Because `DB_CONTEXT` is scoped, the concrete data source should normally be scop
 For example:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPostgresql } from '@xeno-js/postgresql'
 
-app.addDb((options) => {
-  options.connectionString =
-    'postgres://username:password@localhost:5432/myapp'
-  options.enableSqlLite = false
-})
+const app = new XenoAppBuilder()
+
+app.addDb(withPostgresql((options) => {
+  options.connectionString = process.env.DATABASE_URL!
+}))
 
 app.addServices((container) => {
   container.addScoped('USER_DATA_SOURCE', (scope) => {
@@ -302,7 +298,7 @@ app.addServices((container) => {
 await app.build()
 ```
 
-Your application's registry type should include custom tokens when you want them to be strongly typed through `AppBuilder.resolve()`.
+Your application's registry type should include custom tokens when you want those services to be strongly typed through the runtime application's `getServices()`.
 
 The important lifetime relationship is:
 
@@ -325,21 +321,17 @@ Xeno.JS registers Unit of Work under:
 UNIT_OF_WORK
 ```
 
-Resolve it from the application container or an active scope:
+Resolve it from an active application scope:
 
 ```ts
-const unitOfWork = app.resolve('UNIT_OF_WORK')
-```
+const application = await app.build()
 
-Then execute the transactional operation through:
-
-```ts
-await unitOfWork.runInTransaction(
-  async () => {
-    // database operations
-  },
-  undefined,
-)
+await application.runInScope(async (services) => {
+  const unitOfWork = services.UNIT_OF_WORK
+  await unitOfWork.runInTransaction(async (tx) => {
+    // Database operations use this transaction context.
+  })
+})
 ```
 
 The public API does not require manual:
@@ -357,19 +349,13 @@ Instead, `runInTransaction()` defines the transaction boundary.
 A realistic operation can combine multiple data changes:
 
 ```ts
-await unitOfWork.runInTransaction(
-  async () => {
-    await userDataSource.createUser({
+await application.runInScope(async (services) => {
+  await services.UNIT_OF_WORK.runInTransaction(async (tx) => {
+    await tx.insert(users).values({
       email: 'alice@example.com',
     })
-
-    await userDataSource.createProfile({
-      email: 'alice@example.com',
-      displayName: 'Alice',
-    })
-  },
-  undefined,
-)
+  })
+})
 ```
 
 If the callback completes successfully, the transactional operation completes successfully.
@@ -377,6 +363,39 @@ If the callback completes successfully, the transactional operation completes su
 If the callback throws, the error propagates and the transaction does not complete successfully.
 
 Keep the related database operations inside the same `runInTransaction()` callback when they must share one transaction.
+
+## Run the PostgreSQL Outbox worker
+
+When aggregates are passed to `runInTransaction()`, the Unit of Work writes their uncommitted events to the Outbox in that PostgreSQL transaction. Enable this integration by setting `outbox.enable` and providing one or more aggregate names. The plugin creates a `<name-lowercase>_outbox_messages` table for each name; a name is required when the Outbox is enabled.
+
+Set `outbox.worker` to `true` to register the background worker and optionally configure event handlers. Registering the worker does not start its polling loop: the application must start it explicitly.
+
+```ts
+app.addDb(withPostgresql((options) => {
+  options.connectionString = process.env.DATABASE_URL!
+  options.outbox = {
+    enable: true,
+    name: 'Order',
+    worker: true,
+  }
+}))
+```
+
+After building the application, start the worker from the runtime services and stop it during shutdown:
+
+```ts
+const application = await app.build()
+const { worker } = application.getServices()
+
+worker.start(5000)
+
+// During application shutdown:
+worker.stop()
+```
+
+The interval defaults to 5 seconds. Each polling pass handles at most 50 pending messages per configured Outbox table. Failed dispatches are retried; after the third failed attempt, the worker marks a message as `FAILED`. The worker dispatches events in a synthetic request context.
+
+Use the configured `outbox.handlers` factories to provide handlers for events read from the Outbox. The plugin invokes each factory with the service container and subscribes the returned handler to the event dispatcher when it registers the worker.
 
 ## Complete example
 
@@ -407,42 +426,58 @@ export const users = pgTable('users', {
 
 ```ts
 import { eq } from 'drizzle-orm'
-import { BasePostgresSqlDataSource } from '@xeno-js/core/db'
+import { AppError, Enumerable } from '@xeno-js/core'
+import type { IReadDataSource, Optional, UserContext } from '@xeno-js/core'
+import type { DbContext } from '@xeno-js/postgresql'
 
 import { users } from './schema'
 
-export class UserDataSource extends BasePostgresSqlDataSource {
-  async findByEmail(email: string) {
-    return this.db
-      .select()
-      .from(users)
-      .where(eq(users.email, email))
+type UserDto = typeof users.$inferSelect
+
+export class UserDataSource implements IReadDataSource<UserDto> {
+  constructor(private readonly _db: DbContext) {}
+
+  async findAll(
+    _ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
+  ): Promise<UserDto[]> {
+    AppError.throwIfAborted(signal, 'UserDataSource.findAll')
+    return this._db.select().from(users).execute()
   }
 
-  async create(email: string) {
-    return this.db
-      .insert(users)
-      .values({ email })
+  async findById(
+    id: string | number,
+    _ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
+  ): Promise<Optional<UserDto>> {
+    AppError.throwIfAborted(signal, 'UserDataSource.findById')
+    const result = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.id, Number(id)))
+      .limit(1)
+      .execute()
+    return Enumerable.firstOrDefault(result)
   }
+
+  async dispose(): Promise<void> {}
 }
 ```
 
 ### `src/app.ts`
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPostgresql } from '@xeno-js/postgresql'
 
 import { UserDataSource } from './data/user.data-source'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addDb((options, config) => {
+app.addDb(withPostgresql((options, config) => {
   options.connectionString =
-    config.get('DATABASE_URL') ??
-    'postgres://username:password@localhost:5432/myapp'
-
-  options.enableSqlLite = false
-})
+    config.get('DATABASE_URL') ?? process.env.DATABASE_URL!
+}))
 
 app.addServices((container) => {
   container.addScoped('USER_DATA_SOURCE', (scope) => {
@@ -472,10 +507,9 @@ If `addDb()` is not called, the database module is not registered.
 Check that bootstrap contains:
 
 ```ts
-app.addDb((options) => {
-  options.connectionString = 'postgres://...'
-  options.enableSqlLite = false
-})
+app.addDb(withPostgresql((options) => {
+  options.connectionString = process.env.DATABASE_URL!
+}))
 ```
 
 and that the application is built afterward:
@@ -484,67 +518,25 @@ and that the application is built afterward:
 await app.build()
 ```
 
-### PostgreSQL is configured as SQLite
-
-Make sure PostgreSQL uses:
-
-```ts
-options.enableSqlLite = false
-```
-
-Setting this option to `true` selects the SQLite/libSQL provider instead.
-
 ### `DB_CONTEXT` cannot be resolved
 
 Check that:
 
 1. `addDb()` is registered.
 2. `await app.build()` has completed before resolving the service.
-3. the code is using the correct token:
+3. resolution occurs inside an active application scope using the registered token:
 
 ```ts
-'DB_CONTEXT'
+await application.runInScope(async (services) => {
+  const db = services.DB_CONTEXT
+})
 ```
 
 If the problem is related to service lifetimes or resolution, see [Service Resolution](../dependency-injection/resolution).
 
-### The data source cannot access `db`
+### The data source does not satisfy its contract
 
-`BasePostgresSqlDataSource.db` is protected.
-
-This works:
-
-```ts
-class UserDataSource extends BasePostgresSqlDataSource {
-  async findUsers() {
-    return this.db.select().from(users)
-  }
-}
-```
-
-This does not:
-
-```ts
-const dataSource = new UserDataSource(db)
-
-dataSource.db
-```
-
-Use public methods on your concrete data source instead of exposing the database context to callers.
-
-### A data source is using the wrong database provider
-
-`BasePostgresSqlDataSource` is intended for PostgreSQL.
-
-If the application is configured with:
-
-```ts
-options.enableSqlLite = true
-```
-
-use `BaseSqliteSqlDataSource` instead.
-
-Do not mix the provider-specific base data source with a different configured provider.
+Implement the shared data-source interface used by the application, and inject `DbContext` into the implementation. Keep provider-specific Drizzle queries inside the data source rather than exposing the database context to callers.
 
 ### Transactional work is not behaving as one unit
 
@@ -558,11 +550,9 @@ For example:
 
 ```ts
 await unitOfWork.runInTransaction(
-  async () => {
-    await userDataSource.create(...)
-    await profileDataSource.create(...)
+  async (tx) => {
+    // Execute all related PostgreSQL operations with tx.
   },
-  undefined,
 )
 ```
 
@@ -575,7 +565,7 @@ Do not split operations that must be atomic across separate transaction callback
 Check that PostgreSQL was registered with `addDb()` and that the application has been built:
 
 ```ts
-app.addDb(...)
+app.addDb(withPostgresql(...))
 await app.build()
 ```
 
@@ -583,16 +573,16 @@ For general DI problems, see [Resolution](../dependency-injection/resolution).
 
 ## Related docs
 
-* [Data Overview](./overview)
-* [SQLite](./sqlite)
-* [Unit of Work](./unit-of-work)
-* [Service Container](../dependency-injection/service-container)
-* [Registration](../dependency-injection/registration)
-* [Service Resolution](../dependency-injection/resolution)
-* [Scoped Lifetime](../dependency-injection/lifetimes/scoped)
-* [Dependency Graph](../dependency-injection/dependency-graph)
-* [CQRS Commands](../application/cqrs/command)
-* [CQRS Queries](../application/cqrs/query)
+- [Data Overview](./overview)
+- [SQLite](./sqlite)
+- [Unit of Work](./unit-of-work)
+- [Service Container](../dependency-injection/service-container)
+- [Registration](../dependency-injection/registration)
+- [Service Resolution](../dependency-injection/resolution)
+- [Scoped Lifetime](../dependency-injection/lifetimes/scoped)
+- [Dependency Graph](../dependency-injection/dependency-graph)
+- [CQRS Commands](../application/cqrs/command)
+- [CQRS Queries](../application/cqrs/query)
 
 ---
 

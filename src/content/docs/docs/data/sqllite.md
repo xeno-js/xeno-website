@@ -1,6 +1,6 @@
 ---
 title: SQLite
-description: Learn how to configure SQLite, register it with AppBuilder, resolve the database context, create a SQLite data source, and use transactions with Xeno.JS.
+description: Learn how to configure SQLite with XenoAppBuilder and withSqlite(), resolve scoped database services, create a data source, and use transactions with Xeno.JS.
 keywords:
 - Xeno.JS
 - SQLite
@@ -10,7 +10,7 @@ keywords:
 - BaseSqliteSqlDataSource
 - DB_CONTEXT
 - Unit of Work
-- AppBuilder
+- XenoAppBuilder
 - TypeScript
 tags:
 - data
@@ -19,40 +19,39 @@ tags:
 - database
 - data-source
 - unit-of-work
-- appbuilder
+- app-builder
 - typescript
 faqs:
 - question: How do I register SQLite in Xeno.JS?
-  answer: Call AppBuilder.addDb() and set enableSqlLite to true.
+  answer: Pass withSqlite() from @xeno-js/sqlite to XenoAppBuilder.addDb().
 - question: What configuration does SQLite require?
-  answer: SQLite requires a connectionString and enableSqlLite must be set to true.
+  answer: withSqlite() reads DATABASE_URL and DB_AUTH_TOKEN from configuration; override its url or other libSQL options in the setup callback when needed.
 - question: Which database service does Xeno.JS register for SQLite?
-  answer: Xeno.JS registers DB_CONTEXT as a scoped database service after addDb() is configured and the application is built.
+  answer: Xeno.JS registers DB_CONTEXT as a scoped database service when the application is built.
 - question: Does Xeno.JS provide a ready-made SQLite repository?
   answer: No. Xeno.JS provides BaseSqliteSqlDataSource. Your application creates a concrete data source by extending that class.
 - question: How do I access SQLite from a data source?
   answer: Extend BaseSqliteSqlDataSource and use its protected db property in the concrete data source.
 - question: How do I resolve DB_CONTEXT?
-  answer: Resolve DB_CONTEXT from an active service scope, for example with ContainerUtils.resolveServiceScoped().
+  answer: Resolve DB_CONTEXT from scoped services inside XenoApplication.runInScope().
 - question: How do I use SQLite inside a transaction?
   answer: Resolve UNIT_OF_WORK from an active scope and execute the related data operations inside runInTransaction().
 - question: Do I need to call begin(), commit(), or rollback() manually?
-  answer: No. The public Unit of Work API is runInTransaction(callback, signal).
+  answer: No. Use UnitOfWork.runInTransaction(callback, aggregates?, signal?).
 - question: What happens when transactional work fails?
   answer: If the transactional callback fails, the transaction does not complete successfully and the error propagates to the caller.
 ---
 
 ## Introduction
 
-Use SQLite when your application needs an embedded relational database through Xeno.JS.
+Use the SQLite/libSQL integration when your application needs relational data access through Xeno.JS, whether the database runs locally or through a libSQL service.
 
 The workflow is:
 
 1. Configure the SQLite connection.
-2. Register SQLite with `AppBuilder.addDb()`.
+2. Register the SQLite plugin with `XenoAppBuilder.addDb()`.
 3. Build the application.
 4. Resolve `DB_CONTEXT` inside an active service scope.
-5. Create an application-specific data source by extending `BaseSqliteSqlDataSource`.
 6. Use `UNIT_OF_WORK` when multiple database operations must execute transactionally.
 
 Xeno.JS provides the application-facing database integration. Your repositories and application services decide how that database access is used by the application.
@@ -61,159 +60,113 @@ Xeno.JS provides the application-facing database integration. Your repositories 
 
 Before configuring SQLite, make sure that:
 
-* your application uses `@xeno-js/core`;
-* the SQLite/libSQL database dependencies required by your application are installed;
-* you have a SQLite connection URL accepted by the configured SQLite/libSQL client;
-* your application bootstraps through `AppBuilder`.
+- your application uses `@xeno-js/core`;
+- the SQLite/libSQL database dependencies required by your application are installed;
+- you have a SQLite connection URL accepted by the configured SQLite/libSQL client;
+- your application bootstraps through `XenoAppBuilder`.
 
 For example:
 
 ```bash
-npm install @xeno-js/core drizzle-orm @libsql/client
+npm install @xeno-js/core @xeno-js/sqlite drizzle-orm @libsql/client
 ```
 
 The exact dependency versions should follow the versions used by your Xeno.JS installation.
 
 ## Configure SQLite
 
-SQLite is selected through the `DbConfig` passed to `AppBuilder.addDb()`.
-
-Set:
+Configure SQLite with `withSqlite()` from `@xeno-js/sqlite`. By default, the plugin reads `DATABASE_URL` and `DB_AUTH_TOKEN` from the configuration service and sets the libSQL concurrency option to `50`. Override these values in the setup callback when required.
 
 ```ts
-enableSqlLite: true
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSqlite } from '@xeno-js/sqlite'
+
+const app = new XenoAppBuilder()
+
+app.addDb(withSqlite((options) => {
+  options.url = 'file:./data/app.db'
+}))
+
+const application = await app.build()
 ```
 
-and provide the database connection through:
+The `url` option is passed to the libSQL client. Use a URL supported by that client, such as a local `file:` URL.
+
+## Register SQLite in XenoAppBuilder
+
+Register `withSqlite()` during application bootstrap with `addDb()`:
 
 ```ts
-connectionString
-```
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSqlite } from '@xeno-js/sqlite'
 
-For example:
+const app = new XenoAppBuilder()
 
-```ts
-import { AppBuilder } from '@xeno-js/core'
+app.addDb(withSqlite((options) => {
+  options.url = 'file:./data/app.db'
+}))
 
-const app = new AppBuilder()
-
-app.addDb((options) => {
-  options.connectionString = 'file:./data/app.db'
-  options.enableSqlLite = true
-})
-
-await app.build()
-```
-
-The important configuration is:
-
-```ts
-options.enableSqlLite = true
-```
-
-This tells Xeno.JS to configure the SQLite/libSQL database provider rather than PostgreSQL.
-
-The value of `connectionString` is provider-specific. Use a connection URL supported by the SQLite/libSQL client configured for your application.
-
-## Register SQLite in AppBuilder
-
-Register SQLite during application bootstrap with `addDb()`:
-
-```ts
-const app = new AppBuilder()
-
-app.addDb((options) => {
-  options.connectionString = 'file:./data/app.db'
-  options.enableSqlLite = true
-})
-
-await app.build()
+const application = await app.build()
 ```
 
 Call `build()` before resolving application services.
 
-`addDb()` is the public database registration API. You do not need to instantiate a SQLite client manually and add it to the container.
+`addDb()` accepts a database plugin. The plugin configures the client and queues the database module; you do not need to instantiate a SQLite client manually.
 
-## Resolve the SQLite Data Source
+## Resolve the SQLite database context
 
 After `addDb()` has been configured and the application has been built, Xeno.JS exposes the database context through the `DB_CONTEXT` service.
 
 `DB_CONTEXT` is scoped, so it must be resolved from an active service scope.
 
-For example, at an application or transport boundary:
+Resolve the scoped service inside an application scope:
 
 ```ts
-import {
-  AppBuilder,
-  ContainerUtils,
-} from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSqlite } from '@xeno-js/sqlite'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addDb((options) => {
-  options.connectionString = 'file:./data/app.db'
-  options.enableSqlLite = true
+app.addDb(withSqlite((options) => {
+  options.url = 'file:./data/app.db'
+}))
+
+const application = await app.build()
+
+await application.runInScope(async (services) => {
+  const db = services.DB_CONTEXT
+  // Use the scoped database context here.
 })
-
-await app.build()
-
-const db = ContainerUtils.resolveServiceScoped(
-  'DB_CONTEXT',
-  app,
-)
 ```
 
-The resolution must happen while an active service scope exists.
-
-Do not use:
-
-```ts
-app.resolve('DB_CONTEXT')
-```
-
-from code that is outside an active scope. `DB_CONTEXT` is a scoped service.
+`DB_CONTEXT` is scoped. Do not resolve it from the builder's root container; use `runInScope()` or an already active scope.
 
 For more information about scoped services and resolution, see:
 
-* [Scoped](../dependency-injection/lifetimes/scoped)
-* [Resolution](../dependency-injection/resolution)
-* [Service Container](../dependency-injection/service-container)
+- [Scoped](../dependency-injection/lifetimes/scoped)
+- [Resolution](../dependency-injection/resolution)
+- [Service Container](../dependency-injection/service-container)
 
 ## Create a SQLite Data Source
 
-Xeno.JS exposes `BaseSqliteSqlDataSource` as the provider-specific base class for SQLite data access.
+Xeno.JS exposes `IReadDataSource` and `IWriteDataSource` as contracts for data access.
 
 Create a concrete data source in your application:
 
 ```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
+import type { IReadDataSource } from '@xeno-js/core'
+import type { DbSchema } from './schema'
+import type { DbContext } from '@xeno-js/sqlite'
 
-export class UserDataSource extends BaseSqliteSqlDataSource {
+export class UserDataSource implements IReadDataSource {
+  constructor(private readonly _db: DbContext<DbSchema>)
   async findUserById(id: string) {
     // Use this.db for SQLite queries.
   }
 }
 ```
 
-The base class receives the database context through its constructor:
-
-```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
-
-export class UserDataSource extends BaseSqliteSqlDataSource {
-  constructor(db: ConstructorParameters<typeof BaseSqliteSqlDataSource>[0]) {
-    super(db)
-  }
-
-  async findUserById(id: string) {
-    // Query the database through this.db.
-  }
-}
-```
-
 In normal application code, the database context is resolved from the active scope and passed to the data source.
-
-The `db` property provided by `BaseSqliteSqlDataSource` is `protected`, so application-specific data sources can use it directly while callers interact with the methods exposed by the concrete data source.
 
 ## Use the Data Source from Application Code
 
@@ -222,9 +175,12 @@ A typical application keeps SQLite access behind a data source or repository ins
 For example:
 
 ```ts
-import { BaseSqliteSqlDataSource } from '@xeno-js/core/db'
+import type { IWriteDataSource } from '@xeno-js/core'
+import type { DbSchema } from './schema'
+import type { DbContext } from '@xeno-js/sqlite'
 
-export class UserDataSource extends BaseSqliteSqlDataSource {
+export class UserDataSource implements IWriteDataSource {
+  constructor(private readonly _db: DbContext<DbSchema>)
   async findUserById(id: string) {
     // Use this.db to execute the query for your application's schema.
   }
@@ -233,7 +189,7 @@ export class UserDataSource extends BaseSqliteSqlDataSource {
     id: string
     email: string
   }) {
-    // Use this.db to insert the user.
+    // Use this._db to insert the user.
   }
 }
 ```
@@ -263,6 +219,21 @@ If your data source is an application service, register it through the normal Xe
 For example:
 
 ```ts
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSqlite } from '@xeno-js/sqlite'
+import type { DbContext, DbTransaction } from '@xeno-js/sqlite'
+import type { XenoRegistry } from '@xeno-js/shared'
+
+interface AppRegistry extends XenoRegistry<DbContext, DbTransaction> {
+  USER_DATA_SOURCE: UserDataSource
+}
+
+const app = new XenoAppBuilder<AppRegistry>()
+
+app.addDb(withSqlite<AppRegistry>((options) => {
+  options.url = 'file:./data/app.db'
+}))
+
 app.addServices((container) => {
   container.addScoped('USER_DATA_SOURCE', (scope) => {
     const db = scope.resolve('DB_CONTEXT')
@@ -270,6 +241,8 @@ app.addServices((container) => {
     return new UserDataSource(db)
   })
 })
+
+const application = await app.build()
 ```
 
 The exact token used for an application-specific service depends on your application's registry.
@@ -288,38 +261,44 @@ application service / repository
 
 Because both the database context and the data source are scoped, resolve them inside the active scope in which the application operation executes.
 
+For example:
+
+```ts
+await application.runInScope(async (services) => {
+  const userDataSource = services.USER_DATA_SOURCE
+  await userDataSource.findUserById('user-1')
+})
+```
+
 See [Registration](../dependency-injection/registration) and [Scoped](../dependency-injection/lifetimes/scoped) for the general DI rules.
 
 ## Use SQLite with Unit of Work
 
 Use Unit of Work when several database operations must succeed or fail as one transactional operation.
 
-For example, creating a user and creating a related profile can be treated as one transaction:
+For example, related data changes can be grouped in one transaction:
 
 ```ts
-const unitOfWork = ContainerUtils.resolveServiceScoped(
-  'UNIT_OF_WORK',
-  app,
-)
+await application.runInScope(async (services) => {
+  const unitOfWork = services.UNIT_OF_WORK
+  const userDataSource = services.USER_DATA_SOURCE
 
-await unitOfWork.runInTransaction(async () => {
-  await userDataSource.createUser({
-    id: userId,
-    email,
+  await unitOfWork.runInTransaction(async () => {
+    await userDataSource.createUser({
+      id: 'user-1',
+      email: 'user@example.com',
+    })
   })
-
-  await profileDataSource.createProfile({
-    userId,
-    displayName,
-  })
-}, undefined)
+})
 ```
 
 The public API is:
 
 ```ts
-runInTransaction(callback, signal)
+runInTransaction(callback, aggregates?, signal?)
 ```
+
+The callback receives the transaction database context. The optional `aggregates` argument lets the SQLite Unit of Work persist uncommitted domain events to the outbox table when outbox support is configured. The optional `signal` can abort the operation.
 
 You do not manually call:
 
@@ -332,6 +311,27 @@ rollback()
 The callback defines the transactional work.
 
 If the callback completes successfully, the transaction completes successfully. If the callback fails, the transactional operation does not complete successfully and the error is propagated to the caller.
+
+## Configure the Outbox
+
+The SQLite plugin can create outbox tables for named aggregates. Enable the outbox and provide at least one aggregate name:
+
+```ts
+app.addDb(withSqlite((options) => {
+  options.url = 'file:./data/app.db'
+  options.outbox = {
+    enable: true,
+    name: 'Order',
+    worker: true,
+  }
+}))
+```
+
+The plugin creates a table named `order_outbox_messages`. For multiple aggregates, provide an array of names. Setting `outbox.enable` to `true` without `outbox.name` causes configuration to throw.
+
+When outbox support is enabled, `runInTransaction()` can accept an aggregate root or an array of aggregate roots as its second argument. The SQLite Unit of Work writes their uncommitted events to the outbox table in the transaction, then clears those events after insertion.
+
+When `outbox.worker` is `true`, the plugin registers the worker under `TOKENS.BACKGROUND_WORKER`; it does not start it during plugin configuration. The worker's `start()` method polls every 5000 ms by default, processes up to 50 pending messages per table per poll, and marks a message `FAILED` after its third unsuccessful dispatch attempt.
 
 ## Complete Example
 
@@ -363,19 +363,22 @@ export class UserDataSource extends BaseSqliteSqlDataSource {
 ### `src/app.ts`
 
 ```ts
-import {
-  AppBuilder,
-  ContainerUtils,
-} from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSqlite } from '@xeno-js/sqlite'
+import type { DbContext, DbTransaction } from '@xeno-js/sqlite'
+import type { XenoRegistry } from '@xeno-js/shared'
 
 import { UserDataSource } from './users/user.data-source'
 
-const app = new AppBuilder()
+interface AppRegistry extends XenoRegistry<DbContext, DbTransaction> {
+  USER_DATA_SOURCE: UserDataSource
+}
 
-app.addDb((options) => {
-  options.connectionString = 'file:./data/app.db'
-  options.enableSqlLite = true
-})
+const app = new XenoAppBuilder<AppRegistry>()
+
+app.addDb(withSqlite<AppRegistry>((options) => {
+  options.url = 'file:./data/app.db'
+}))
 
 app.addServices((container) => {
   container.addScoped('USER_DATA_SOURCE', (scope) => {
@@ -383,27 +386,21 @@ app.addServices((container) => {
   })
 })
 
-await app.build()
+const application = await app.build()
 
-// This code must execute inside an active Xeno.JS service scope.
-const userDataSource = ContainerUtils.resolveServiceScoped(
-  'USER_DATA_SOURCE',
-  app,
-)
+await application.runInScope(async (services) => {
+  const userDataSource = services.USER_DATA_SOURCE
+  const unitOfWork = services.UNIT_OF_WORK
 
-const unitOfWork = ContainerUtils.resolveServiceScoped(
-  'UNIT_OF_WORK',
-  app,
-)
+  await unitOfWork.runInTransaction(async () => {
+    await userDataSource.createUser({
+      id: 'user-1',
+      email: 'user@example.com',
+    })
 
-await unitOfWork.runInTransaction(async () => {
-  await userDataSource.createUser({
-    id: 'user-1',
-    email: 'user@example.com',
+    // Additional related database operations can be performed here.
   })
-
-  // Additional related database operations can be performed here.
-}, undefined)
+})
 ```
 
 The query itself is intentionally application-specific: Xeno.JS provides the SQLite data source base class and database context, while your application defines its Drizzle schema and data-access operations.
@@ -412,23 +409,25 @@ The query itself is intentionally application-specific: Xeno.JS provides the SQL
 
 ### SQLite is not being used
 
-Check that the database registration contains:
+Check that `withSqlite()` is passed to `addDb()`:
 
 ```ts
-options.enableSqlLite = true
+app.addDb(withSqlite((options) => {
+  options.url = 'file:./data/app.db'
+}))
 ```
 
-If this flag is not enabled, `addDb()` configures the PostgreSQL database path instead.
+The SQLite plugin selects the libSQL client; its configuration does not use an `enableSqlLite` switch.
 
 ### The database connection is not configured
 
 Check that:
 
 ```ts
-options.connectionString = '...'
+options.url = '...'
 ```
 
-is assigned during `addDb()` configuration.
+is assigned in the `withSqlite()` setup callback, or that `DATABASE_URL` is configured.
 
 Also verify that the connection URL is valid for the SQLite/libSQL client used by your application.
 
@@ -443,17 +442,12 @@ Make sure that:
 For scoped resolution, use:
 
 ```ts
-ContainerUtils.resolveServiceScoped(
-  'DB_CONTEXT',
-  app,
-)
+await application.runInScope(async (services) => {
+  const db = services.DB_CONTEXT
+})
 ```
 
-If there is no active scope, Xeno.JS reports:
-
-```text
-Active service scope is required to execute Scoped service.
-```
+Resolving a scoped service without an active scope throws an error.
 
 See [Resolution](../dependency-injection/resolution) for the general scoped-resolution rules.
 
@@ -491,31 +485,30 @@ Do not mix the provider configuration and provider-specific data source.
 
 Check that:
 
-* `UNIT_OF_WORK` is resolved from an active scope;
-* all operations that must belong to the transaction execute inside the `runInTransaction()` callback;
-* errors from the transactional operation are not being silently discarded.
+- `UNIT_OF_WORK` is resolved from an active scope;
+- all operations that must belong to the transaction execute inside the `runInTransaction()` callback;
+- errors from the transactional operation are not being silently discarded.
 
 Example:
 
 ```ts
 await unitOfWork.runInTransaction(async () => {
   await userDataSource.createUser(user)
-  await profileDataSource.createProfile(profile)
-}, undefined)
+})
 ```
 
 Do not manually manage `begin`, `commit`, or `rollback`.
 
 ## Related Docs
 
-* [Data Overview](./overview)
-* [Node PostgreSQL](./node-postgresql)
-* [Unit of Work](./unit-of-work)
-* [Service Container](../dependency-injection/service-container)
-* [Registration](../dependency-injection/registration)
-* [Resolution](../dependency-injection/resolution)
-* [Scoped](../dependency-injection/lifetimes/scoped)
-* [Dependency Graph](../dependency-injection/dependency-graph)
+- [Data Overview](./overview)
+- [Node PostgreSQL](./node-postgresql)
+- [Unit of Work](./unit-of-work)
+- [Service Container](../dependency-injection/service-container)
+- [Registration](../dependency-injection/registration)
+- [Resolution](../dependency-injection/resolution)
+- [Scoped](../dependency-injection/lifetimes/scoped)
+- [Dependency Graph](../dependency-injection/dependency-graph)
 
 ---
 

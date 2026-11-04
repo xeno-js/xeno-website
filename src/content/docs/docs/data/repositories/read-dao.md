@@ -16,9 +16,9 @@ faqs:
 - question: How do I implement a read-only DAO in Xeno.JS?
   answer: Extend the abstract ReadDao<T, TDto> class and provide an IReadDataSource<TDto> and an IMapper<T, TDto> to its constructor.
 - question: How do I register a ReadDao in Xeno.JS?
-  answer: Register the concrete DAO with the application's service container, typically through AppBuilder.addServices().
+  answer: Register the concrete DAO with the application's service container, typically through XenoAppBuilder.addServices().
 - question: How do I resolve a ReadDao?
-  answer: Build the AppBuilder and resolve the registered token from the service container or from an application service scope.
+  answer: Build the XenoAppBuilder and resolve the registered token from an active application scope, such as with XenoApplication.runInScope().
 - question: What operations does ReadDao provide?
   answer: ReadDao provides findById() and findAll(), returning Xeno.JS ResultType values.
 - question: Does ReadDao access the database directly?
@@ -57,26 +57,26 @@ import { ReadDao } from '@xeno-js/core'
 
 ## Prerequisites
 
-A concrete `ReadDao` needs three application-level types:
+A concrete `ReadDao` needs four application-level pieces:
 
-* an entity type `T`;
-* a DTO type `TDto`;
-* an implementation of `IReadDataSource<TDto>`;
-* an implementation of `IMapper<T, TDto>`.
+- an entity type `T`;
+- a DTO type `TDto`;
+- an implementation of `IReadDataSource<TDto>`;
+- an implementation of `IMapper<T, TDto>`.
 
 The relevant contracts are public Xeno.JS APIs:
 
 ```ts
 interface IReadDataSource<TDto> {
   findAll(
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
   ): Promise<TDto[]>
 
   findById(
     id: string | number,
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
   ): Promise<Optional<TDto>>
 }
 ```
@@ -176,29 +176,26 @@ import type { UserDto } from './types'
 export class UserDataSource implements IReadDataSource<UserDto> {
   async findById(
     id: string | number,
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    _ctx?: Optional<UserContext>,
+    _signal?: Optional<AbortSignal>,
   ): Promise<Optional<UserDto>> {
-    // Application-specific database query.
-    // Use ctx and signal according to the application's data-access rules.
-
-    return undefined
+    throw new Error('Implement the application-specific query for the requested user.')
   }
 
   async findAll(
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    _ctx?: Optional<UserContext>,
+    _signal?: Optional<AbortSignal>,
   ): Promise<UserDto[]> {
-    // Application-specific database query.
-
-    return []
+    throw new Error('Implement the application-specific user query.')
   }
 
   async dispose(): Promise<void> {
-    // Release resources if this data source owns any.
+    // Release resources here if this data source owns any.
   }
 }
 ```
+
+Replace the explicit placeholder errors with the application's database/query implementation. They avoid returning an empty result that could look like a successful query.
 
 The database/query implementation belongs to the `IReadDataSource` implementation, not to `ReadDao`.
 
@@ -275,7 +272,7 @@ The identifier can be either a string or a number.
 
 The `UserContext` is passed through to the data source.
 
-The `AbortSignal` is optional and allows the operation to be cancelled.
+The `signal` parameter accepts `Optional<AbortSignal>`; pass `undefined` when cancellation is not needed.
 
 If the data source returns `undefined` or `null`, `ReadDao` returns a successful `Result` whose value is `undefined`.
 
@@ -362,7 +359,7 @@ The tokens shown here (`USER_DATA_SOURCE`, `USER_MAPPER`, and `USER_READ_DAO`) a
 
 ## 7. Add the tokens to the application registry
 
-When using a typed `AppBuilder`, add the application-specific tokens to the `XenoRegistry`.
+When using a typed `XenoAppBuilder`, add the application-specific tokens to the `XenoRegistry`.
 
 For example:
 
@@ -370,19 +367,13 @@ For example:
 import type { XenoRegistry } from '@xeno-js/core'
 import type { IReadDataSource, IMapper } from '@xeno-js/core'
 
-type ApplicationRegistry = XenoRegistry<
-  {
-    db: unknown
-  },
-  {
-    USER_DATA_SOURCE: IReadDataSource<UserDto>
-    USER_MAPPER: IMapper<User, UserDto>
-    USER_READ_DAO: UserReadDao
-  }
->
-```
+interface ApplicationRegistry extends XenoRegistry {
+  USER_DATA_SOURCE: IReadDataSource<UserDto>
+  USER_MAPPER: IMapper<User, UserDto>
+  USER_READ_DAO: UserReadDao
+}
 
-The exact first generic parameter depends on the application's `XenoRegistry` setup.
+```
 
 The important part for the DAO is that the registry associates each token with its resolved type:
 
@@ -394,14 +385,14 @@ The important part for the DAO is that the registry associates each token with i
 }
 ```
 
-This gives `AppBuilder.resolve()` and the service container the corresponding TypeScript types.
+This gives `XenoAppBuilder` and the service container the corresponding TypeScript types.
 
 ## 8. Build the application
 
 Register the services before building the application:
 
 ```ts
-const app = new AppBuilder<ApplicationRegistry>()
+const app = new XenoAppBuilder<ApplicationRegistry>()
 
 app.addServices((services) => {
   services.addScoped('USER_DATA_SOURCE', () => {
@@ -420,10 +411,10 @@ app.addServices((services) => {
   })
 })
 
-const container = await app.build()
+const application = await app.build()
 ```
 
-`build()` initializes the configured application modules and returns the configured service container.
+`build()` initializes the configured application modules and returns the runtime `XenoApplication`, not the service container.
 
 ## 9. Resolve the ReadDao
 
@@ -432,9 +423,10 @@ const container = await app.build()
 A scoped service must be resolved through a scope.
 
 ```ts
-const scope = container.createScope()
-
-const readDao = scope.resolve('USER_READ_DAO')
+await application.runInScope(async (services) => {
+  const readDao = services.USER_READ_DAO
+  // Use the DAO within this scope.
+})
 ```
 
 The resolved value has the registry type:
@@ -443,39 +435,30 @@ The resolved value has the registry type:
 UserReadDao
 ```
 
-You can then use it directly:
+Use it while the scope is active:
 
 ```ts
-const result = await readDao.findById(
-  'user-123',
-  ctx,
-  signal,
-)
+const userContext: UserContext = { userId: 'user-123', tenantId: 'tenant-456' }
+
+const result = await application.runInScope(async ({ USER_READ_DAO: readDao }) => {
+  return readDao.findById('user-123', userContext, undefined)
+})
 ```
 
-When the scope is no longer needed:
+`runInScope()` manages and disposes the scope when the callback completes. The DAO must not be used after the callback returns.
+
+### Resolving from `XenoAppBuilder`
+
+`XenoAppBuilder.resolve()` resolves services from the root container, so it cannot retrieve a scoped `ReadDao`.
+
+Resolve the DAO through the runtime application's active scope instead:
 
 ```ts
-await scope.dispose()
-```
-
-### Resolving from AppBuilder
-
-`AppBuilder` also exposes `resolve()`:
-
-```ts
-const readDao = app.resolve('USER_READ_DAO')
-```
-
-However, the Xeno.JS container does not allow a scoped registration to be resolved from the root container.
-
-For a scoped `ReadDao`, use:
-
-```ts
-const container = await app.build()
-const scope = container.createScope()
-
-const readDao = scope.resolve('USER_READ_DAO')
+const application = await app.build()
+await application.runInScope(async (services) => {
+  const readDao = services.USER_READ_DAO
+  // Use the DAO within this scope.
+})
 ```
 
 ## 10. Use ReadDao from an application service
@@ -502,10 +485,10 @@ export class GetUserService {
 
 The service does not need to know:
 
-* which database is used;
-* which SQL/query implementation is used;
-* how the DTO is represented;
-* how the DTO is mapped to the entity.
+- which database is used;
+- which SQL/query implementation is used;
+- how the DTO is represented;
+- how the DTO is mapped to the entity.
 
 Those responsibilities remain behind the data source and mapper.
 
@@ -688,9 +671,16 @@ The data source and DAO have different responsibilities.
 `IReadDataSource<TDto>` works with DTO/data-source representations:
 
 ```ts
-findById(...): Promise<Optional<TDto>>
+findById(
+  id: string | number,
+  ctx?: Optional<UserContext>,
+  signal?: Optional<AbortSignal>,
+): Promise<Optional<TDto>>
 
-findAll(...): Promise<TDto[]>
+findAll(
+  ctx?: Optional<UserContext>,
+  signal?: Optional<AbortSignal>,
+): Promise<TDto[]>
 ```
 
 It is responsible for obtaining data.
@@ -798,23 +788,21 @@ import type { UserDto } from './user.dto'
 export class UserDataSource implements IReadDataSource<UserDto> {
   async findById(
     id: string | number,
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    _ctx?: Optional<UserContext>,
+    _signal?: Optional<AbortSignal>,
   ): Promise<Optional<UserDto>> {
-    // Implement the application-specific database query here.
-    return undefined
+    throw new Error('Implement the application-specific query for the requested user.')
   }
 
   async findAll(
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    _ctx?: Optional<UserContext>,
+    _signal?: Optional<AbortSignal>,
   ): Promise<UserDto[]> {
-    // Implement the application-specific database query here.
-    return []
+    throw new Error('Implement the application-specific user query.')
   }
 
   async dispose(): Promise<void> {
-    // Release resources owned by the data source, if any.
+    // Release resources here if this data source owns any.
   }
 }
 ```
@@ -826,6 +814,8 @@ import { ReadDao } from '@xeno-js/core'
 import type {
   IMapper,
   IReadDataSource,
+  Optional,
+  UserContext,
 } from '@xeno-js/core'
 
 import type { User } from './user'
@@ -846,7 +836,7 @@ export class UserReadDao extends ReadDao<User, UserDto> {
 The registration follows the normal Xeno.JS DI pattern:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 import type { XenoRegistry } from '@xeno-js/core'
 import type {
   IMapper,
@@ -859,16 +849,13 @@ import { UserMapper } from './users/user.mapper'
 import { UserDataSource } from './users/user.data-source'
 import { UserReadDao } from './users/user.read-dao'
 
-type ApplicationRegistry = XenoRegistry<
-  unknown,
-  {
-    USER_DATA_SOURCE: IReadDataSource<UserDto>
-    USER_MAPPER: IMapper<User, UserDto>
-    USER_READ_DAO: UserReadDao
-  }
->
+interface ApplicationRegistry extends XenoRegistry {
+  USER_DATA_SOURCE: IReadDataSource<UserDto>
+  USER_MAPPER: IMapper<User, UserDto>
+  USER_READ_DAO: UserReadDao
+}
 
-const app = new AppBuilder<ApplicationRegistry>()
+const app = new XenoAppBuilder<ApplicationRegistry>()
 
 app.addServices((services) => {
   services.addScoped('USER_DATA_SOURCE', () => {
@@ -887,18 +874,17 @@ app.addServices((services) => {
   })
 })
 
-const container = await app.build()
+const application = await app.build()
 
-const scope = container.createScope()
+const userContext: UserContext = { userId: 'user-123', tenantId: 'tenant-456' }
+const signal: Optional<AbortSignal> = undefined
 
-const readDao = scope.resolve('USER_READ_DAO')
-
-const result = await readDao.findAll(ctx, signal)
-
-await scope.dispose()
+const result = await application.runInScope(async (services) => {
+  return services.USER_READ_DAO.findAll(userContext, signal)
+})
 ```
 
-The `unknown` used as the first `XenoRegistry` parameter above is only a placeholder for the application's actual registry base type. It is not a special Xeno.JS value required by `ReadDao`.
+Replace the placeholder query errors in `UserDataSource` with the application's database access logic. `runInScope()` manages the scoped services' lifetime.
 
 ## What ReadDao does for you
 
@@ -1003,21 +989,21 @@ services.addScoped('USER_READ_DAO', ...)
 then:
 
 ```ts
-scope.resolve('USER_READ_DAO')
+await application.runInScope(async (services) => {
+  const readDao = services.USER_READ_DAO
+})
 ```
 
-### A scoped DAO cannot be resolved from `container.resolve()`
+### A scoped DAO cannot be resolved from the root container
 
 This is expected for a scoped registration.
 
-The service container explicitly rejects resolving scoped services from the root container.
-
-Use:
+Root resolution cannot retrieve scoped services. Use `XenoApplication.runInScope()`:
 
 ```ts
-const scope = container.createScope()
-
-const dao = scope.resolve('USER_READ_DAO')
+await application.runInScope(async (services) => {
+  const dao = services.USER_READ_DAO
+})
 ```
 
 ### `findById()` returns no entity
@@ -1058,36 +1044,34 @@ await readDao.findById(id, ctx, signal)
 
 To implement a read-only DAO:
 
-* [ ] Define the entity type.
-* [ ] Define the data-source DTO type.
-* [ ] Implement `IReadDataSource<TDto>`.
-* [ ] Implement `IMapper<T, TDto>`.
-* [ ] Create a concrete class extending `ReadDao<T, TDto>`.
-* [ ] Pass the data source and mapper to `super(...)`.
-* [ ] Add the concrete DAO to the application's registry.
-* [ ] Register the data source.
-* [ ] Register the mapper.
-* [ ] Register the DAO.
-* [ ] Build the `AppBuilder`.
-* [ ] Create a scope when the DAO is registered as scoped.
-* [ ] Resolve the DAO using its application-defined token.
-* [ ] Call `findById()` or `findAll()`.
-* [ ] Pass the `UserContext`.
-* [ ] Pass an `AbortSignal` when cancellation is needed.
-* [ ] Dispose the scope when its lifetime ends.
+- [ ] Define the entity type.
+- [ ] Define the data-source DTO type.
+- [ ] Implement `IReadDataSource<TDto>`.
+- [ ] Implement `IMapper<T, TDto>`.
+- [ ] Create a concrete class extending `ReadDao<T, TDto>`.
+- [ ] Pass the data source and mapper to `super(...)`.
+- [ ] Add the concrete DAO to the application's registry.
+- [ ] Register the data source.
+- [ ] Register the mapper.
+- [ ] Register the DAO.
+- [ ] Build the `XenoAppBuilder`.
+- [ ] Resolve scoped DAO work with `XenoApplication.runInScope()`.
+- [ ] Call `findById()` or `findAll()`.
+- [ ] Pass the `UserContext`.
+- [ ] Pass an `AbortSignal` when cancellation is needed.
 
 ---
 
 ## Related Docs
 
-* [Data Overview](../overview)
-* [Node PostgreSQL](../node-postgresql)
-* [SQLite](../sqllite)
-* [Unit of Work](../unit-of-work)
-* [Service Registration](../../dependency-injection/registration)
-* [Service Resolution](../../dependency-injection/resolution)
-* [Dependency Graph](../../dependency-injection/dependency-graph)
-* [Repository](./repository)
+- [Data Overview](../overview)
+- [Node PostgreSQL](../node-postgresql)
+- [SQLite](../sqllite)
+- [Unit of Work](../unit-of-work)
+- [Service Registration](../../dependency-injection/registration)
+- [Service Resolution](../../dependency-injection/resolution)
+- [Dependency Graph](../../dependency-injection/dependency-graph)
+- [Repository](./repository)
 
 ---
 

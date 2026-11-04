@@ -1,6 +1,6 @@
 ---
 title: Validation Pipeline
-description: Learn how to enable validation for Xeno.JS commands and queries using the built-in Zod validator or custom validation strategies.
+description: Learn how to validate Xeno.JS commands and queries with the Zod integration or custom validation strategies.
 keywords:
 - Xeno.JS validation
 - Xeno.JS validation pipeline
@@ -17,17 +17,15 @@ tags:
 - cqrs
 faqs:
 - question: How do I enable validation in Xeno.JS?
-  answer: Configure validation.zod or validation.customValidationStrategy in the AppBuilder pipeline configuration.
+  answer: Pass withZodValidation() from @xeno-js/zod or withValidation() from @xeno-js/core to XenoAppBuilder.addPipeline().
 - question: How do I register a Zod schema?
-  answer: Add the schema to validation.zod.schemas using the request intent as the key.
+  answer: Configure withZodValidation() with a schemas object keyed by request intent.
 - question: Where should I define the Zod schema for a command or query?
   answer: Define the schema in the corresponding CQRS command or query documentation, then register it in the validation pipeline during application bootstrap.
 - question: Can I use validation without Zod?
-  answer: Yes. Register one or more custom validation strategies through validation.customValidationStrategy.
+  answer: Yes. Register one or more IStrategy instances with withValidation().
 - question: What happens when validation fails?
   answer: The validation pipeline returns a failed Result and does not execute the next pipeline stage or the handler.
-- question: What happens if a Zod schema is not registered for an intent?
-  answer: Xeno.JS logs a warning and continues without applying Zod validation for that request.
 ---
 
 ## Introduction
@@ -36,8 +34,8 @@ Use the Validation Pipeline to validate commands and queries before they reach t
 
 Xeno.JS supports two validation approaches:
 
-* the built-in Zod validator;
-* custom validation strategies.
+- the Zod integration from `@xeno-js/zod`;
+- custom validation strategies.
 
 The pipeline is used for both commands and queries.
 
@@ -47,48 +45,59 @@ The pipeline is used for both commands and queries.
 
 You need:
 
-* an `AppBuilder` instance;
-* a Command or Query;
-* a request `intent`;
-* a Zod schema registered for that intent, or a custom validation strategy.
+- an `XenoAppBuilder` instance;
+- a Command or Query;
+- a request `intent`;
+- a Zod schema registered for that intent, or a custom validation strategy.
 
 If you are creating the request and its schema, start with:
 
-* [Create a Command](../cqrs/command)
-* [Create a Query](../cqrs/query)
+- [Create a Command](../cqrs/command)
+- [Create a Query](../cqrs/query)
 
 ## Enable validation
 
-Validation is enabled through the `addPipeline()` configuration.
+Add validation plugins to `XenoAppBuilder.addPipeline()`. The Zod plugin is provided by `@xeno-js/zod`; the generic validation plugin is provided by `@xeno-js/core`.
 
 You do not need to register `ValidationPipeline` manually.
 
-Configure either `validation.zod` or `validation.customValidationStrategy`:
+For Zod validation:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {},
-    }
-  })
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {}
+  }))
   .build()
 ```
 
-If at least one validation strategy is configured, Xeno.JS adds validation to both the command and query pipelines.
+For custom validation, pass strategy instances to `withValidation()`:
 
-You can also configure Zod and custom validation at the same time.
+```ts
+import { XenoAppBuilder, withValidation } from '@xeno-js/core'
 
-## Use the built-in Zod validator
+const app = new XenoAppBuilder()
+  .addPipeline(withValidation((strategies) => {
+    strategies.push(validateUser)
+  }))
+  .build()
+```
 
-Xeno.JS provides a Zod-based validator that can be configured during application bootstrap.
+The configured validation strategy is added to the common pipeline, so it applies to both commands and queries.
+
+## Use the Zod integration
+
+The `@xeno-js/zod` package provides a Zod-based validator that you configure during application bootstrap with `withZodValidation()`.
 
 The configuration is a map where:
 
-* the key is the request `intent`;
-* the value is the corresponding Zod schema.
+- the key is the request `intent`;
+- the value is the corresponding Zod schema.
 
-The intent is the identifier associated with the registered command or query handler.
+The key must match the value exposed as the request's `intent`.
 
 ### Register a Zod schema
 
@@ -101,20 +110,17 @@ CREATE_USER_HANDLER
 Register its schema during bootstrap:
 
 ```ts
-import { z } from 'zod'
-
-import { AppBuilder } from '@xeno-js/shared'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
 
 import { createUserSchema } from './application/users/create-user.schema'
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CREATE_USER_HANDLER: createUserSchema,
-      },
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      CREATE_USER_HANDLER: createUserSchema,
     }
-  })
+  }))
   .build()
 ```
 
@@ -145,24 +151,25 @@ export const createUserSchema = z.object({
 
 The details of how the schema is associated with a Command or Query are documented in the corresponding CQRS guides:
 
-* [Create a Command](../cqrs/command)
-* [Create a Query](../cqrs/query)
+- [Create a Command](../cqrs/command)
+- [Create a Query](../cqrs/query)
 
 ### Register multiple schemas
 
 You can register schemas for multiple commands and queries in the same bootstrap configuration:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CREATE_USER_HANDLER: createUserSchema,
-        UPDATE_USER_HANDLER: updateUserSchema,
-        GET_USER_HANDLER: getUserSchema,
-      },
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      CREATE_USER_HANDLER: createUserSchema,
+      UPDATE_USER_HANDLER: updateUserSchema,
+      GET_USER_HANDLER: getUserSchema,
     }
-  })
+  }))
   .build()
 ```
 
@@ -179,7 +186,7 @@ Request
   intent: CREATE_USER_HANDLER
         │
         ▼
-validation.zod.schemas
+withZodValidation({ schemas })
         │
         └── CREATE_USER_HANDLER → createUserSchema
 ```
@@ -202,23 +209,11 @@ schemas: {
 }
 ```
 
-### Missing schema
-
-A missing schema does **not** produce a validation failure.
-
-If no schema is registered for the request intent, the built-in Zod validator:
-
-1. logs a warning;
-2. returns a successful validation result;
-3. allows the request to continue.
-
-The warning identifies the missing intent.
-
-Therefore, if a request is expected to be validated with Zod, make sure its intent is present in `validation.zod.schemas`.
+The validation strategy passes the request intent and request to the configured validator service. The behavior for an intent with no registered schema depends on that validator service; this specific behavior cannot be verified from the current context.
 
 ## Add custom validation
 
-Use `validation.customValidationStrategy` when the validation logic cannot or should not be expressed as a Zod schema.
+Use `withValidation()` when the validation logic cannot or should not be expressed as a Zod schema.
 
 A custom validation strategy implements:
 
@@ -232,7 +227,7 @@ and exposes:
 execute(request)
 ```
 
-The method must return a `Result`.
+The method returns a result. Return a failed `Result` to stop pipeline execution; the pipeline treats any successful result as validation success.
 
 ### Basic custom validator
 
@@ -244,13 +239,11 @@ import { AppError, Result } from '@xeno-js/shared'
 
 const validateUser: IStrategy<IRequest, boolean> = {
   async execute(request) {
-    const email = (request as { email?: string }).email
-
-    if (!email?.endsWith('@example.com')) {
+    if (!('email' in request) || typeof request.email !== 'string') {
       return Result.fail(
         AppError.validationError(
           request.intent,
-          'Email must use the @example.com domain',
+          'Email is required',
         ),
       )
     }
@@ -260,101 +253,37 @@ const validateUser: IStrategy<IRequest, boolean> = {
 }
 ```
 
-Register the strategy during bootstrap:
+Register the strategy instance during bootstrap:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.customValidationStrategy = [
-      () => validateUser,
-    ]
-  })
+import { XenoAppBuilder, withValidation } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withValidation((strategies) => {
+    strategies.push(validateUser)
+  }))
   .build()
 ```
 
-The factory function receives the active service scope.
-
-This allows a custom strategy to resolve application services when validation requires dependencies.
-
-For example:
-
-```ts
-import type {
-  IRequest,
-  IStrategy,
-  IServiceScope,
-} from '@xeno-js/shared'
-
-import { AppError, Result } from '@xeno-js/shared'
-
-const validateUser = (
-  scope: IServiceScope,
-): IStrategy<IRequest, boolean> => {
-  const userRepository = scope.resolve('USER_REPOSITORY')
-
-  return {
-    async execute(request) {
-      const email = (request as { email?: string }).email
-
-      if (!email) {
-        return Result.fail(
-          AppError.validationError(
-            request.intent,
-            'Email is required',
-          ),
-        )
-      }
-
-      const exists = await userRepository.existsByEmail(email)
-
-      if (exists) {
-        return Result.fail(
-          AppError.validationError(
-            request.intent,
-            'Email is already registered',
-          ),
-        )
-      }
-
-      return Result.ok(true)
-    },
-  }
-}
-```
-
-Register it with the application:
-
-```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.customValidationStrategy = [
-      (scope) => validateUser(scope),
-    ]
-  })
-  .build()
-```
-
-The exact dependency token and repository API depend on your application.
+`withValidation()` accepts strategy instances in its setup callback; the provided plugin does not supply a service scope or create a strategy from a scope-aware factory. The exact approach for injecting dependencies into a strategy cannot be verified from the current context.
 
 ## Register multiple custom validators
 
 You can register more than one custom validation strategy:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.customValidationStrategy = [
-      (scope) => validateUser(scope),
-      (scope) => validateAccount(scope),
-      (scope) => validateBusinessRules(scope),
-    ]
-  })
+import { XenoAppBuilder, withValidation } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withValidation((strategies) => {
+    strategies.push(validateUser, validateAccount, validateBusinessRules)
+  }))
   .build()
 ```
 
-Strategies are executed in registration order.
+Strategies in the array passed to a single `withValidation()` call are executed in array order.
 
-If a strategy returns a failed `Result`, validation stops immediately and the remaining strategies are not executed.
+The validation pipeline awaits each strategy in order. If a strategy returns a failed `Result`, validation stops immediately and the remaining strategies are not executed.
 
 The request also does not continue to the next pipeline stage or handler.
 
@@ -365,25 +294,27 @@ Zod and custom strategies can be used together.
 For example:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CREATE_USER_HANDLER: createUserSchema,
-      },
-    }
+import { XenoAppBuilder, withValidation } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
 
-    config.validation.customValidationStrategy = [
-      (scope) => validateUser(scope),
-    ]
-  })
+const app = new XenoAppBuilder()
+  .addPipeline(
+    withZodValidation((options) => {
+      options.schemas = {
+        CREATE_USER_HANDLER: createUserSchema,
+      }
+    }),
+    withValidation((strategies) => {
+      strategies.push(validateUser)
+    }),
+  )
   .build()
 ```
 
 This is useful when:
 
-* Zod validates the structure and basic constraints of the request;
-* custom validation checks application-specific rules.
+- Zod validates the structure and basic constraints of the request;
+- custom validation checks application-specific rules.
 
 For example:
 
@@ -391,16 +322,13 @@ For example:
 CREATE_USER_HANDLER
         │
         ▼
-   Zod validation
-        │
-        ▼
- custom validation
+ Validation strategies
         │
         ▼
      Handler
 ```
 
-If any validation strategy fails, execution stops at that point.
+If any validation strategy fails, execution stops at that point. The exact ordering between separate validation plugins depends on pipeline assembly and is not specified by the implementation context provided here.
 
 ## What happens when validation succeeds?
 
@@ -433,17 +361,9 @@ A failed validation returns a failed `Result`.
 
 The next pipeline stage is not executed, and the handler is not called.
 
-For a Zod validation failure, Xeno.JS produces a validation error containing the validation details.
+For a Zod validation failure, the schema strategy converts the validator service's error into an `AppError.validationError`. The strategy prefixes the message with `Validation failed:`.
 
-For example, a Zod schema failure can result in an error describing the invalid field:
-
-```text
-Validation failed for schema: [email] Invalid email address
-```
-
-Multiple Zod issues are combined into the validation error message.
-
-The validation error uses the `VALIDATION_FAILED` error category and a `400` status.
+The strategy prefixes the validator service's error message, but its exact formatting cannot be verified from the current context.
 
 ## Validation for commands and queries
 
@@ -452,15 +372,16 @@ The same validation configuration is used for both commands and queries.
 For example:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CREATE_USER_HANDLER: createUserSchema,
-        GET_USER_HANDLER: getUserSchema,
-      },
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      CREATE_USER_HANDLER: createUserSchema,
+      GET_USER_HANDLER: getUserSchema,
     }
-  })
+  }))
   .build()
 ```
 
@@ -480,8 +401,8 @@ Query
 
 For request-specific schema definitions, see:
 
-* [Create a Command](../cqrs/command)
-* [Create a Query](../cqrs/query)
+- [Create a Command](../cqrs/command)
+- [Create a Query](../cqrs/query)
 
 ## Troubleshooting
 
@@ -489,8 +410,8 @@ For request-specific schema definitions, see:
 
 Check the following:
 
-1. `addPipeline()` is called on the `AppBuilder`;
-2. either `validation.zod` or `validation.customValidationStrategy` is configured;
+1. `addPipeline()` is called on the `XenoAppBuilder`;
+2. `withZodValidation()` or `withValidation()` is passed to `addPipeline()`;
 3. the Zod schema is registered under the correct request `intent`;
 4. the request is executed through the Xeno.JS mediator;
 5. the request reaches the configured application pipeline.
@@ -500,29 +421,14 @@ Check the following:
 Check the schema registry:
 
 ```ts
-config.validation.zod = {
-  schemas: {
+withZodValidation((options) => {
+  options.schemas = {
     CREATE_USER_HANDLER: createUserSchema,
-  },
-}
-
-// Check if you added the handler in the container with the same key
-container.addScoped('CREATE_USER_HANDLER', () => new CreateUserHandler())
-
-// Check if you are using the correct intent in the command or query
-export class CreateUserCommand extends Command<null> {
-  constructor() {
-    super('CREATE_USER_HANDLER')
   }
-}
-
-// Che if you are using the correct key in the registry
-export type MyRegistry {
-  CREATE_USER_HANDLER: CreateUserHandler
-}
+})
 ```
 
-Then check the request intent:
+The schema lookup uses the request `intent`. Check that it exactly matches the registry key:
 
 ```ts
 request.intent === 'CREATE_USER_HANDLER'
@@ -530,23 +436,23 @@ request.intent === 'CREATE_USER_HANDLER'
 
 The two values must match exactly.
 
-If the schema is missing for an intent, Xeno.JS logs a warning and continues without Zod validation.
+The behavior when no schema exists for an intent depends on the validator service and cannot be verified from the current context.
 
 ### The custom validator is not running
 
 Check that the strategy is registered through:
 
 ```ts
-config.validation.customValidationStrategy = [
-  (scope) => createCustomValidator(scope),
-]
+withValidation((strategies) => {
+  strategies.push(validateUser)
+})
 ```
 
 Also verify that:
 
-* the factory returns an object implementing `execute()`;
-* `execute()` returns a `Result`;
-* the strategy is configured before `build()`.
+- the setup callback adds an `IStrategy` instance to the array;
+- the strategy's `execute()` returns a successful or failed result;
+- the plugin is passed to `addPipeline()` before `build()`.
 
 ### One custom validator prevents the others from running
 
@@ -556,13 +462,13 @@ Validation stops at the first failure. This prevents the request from continuing
 
 ## Related docs
 
-* [Application Overview](../overview)
-* [Create a Command](../cqrs/command)
-* [Create a Query](../cqrs/query)
-* [Create a Handler](../cqrs/handler)
-* [Exception Pipeline](./exception)
-* [Performance Pipeline](./performance)
-* [Logging Pipeline](./logging)
+- [Application Overview](../overview)
+- [Create a Command](../cqrs/command)
+- [Create a Query](../cqrs/query)
+- [Create a Handler](../cqrs/handler)
+- [Exception Pipeline](./exception)
+- [Performance Pipeline](./performance)
+- [Logging Pipeline](./logging)
 
 ---
 

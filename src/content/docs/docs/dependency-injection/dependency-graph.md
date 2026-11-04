@@ -23,13 +23,13 @@ faqs:
 - question: Does Xeno.JS automatically discover service dependencies?
   answer: No. Dependencies are defined explicitly in service registration factories.
 - question: Where should I define the dependency graph?
-  answer: Define service dependencies at the application composition root, typically through AppBuilder.addServices() or a module configuration.
+  answer: Define service dependencies at the application composition root, typically through XenoAppBuilder.addServices() or a module configuration.
 - question: How do I make one service depend on another?
   answer: Register the dependent service and resolve the required service from the factory scope.
 - question: How does Xeno.JS detect circular dependencies?
   answer: The service container detects a circular resolution path and throws a DI Circular Dependency Error containing the resolution path.
 - question: Can a singleton depend on a scoped service?
-  answer: No. Xeno.JS rejects resolving a scoped service from a singleton resolution context to prevent a captive dependency.
+  answer: No. The container rejects resolving a scoped service while constructing a singleton, including through transient dependencies in that resolution chain.
 - question: Can a service have multiple dependencies?
   answer: Yes. A registration factory can resolve multiple services from the current scope.
 - question: Do service lifetimes affect the dependency graph?
@@ -79,15 +79,15 @@ You do not need decorators, runtime scanning, or a separate graph configuration.
 
 You should already have:
 
-* a Xeno.JS application created with `AppBuilder`
-* the services you want to connect
-* service registrations for their dependencies
-* a clear lifetime for each service
+- a Xeno.JS application created with `XenoAppBuilder`
+- the services you want to connect
+- service registrations for their dependencies
+- a clear lifetime for each service
 
 For application-level registration, use `AppBuilder.addServices()`:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((services) => {
     // service registrations
   })
@@ -95,13 +95,19 @@ const app = new AppBuilder()
 await app.build()
 ```
 
-`addServices()` gives you access to the configured `IServiceContainer`, where you can register singleton, scoped, and transient services.
+`addServices()` provides the service container during application
+configuration, where you can register singleton, scoped, and transient
+services. `build()` returns the configured runtime application, not the
+container.
 
 See [Registration](./registration) for the registration API and [Lifetimes](./lifetimes/singleton) for service lifetime details.
 
 ## Define a dependency between services
 
-Register the dependency first conceptually, then resolve it from the dependent service's factory.
+Declare registrations during application composition, then resolve dependencies
+from the dependent service's factory. The factory resolves its dependencies
+when the service is requested, so registration order is not the dependency
+relationship itself.
 
 For example, suppose `UserService` needs `UserRepository`.
 
@@ -273,7 +279,8 @@ If a dependency points in an unexpected direction, review the service boundary b
 
 ## Use built-in Xeno.JS services as dependencies
 
-Xeno.JS registers framework services in the application registry.
+Xeno.JS exposes framework services through registry tokens when the relevant
+modules are configured.
 
 For example, a service can depend on the request context or mediator:
 
@@ -288,19 +295,19 @@ services.addTransient('USER_CONTROLLER', (scope) => {
 
 The built-in tokens are typed through the application registry, so the token determines the type returned by `resolve()`.
 
-Common built-in services include:
+Examples of framework service tokens used by the registrations in this
+documentation include:
 
-* `REQUEST_CONTEXT`
-* `MEDIATOR`
-* `LOGGER`
-* `CACHE`
-* `CONFIGURATION_SERVICE`
-* `SERVICE_CONTAINER`
-* `SERVICE_SCOPE_ACCESSOR`
-* `UNIT_OF_WORK`
-* `VALIDATOR_SERVICE`
+- `REQUEST_CONTEXT`
+- `MEDIATOR`
+- `LOGGER`
+- `CACHE`
+- `CONFIGURATION_SERVICE`
+- `SERVICE_SCOPE_ACCESSOR`
+- `UNIT_OF_WORK`
 
-Only use a built-in token when the corresponding service is available in your application's configuration.
+Only resolve a token when the corresponding registration is available in your
+application configuration.
 
 ## Register dependencies through modules
 
@@ -434,7 +441,10 @@ is not a valid dependency relationship in Xeno.JS.
 
 A singleton is created at the container level, while a scoped service belongs to an active scope. Allowing the singleton to retain the scoped service would make the scoped instance outlive its intended scope.
 
-Xeno.JS detects this situation and throws a captive dependency error.
+While constructing a singleton, the container rejects a scoped dependency
+reached directly or through transient registrations and throws a captive
+dependency error. This check is specific to singleton construction; it does
+not validate every lifetime combination or root-scope use.
 
 For example:
 
@@ -448,7 +458,9 @@ See [Singleton](./lifetimes/singleton), [Scoped](./lifetimes/scoped), and [Capti
 
 ## Use the service scope for scoped dependencies
 
-If a service depends on a scoped service, its factory must resolve the dependency from the active service scope.
+If a service depends on a scoped service, resolve it through the scope for the
+intended execution. In application code, use `getScopedServices()` within an
+existing execution or `runInScope()` to create a scope for a new operation.
 
 For example:
 
@@ -474,7 +486,11 @@ Request scope
               +--> REQUEST_DATA
 ```
 
-This allows `REQUEST_DATA` to remain scoped to the current application execution.
+This allows `REQUEST_DATA` to remain scoped to the current application
+execution. Do not resolve a transient that depends on `REQUEST_DATA` through
+root services: its factory receives the root scope, so a nested scoped
+resolution is associated with that root scope rather than the intended request
+or operation scope.
 
 See [Scoped](./lifetimes/scoped) and [Resolution](./resolution).
 
@@ -579,26 +595,26 @@ If multiple implementations are required, use different tokens and choose explic
 
 ### Scoped service requires an active scope
 
-If a dependency is scoped but the service is resolved from the root container, Xeno.JS throws:
+Resolving a scoped registration directly from root services is invalid:
 
 ```text
 [DI Container Error]: Scoped service 'USER_SERVICE' requires an active scope.
 ```
 
-Resolve scoped services through an `IServiceScope` instead.
+Resolve scoped services within an active operation scope instead:
 
 ```ts
-const scope = container.createScope()
-
-try {
-  const service = scope.resolve('USER_SERVICE')
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
   await service.execute()
-} finally {
-  await scope.dispose()
-}
+})
 ```
 
-In request-driven code, use the request's active service scope rather than creating an unrelated scope for every dependency.
+In request-driven code, use `getScopedServices()` to resolve through the
+request's active scope rather than creating an unrelated scope. Also avoid
+resolving a transient that depends on scoped services through root services:
+its factory receives the root scope, so a nested scoped resolution belongs to
+that root scope.
 
 See [Resolution](./resolution).
 
@@ -639,7 +655,7 @@ See [Captive Dependencies](./captive-dependencies).
 The following example defines a small application graph with a controller, application service, repository, and data source:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
 class UserDataSource {
   async findById(id: string) {
@@ -680,7 +696,7 @@ class UserController {
   }
 }
 
-const app = new AppBuilder().addServices((services) => {
+const app = new XenoAppBuilder().addServices((services) => {
   services.addScoped('USER_DATA_SOURCE', () => {
     return new UserDataSource()
   })
@@ -704,7 +720,7 @@ const app = new AppBuilder().addServices((services) => {
   })
 })
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 The dependency graph is:
@@ -728,25 +744,25 @@ The important part is that every edge in the graph is visible in the registratio
 
 When adding a new service, verify:
 
-* [ ] The service has a registration.
-* [ ] Every dependency has a registration.
-* [ ] Each dependency is resolved explicitly from the factory scope.
-* [ ] The service lifetime matches how it is used.
-* [ ] Scoped dependencies are resolved inside an active scope.
-* [ ] There is no circular dependency.
-* [ ] A singleton does not depend directly on a scoped service.
-* [ ] The dependency direction matches the application's boundaries.
-* [ ] The registrations are included in the application build.
+- [ ] The service has a registration.
+- [ ] Every dependency has a registration.
+- [ ] Each dependency is resolved explicitly from the factory scope.
+- [ ] The service lifetime matches how it is used.
+- [ ] Scoped dependencies are resolved inside an active scope.
+- [ ] There is no circular dependency.
+- [ ] A singleton does not depend directly on a scoped service.
+- [ ] The dependency direction matches the application's boundaries.
+- [ ] The registrations are included in the application build.
 
 ## Related docs
 
-* [Service Container](./service-container) — understand the container used to register and resolve services.
-* [Registration](./registration) — register singleton, scoped, and transient services.
-* [Singleton](./lifetimes/singleton) — configure services shared by the container.
-* [Scoped](./lifetimes/scoped) — configure services tied to a logical scope.
-* [Transient](./lifetimes/transient) — create a new instance for each resolution.
-* [Resolution](./resolution) — resolve services from the container or an active scope.
-* [Captive Dependencies](./captive-dependencies) — fix invalid lifetime relationships.
+- [Service Container](./service-container) — understand the container used to register and resolve services.
+- [Registration](./registration) — register singleton, scoped, and transient services.
+- [Singleton](./lifetimes/singleton) — configure services shared by the container.
+- [Scoped](./lifetimes/scoped) — configure services tied to a logical scope.
+- [Transient](./lifetimes/transient) — create a new instance for each resolution.
+- [Resolution](./resolution) — resolve services from the container or an active scope.
+- [Captive Dependencies](./captive-dependencies) — fix invalid lifetime relationships.
 
 ---
 

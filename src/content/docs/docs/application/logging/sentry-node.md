@@ -23,11 +23,11 @@ tags:
 - typescript
 faqs:
 - question: How do I enable Sentry logging in Xeno.JS?
-  answer: Call app.addLogger() and configure options.sentry.config with a Sentry DSN.
+  answer: Register withSentryNodeLogger() with app.addLogger() and configure its DSN.
 - question: Which package do I need for Sentry logging?
-  answer: Install @sentry/node alongside the Xeno.JS packages used by your application.
+  answer: Install @xeno-js/sentry-node and the Sentry Node SDK alongside the Xeno.JS packages used by your application.
 - question: What Sentry configuration does Xeno.JS require?
-  answer: A Sentry DSN is required. The environment is optional and defaults to NODE_ENV or development.
+  answer: The plugin accepts a DSN, release, and environment; it initializes these from SENTRY_DSN, SENTRY_RELEASE, and SENTRY_ENVIRONMENT when configured.
 - question: Does Xeno.JS send every log level to Sentry?
   answer: No. The Sentry logger only forwards WARN and ERROR log levels.
 - question: How are warnings sent to Sentry?
@@ -37,7 +37,7 @@ faqs:
 - question: Can I use Sentry together with Console or Pino?
   answer: Yes. Xeno.JS can configure Sentry alongside the Console logger, Pino, and custom logger clients.
 - question: How do I resolve the Sentry logger?
-  answer: Resolve TOKENS.LOGGER. Xeno.JS exposes the combined application logger rather than a separate Sentry logger token.
+  answer: Resolve the application logger from the application instance returned by build(). Xeno.JS exposes the combined application logger rather than a separate Sentry logger token.
 - question: What context does Xeno.JS send to Sentry?
   answer: The application logger uses a restricted safe context for observability. Sentry attaches that context as event extras rather than serializing the complete request context.
 - question: Does safe context guarantee that no sensitive data reaches Sentry?
@@ -58,66 +58,69 @@ Xeno.JS integrates `@sentry/node` as a logging provider. You configure it throug
 Install the Xeno.JS packages used by your application and the Sentry Node SDK:
 
 ```bash
-npm install @xeno-js/core @xeno-js/shared @sentry/node
+npm install @xeno-js/core @xeno-js/sentry-node
 ```
 
-Xeno.JS loads the Sentry integration when Sentry logging is configured.
+Register the `@xeno-js/sentry-node` plugin to add Sentry as a logging provider.
 
-You do not need to call `Sentry.init()` yourself. Xeno.JS initializes Sentry from the configuration passed to `addLogger()`.
+Configure the integration through `withSentryNodeLogger()` rather than calling Sentry APIs from application code.
 
 ## Configure Sentry
 
 Configure Sentry through `AppBuilder.addLogger()`:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options, config) => {
-  options.sentry.config = {
-    dsn: config.getOrThrow('SENTRY_DSN'),
-    environment: config.get('NODE_ENV', 'development'),
-  }
-})
+app.addLogger(withSentryNodeLogger((options, config) => {
+  options.dsn = config.get('SENTRY_DSN') ?? ''
+  options.release = config.get('SENTRY_RELEASE') ?? ''
+  options.environment = config.get('SENTRY_ENVIRONMENT') ?? ''
+}))
 ```
 
 The Sentry configuration exposes:
 
-| Option        | Required | Description                                                                   |
-| ------------- | -------- | ----------------------------------------------------------------------------- |
-| `dsn`         | Yes      | Sentry Data Source Name used to send events to the configured Sentry project. |
-| `environment` | No       | Environment associated with the Sentry events.                                |
+| Option        | Description                                                                   |
+| ------------- | ----------------------------------------------------------------------------- |
+| `dsn`         | Sentry Data Source Name used to send events to the configured Sentry project. |
+| `release`     | Release associated with the Sentry events.                                    |
+| `environment` | Environment associated with the Sentry events.                                |
 
-If `environment` is not provided, Xeno.JS uses `process.env.NODE_ENV`. If `NODE_ENV` is also undefined, it uses `development`.
-
-A DSN is required when Sentry logging is enabled.
+The plugin initializes these options from `SENTRY_DSN`, `SENTRY_RELEASE`, and `SENTRY_ENVIRONMENT` via the configuration service. Its setup callback can override them.
 
 ### Configure the log level
 
 The application log level is configured through the same `LoggerConfig` used by the other Xeno.JS providers:
 
 ```ts
-import { AppBuilder, LOG_LEVEL } from '@xeno-js/core'
+import { LOG_LEVEL } from '@xeno-js/shared'
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options, config) => {
-  options.level = LOG_LEVEL.INFO
-
-  options.sentry.config = {
-    dsn: config.getOrThrow('SENTRY_DSN'),
-    environment: config.get('NODE_ENV', 'development'),
-  }
-})
+app.addLogger([
+  withConsoleLogger((options) => {
+    options.level = LOG_LEVEL.INFO
+  }),
+  withSentryNodeLogger((options, config) => {
+    options.dsn = config.get('SENTRY_DSN') ?? ''
+    options.release = config.get('SENTRY_RELEASE') ?? ''
+    options.environment = config.get('SENTRY_ENVIRONMENT') ?? ''
+  }),
+])
 ```
 
 Xeno.JS supports these log levels:
 
-* `DEBUG`
-* `INFO`
-* `WARN`
-* `ERROR`
+- `DEBUG`
+- `INFO`
+- `WARN`
+- `ERROR`
 
 The configured level is the minimum level accepted by the application logger.
 
@@ -144,7 +147,7 @@ the application logger accepts `INFO`, `WARN`, and `ERROR`, but Sentry still rec
 The logger is registered during application bootstrap:
 
 ```ts
-const container = await app.build()
+const application = await app.build()
 ```
 
 Configure Sentry before calling `build()`.
@@ -152,30 +155,28 @@ Configure Sentry before calling `build()`.
 A complete minimal setup is:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options, config) => {
-  options.sentry.config = {
-    dsn: config.getOrThrow('SENTRY_DSN'),
-    environment: config.get('NODE_ENV', 'development'),
-  }
-})
+app.addLogger(withSentryNodeLogger((options, config) => {
+  options.dsn = config.get('SENTRY_DSN') ?? ''
+  options.release = config.get('SENTRY_RELEASE') ?? ''
+  options.environment = config.get('SENTRY_ENVIRONMENT') ?? ''
+}))
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 ## Resolve the application logger
 
 Xeno.JS does not expose a separate DI token for the Sentry logger.
 
-Resolve the application logger through `TOKENS.LOGGER`:
+Resolve the application logger through the built application's service proxy:
 
 ```ts
-import { TOKENS } from '@xeno-js/core'
-
-const logger = container.resolve(TOKENS.LOGGER)
+const { logger } = application.getServices()
 ```
 
 The resolved object is the Xeno.JS `ILogger` abstraction.
@@ -214,8 +215,7 @@ You do not need to import or call the Sentry SDK from application code.
 ### Example in an application service
 
 ```ts
-import { TOKENS } from '@xeno-js/core'
-import type { ILogger } from '@xeno-js/core'
+import type { ILogger } from '@xeno-js/shared'
 
 export class UserService {
   constructor(private readonly logger: ILogger) {}
@@ -225,7 +225,7 @@ export class UserService {
       // Application work...
       this.logger.info('User created')
     } catch (error) {
-      this.logger.error('Failed to create user', error) //Sentry recieves only the error's log
+      this.logger.error('Failed to create user', error)
       throw error
     }
   }
@@ -317,17 +317,17 @@ The application logger builds a restricted safe context for observability. This 
 
 The safe context can include information such as:
 
-* `userId`
-* `tenantId`
-* `requestId`
-* request `path`
-* request `origin`
-* masked client IP
-* `correlationId`
-* `spanId`
-* `startTime`
-* `parentSpanId`
-* applicable messaging context
+- `userId`
+- `tenantId`
+- `requestId`
+- request `path`
+- request `origin`
+- masked client IP
+- `correlationId`
+- `spanId`
+- `startTime`
+- `parentSpanId`
+- applicable messaging context
 
 The full request context can contain additional information that is not appropriate for automatic logging, such as authentication details, cookies, CSRF values, user profile information, or transport-specific objects.
 
@@ -354,14 +354,14 @@ logger.error('Authentication failed', {
 
 Do not explicitly log:
 
-* passwords;
-* access tokens;
-* refresh tokens;
-* API keys;
-* authorization credentials;
-* session cookies;
-* secrets;
-* sensitive personal data that is not required for diagnostics.
+- passwords;
+- access tokens;
+- refresh tokens;
+- API keys;
+- authorization credentials;
+- session cookies;
+- secrets;
+- sensitive personal data that is not required for diagnostics.
 
 The safe-context mechanism limits automatically propagated context. It cannot remove sensitive information that application code explicitly places in a log message or error.
 
@@ -397,20 +397,23 @@ Sentry does not have to be the only logging provider.
 For example, you can enable Console, Pino, and Sentry together:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options, config) => {
-  options.sentry.config = {
-    dsn: config.getOrThrow('SENTRY_DSN'),
-    environment: config.get('NODE_ENV', 'development'),
-  }
-
-  options.pino.config = {
-    destination: 'stdout',
-  }
-})
+app.addLogger([
+  withConsoleLogger(),
+  withPinoLogger((options) => {
+    options.destination = 'stdout'
+  }),
+  withSentryNodeLogger((options, config) => {
+    options.dsn = config.get('SENTRY_DSN') ?? ''
+    options.release = config.get('SENTRY_RELEASE') ?? ''
+    options.environment = config.get('SENTRY_ENVIRONMENT') ?? ''
+  }),
+])
 
 await app.build()
 ```
@@ -431,40 +434,31 @@ Each provider handles the log according to its own integration rules.
 
 ## Sentry initialization performed by Xeno.JS
 
-When Sentry is configured, Xeno.JS initializes `@sentry/node` with:
+When the plugin is enabled, it creates the Sentry logger through `SentryLoggerFactory.create(options)`, passing the configured DSN, release, and environment.
 
-* the configured DSN;
-* the configured environment;
-* HTTP integration;
-* a traces sample rate of `1.0` outside production;
-* a traces sample rate of `0.1` in production.
-
-Xeno.JS also installs an event filter that discards events whose original exception is a `ZodError`.
-
-These settings are part of the Xeno.JS integration. You should therefore configure the integration through `addLogger()` rather than separately initializing Sentry for the same application logger.
+The exact `@sentry/node` initialization behavior, including integrations, sampling rates, and event filters, cannot be verified from the current context; checking the factory implementation is required.
 
 ## Complete example
 
 A typical application can configure Sentry and keep application logging independent from Sentry:
 
 ```ts
-import { AppBuilder, LOG_LEVEL, TOKENS } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { LOG_LEVEL } from '@xeno-js/shared'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
 
 async function bootstrap() {
-  const app = new AppBuilder()
+  const app = new XenoAppBuilder()
 
-  app.addLogger((options, config) => {
-    options.level = LOG_LEVEL.INFO
+  app.addLogger(withSentryNodeLogger((options, config) => {
+    options.dsn = config.get('SENTRY_DSN') ?? ''
+    options.release = config.get('SENTRY_RELEASE') ?? ''
+    options.environment = config.get('SENTRY_ENVIRONMENT') ?? ''
+  }))
 
-    options.sentry.config = {
-      dsn: config.getOrThrow('SENTRY_DSN'),
-      environment: config.get('NODE_ENV', 'development'),
-    }
-  })
+  const application = await app.build()
 
-  const container = await app.build()
-
-  const logger = container.resolve(TOKENS.LOGGER)
+  const { logger } = application.getServices()
 
   logger.info('Application started')
 
@@ -487,7 +481,7 @@ The application knows only about `ILogger`. It does not need to depend on the Se
 Check the following:
 
 1. `app.addLogger()` is called.
-2. `options.sentry.config` is configured.
+2. `withSentryNodeLogger()` is passed to `addLogger()`.
 3. A valid `dsn` is provided.
 4. `app.build()` is called after the logger configuration.
 5. The log level allows the event.
@@ -497,35 +491,26 @@ Check the following:
 For example:
 
 ```ts
-app.addLogger((options, config) => {
-  options.level = LOG_LEVEL.WARN
-
-  options.sentry.config = {
-    dsn: config.getOrThrow('SENTRY_DSN'),
-  }
-})
+app.addLogger([
+  withConsoleLogger((options) => {
+    options.level = LOG_LEVEL.WARN
+  }),
+  withSentryNodeLogger((options, config) => {
+    options.dsn = config.get('SENTRY_DSN') ?? ''
+    options.release = config.get('SENTRY_RELEASE') ?? ''
+    options.environment = config.get('SENTRY_ENVIRONMENT') ?? ''
+  }),
+])
 ```
 
 ### Bootstrap fails with a Sentry configuration error
 
-If Sentry logging is enabled without a Sentry configuration, Xeno.JS throws:
-
-```text
-Sentry configuration is required when Sentry logging is enabled.
-```
-
-If the configuration exists but has no DSN, Xeno.JS throws:
-
-```text
-Sentry DSN is required when Sentry logging is enabled.
-```
-
-Check:
+Check that `withSentryNodeLogger()` is registered and that the DSN is configured:
 
 ```ts
-options.sentry.config = {
-  dsn: process.env.SENTRY_DSN,
-}
+app.addLogger(withSentryNodeLogger((options, config) => {
+  options.dsn = config.get('SENTRY_DSN') ?? ''
+}))
 ```
 
 and verify that `SENTRY_DSN` is actually defined.
@@ -582,11 +567,11 @@ Remove secrets, credentials, tokens, passwords, and unnecessary sensitive inform
 
 ## Related documentation
 
-* [Observability Overview](./overview)
-* [Pino Logger](./pino-logger)
-* [Dependency Injection — Resolution](../dependency-injection/resolution)
-* [Fundamentals — Context & Scopes](../fundamentals/context-scopes)
-* [Application — Pipelines](../application/pipelines/overview)
+- [Observability Overview](./overview)
+- [Pino Logger](./pino-logger)
+- [Dependency Injection — Resolution](../dependency-injection/resolution)
+- [Fundamentals — Context & Scopes](../fundamentals/context-scopes)
+- [Application — Pipelines](../application/pipelines/overview)
 
 ---
 

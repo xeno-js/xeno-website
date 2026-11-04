@@ -25,15 +25,15 @@ faqs:
 - question: What logging providers does Xeno.JS support?
   answer: Xeno.JS provides Console, Pino, and Sentry providers, and also allows applications to register custom logger clients.
 - question: How do I enable the default Console logger?
-  answer: Call addLogger() on AppBuilder. Console logging is enabled by default.
+  answer: Call addLogger() onXenoAppBuilder. Console logging is enabled by default.
 - question: How do I disable the Console logger?
   answer: Pass a logger setup callback that sets console to false.
 - question: Can I use Console, Pino, and Sentry at the same time?
-  answer: Yes. Xeno.JS broadcasts each accepted log event to all configured logger providers.
+  answer: Yes. Register the Console, Pino, and Sentry logger plugins with addLogger(); each provider can still apply its own minimum level.
 - question: Can I add a custom logger?
   answer: Yes. LoggerConfig accepts custom logger factories that can be registered alongside the built-in providers.
 - question: How do I resolve the Xeno.JS logger?
-  answer: Resolve TOKENS.LOGGER from the built application service container.
+  answer: Build the application, then resolve TOKENS.LOGGER from the XenoAppBuilder.
 - question: Which log levels does Xeno.JS support?
   answer: Xeno.JS supports DEBUG, INFO, WARN, and ERROR.
 - question: What context does Xeno.JS add to log messages?
@@ -52,11 +52,11 @@ Xeno.JS provides an application-level logger that can send the same log event to
 
 You can use:
 
-* the built-in Console logger;
-* Pino;
-* Sentry Node;
-* one or more custom logger clients;
-* any combination of the providers above.
+- the built-in Console logger;
+- Pino;
+- Sentry Node;
+- one or more custom logger clients;
+- any combination of the providers above.
 
 The application code uses the Xeno.JS `ILogger` abstraction rather than depending directly on a provider.
 
@@ -67,13 +67,13 @@ This lets you configure logging without changing the code that writes log messag
 The simplest configuration is:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger()
 
-const container = await app.build()
+await app.build()
 ```
 
 Calling `addLogger()` enables the Console provider with the default `DEBUG` minimum level.
@@ -98,16 +98,16 @@ For example, with `INFO`, `DEBUG` messages are ignored while `INFO`, `WARN`, and
 Configure it through the `addLogger()` setup callback:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { LOG_LEVEL } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.level = LOG_LEVEL.INFO
 })
 
-const container = await app.build()
+await app.build()
 ```
 
 The default level is `LOG_LEVEL.DEBUG`.
@@ -131,13 +131,19 @@ This does not disable the Xeno.JS logger itself. It only removes the Console pro
 You can therefore disable Console while keeping another provider enabled:
 
 ```ts
-app.addLogger((options) => {
-  options.console = false
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 
-  options.pino.config = {
-    destination: 'stdout',
-  }
-})
+const app = new XenoAppBuilder()
+
+app.addLogger([
+  withConsoleLogger((options) => {
+    options.isEnabled = false
+  }),
+  withPinoLogger((options) => {
+    options.destination = 'stdout'
+  }),
+])
 ```
 
 ## Use Multiple Providers
@@ -147,37 +153,36 @@ The logger configuration is not limited to one provider.
 For example, an application can configure Console, Pino, and Sentry together:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
 import { LOG_LEVEL } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options) => {
-  options.level = LOG_LEVEL.INFO
+app.addLogger([
+  withConsoleLogger((options) => {
+    options.level = LOG_LEVEL.INFO
+  }),
+  withPinoLogger((options) => {
+    options.destination = 'stdout'
+  }),
+  withSentryNodeLogger((options) => {
+    options.dsn = process.env.SENTRY_DSN ?? ''
+    options.environment = 'production'
+  }),
+])
 
-  options.console = true
-
-  options.pino.config = {
-    destination: 'stdout',
-    env: 'production',
-  }
-
-  options.sentry.config = {
-    dsn: process.env.SENTRY_DSN,
-    environment: 'production',
-  }
-})
-
-const container = await app.build()
+await app.build()
 ```
 
-Each accepted log event is sent to every configured provider.
+Each event accepted by the application-level minimum is passed to every configured provider. A provider can apply an additional minimum level before writing or reporting it.
 
 This means the same application log can be:
 
-* printed to the Console;
-* written as a structured Pino log;
-* reported to Sentry when its level is eligible.
+- printed to the Console;
+- written as a structured Pino log;
+- reported to Sentry when its level is eligible.
 
 You can also combine built-in providers with custom logger clients.
 
@@ -185,7 +190,7 @@ You can also combine built-in providers with custom logger clients.
 
 Xeno.JS accepts custom logger clients through `customLoggers`.
 
-A custom logger is provided as a factory receiving the application service scope:
+A custom logger is provided as a factory receiving the application's service container through the `IServiceScope` contract:
 
 ```ts
 app.addLogger((options) => {
@@ -248,39 +253,35 @@ app.addLogger((options) => {
 })
 ```
 
-or together with the built-in providers:
+or together with the built-in Console provider:
 
 ```ts
 app.addLogger((options) => {
   options.customLoggers = [
     () => customLogger,
   ]
-
-  options.pino.config = {
-    destination: 'stdout',
-  }
 })
 ```
 
-The custom logger receives the same Xeno.JS log event that is sent to the other configured providers.
+The custom logger receives the same Xeno.JS log event as the other configured logger clients. Pino and Sentry are registered separately through their logger plugins.
 
 ## Resolve the Logger
 
 Xeno.JS registers the application logger under `TOKENS.LOGGER`.
 
-After building the application, resolve it from the service container:
+After building the application, resolve it through the builder:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { TOKENS } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger()
 
-const container = await app.build()
+await app.build()
 
-const logger = container.resolve(TOKENS.LOGGER)
+const { logger } = app.getServices()
 ```
 
 The resolved value implements `ILogger`.
@@ -345,7 +346,7 @@ messaging
 └── optional messaging context
 ```
 
-The original request context contains additional information such as email, name, roles, permissions, user-agent, CSRF values, cookies, and the transport object. These fields are not copied into the safe logging context.
+The original request context contains additional information such as email, name, roles, permissions, user-agent, CSRF values, and cookies. These fields are not copied into the safe logging context.
 
 The client IP is passed through Xeno.JS IP masking before it is included.
 
@@ -355,10 +356,10 @@ The safe context gives log entries useful information for correlating and diagno
 
 For example, a log can identify:
 
-* which request produced the event;
-* which user or tenant was involved;
-* which correlation/span identifiers belong to the execution;
-* which request path was involved.
+- which request produced the event;
+- which user or tenant was involved;
+- which correlation/span identifiers belong to the execution;
+- which request path was involved.
 
 It does not automatically serialize the entire authenticated identity or network request.
 
@@ -429,22 +430,18 @@ The exact values depend on the active request context.
 
 The Pino provider receives the safe context as a structured object and the Xeno.JS message as the Pino message.
 
-Xeno.JS configures Pino with:
-
-* ISO timestamps;
-* standard Pino error serialization;
-* redaction for `password`, `token`, `secret`, `authorization`, and `headers.authorization`.
+Xeno.JS configures Pino with its standard error serializers and redaction for `password`, `token`, `authorization`, `accessToken`, `refreshToken`, `secret`, `cookie`, `creditCard`, `*.password`, `*.token`, `headers.authorization`, and `headers.cookie`. Additional redaction paths and Pino options can be supplied through the plugin.
 
 The default Pino destination is `stdout`.
 
-Pino pretty printing defaults to enabled when the configured Pino environment is `development`.
+Pino pretty printing is disabled by default. Enable it explicitly with the plugin's `prettyPrint` option. Xeno.JS does not set an ISO timestamp by default; Pino's default timestamp behavior is used unless overridden through `pinoOptions`.
 
 A structured Pino event is therefore conceptually represented as:
 
 ```json
 {
   "level": 30,
-  "time": "2026-10-03T16:00:00.000Z",
+  "time": 1791043200000,
   "msg": "[INFO] Application started",
   "identity": {
     "userId": "...",
@@ -479,21 +476,21 @@ It applies the configured minimum level first.
 
 For `WARN` and `ERROR`:
 
-* when an error object is supplied, Xeno.JS calls Sentry `captureException()`;
-* when no error object is supplied, Xeno.JS calls Sentry `captureMessage()` with the Sentry severity `"warning"`;
-* the safe context is attached to the Sentry scope as extras.
+- when an error object is supplied, Xeno.JS calls Sentry `captureException()`;
+- when no error object is supplied, Xeno.JS calls Sentry `captureMessage()` with the Sentry severity `"warning"`;
+- the safe context is attached to the Sentry scope as extras.
 
 This means an `ERROR` log without an error object is still captured as a Sentry message with warning severity.
 
-Configure Sentry through:
+Register and configure Sentry through its logger plugin:
 
 ```ts
-app.addLogger((options) => {
-  options.sentry.config = {
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
-  }
-})
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
+
+app.addLogger(withSentryNodeLogger((options, config) => {
+  options.dsn = config.getOrThrow('SENTRY_DSN')
+  options.environment = config.getEnvironment()
+}))
 ```
 
 The Sentry configuration requires a DSN.
@@ -532,8 +529,8 @@ Exception while handling <request.type> <request.intent>
 
 The pipeline uses:
 
-* `INFO` for start and successful completion;
-* `ERROR` for failed results and thrown exceptions.
+- `INFO` for start and successful completion;
+- `ERROR` for failed results and thrown exceptions.
 
 Other Xeno.JS infrastructure components also use `ILogger` for warnings, errors, and diagnostic messages. For example, the performance pipeline emits a warning when an operation exceeds its configured threshold.
 
@@ -542,26 +539,25 @@ Other Xeno.JS infrastructure components also use `ILogger` for warnings, errors,
 The following example enables Console and Pino while keeping Sentry disabled:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 import { LOG_LEVEL, TOKENS } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options) => {
-  options.level = LOG_LEVEL.INFO
+app.addLogger([
+  withConsoleLogger((options) => {
+    options.level = LOG_LEVEL.INFO
+  }),
+  withPinoLogger((options) => {
+    options.destination = 'stdout'
+    options.prettyPrint = true
+  }),
+])
 
-  options.console = true
+await app.build()
 
-  options.pino.config = {
-    destination: 'stdout',
-    env: 'development',
-    prettyPrint: true,
-  }
-})
-
-const container = await app.build()
-
-const logger = container.resolve(TOKENS.LOGGER)
+const { logger } = app.getServices()
 
 logger.info('Application started')
 logger.warn('Example warning')
@@ -575,11 +571,10 @@ try {
 
 With this configuration:
 
-* `DEBUG` events are filtered out;
-* `INFO`, `WARN`, and `ERROR` events are accepted;
-* Console receives all accepted events;
-* Pino receives all accepted events;
-* the same safe context is supplied to both providers.
+- `DEBUG` events are filtered out;
+- `INFO`, `WARN`, and `ERROR` events are accepted;
+- Console and Pino receive all events accepted by the application-level minimum;
+- the same safe context is supplied to both providers.
 
 ## Common Problems
 
@@ -615,10 +610,10 @@ If Console is disabled, another configured provider must be used to receive the 
 
 Check:
 
-* the `pino` package is installed;
-* `options.pino.config` is defined;
-* the configured destination is valid;
-* the log level allows the event.
+- the `@xeno-js/pino` package is installed;
+- `withPinoLogger()` is registered with `app.addLogger()`;
+- the configured destination is valid;
+- the Pino and application-level minimum levels allow the event.
 
 See [Pino Logger](./pino-logger).
 
@@ -638,25 +633,25 @@ It does not sanitize arbitrary application messages or errors.
 
 Avoid logging:
 
-* passwords;
-* authentication tokens;
-* secrets;
-* credentials;
-* complete request bodies;
-* cookies;
-* authorization headers;
-* other sensitive application data.
+- passwords;
+- authentication tokens;
+- secrets;
+- credentials;
+- complete request bodies;
+- cookies;
+- authorization headers;
+- other sensitive application data.
 
 Pino also applies provider-level redaction for specific fields, but applications should not rely on redaction as a replacement for careful logging.
 
 ## Related Docs
 
-* [Pino Logger](./pino-logger)
-* [Sentry Node](./sentry-node)
-* [Dependency Injection — Resolution](../dependency-injection/resolution)
-* [Context & Scopes](../fundamentals/context-scopes)
-* [CQRS — Handler](../application/cqrs/handler)
-* [Pipelines — Logging](../application/pipelines/logging)
+- [Pino Logger](./pino-logger)
+- [Sentry Node](./sentry-node)
+- [Dependency Injection — Resolution](../dependency-injection/resolution)
+- [Context & Scopes](../fundamentals/context-scopes)
+- [CQRS — Handler](../application/cqrs/handler)
+- [Pipelines — Logging](../application/pipelines/logging)
 
 ---
 

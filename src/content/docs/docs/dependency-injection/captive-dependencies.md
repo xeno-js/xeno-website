@@ -21,7 +21,7 @@ faqs:
 - question: What is a captive dependency in Xeno.JS?
   answer: A captive dependency occurs when a longer-lived service, such as a singleton, depends on a shorter-lived scoped service.
 - question: Can a singleton depend on a scoped service in Xeno.JS?
-  answer: No. Xeno.JS rejects resolving a scoped service from a singleton resolution context.
+  answer: No. The container rejects resolving a scoped service while constructing a singleton, including through transient dependencies in that resolution chain.
 - question: What error does Xeno.JS throw for a captive dependency?
   answer: Xeno.JS throws a DI Captive Dependency Error and includes the resolution path.
 - question: How do I fix a singleton-to-scoped dependency?
@@ -29,7 +29,7 @@ faqs:
 - question: Can a scoped service depend on a singleton?
   answer: Yes. A scoped service can use a singleton because the singleton has a lifetime that is at least as long as the scope.
 - question: Can a transient service depend on a scoped service?
-  answer: Yes, provided the transient service is resolved within an active scope.
+  answer: Yes, when the transient is resolved through an active operation scope. Resolving a transient from root services passes the root scope to its factory, so a scoped dependency would be associated with the root scope instead.
 - question: How do I find which dependency causes a captive dependency error?
   answer: Read the resolution path included in the DI Captive Dependency Error and inspect the corresponding service registrations.
 - question: Does Xeno.JS detect every possible lifetime design problem?
@@ -50,7 +50,9 @@ Scoped
 
 A singleton lives for the lifetime of the service container, while a scoped service belongs to a specific logical scope.
 
-Xeno.JS prevents this combination during service resolution.
+The container explicitly rejects a scoped dependency when it is resolved while
+a singleton is being constructed. This check also applies when the resolution
+reaches the scoped service through a transient dependency.
 
 ## When this problem occurs
 
@@ -68,7 +70,8 @@ If `REQUEST_CONTEXT` is registered as scoped, resolving `USER_SERVICE` requires 
 
 That dependency is invalid because the singleton could outlive the scope that created the scoped dependency.
 
-Xeno.JS detects this situation and throws a captive dependency error instead of allowing the invalid lifetime relationship.
+Xeno.JS detects this situation and throws a captive dependency error instead
+of allowing the singleton construction to capture the scoped instance.
 
 ## Understand the lifetime relationship
 
@@ -110,7 +113,11 @@ is valid because the singleton remains available for the entire lifetime of the 
 
 ## How Xeno.JS detects the problem
 
-Xeno.JS checks the lifetime of the service currently being created against the lifetime of the dependency being resolved.
+While a singleton factory is running, the container marks the resolution
+context as singleton. If resolution in that context reaches a scoped
+registration, directly or through transient registrations, it throws a captive
+dependency error. The check is specific to singleton construction; it does not
+validate every lifetime combination or every possible root-scope use.
 
 When a singleton resolves a scoped service, the container throws:
 
@@ -132,7 +139,9 @@ USER_REPOSITORY
 REQUEST_CONTEXT
 ```
 
-If `USER_SERVICE` is a singleton and `REQUEST_CONTEXT` is scoped, the entire chain contains the problematic relationship.
+If `USER_SERVICE` is a singleton and `REQUEST_CONTEXT` is scoped, the
+resolution chain contains the problematic relationship. The container reports
+the path reached during resolution.
 
 ## Fix a singleton that depends on a scoped service
 
@@ -243,7 +252,7 @@ services.addSingleton('USER_SERVICE', (scope) => {
   )
 })
 
-services.addScoped('USER_REPOSITORY', (scope) => {
+services.addTransient('USER_REPOSITORY', (scope) => {
   return new UserRepository(
     scope.resolve('REQUEST_CONTEXT'),
   )
@@ -259,12 +268,15 @@ The graph is:
 ```text
 USER_SERVICE [singleton]
        ↓
-USER_REPOSITORY [scoped]
+USER_REPOSITORY [transient]
        ↓
 REQUEST_CONTEXT [scoped]
 ```
 
-The captive dependency is indirect.
+The transient factory preserves the singleton resolution context, so resolving
+`REQUEST_CONTEXT` still triggers the captive-dependency check. A scoped
+intermediate dependency would be rejected as soon as the container tried to
+resolve that registration, before running its factory.
 
 When Xeno.JS reports the resolution path, use it to trace the registrations from the singleton to the scoped service.
 
@@ -372,7 +384,14 @@ services.addTransient('USER_HELPER', (scope) => {
 })
 ```
 
-The transient receives the scoped instance belonging to the active scope.
+When the transient is resolved through an active operation scope, its factory
+receives that scope and resolves the scoped instance belonging to it.
+
+Do not resolve this transient through root services: a transient factory
+resolved there receives the root scope, and a nested scoped resolution is
+stored in that root scope rather than being rejected as a singleton captive
+dependency. That can make scope-specific state live beyond the intended
+operation.
 
 ## Avoid fixing the error by changing everything to singleton
 
@@ -390,10 +409,10 @@ Instead, first determine what the dependency represents.
 
 Use a scoped lifetime when the service contains state that belongs to a logical scope, such as:
 
-* request-specific state
-* transaction-specific state
-* per-operation state
-* contextual data
+- request-specific state
+- transaction-specific state
+- per-operation state
+- contextual data
 
 Use a singleton when the service is genuinely safe to share across the application's container lifetime.
 
@@ -404,21 +423,19 @@ Scoped services must be resolved through an active `IServiceScope`.
 For example:
 
 ```ts
-const scope = container.createScope()
-
-try {
-  const userRepository = scope.resolve('USER_REPOSITORY')
-
+await application.runInScope(async (services) => {
+  const userRepository = services.USER_REPOSITORY
   await userRepository.findById('123')
-} finally {
-  await scope.dispose()
-}
+})
 ```
 
-Do not resolve a scoped dependency directly from the root container:
+`runInScope()` creates the request context and scope for the operation and
+disposes the scope when the operation completes.
+
+Do not resolve a scoped dependency directly from root services:
 
 ```ts
-const userRepository = container.resolve('USER_REPOSITORY')
+const userRepository = application.getServices().USER_REPOSITORY
 ```
 
 Xeno.JS rejects this with:
@@ -495,10 +512,10 @@ Do not change a lifetime only to silence the error.
 
 Ask:
 
-* Should this service exist once for the application?
-* Should it exist once per scope?
-* Should a new instance be created on each resolution?
-* Does it contain request-specific or transaction-specific state?
+- Should this service exist once for the application?
+- Should it exist once per scope?
+- Should a new instance be created on each resolution?
+- Does it contain request-specific or transaction-specific state?
 
 Then change the registration or dependency design accordingly.
 
@@ -507,9 +524,9 @@ Then change the registration or dependency design accordingly.
 The following example shows a valid scoped dependency graph:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
   .addServices((services) => {
     services.addSingleton('LOGGER', () => {
@@ -552,11 +569,11 @@ USER_SERVICE [scoped]
 
 This is valid because:
 
-* `USER_SERVICE` is scoped.
-* `USER_REPOSITORY` is scoped.
-* `REQUEST_CONTEXT` is scoped.
-* `LOGGER` is singleton.
-* No singleton captures a scoped service.
+- `USER_SERVICE` is scoped.
+- `USER_REPOSITORY` is scoped.
+- `REQUEST_CONTEXT` is scoped.
+- `LOGGER` is singleton.
+- No singleton captures a scoped service.
 
 ## Common problems
 
@@ -617,13 +634,9 @@ The dependency can be hidden several registrations deep.
 Resolve the service through an active `IServiceScope`:
 
 ```ts
-const scope = container.createScope()
-
-try {
-  const repository = scope.resolve('USER_REPOSITORY')
-} finally {
-  await scope.dispose()
-}
+await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+})
 ```
 
 ### Changing a scoped service to singleton breaks request isolation
@@ -636,25 +649,25 @@ Keep the service scoped and adjust the dependent service instead.
 
 When you encounter a captive dependency:
 
-* [ ] Read the complete resolution path from the error.
-* [ ] Find the singleton at the beginning of the dependency chain.
-* [ ] Inspect each `scope.resolve(...)` in the chain.
-* [ ] Find the scoped service that is being captured.
-* [ ] Check whether the dependent service should actually be scoped.
-* [ ] If the dependent service must remain singleton, remove its direct dependency on scoped state.
-* [ ] Do not change a service to singleton merely to suppress the error.
-* [ ] Verify that request and transaction isolation are preserved.
-* [ ] Rebuild the application and resolve the dependency again.
+- [ ] Read the complete resolution path from the error.
+- [ ] Find the singleton at the beginning of the dependency chain.
+- [ ] Inspect each `scope.resolve(...)` in the chain.
+- [ ] Find the scoped service that is being captured.
+- [ ] Check whether the dependent service should actually be scoped.
+- [ ] If the dependent service must remain singleton, remove its direct dependency on scoped state.
+- [ ] Do not change a service to singleton merely to suppress the error.
+- [ ] Verify that request and transaction isolation are preserved.
+- [ ] Rebuild the application and resolve the dependency again.
 
 ## Related docs
 
-* [Service Container](./service-container) — Learn where services are registered and resolved.
-* [Registration](./registration) — Learn how to register services with explicit lifetimes.
-* [Singleton](./lifetimes/singleton) — Learn how singleton services behave.
-* [Scoped](./lifetimes/scoped) — Learn how scoped services behave.
-* [Transient](./lifetimes/transient) — Learn how transient services behave.
-* [Resolution](./resolution) — Learn how to resolve registered services.
-* [Dependency Graph](./dependency-graph) — Learn how to model dependencies between services.
+- [Service Container](./service-container) — Learn where services are registered and resolved.
+- [Registration](./registration) — Learn how to register services with explicit lifetimes.
+- [Singleton](./lifetimes/singleton) — Learn how singleton services behave.
+- [Scoped](./lifetimes/scoped) — Learn how scoped services behave.
+- [Transient](./lifetimes/transient) — Learn how transient services behave.
+- [Resolution](./resolution) — Learn how to resolve registered services.
+- [Dependency Graph](./dependency-graph) — Learn how to model dependencies between services.
 
 ---
 

@@ -20,7 +20,7 @@ tags:
 - permissions
 faqs:
 - question: How do I enable authorization in Xeno.JS?
-  answer: Configure authorization policies or custom authorization strategies through AppBuilder.addPipeline(), then build the application.
+  answer: Configure authorization policies or custom authorization strategies with the withAuthZ() pipeline plugin passed to XenoAppBuilder.addPipeline(), then build the application.
 - question: Does Xeno.JS authorization apply to commands and queries?
   answer: Yes. The configured authorization pipeline is added to both the command and query pipelines.
 - question: How are authorization policies associated with requests?
@@ -45,10 +45,10 @@ You define an authorization policy for a request intent and Xeno.JS evaluates th
 
 The built-in policy dimensions are:
 
-* `userId`
-* `tenantId`
-* `roles`
-* `permissions`
+- `userId`
+- `tenantId`
+- `roles`
+- `permissions`
 
 You can also add custom authorization strategies for application-specific rules.
 
@@ -81,13 +81,13 @@ Authorization is an **application-layer** concern. HTTP authentication establish
 
 Authorization is opt-in.
 
-Configure it through `AppBuilder.addPipeline()`:
+Configure it by passing the `withAuthZ()` plugin to `AppBuilder.addPipeline()`:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addPipeline((options) => {
-  options.authorization.policies = {
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
     CreateInvoice: {
       userId: true,
       tenantId: true,
@@ -95,7 +95,7 @@ app.addPipeline((options) => {
       permissions: ['invoice:create'],
     },
   }
-})
+}))
 
 const container = await app.build()
 ```
@@ -104,8 +104,8 @@ When authorization policies or custom authorization strategies are configured, X
 
 The same authorization pipeline is used for:
 
-* commands;
-* queries.
+- commands;
+- queries.
 
 You do not configure separate authorization policies for the command bus and query bus.
 
@@ -116,14 +116,16 @@ You do not configure separate authorization policies for the command bus and que
 A policy is associated with a request intent:
 
 ```ts
-options.authorization.policies = {
-  CreateInvoice: {
-    userId: true,
-    tenantId: true,
-    roles: ['admin', 'billing'],
-    permissions: ['invoice:create'],
-  },
-}
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
+    CreateInvoice: {
+      userId: true,
+      tenantId: true,
+      roles: ['admin', 'billing'],
+      permissions: ['invoice:create'],
+    },
+  }
+}))
 ```
 
 The policy describes which identity requirements must be satisfied when the `CreateInvoice` intent is executed.
@@ -265,10 +267,10 @@ context.identity.tenantId
 
 It does **not** automatically compare the identity tenant ID with a tenant ID contained in:
 
-* the command;
-* the query;
-* a route parameter;
-* a database entity.
+- the command;
+- the query;
+- a route parameter;
+- a database entity.
 
 For example:
 
@@ -409,19 +411,21 @@ Missing required permissions produce a forbidden authorization result.
 You can combine multiple policy dimensions:
 
 ```ts
-options.authorization.policies = {
-  CreateInvoice: {
-    userId: true,
-    tenantId: true,
-    roles: ['admin', 'billing'],
-    permissions: ['invoice:create'],
-  },
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
+    CreateInvoice: {
+      userId: true,
+      tenantId: true,
+      roles: ['admin', 'billing'],
+      permissions: ['invoice:create'],
+    },
 
-  ReadInvoice: {
-    tenantId: true,
-    permissions: ['invoice:read', 'invoice:admin'],
-  },
-}
+    ReadInvoice: {
+      tenantId: true,
+      permissions: ['invoice:read', 'invoice:admin'],
+    },
+  }
+}))
 ```
 
 The semantics are:
@@ -450,9 +454,9 @@ valid tenant ID
 
 This gives you a simple model:
 
-* **different policy dimensions** are combined with AND semantics;
-* **multiple roles** use OR semantics;
-* **multiple permissions** use OR semantics.
+- **different policy dimensions** are combined with AND semantics;
+- **multiple roles** use OR semantics;
+- **multiple permissions** use OR semantics.
 
 ---
 
@@ -464,18 +468,22 @@ At execution time, each built-in strategy looks up the policy for the current re
 
 If that policy does not define the dimension handled by the strategy, that strategy succeeds without applying a restriction.
 
+An intent with no matching policy requirements therefore continues without a built-in policy restriction (provided a request context is available). Authorization policies do not deny requests by default.
+
 For example:
 
 ```ts
-options.authorization.policies = {
-  CreateInvoice: {
-    roles: ['billing'],
-  },
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
+    CreateInvoice: {
+      roles: ['billing'],
+    },
 
-  ReadInvoice: {
-    permissions: ['invoice:read'],
-  },
-}
+    ReadInvoice: {
+      permissions: ['invoice:read'],
+    },
+  }
+}))
 ```
 
 The role strategy applies to `CreateInvoice`.
@@ -558,7 +566,7 @@ This means authorization is fail-fast.
 
 ## Authorization order in the CQRS pipeline
 
-The authorization pipeline is added after the exception, logging, and performance pipelines and before validation and command/query-specific pipeline behaviors.
+The authorization pipeline follows the exception, logging, and performance pipelines. Command idempotency, when enabled, precedes authorization; validation and other configured behaviors follow it.
 
 The effective high-level order is:
 
@@ -569,16 +577,18 @@ Logging
    ↓
 Performance
    ↓
+Idempotency (commands, when enabled)
+   ↓
 Authorization
    ↓
 Validation
    ↓
-Command / Query specific behaviors
+Other command / query behaviors
    ↓
 Handler
 ```
 
-This applies to both command and query pipelines.
+Idempotency applies to commands when configured. Authorization and validation are common behaviors for both command and query pipelines; other behaviors depend on the configured plugins.
 
 As a result, authorization can reject a request before application validation is executed.
 
@@ -593,22 +603,23 @@ Authorization and validation are separate concerns.
 For example:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addPipeline((options) => {
-  options.authorization.policies = {
-    CreateInvoice: {
-      tenantId: true,
-      permissions: ['invoice:create'],
-    },
-  }
-
-  options.validation.zod = {
-    schemas: {
+app.addPipeline([
+  withAuthZ((opts) => {
+    opts.policies = {
+      CreateInvoice: {
+        tenantId: true,
+        permissions: ['invoice:create'],
+      },
+    }
+  }),
+  withZodValidation((opts) => {
+    opts.schemas = {
       CreateInvoice: CreateInvoiceSchema,
-    },
-  }
-})
+    }
+  }),
+])
 
 const container = await app.build()
 ```
@@ -638,17 +649,19 @@ Because the configured authorization pipeline is added to both the command and q
 For example:
 
 ```ts
-options.authorization.policies = {
-  GetInvoice: {
-    tenantId: true,
-    permissions: ['invoice:read'],
-  },
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
+    GetInvoice: {
+      tenantId: true,
+      permissions: ['invoice:read'],
+    },
 
-  DeleteInvoice: {
-    tenantId: true,
-    permissions: ['invoice:delete'],
-  },
-}
+    DeleteInvoice: {
+      tenantId: true,
+      permissions: ['invoice:delete'],
+    },
+  }
+}))
 ```
 
 This allows read and write operations to have independent authorization requirements.
@@ -704,8 +717,8 @@ Built-in policies cover common identity-based authorization requirements.
 For application-specific rules, configure custom authorization strategies:
 
 ```ts
-app.addPipeline((options) => {
-  options.authorization.customAuthorizationStrategy = [
+app.addPipeline(withAuthZ((opts) => {
+  opts.customAuthorizationStrategy = [
     (container) => {
       return new InvoiceOwnershipStrategy(
         container.resolve(INVOICE_REPOSITORY),
@@ -713,19 +726,19 @@ app.addPipeline((options) => {
       )
     },
   ]
-})
+}))
 ```
 
 Custom strategies are added to the same authorization pipeline as the built-in strategies.
 
 Typical custom rules include:
 
-* resource ownership;
-* organization membership;
-* subscription state;
-* account status;
-* resource-specific tenant isolation;
-* business-specific access rules.
+- resource ownership;
+- organization membership;
+- subscription state;
+- account status;
+- resource-specific tenant isolation;
+- business-specific access rules.
 
 See [Custom Authorization](./custom) for the implementation details.
 
@@ -736,10 +749,10 @@ See [Custom Authorization](./custom) for the implementation details.
 The following example combines identity, tenant, role, and permission checks:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addPipeline((options) => {
-  options.authorization.policies = {
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
     CreateInvoice: {
       userId: true,
       tenantId: true,
@@ -758,7 +771,7 @@ app.addPipeline((options) => {
       permissions: ['invoice:delete'],
     },
   }
-})
+}))
 
 const container = await app.build()
 ```
@@ -782,13 +795,13 @@ All configured requirements for an intent must pass.
 Make sure the CQRS pipeline is enabled:
 
 ```ts
-app.addPipeline((options) => {
-  options.authorization.policies = {
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
     CreateInvoice: {
       permissions: ['invoice:create'],
     },
   }
-})
+}))
 ```
 
 Authorization is not enabled merely by defining an authentication provider.
@@ -932,12 +945,12 @@ Use a custom authorization strategy when the rule depends on application data or
 
 ## Related documentation
 
-* [Authorization Policies](./policies)
-* [Custom Authorization](./custom)
-* [Authentication Overview](../authentication/overview)
-* [Authentication Middleware](../middleware/authentication)
-* [Middleware Execution](../middleware/execution)
-* [CQRS Overview](../../application/cqrs/overview)
+- [Authorization Policies](./policies)
+- [Custom Authorization](./custom)
+- [Authentication Overview](../authentication/overview)
+- [Authentication Middleware](../middleware/authentication)
+- [Middleware Execution](../middleware/execution)
+- [CQRS Overview](../../application/cqrs/overview)
 
 ---
 

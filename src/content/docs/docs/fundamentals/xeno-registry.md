@@ -1,6 +1,6 @@
 ---
 title: "Xeno Registry"
-description: "Learn how the Xeno Registry defines and organizes the dependency vocabulary and application-specific tokens used to compose a Xeno.JS application."
+description: "Learn how XenoRegistry types built-in and application-specific services for Xeno.JS dependency injection."
 canonical: "https://www.xeno-js.it/docs/fundamentals/xeno-registry"
 publishedAt: "2026-09-30"
 updatedAt: "2026-09-30"
@@ -31,35 +31,35 @@ relatedTopics:
   - "/docs/dependency-injection/service-container"
 faqs:
   - question: "What is the Xeno Registry?"
-    answer: "The Xeno Registry defines and organizes the dependency vocabulary used by a Xeno.JS application, including application-specific dependency tokens."
+    answer: "XenoRegistry is a TypeScript type that combines the built-in ApplicationRegistry with an application's additional service keys and their types."
   - question: "What is the difference between the Xeno Registry and the Service Container?"
-    answer: "The Registry defines the application's dependency vocabulary, while the Service Container manages runtime dependency resolution and service instances."
+    answer: "XenoRegistry is a compile-time type contract for service keys and types; the Service Container stores runtime registrations and resolves instances."
   - question: "Where is the Xeno Registry defined?"
-    answer: "A generated Xeno.JS Core project includes a registry.ts file in the src directory where the application registry can be defined and extended."
+    answer: "Define an application-specific type or interface by extending XenoRegistry; a registry.ts file is a common place to keep that type."
   - question: "Should the Xeno Registry store runtime state?"
-    answer: "No. The Registry should define application dependency vocabulary and tokens rather than being used as a store for runtime application state."
+    answer: "XenoRegistry is a type and has no runtime storage. Runtime state belongs to services, context, or other application mechanisms."
   - question: "How does the Xeno Registry relate to dependency injection?"
-    answer: "The Registry provides the tokens and dependency vocabulary used as part of the application's dependency injection and composition model."
-answerSummary: "The Xeno Registry defines the dependency vocabulary of a Xeno.JS application and provides the foundation for organizing application-specific dependency tokens during composition."
+    answer: "The registry type constrains service keys and value types in typed registration and resolution APIs; runtime factories and the Service Container perform registration and resolution."
+answerSummary: "XenoRegistry is the compile-time type for built-in and application-specific service keys. Runtime registrations and service resolution are handled by the Service Container."
 directAnswer:
   question: "What is the Xeno Registry?"
-  answer: "The Xeno Registry is the mechanism used to define and organize the dependency vocabulary and application-specific tokens of a Xeno.JS application."
+  answer: "XenoRegistry is a TypeScript type that combines the built-in ApplicationRegistry with application-specific service keys and types."
 keyFacts:
-  - "The Xeno Registry defines application dependency vocabulary."
-  - "A generated Core project includes src/registry.ts."
-  - "The application registry extends XenoRegistry."
-  - "The Registry is part of the application's composition model."
+  - "XenoRegistry is a type alias, not a runtime registry object or class."
+  - "XenoRegistry combines ApplicationRegistry with an application's additional service keys."
+  - "The registry type constrains service registration and resolution at compile time."
+  - "The Service Container stores runtime registrations and resolves service instances."
   - "The Registry and Service Container have different responsibilities."
   - "The Registry should not be used to store runtime application state."
 ---
 
 ## Introduction
 
-The **Xeno Registry** is the mechanism used by Xeno.JS to define the application's dependency vocabulary.
+`XenoRegistry` is a TypeScript type that defines the keys and service types available to the application's typed dependency-injection APIs.
 
-It provides a centralized place for application-specific tokens and registrations, allowing different parts of an application to refer to dependencies explicitly rather than relying on implicit names or global state.
+It combines the built-in `ApplicationRegistry` with application-specific service keys. It does not store runtime registrations or service instances; the Service Container handles those at runtime.
 
-The registry works together with the [App Builder](./app-builder) and the [Service Container](../dependency-injection/service-container) to turn those definitions into runtime dependencies.
+The type works with the [App Builder](./app-builder) and the [Service Container](../dependency-injection/service-container) to check registrations and resolutions against the application contract.
 
 ## Why a Registry?
 
@@ -77,31 +77,28 @@ As an application grows, it can have many different dependencies:
 
 Those dependencies need stable identifiers so that they can be registered and resolved consistently.
 
-Instead of scattering dependency identifiers throughout the application, Xeno.JS provides a registry as the place where the application's dependency vocabulary can be defined.
+The application registry type makes those keys and their service types explicit. It is a compile-time contract, not a runtime store of registrations.
 
-The basic idea is:
+The relationship is:
 
 ```text
-Application
+XenoRegistry Type
     │
-    ▼
-Xeno Registry
-    │
-    ├── Dependency Token
-    ├── Dependency Token
-    ├── Dependency Token
-    └── Dependency Token
-            │
-            ▼
-      Service Container
-            │
-            ▼
-      Runtime Instance
+    ├── Built-in service keys and types
+    └── Application-specific service keys and types
+             │
+             ▼
+       Type-checks registration
+             │
+             ▼
+       Service Container
+             │
+             └── Runtime registrations and instances
 ```
 
-The Registry describes **what the application knows about**.
+The registry type describes **which service keys and types are valid**.
 
-The Service Container is responsible for **resolving those dependencies at runtime**.
+The Service Container is responsible for **registering and resolving dependencies at runtime**.
 
 ## Registry vs. Container
 
@@ -109,69 +106,103 @@ The Registry and the Service Container have different responsibilities.
 
 | Component         | Responsibility                                   |
 | ----------------- | ------------------------------------------------ |
-| Xeno Registry     | Defines the application's dependency identifiers |
+| XenoRegistry      | Defines the compile-time service keys and their types |
 | App Builder       | Composes the application and its registrations   |
-| Service Container | Resolves registered dependencies at runtime      |
+| Service Container | Stores registrations and resolves dependencies at runtime |
 
 This separation keeps application composition explicit.
 
-The Registry is not intended to replace the container. It provides the vocabulary that the container uses when dependencies are registered and resolved.
+`XenoRegistry` is a type, not a separate runtime object. It constrains the keys and service types accepted by the container; the container itself stores the registrations and resolves the instances.
 
 ## The Xeno Registry
 
-Xeno.JS provides a base `XenoRegistry` that can be extended by an application.
+`XenoRegistry` is a type alias over the built-in `ApplicationRegistry`, with an optional type parameter for application-specific service keys and value types.
 
-A project can define its own registry for application-specific dependency tokens.
+A project can define an application-specific type using this alias. It is not a class and is not constructed at runtime.
 
 For example:
 
 ```ts
-import { XenoRegistry } from "@xeno-js/core";
+import type { XenoRegistry } from "@xeno-js/shared"
 
-export class MyRegistry extends XenoRegistry {
-  // Application-specific tokens
+interface InventoryRegistry extends XenoRegistry {
+  STOCK_REPOSITORY: {
+    getAvailableQuantity(sku: string): number
+  }
+  RESERVATION_SERVICE: {
+    reserve(sku: string, quantity: number): void
+  }
 }
 ```
 
-The generated project structure uses this pattern so that application-specific registrations have a dedicated place.
+The first two generic parameters represent the database context and transaction types used by the built-in registry. They default to `unknown`. The third parameter adds application-specific keys and their value types.
 
-For example, the scaffolded project may contain:
+The registry is a compile-time shape. Runtime registrations still belong to the builder and its container. The third type parameter adds keys that do not replace keys already defined by `ApplicationRegistry`.
+
+An application may keep this type in a dedicated `registry.ts` module:
 
 ```text
 src/
 ├── bootstrap.ts
-├── main.ts
 └── registry.ts
 ```
 
-The `registry.ts` file is where the application's registry can be customized.
+The file name and project layout are conventions; the type can be declared wherever the application keeps its composition contracts.
 
 ## Application-Specific Tokens
 
 A registry becomes useful when an application introduces dependencies that are specific to its own architecture.
 
-For example, an application might need to identify:
+For example, an inventory application can add a repository key and its contract to the registry type:
 
-```text
-UserRepository
-PaymentService
-EmailClient
-StorageService
+```ts
+import { XenoAppBuilder } from '@xeno-js/core'
+import type { XenoRegistry } from '@xeno-js/shared'
+
+interface StockRepository {
+  getAvailableQuantity(sku: string): number
+}
+
+interface InventoryRegistry extends XenoRegistry {
+  STOCK_REPOSITORY: StockRepository
+}
+
+const builder = new XenoAppBuilder<InventoryRegistry>()
+
+const availableStock = new Map<string, number>([['SKU-100', 8]])
+
+builder.addServices((services) => {
+  services.addSingleton('STOCK_REPOSITORY', () => ({
+    getAvailableQuantity: (sku) => availableStock.get(sku) ?? 0,
+  }))
+})
+
+const application = await builder.build()
+const stockRepository = application.getServices().STOCK_REPOSITORY
+const availableQuantity = stockRepository.getAvailableQuantity('SKU-100')
 ```
 
-Instead of coupling consumers to concrete implementations, the application can expose stable dependency tokens and let the composition layer decide which implementation should be provided.
+The registry type associates `STOCK_REPOSITORY` with `StockRepository`. The builder registers a runtime implementation under that key, and `getServices()` exposes it using the same registry key.
+
+Built-in services use the keys declared in `ApplicationRegistry`. When the logger is registered, `TOKENS.LOGGER` has the value `logger`, so both forms access the same service:
+
+```ts
+import { TOKENS } from '@xeno-js/shared'
+
+const {logger} = application.getServices()
+const loggerByToken = application.getServices().LOGGER
+```
 
 Conceptually:
 
 ```text
           Registry
              │
-     ┌───────┼────────┐
-     ▼       ▼        ▼
-  UserRepo  Email   Storage
-   Token     Token    Token
-     │       │        │
-     └───────┼────────┘
+     ┌───────┴────────┐
+     ▼                ▼
+ STOCK_REPOSITORY   StockRepository
+     key               type
+     └───────┬────────┘
              ▼
        App Composition
              │
@@ -179,7 +210,7 @@ Conceptually:
       Concrete Services
 ```
 
-This allows the application code to depend on the dependency contract while the composition layer decides how that dependency is implemented.
+This lets TypeScript check that registration and resolution use the declared service contract while the composition layer supplies its implementation.
 
 ## The Registry as Part of the Composition Root
 
@@ -188,10 +219,10 @@ The registry belongs to the application's composition model.
 A typical Xeno.JS application has a flow similar to:
 
 ```text
-registry.ts
+registry.ts (type)
      │
      ▼
-bootstrap.ts
+bootstrap.ts (runtime registrations)
      │
      ▼
 App Builder
@@ -203,9 +234,9 @@ Service Container
 Application
 ```
 
-The registry defines the application's dependency vocabulary.
+The registry type defines the application's service keys and types.
 
-The bootstrap process then uses that vocabulary while composing the application.
+The bootstrap process uses the type while composing the application and registering runtime implementations.
 
 This keeps dependency configuration close to the composition root instead of requiring individual application components to know how their dependencies are created.
 
@@ -223,13 +254,13 @@ For example:
                 Registry
                    │
                    ▼
-             "UserRepository"
+           "STOCK_REPOSITORY"
                    │
                    ▼
             Service Container
                    │
                    ▼
-          PostgreSQL Repository
+          StockRepository implementation
                    │
                    ▼
              Application Service
@@ -237,13 +268,13 @@ For example:
 
 The application service does not need to know how the repository was constructed.
 
-The composition layer connects the token to the implementation.
+The composition layer registers an implementation under the typed service key.
 
 For more information about resolving dependencies, see [Dependency Injection](./dependency-injection).
 
 ## Registry and Infrastructure
 
-The Registry can be used to keep application code independent from infrastructure implementations.
+The registry type can describe an application-facing contract independently of its infrastructure implementation.
 
 For example, an application may define a repository contract while infrastructure provides a concrete database implementation.
 
@@ -255,9 +286,9 @@ Application
     ▼
 Repository Contract
     │
-    │ identified through
+    │ exposed through the application service key
     ▼
-Registry Token
+Registry Service Key
     │
     ▼
 Infrastructure Registration
@@ -266,57 +297,44 @@ Infrastructure Registration
 Database Repository
 ```
 
-This is particularly useful when the same application architecture needs to work with different implementations.
-
-The application does not need to change simply because the infrastructure implementation changes.
+The composition layer can then register an implementation that satisfies the declared contract. The registry type constrains its key and service shape; it does not select or instantiate that implementation.
 
 ## Customizing the Registry
 
-The registry should contain application-specific dependency definitions rather than becoming a general-purpose container for unrelated application state.
+The registry type should describe application-specific service keys and their types rather than runtime state.
 
 A useful rule is:
 
-> **Use the registry to name dependencies, not to store runtime state.**
+> **Use the registry type to describe service keys and contracts, not to store runtime state.**
 
 Runtime state belongs to the appropriate service, context, scope, or other application mechanism.
 
-This keeps the registry focused and makes the application's dependency graph easier to understand.
+Keeping the type focused makes the application contract easier to review.
 
-## Registry in a Generated Project
+## Registry in a Project
 
-Projects created through the Xeno CLI include a `registry.ts` file.
+An application can keep its registry type in a `registry.ts` file and import it from the composition module.
 
-A generated Core project follows this general structure:
+For example:
 
 ```text
 my-app/
 ├── src/
 │   ├── bootstrap.ts
-│   ├── main.ts
 │   └── registry.ts
-├── .env
-├── .env.example
-├── package.json
-└── tsconfig.json
 ```
 
-The generated registry extends `XenoRegistry` and provides the starting point for defining application-specific tokens.
-
-As the application grows, this file can become part of the application's composition model alongside `bootstrap.ts`.
-
-See [Project Structure](../getting-started/project-structure) for more information about the generated project.
+This is an organizational convention, not a required Xeno.JS runtime file or folder layout. The registry type can be declared wherever the application keeps its composition contracts.
 
 ## Summary
 
-The Xeno Registry provides the dependency vocabulary of a Xeno.JS application.
+`XenoRegistry` is the compile-time contract for the built-in and application-specific service keys used by typed registration and resolution.
 
-Its main responsibilities are:
+It provides:
 
-* defining application-specific dependency tokens;
-* providing stable identifiers for dependencies;
-* integrating those identifiers with application composition;
-* keeping dependency definitions separate from their implementations;
-* working together with the App Builder and Service Container.
+* type-safe service keys and corresponding service types;
+* an extension point for application-specific service contracts;
+* compile-time integration with the App Builder and Service Container.
 
 The resulting model is explicit:
 

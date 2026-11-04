@@ -9,7 +9,7 @@ keywords:
 - Redis
 - TOKENS.CACHE
 - ICache
-- AppBuilder
+-XenoAppBuilder
 tags:
 - cache
 - caching
@@ -22,13 +22,13 @@ faqs:
 - question: Which cache implementations does Xeno.JS provide?
   answer: Xeno.JS provides an in-memory cache and a Redis-backed cache.
 - question: How do I resolve the configured cache?
-  answer: Resolve TOKENS.CACHE from the application container after the application has been built.
+  answer: After building the application, resolve TOKENS.CACHE through the builder's resolve method.
 - question: Which API does the Xeno.JS cache expose?
-  answer: The cache exposes get, set, setIfAbsent, remove, has, and clear operations, plus increment through the atomic cache used by Xeno.JS.
+  answer: The cache exposes get, set, setIfAbsent, remove, removePattern, has, and clear operations. The IAtomicCache contract also provides increment.
 - question: Where is the Xeno.JS cache used?
   answer: Xeno.JS uses the configured cache for query caching, command idempotency, and rate limiting.
 - question: Do I need to configure the cache explicitly when using pipelines or middleware?
-  answer: No. Xeno.JS automatically queues the default cache configuration when pipelines or middlewares are enabled.
+  answer: Not always. Xeno.JS queues the default cache when query caching or command idempotency is enabled through pipelines, or when rate-limiting middleware is enabled. Call addCache() explicitly to choose or configure a cache provider.
 - question: How do I configure Redis?
   answer: Use the dedicated Redis cache documentation.
 
@@ -38,16 +38,16 @@ faqs:
 
 Xeno.JS provides a common cache API that can be backed by different cache implementations.
 
-The cache is configured through `AppBuilder` and resolved through `TOKENS.CACHE`.
+The cache is configured through `XenoAppBuilder` and resolved through `TOKENS.CACHE`.
 
 ## Configure the Cache
 
 Add the cache module to your application:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addCache()
 ```
@@ -68,25 +68,25 @@ For Redis configuration, see [Redis Cache](./redis).
 
 Xeno.JS currently provides:
 
-* **In-memory cache** — stores values in the current application process.
-* **Redis cache** — stores values in Redis and can be used when cache state must be shared outside the process.
+- **In-memory cache** — stores values in the current application process.
+- **Redis cache** — stores values in Redis and can be used when cache state must be shared outside the process.
 
 Both implementations expose the same cache contract, so application code can resolve and use the cache without depending on the underlying storage.
 
 ## Resolve the Cache
 
-After building the application, resolve `TOKENS.CACHE`:
+After building the application, resolve `TOKENS.CACHE` through the builder:
 
 ```ts
-import { AppBuilder, TOKENS } from '@xeno-js/core'
+import { XenoAppBuilder, TOKENS } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addCache()
 
 await app.build()
 
-const cache = app.resolve(TOKENS.CACHE)
+const { cache } = app.getServices()
 ```
 
 The resolved value is the configured cache implementation.
@@ -181,35 +181,35 @@ This allows rate-limit state to be stored through the same cache abstraction use
 
 ## Cache Configuration and Pipelines
 
-When you call `addPipeline()`, Xeno.JS automatically queues the cache module if it has not already been configured.
+When you call `addPipeline()`, Xeno.JS queues the cache module if query caching or command idempotency is enabled and a cache has not already been configured.
 
-The same happens when you enable middlewares with `addMiddlewares()`.
+When you call `addMiddlewares()`, Xeno.JS queues the cache module if rate limiting is enabled and a cache has not already been configured.
 
-Therefore, you normally only need to call `addCache()` explicitly when you want to configure the cache yourself, for example to select Redis.
+Therefore, call `addCache()` explicitly when you want to configure the cache yourself, for example to select Redis.
 
 ## Choose a Cache
 
 Use the in-memory cache when:
 
-* the cache only needs to live inside one application process;
-* you are developing locally;
-* shared cache state is not required.
+- the cache only needs to live inside one application process;
+- you are developing locally;
+- shared cache state is not required.
 
 Use Redis when:
 
-* multiple application instances need to share cached values;
-* cache state must live outside the application process;
-* you need a distributed cache.
+- multiple application instances need to share cached values;
+- cache state must live outside the application process;
+- you need a distributed cache.
 
 For Redis configuration, see [Redis Cache](./redis).
 
 ## Related Documentation
 
-* [Redis Cache](./redis)
-* [CQRS Query](../application/cqrs/query)
-* [Caching Pipeline](../application/pipelines/caching)
-* [Command Idempotency](../application/pipelines/idempotency)
-* [Dependency Injection Resolution](../dependency-injection/resolution)
+- [Redis Cache](./redis)
+- [CQRS Query](../application/cqrs/query)
+- [Caching Pipeline](../application/pipelines/caching)
+- [Command Idempotency](../application/pipelines/idempotency)
+- [Dependency Injection Resolution](../dependency-injection/resolution)
 
 ---
 

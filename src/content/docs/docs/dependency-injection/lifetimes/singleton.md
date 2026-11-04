@@ -43,9 +43,9 @@ A singleton is useful for services that are safe to share across the application
 
 You need:
 
-* an Xeno.JS application using `AppBuilder`
-* a service token available in your application registry
-* a service class or factory function to instantiate
+- an Xeno.JS application using `XenoAppBuilder`
+- a service token available in your application registry
+- a service class or factory function to instantiate
 
 Xeno.JS uses explicit dependency injection. You register the service yourself instead of relying on decorators or automatic dependency discovery.
 
@@ -56,9 +56,9 @@ If you are adding a custom service token, make sure it is part of your applicati
 Register a singleton with `addSingleton()` inside `AppBuilder.addServices()`:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder().addServices((services) => {
+const app = new XenoAppBuilder().addServices((services) => {
   services.addSingleton('USER_SERVICE', () => {
     return new UserService()
   })
@@ -79,17 +79,19 @@ The factory creates the service instance. Xeno.JS creates that instance when the
 
 ## Resolve the singleton
 
-After the application has been built, resolve the service from the application:
+`build()` returns the runtime application, not the service container. Resolve
+the singleton from its root services:
 
 ```ts
-const userService = app.resolve('USER_SERVICE')
+const application = await app.build()
+const userService = application.getServices().USER_SERVICE
 ```
 
 Resolving the same token again returns the same instance:
 
 ```ts
-const first = app.resolve('USER_SERVICE')
-const second = app.resolve('USER_SERVICE')
+const first = application.getServices().USER_SERVICE
+const second = application.getServices().USER_SERVICE
 
 console.log(first === second) // true
 ```
@@ -98,7 +100,9 @@ This is the defining behavior of the singleton lifetime.
 
 ## Add dependencies to a singleton
 
-Singleton factories receive a service scope. Use that scope to resolve the services required by the singleton.
+Singleton factories receive the container's root service scope. Use it to
+resolve dependencies that can be resolved from the root; the singleton factory
+does not run in a request scope.
 
 For example:
 
@@ -129,8 +133,8 @@ A singleton can resolve several registered services:
 services.addSingleton('USER_SERVICE', (scope) => {
   return new UserService(
     scope.resolve('USER_REPOSITORY'),
-    scope.resolve('LOGGER'),
-    scope.resolve('CONFIGURATION_SERVICE'),
+    scope.resolve(TOKENS.LOGGER),
+    scope.resolve(TOKENS.CONFIGURATION_SERVICE),
   )
 })
 ```
@@ -144,11 +148,12 @@ Creating a service scope does **not** create another singleton instance.
 For example:
 
 ```ts
-const scopeA = container.createScope()
-const scopeB = container.createScope()
-
-const serviceA = scopeA.resolve('USER_SERVICE')
-const serviceB = scopeB.resolve('USER_SERVICE')
+const serviceA = await application.runInScope(
+  async (services) => services.USER_SERVICE,
+)
+const serviceB = await application.runInScope(
+  async (services) => services.USER_SERVICE,
+)
 
 console.log(serviceA === serviceB) // true
 ```
@@ -165,14 +170,14 @@ Use a singleton when the service should be shared across the application's conta
 
 Typical candidates include:
 
-* stateless application services that are safe to share
-* reusable infrastructure clients
-* caches
-* configuration services
-* loggers
-* factories
-* immutable or internally synchronized resources
-* resources that should have one instance for the application
+- stateless application services that are safe to share
+- reusable infrastructure clients
+- caches
+- configuration services
+- loggers
+- factories
+- immutable or internally synchronized resources
+- resources that should have one instance for the application
 
 The important requirement is that the service must be safe to share.
 
@@ -184,11 +189,11 @@ Do not use a singleton simply because creating one instance is convenient.
 
 A different lifetime may be more appropriate when the service contains:
 
-* request-specific state
-* user-specific state
-* transaction-specific state
-* scope-specific resources
-* mutable state that must not be shared between requests
+- request-specific state
+- user-specific state
+- transaction-specific state
+- scope-specific resources
+- mutable state that must not be shared between requests
 
 For request- or operation-specific dependencies, use a scoped lifetime instead.
 
@@ -196,8 +201,8 @@ For services that should be recreated for every resolution, use transient lifeti
 
 See:
 
-* [Scoped](./scoped)
-* [Transient](./transient)
+- [Scoped](./scoped)
+- [Transient](./transient)
 
 ## Singleton dependencies
 
@@ -206,13 +211,13 @@ A singleton can depend on services with lifetimes that are compatible with its l
 For example, a singleton depending on another singleton is valid:
 
 ```ts
-services.addSingleton('CONFIG_SERVICE', () => {
+services.addSingleton(TOKENS.CONFIGURATION_SERVICE, () => {
   return new ConfigurationService()
 })
 
 services.addSingleton('USER_SERVICE', (scope) => {
   return new UserService(
-    scope.resolve('CONFIG_SERVICE'),
+    scope.resolve(TOKENS.CONFIGURATION_SERVICE),
   )
 })
 ```
@@ -237,7 +242,10 @@ services.addSingleton('USER_SERVICE', (scope) => {
 })
 ```
 
-This is invalid because `USER_SERVICE` lives for the lifetime of the container while `REQUEST_SERVICE` belongs to an individual scope.
+This is invalid because `USER_SERVICE` lives for the lifetime of the container
+while `REQUEST_SERVICE` belongs to an individual scope. The container also
+rejects a scoped dependency reached transitively while constructing a
+singleton, for example through a transient dependency.
 
 Xeno.JS detects this situation and throws a captive dependency error.
 
@@ -247,7 +255,11 @@ See [Captive Dependencies](../captive-dependencies).
 
 ## Singleton disposal
 
-If a singleton implements the disposable contract exposed by Xeno.JS, its cleanup is handled when the container is disposed.
+If a singleton implements the disposable contract, the service container tracks
+it in the root scope. When `ServiceContainer.dispose()` runs, it disposes
+tracked instances in reverse creation order, then clears the singleton
+instances and registrations. A disposal error is logged and does not prevent
+the container from attempting to dispose the remaining tracked instances.
 
 For example:
 
@@ -271,20 +283,17 @@ services.addSingleton('EXTERNAL_CLIENT', () => {
 })
 ```
 
-Dispose the application container when the application is shutting down:
-
-```ts
-await container.dispose()
-```
-
-This allows disposable singleton resources to be released with the container lifecycle.
+The `XenoApplication` runtime API shown in this documentation does not expose a
+container-disposal method. Dispose the `ServiceContainer` when you manage that
+container directly; do not treat the value returned by `build()` as the
+container.
 
 ## Complete example
 
 The following example registers a shared `UserService` and gives it a repository dependency.
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
 class UserRepository {
   async findById(id: string) {
@@ -305,7 +314,7 @@ class UserService {
   }
 }
 
-const app = new AppBuilder().addServices((services) => {
+const app = new XenoAppBuilder().addServices((services) => {
   services.addSingleton('USER_REPOSITORY', () => {
     return new UserRepository()
   })
@@ -317,10 +326,10 @@ const app = new AppBuilder().addServices((services) => {
   })
 })
 
-const container = await app.build()
+const application = await app.build()
 
-const first = container.resolve('USER_SERVICE')
-const second = container.resolve('USER_SERVICE')
+const first = application.getServices().USER_SERVICE
+const second = application.getServices().USER_SERVICE
 
 console.log(first === second) // true
 ```
@@ -382,7 +391,9 @@ Check the token spelling and make sure the registration is part of the applicati
 
 A scoped service cannot be resolved directly from the root container.
 
-If the service is intentionally scoped, resolve it through an active `IServiceScope` instead.
+If the service is intentionally scoped, resolve it through an active scope,
+using `getScopedServices()` during an existing execution or `runInScope()` for
+a new operation.
 
 If the service is intended to be application-wide, reconsider whether it should be registered as a singleton.
 
@@ -411,24 +422,24 @@ Move that state into a scoped service or another request-specific abstraction.
 
 Before registering a service as singleton, verify:
 
-* [ ] The service should have one instance for the container lifetime.
-* [ ] The service is safe to share between scopes.
-* [ ] The service does not store request-specific state.
-* [ ] Its dependencies use compatible lifetimes.
-* [ ] All dependency tokens are registered.
-* [ ] The service is registered only once.
-* [ ] Disposable resources are cleaned up when the container is disposed.
+- [ ] The service should have one instance for the container lifetime.
+- [ ] The service is safe to share between scopes.
+- [ ] The service does not store request-specific state.
+- [ ] Its dependencies use compatible lifetimes.
+- [ ] All dependency tokens are registered.
+- [ ] The service is registered only once.
+- [ ] Disposable resources are cleaned up when the container is disposed.
 
 ## Related docs
 
-* [Dependency Injection](../overview)
-* [Service Container](../service-container)
-* [Registration](../registration)
-* [Scoped](./scoped)
-* [Transient](./transient)
-* [Resolution](../resolution)
-* [Dependency Graph](../dependency-graph)
-* [Captive Dependencies](../captive-dependencies)
+- [Dependency Injection](../overview)
+- [Service Container](../service-container)
+- [Registration](../registration)
+- [Scoped](./scoped)
+- [Transient](./transient)
+- [Resolution](../resolution)
+- [Dependency Graph](../dependency-graph)
+- [Captive Dependencies](../captive-dependencies)
 
 ---
 

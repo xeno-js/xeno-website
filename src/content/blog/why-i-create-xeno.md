@@ -47,7 +47,7 @@ Here is how it solves the problems of technical debt:
 * **° Clean Separation of Boundaries:** Xeno.JS strictly separates domain logic and application use cases from infrastructure. By leveraging a system of **Commands, Queries, Handlers, and a Mediator** with composable pipelines (for validation, performance, and logging), code stays tidy and testable no matter how much the app expands.
 * **° Explicit, Zero-Magic Dependency Injection:** No hidden decorators or runtime reflection. Xeno.JS uses a DI container based on **explicit factories and strict lifecycles** (singleton, scoped, transient) with native checks against circular and captive dependencies.
 * **° Runtime-Agnostic (From Console to the Edge):** Because it is designed without heavy Node.js dependencies and without reflection, Xeno.JS is lightweight enough to run seamlessly on **command-line apps (CLIs)**, traditional HTTP servers (Fastify/Node), or natively on **Edge Functions** (like Cloudflare Workers or Vercel Edge), allowing you to change your deployment target without touching a single line of application logic.
-* **° Plugin/Module Architecture:** Thanks to a composable module system via the `AppBuilder`, you enable only what you need (Database, Redis Cache, Auth, Security pipelines) without weighing down the project with useless dependencies.
+* **° Plugin/Module Architecture:** Thanks to a composable module system via the `XenoAppBuilder`, you enable only what you need (Database, Redis Cache, Auth, Security pipelines) without weighing down the project with useless dependencies.
 
 ---
 

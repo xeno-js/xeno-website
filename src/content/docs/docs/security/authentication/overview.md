@@ -6,7 +6,7 @@ keywords:
 - authentication
 - AuthService
 - AuthClaims
-- AppBuilder
+- XenoAppBuilder
 - Supabase
 - custom authentication
 - token extractor
@@ -21,15 +21,15 @@ faqs:
 - question: What does authentication do in Xeno.JS?
   answer: Authentication validates a request credential and establishes the authenticated identity that can be used by the application and authorization pipeline.
 - question: How do I enable authentication in Xeno.JS?
-  answer: Configure authentication with AppBuilder.addAuth() and enable the middleware layer with addMiddlewares().
+  answer: Configure an authentication plugin or service with XenoAppBuilder.addAuth() and enable the HTTP middleware layer with addMiddlewares().
 - question: Does Xeno.JS provide a built-in authentication provider?
-  answer: Yes. Xeno.JS provides a built-in authentication integration based on Supabase and also supports custom authentication services.
+  answer: Xeno.JS provides a separate Supabase integration package and supports custom authentication services configured through AuthModuleOptions.
 - question: What is the difference between a token extractor and an authentication service?
   answer: A token extractor retrieves the credential from the incoming request, while the authentication service validates that credential and produces the authenticated claims.
 - question: Where is the authenticated identity stored?
   answer: After successful authentication, Xeno.JS maps the authentication claims to the request identity and makes that identity available through the request context.
 - question: Can I use a custom authentication provider?
-  answer: Yes. Xeno.JS allows an application to provide both a custom authentication service and a custom credential extractor.
+  answer: Yes. Configure authService and, optionally, tokenExtractor through XenoAppBuilder.addAuth().
 ---
 
 ## Introduction
@@ -38,7 +38,7 @@ Authentication answers a fundamental security question:
 
 > **Who is making this request?**
 
-In Xeno.JS, authentication takes a credential from the incoming request, validates it through an authentication service, and establishes the authenticated identity used by the rest of the application.
+In Xeno.JS, the HTTP authentication middleware extracts a credential from the incoming request, asks the configured authentication service to validate it, and places the resulting identity in the request context. If there is no credential, the gatekeeper can resolve the current user through `getUser()` or return a guest identity.
 
 The authentication flow is:
 
@@ -70,27 +70,30 @@ Authorization is responsible for that decision.
 
 ## Add Authentication
 
-Authentication is configured through `AppBuilder`.
+Authentication is configured through `XenoAppBuilder`.
 
 A basic application configuration looks like this:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 There are two important pieces here:
 
-* `addAuth()` configures the authentication service.
-* `addMiddlewares()` enables the HTTP middleware that extracts the request credential and authenticates the request.
+- `withSupabase()` configures the Supabase authentication plugin, and `addAuth()` queues it with the builder.
+- `addMiddlewares()` enables the HTTP middleware that extracts the request credential and authenticates the request.
 
 Without the authentication middleware, configuring an authentication service does not by itself authenticate incoming HTTP requests.
 
@@ -107,10 +110,10 @@ The **token extractor** answers:
 For example, an HTTP authentication credential may come from:
 
 ```http
-Authorization: Bearer <token>
+Authorization: Bearer <access-token>
 ```
 
-or from an authentication cookie.
+or from a cookie, depending on the selected authentication integration.
 
 The extractor is responsible for retrieving the credential from the transport.
 
@@ -143,20 +146,22 @@ Keeping these responsibilities separate allows the same authentication model to 
 
 A successful authentication produces claims describing the authenticated identity.
 
-The claims can contain information such as:
+The `AuthClaims` contract requires `sub` and defines the following fields:
 
 ```ts
-{
-  sub: 'user-id',
+import type { AuthClaims } from '@xeno-js/shared'
+
+const claims: AuthClaims = {
+  sub: '550e8400-e29b-41d4-a716-446655440000',
   email: 'user@example.com',
   name: 'Jane Doe',
-  tenantId: 'tenant-id',
+  tenantId: '550e8400-e29b-41d4-a716-446655440001',
   roles: ['admin'],
-  permissions: ['orders:read']
+  permissions: ['orders:read'],
 }
 ```
 
-The exact claims depend on the authentication provider.
+`email`, `name`, `tenantId`, `roles`, and `permissions` can each have an `undefined` value. Xeno.JS maps `sub` to `Identity.userId` and `tenantId` to `Identity.tenantId`; both values are parsed as GUIDs, so provide valid GUID strings when the application needs those identifiers.
 
 Xeno.JS then maps the authentication claims to the request identity used by the application.
 
@@ -172,79 +177,58 @@ Authentication claims
 Request identity
       │
       ▼
-Authorization
+Configured authorization (if any)
 ```
 
 ## Configure Authentication with Supabase
 
-Xeno.JS provides a built-in Supabase authentication integration.
+The `@xeno-js/supabase` package provides a Supabase authentication integration.
 
 The minimal configuration is:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+const application = await app.build()
 ```
 
-The authentication options include:
+The Supabase integration reads `SUPABASE_URL` and `SUPABASE_KEY` by default. It requires both values and selects the standard client unless you define its `ssr` options. `redirectTo`, when set, is passed to Supabase's OAuth sign-in operation.
 
-```ts
-interface AuthConfig<TOptions> {
-  url: string
-  key: string
-  opts?: TOptions
-  storageOpts?: {
-    type?: 'local' | 'session' | 'memory' | 'cookie'
-    cookieOpts?: CookieOptions
-    storage?: IStorage
-  }
-  redirectTo?: string
-}
-```
-
-These options configure the authentication provider and how authentication state is stored.
-
-For example:
-
-* `url` identifies the authentication service.
-* `key` provides the client key required by the provider.
-* `opts` provides provider-specific options.
-* `storageOpts` controls the authentication state storage strategy.
-* `redirectTo` configures the application redirect destination where supported.
-
-For Supabase-specific configuration, including SSR cookies, session handling, and authentication cookies, see:
+For Supabase-specific configuration, including client options, SSR cookies, and token extraction, see:
 
 **[Supabase Authentication](./supabase)**
 
 ## Use a Custom Authentication Service
 
-You do not have to use the built-in Supabase integration.
+You do not have to use the Supabase integration.
 
 Xeno.JS supports a custom authentication service when your application uses another identity provider or has its own authentication mechanism.
 
-Configure it through `customAuth`:
+Configure `authService` and, optionally, `tokenExtractor` through `addAuth()`:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
 
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new MyTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.authService = () => new MyAuthService()
+  options.tokenExtractor = () => new MyTokenExtractor()
 })
 
 app.addMiddlewares()
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 The two components have different responsibilities:
@@ -265,6 +249,8 @@ The custom authentication service implements the Xeno.JS authentication contract
 At its base, the authentication service provides operations such as:
 
 ```ts
+import type { AuthClaims, Maybe, ResultType } from '@xeno-js/shared'
+
 interface IBaseAuthService {
   isAuthenticated(): Promise<boolean>
 
@@ -274,7 +260,9 @@ interface IBaseAuthService {
 }
 ```
 
-This allows Xeno.JS to work with authentication systems other than Supabase without changing the application authentication flow.
+The configured service must implement `IExtendendAuthService`, which also includes `signInWithProvider()`, `getSession()`, `signOut()`, and `exchangeCodeForSession()`. When the extractor returns no credential, Xeno.JS calls `getUser()`; `isAuthenticated()` is part of the contract but is not called by the HTTP authentication middleware.
+
+The custom service factory receives the active service scope, and the service is scoped to the request. The optional token extractor is registered as a singleton and should not capture request-scoped services.
 
 For the complete custom provider implementation, see:
 
@@ -305,9 +293,11 @@ Request context
 Application execution
 ```
 
-When authentication succeeds, the authenticated identity becomes available to the request context.
+When the configured service authenticates a supplied credential successfully, Xeno.JS maps the returned claims to an identity and makes it available through the request context.
 
-When authentication fails, the request does not continue as an authenticated request.
+When the service returns a failed result for a supplied credential, the middleware returns an error response and does not continue to the next middleware. It uses the error's status when provided, or `401 Unauthorized` otherwise.
+
+When no credential is extracted, Xeno.JS calls `getUser()`. If that call fails or returns no user, the gatekeeper sets the guest identity and the middleware continues. The middleware therefore does not, by itself, require every request to be authenticated; use route protection or authorization rules where authentication is mandatory.
 
 This makes authentication available to the application without requiring individual commands or services to manually parse HTTP headers or authentication cookies.
 
@@ -345,8 +335,8 @@ For example, authentication may establish:
 
 ```ts
 {
-  sub: 'user-123',
-  tenantId: 'tenant-456',
+  sub: '550e8400-e29b-41d4-a716-446655440000',
+  tenantId: '550e8400-e29b-41d4-a716-446655440001',
   roles: ['operator']
 }
 ```
@@ -361,9 +351,11 @@ See **[Authorization](../authorization/overview)** for application-level access 
 
 ## Authentication and the Request Context
 
-Once authentication succeeds, the resulting identity is associated with the current request context.
+Once the gatekeeper resolves an identity, Xeno.JS associates it with the current request context. This includes the guest identity when no authenticated user is found.
 
 This allows application code to work with the authenticated identity without depending directly on the HTTP transport.
+
+In the default Node context, `AsyncLocalStorage` carries the `RequestContext` across asynchronous work. Authentication services are scoped to the active service scope; avoid retaining request-scoped services in singletons.
 
 The architectural flow is therefore:
 
@@ -387,17 +379,17 @@ This is particularly useful for CQRS handlers and application services because t
 
 ## When Should You Use Custom Authentication?
 
-Use the built-in Supabase integration when Supabase is responsible for authenticating your application users.
+Use the `@xeno-js/supabase` integration when Supabase is responsible for authenticating your application users.
 
 Use a custom authentication service when your application needs to integrate with another authentication provider or an existing authentication system.
 
 Typical examples include:
 
-* an enterprise identity provider;
-* an internal authentication service;
-* a custom JWT issuer;
-* an API gateway that provides application credentials;
-* an existing authentication system that cannot be replaced.
+- an enterprise identity provider;
+- an internal authentication service;
+- a custom JWT issuer;
+- an API gateway that provides application credentials;
+- an existing authentication system that cannot be replaced.
 
 The important requirement is that the custom implementation can turn the incoming credential into the authentication claims required by the application.
 
@@ -409,8 +401,8 @@ For example, an authenticated identity might contain:
 
 ```ts
 {
-  sub: 'user-123',
-  tenantId: 'tenant-456',
+  sub: '550e8400-e29b-41d4-a716-446655440000',
+  tenantId: '550e8400-e29b-41d4-a716-446655440001',
   roles: ['user']
 }
 ```
@@ -444,18 +436,21 @@ Xeno.JS provides built-in authorization strategies for common identity and acces
 For a typical HTTP application, configure authentication together with the middleware layer:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
 
 app.addPipeline()
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 This gives the application the following security flow:
@@ -490,14 +485,20 @@ See the **[HTTP Security Middleware](../middleware/overview)** documentation for
 Make sure the middleware layer is enabled:
 
 ```ts
-app.addAuth((options) => {
-  // authentication configuration
-})
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
+  options.url = config.get('SUPABASE_URL')!
+  options.key = config.get('SUPABASE_KEY')!
+}))
 app.addMiddlewares()
+await app.build()
 ```
 
-`addAuth()` configures the authentication service; `addMiddlewares()` enables the HTTP middleware that uses it.
+`addAuth()` configures the authentication service; `addMiddlewares()` enables the HTTP middleware that uses it. A missing credential may result in the guest identity rather than an error response, so ensure the relevant route or authorization policy requires an authenticated identity.
 
 ### The application parses the Authorization header inside handlers
 
@@ -541,10 +542,10 @@ authentication service
 
 Once authentication is configured, continue with the provider-specific or application-specific integration:
 
-* **[Supabase Authentication](./supabase)** — configure the built-in Supabase integration, cookies, SSR, and token extraction.
-* **[Custom Authentication](./custom)** — implement your own authentication service and credential extractor.
-* **[Authorization](../authorization/overview)** — use the authenticated identity to control access to application operations.
-* **[HTTP Security Middleware](../middleware/overview)** — configure authentication together with CSRF, CORS, method restrictions, and rate limiting.
+- **[Supabase Authentication](./supabase)** — configure the Supabase integration, cookies, SSR, and token extraction.
+- **[Custom Authentication](./custom)** — implement your own authentication service and credential extractor.
+- **[Authorization](../authorization/overview)** — use the authenticated identity to control access to application operations.
+- **[HTTP Security Middleware](../middleware/overview)** — configure authentication together with CSRF, CORS, method restrictions, and rate limiting.
 
 ---
 

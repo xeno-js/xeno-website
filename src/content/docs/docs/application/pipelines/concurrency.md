@@ -18,7 +18,7 @@ tags:
 - commands
 faqs:
 - question: How do I enable concurrency retries?
-  answer: Configure commandBus.concurrency through AppBuilder.addPipeline().
+  answer: Pass withConcurrency() to XenoAppBuilder.addPipeline() and configure the retry options in its callback.
 - question: Does the concurrency pipeline apply to queries?
   answer: No. The concurrency retry pipeline is added to the command pipeline only.
 - question: What errors are retried?
@@ -26,7 +26,7 @@ faqs:
 - question: How many times is a command executed?
   answer: The maxRetries value limits the total number of pipeline attempts, including the first execution.
 - question: Can I configure the delay between retries?
-  answer: Yes. Use commandBus.concurrency.delayConfig with baseDelayMs and maxJitterMs.
+  answer: Yes. Configure baseDelayMs and maxJitterMs in the withConcurrency() callback.
 - question: What happens when the retry limit is reached?
   answer: The pipeline returns a failed conflict Result instead of executing the command again.
 
@@ -44,28 +44,28 @@ The concurrency retry configuration belongs to the **command bus**. It does not 
 
 You need:
 
-* an `AppBuilder` instance;
-* a Command and its handler;
-* concurrency conflicts represented as a failed `Result` with a conflict error;
-* the command executed through the Xeno.JS mediator.
+- an `XenoAppBuilder` instance;
+- a Command and its handler;
+- concurrency conflicts represented as a failed `Result` with a conflict error;
+- the command executed through the Xeno.JS mediator.
 
 If you are creating the Command itself, see [Create a Command](../cqrs/command).
 
 ## Enable concurrency retries
 
-Configure `commandBus.concurrency` inside `addPipeline()`:
+Pass `withConcurrency()` to `addPipeline()` and configure its options in the callback:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.concurrency = {
-      maxRetries: 3,
-      delayConfig: {
-        baseDelayMs: 100,
-        maxJitterMs: 50,
-      },
+import { XenoAppBuilder, withConcurrency } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withConcurrency((options) => {
+    options.maxRetries = 3
+    options.delayConfig = {
+      baseDelayMs: 100,
+      maxJitterMs: 50,
     }
-  })
+  }))
   .build()
 ```
 
@@ -75,18 +75,18 @@ You do not need to register `ConcurrencyRetryPipeline` manually.
 
 ## Configure the retry limit
 
-Use `maxRetries` to control the maximum number of times the command pipeline is executed.
+Use `maxRetries` to control the maximum number of command pipeline attempts, including the first execution.
 
 For example:
 
 ```ts
-config.commandBus.concurrency = {
-  maxRetries: 3,
-  delayConfig: {
+withConcurrency((options) => {
+  options.maxRetries = 3
+  options.delayConfig = {
     baseDelayMs: 100,
     maxJitterMs: 50,
-  },
-}
+  }
+})
 ```
 
 With `maxRetries: 3`, a command can be executed up to three times when it keeps returning a concurrency conflict:
@@ -119,29 +119,25 @@ Attempt 3
    └── conflict ───────────────► return failed Result
 ```
 
-`maxRetries` must be a positive integer.
-
-A value of `0` or a negative value is invalid.
+Use a positive integer for `maxRetries`. The retry pipeline does not validate this value.
 
 ## Configure retry delays
 
-Use `delayConfig` to configure the delay applied between concurrency-conflict attempts:
+Use `delayConfig` to configure the delay applied between concurrency-conflict attempts. The pipeline waits for `baseDelayMs` plus a random jitter from zero up to (but not including) `maxJitterMs`; it does not increase the base delay on later attempts.
 
 ```ts
-config.commandBus.concurrency = {
-  maxRetries: 5,
-  delayConfig: {
+withConcurrency((options) => {
+  options.maxRetries = 5
+  options.delayConfig = {
     baseDelayMs: 100,
     maxJitterMs: 50,
-  },
-}
+  }
+})
 ```
 
 ### `baseDelayMs`
 
-`baseDelayMs` defines the base delay in milliseconds before another attempt.
-
-It must be a non-negative integer.
+`baseDelayMs` defines the fixed base delay in milliseconds before another attempt. Use a non-negative integer; the retry pipeline does not validate this value.
 
 ```ts
 baseDelayMs: 100
@@ -149,9 +145,7 @@ baseDelayMs: 100
 
 ### `maxJitterMs`
 
-`maxJitterMs` defines the maximum jitter added to the retry delay.
-
-It must be a non-negative integer.
+`maxJitterMs` defines the upper bound, in milliseconds, for the random jitter added to the base delay. Use a non-negative integer; the retry pipeline does not validate this value.
 
 ```ts
 maxJitterMs: 50
@@ -166,42 +160,68 @@ The concurrency configuration is optional.
 You can enable it with the defaults:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.concurrency = {}
-  })
+const app = new XenoAppBuilder()
+  .addPipeline(withConcurrency())
   .build()
 ```
 
-When a value is omitted, Xeno.JS uses the pipeline defaults.
+When a value is omitted, the pipeline defaults are used: `maxRetries` is `3`, `baseDelayMs` is `20`, and `maxJitterMs` is `30`.
 
 You can override only the retry count:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.concurrency = {
-      maxRetries: 5,
-    }
-  })
+const app = new XenoAppBuilder()
+  .addPipeline(withConcurrency((options) => {
+    options.maxRetries = 5
+  }))
   .build()
 ```
 
 Or provide the complete configuration:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.concurrency = {
-      maxRetries: 5,
-      delayConfig: {
-        baseDelayMs: 100,
-        maxJitterMs: 50,
-      },
+const app = new XenoAppBuilder()
+  .addPipeline(withConcurrency((options) => {
+    options.maxRetries = 5
+    options.delayConfig = {
+      baseDelayMs: 100,
+      maxJitterMs: 50,
     }
-  })
+  }))
   .build()
 ```
+
+## Configure retries per intent
+
+Use `intentRegistry` to override retry settings for specific command intents. The registry key must match the command's `intent`. Settings defined for an intent take precedence over the corresponding global options; any omitted fields fall back to the global configuration and then to the pipeline defaults.
+
+For example, set global options and give selected commands their own retry limits and delays:
+
+```ts
+const app = new XenoAppBuilder()
+  .addPipeline(withConcurrency((options) => {
+    options.maxRetries = 3
+    options.delayConfig = {
+      baseDelayMs: 100,
+      maxJitterMs: 50,
+    }
+    options.intentRegistry = {
+      UpdateUserCommand: {
+        maxRetries: 5,
+      },
+      SubmitPaymentCommand: {
+        maxRetries: 2,
+        delayConfig: {
+          baseDelayMs: 250,
+          maxJitterMs: 100,
+        },
+      },
+    }
+  }))
+  .build()
+```
+
+In this example, `UpdateUserCommand` uses five attempts with the global delay settings. `SubmitPaymentCommand` uses two attempts and its own delay settings. Commands not listed in `intentRegistry` use the global options.
 
 ## What counts as a concurrency conflict?
 
@@ -209,8 +229,8 @@ The retry pipeline does not retry every failed command.
 
 A result is retried only when its error is a conflict with:
 
-* the `CONFLICT` error code;
-* HTTP status `409`.
+- the `CONFLICT` error code;
+- HTTP status `409`.
 
 For example, a command handler can return a conflict result when an optimistic concurrency check detects that the entity was modified by another operation.
 
@@ -297,18 +317,16 @@ The command is not executed again after the limit has been reached.
 A typical application can configure the command bus as follows:
 
 ```ts
-import { AppBuilder } from '@xeno-js/shared'
+import { XenoAppBuilder, withConcurrency } from '@xeno-js/core'
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.concurrency = {
-      maxRetries: 3,
-      delayConfig: {
-        baseDelayMs: 100,
-        maxJitterMs: 50,
-      },
+const app = new XenoAppBuilder()
+  .addPipeline(withConcurrency((options) => {
+    options.maxRetries = 3
+    options.delayConfig = {
+      baseDelayMs: 100,
+      maxJitterMs: 50,
     }
-  })
+  }))
   .build()
 ```
 
@@ -357,21 +375,15 @@ With concurrency retries enabled, a conflict can cause the command to be execute
 
 ## Concurrency applies to Commands
 
-The retry configuration is part of:
+The retry options are provided to:
 
 ```ts
-config.commandBus.concurrency
+withConcurrency((options) => {
+  options.maxRetries = 3
+})
 ```
 
-It is therefore applied to Commands.
-
-It is not part of:
-
-```ts
-config.queryBus
-```
-
-and does not automatically retry Queries.
+The plugin adds the retry behavior to the Command pipeline; it does not add retry behavior to the Query pipeline.
 
 The application pipeline is conceptually:
 
@@ -392,22 +404,14 @@ Command-specific pipelines
 
 If you need query result caching or other query-specific behavior, see the corresponding query pipeline documentation.
 
-## Validation and authorization errors are not retried
+## Other errors are not retried
 
-Concurrency retry is intentionally limited to conflict errors.
+The retry pipeline retries only failed results whose error code is `CONFLICT` and whose HTTP status is `409`. Other errors are returned without retrying.
 
 For example:
 
 ```text
-Validation failure
-      │
-      └──► return immediately
-
-Authorization failure
-      │
-      └──► return immediately
-
-Not found
+Non-conflict error
       │
       └──► return immediately
 
@@ -416,26 +420,28 @@ Conflict / 409
       └──► retry
 ```
 
-This means that increasing `maxRetries` does not cause unrelated application errors to be retried.
+Increasing `maxRetries` does not cause errors that fail either conflict check to be retried.
 
 ## Troubleshooting
 
 ### The command is not being retried
 
-Check that concurrency is configured under `commandBus`:
+Check that `withConcurrency()` is passed to `addPipeline()`:
 
 ```ts
-config.commandBus.concurrency = {
-  maxRetries: 3,
-}
+import { withConcurrency } from '@xeno-js/core'
+
+app.addPipeline(withConcurrency((options) => {
+  options.maxRetries = 3
+}))
 ```
 
 Then check that the handler returns a conflict error.
 
 The retry pipeline only recognizes errors with:
 
-* conflict error code;
-* HTTP status `409`.
+- conflict error code;
+- HTTP status `409`.
 
 A generic failed `Result` will not trigger a retry.
 
@@ -456,33 +462,33 @@ return Result.fail(
 
 Whereas returning another error type will not activate the retry behavior.
 
-### `maxRetries` is rejected
+### `maxRetries` has an unexpected value
 
-`maxRetries` must be a positive integer.
+Use a positive integer for `maxRetries`. The retry pipeline does not validate this value.
 
-Invalid:
+Not recommended:
 
 ```ts
 maxRetries: 0
 ```
 
-Invalid:
+Not recommended:
 
 ```ts
 maxRetries: -1
 ```
 
-Valid:
+Recommended:
 
 ```ts
 maxRetries: 3
 ```
 
-### `baseDelayMs` or `maxJitterMs` is rejected
+### `baseDelayMs` or `maxJitterMs` has an unexpected value
 
-Both values must be non-negative integers.
+Use non-negative integers for `baseDelayMs` and `maxJitterMs`. The retry pipeline does not validate these values.
 
-Invalid:
+Not recommended:
 
 ```ts
 delayConfig: {
@@ -491,7 +497,7 @@ delayConfig: {
 }
 ```
 
-Valid:
+Recommended:
 
 ```ts
 delayConfig: {
@@ -502,13 +508,13 @@ delayConfig: {
 
 ## Related docs
 
-* [Application Overview](../overview)
-* [Create a Command](../cqrs/command)
-* [Create a Handler](../cqrs/handler)
-* [Exception Pipeline](./exception)
-* [Validation Pipeline](./validation)
-* [Idempotency Pipeline](./idempotency)
-* [Caching](./caching)
+- [Application Overview](../overview)
+- [Create a Command](../cqrs/command)
+- [Create a Handler](../cqrs/handler)
+- [Exception Pipeline](./exception)
+- [Validation Pipeline](./validation)
+- [Idempotency Pipeline](./idempotency)
+- [Caching](./caching)
 
 ---
 

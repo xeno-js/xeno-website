@@ -1,6 +1,6 @@
 ---
 title: Idempotency Pipeline
-description: Learn how to enable idempotency for Xeno.JS commands and configure lock and processed-result TTLs.
+description: Learn how to enable idempotency for Xeno.JS commands and configure lock and processed-result TTLs globally or per command intent.
 keywords:
 - Xeno.JS idempotency
 - Xeno.JS idempotency pipeline
@@ -8,6 +8,7 @@ keywords:
 - CQRS idempotency
 - command deduplication
 - request idempotency
+- intentRegistry
 - TypeScript CQRS
 tags:
 - application
@@ -17,13 +18,13 @@ tags:
 - commands
 faqs:
 - question: How do I enable idempotency?
-  answer: Configure commandBus.idempotency through AppBuilder.addPipeline().
+  answer: Pass withIdempotency() to XenoAppBuilder.addPipeline().
 - question: Does idempotency apply to queries?
   answer: No. Idempotency is added to the Command pipeline only.
 - question: What identifies an idempotent request?
-  answer: Xeno.JS uses the requestId from the network context to identify the request.
+  answer: Xeno.JS uses the requestId from the network context as the idempotency key. The command intent selects optional per-command TTL settings.
 - question: What happens when the same request is received again?
-  answer: If a processed result is still stored, Xeno.JS returns that result without executing the command again.
+  answer: If a processed payload is still stored, Xeno.JS returns it in a new successful Result without executing the command again.
 - question: What happens when another request is processing the same request ID?
   answer: The command is not executed and a conflict result is returned.
 - question: What happens when a command fails?
@@ -32,19 +33,22 @@ faqs:
   answer: Configure lockTtlSeconds. If it is not specified, Xeno.JS uses its built-in default.
 - question: How long are processed results kept?
   answer: Configure processedTtlSeconds. If it is not specified, Xeno.JS uses its built-in default.
+- question: Can I configure idempotency TTLs per command?
+  answer: Yes. Use intentRegistry with keys matching each command's intent; per-intent TTL values override the corresponding global values.
 ---
 
 ## Introduction
 
-Use the Idempotency Pipeline to prevent the same **Command** from being processed more than once for the same request ID.
+Use the Idempotency Pipeline to deduplicate repeated **Command** executions
+that use the same request ID while the corresponding cache entry is available.
 
 When idempotency is enabled, Xeno.JS:
 
 1. checks whether the request has already been processed;
-2. returns the stored result when one is available;
+2. returns the stored payload in a successful `Result` when one is available;
 3. otherwise acquires an idempotency lock;
 4. executes the command;
-5. stores a successful result for subsequent requests;
+5. stores the successful result payload for subsequent requests;
 6. releases the lock when the command fails or throws an exception.
 
 Idempotency is available for **Commands only**. It is not added to the Query pipeline.
@@ -53,11 +57,11 @@ Idempotency is available for **Commands only**. It is not added to the Query pip
 
 You need:
 
-* an `AppBuilder` instance;
-* a Command and its handler;
-* a configured cache;
-* a network request context that provides a `requestId`;
-* the command executed through the Xeno.JS mediator.
+- an `XenoAppBuilder` instance;
+- a Command and its handler;
+- a cache implementation; the CQRS module configures the default in-memory cache if needed;
+- a network request context that provides a `requestId`;
+- the command executed through the Xeno.JS mediator.
 
 If you are creating the Command itself, see [Create a Command](../cqrs/command).
 
@@ -65,41 +69,43 @@ If you need to configure the cache used by Xeno.JS, see the cache documentation.
 
 ## Enable idempotency
 
-Configure `commandBus.idempotency` through `addPipeline()`:
+Pass `withIdempotency()` to `addPipeline()` and configure its options:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.idempotency = {
-      lockTtlSeconds: 30,
-      processedTtlSeconds: 60,
-    }
-  })
-  .build()
+import { XenoAppBuilder, withIdempotency } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withIdempotency((options) => {
+    options.lockTtlSeconds = 30
+    options.processedTtlSeconds = 60
+  }))
+
+const application = await app.build()
 ```
 
 You do not need to instantiate or register `IdempotencyPipeline` manually.
 
-Once `commandBus.idempotency` is defined, Xeno.JS adds the idempotency behavior to the Command pipeline.
+Once configured, Xeno.JS adds the idempotency behavior to the Command pipeline.
 
 ## Configure the lock TTL
 
 Use `lockTtlSeconds` to control how long an idempotency lock remains in the cache.
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.idempotency = {
-      lockTtlSeconds: 30,
-      processedTtlSeconds: 60,
-    }
-  })
-  .build()
+import { XenoAppBuilder, withIdempotency } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withIdempotency((options) => {
+    options.lockTtlSeconds = 30
+    options.processedTtlSeconds = 60
+  }))
+
+const application = await app.build()
 ```
 
 The value is expressed in **seconds**.
 
-The value must be a positive integer.
+Use a positive integer value.
 
 For example:
 
@@ -109,10 +115,10 @@ lockTtlSeconds: 30
 
 means that the lock can remain in the cache for up to 30 seconds if it is not explicitly released earlier.
 
-The lock is released automatically by the pipeline when:
+The lock is released by the pipeline when:
 
-* the command returns a failed `Result`;
-* command execution throws an exception.
+- the command returns a failed `Result`;
+- the next behavior or command handler throws.
 
 A successful command is marked as processed instead of explicitly releasing the lock.
 
@@ -121,19 +127,60 @@ A successful command is marked as processed instead of explicitly releasing the 
 Use `processedTtlSeconds` to control how long the result of a successfully processed command remains available.
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.idempotency = {
-      lockTtlSeconds: 30,
-      processedTtlSeconds: 300,
-    }
-  })
-  .build()
+import { XenoAppBuilder, withIdempotency } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withIdempotency((options) => {
+    options.lockTtlSeconds = 30
+    options.processedTtlSeconds = 300
+  }))
+
+const application = await app.build()
 ```
 
-The value is expressed in **seconds** and must be a positive integer.
+The value is expressed in **seconds**. Use a positive integer.
 
-While the processed result is still available, another request with the same `requestId` receives the stored result instead of executing the command again.
+While the processed payload is still available, another request with the same
+`requestId` receives that payload in a successful `Result` instead of executing
+the command again.
+
+## Configure idempotency per intent
+
+Use `intentRegistry` to override TTL settings for specific command intents. A
+registry key must match the command's `intent`. Each per-intent TTL overrides
+the corresponding global setting; omitted values fall back to the global
+setting and then to the pipeline default.
+
+```ts
+import { XenoAppBuilder, withIdempotency } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withIdempotency((options) => {
+    options.lockTtlSeconds = 30
+    options.processedTtlSeconds = 300
+    options.intentRegistry = {
+      CreateUserCommand: {
+        processedTtlSeconds: 900,
+      },
+      SubmitPaymentCommand: {
+        lockTtlSeconds: 60,
+        processedTtlSeconds: 3600,
+      },
+    }
+  }))
+
+const application = await app.build()
+```
+
+In this example, `CreateUserCommand` uses the global lock TTL and a processed
+payload TTL of 900 seconds. `SubmitPaymentCommand` uses both of its configured
+TTLs. Other commands use the global values; any global value not specified
+falls back to the pipeline default.
+
+The intent selects TTL configuration only. The idempotency store is keyed by
+the network context's `requestId`, not by the command intent. Use request IDs
+that are unique across commands, and reuse the same ID only when retrying the
+same operation.
 
 ## Use the request ID
 
@@ -155,9 +202,13 @@ Do not generate a new request ID for every retry if the intention is to retrieve
 
 ## What happens when a request was already processed?
 
-When Xeno.JS finds a processed result for the request ID, it returns that result immediately.
+When Xeno.JS finds a processed payload for the request ID, it returns
+`Result.ok(payload)` immediately. The payload must be defined in the store.
 
 The command pipeline does not execute the command again.
+
+If the store reports that the request was processed but has no payload for its
+ID, the pipeline returns a failed conflict `Result` instead.
 
 Conceptually:
 
@@ -167,7 +218,7 @@ Request
    ▼
 Has this request already been processed?
    │
-   ├── Yes ──► Return stored result
+   ├── Yes ──► Return Result.ok(stored payload)
    │
    └── No
          │
@@ -178,7 +229,7 @@ Has this request already been processed?
      Execute command
          │
          ▼
-     Store successful result
+     Store successful payload
 ```
 
 This is the main behavior provided by the Idempotency Pipeline.
@@ -195,7 +246,8 @@ This prevents two concurrent executions with the same request ID from processing
 
 ## What happens when the command succeeds?
 
-When the command returns a successful `Result`, Xeno.JS stores the result using the configured `processedTtlSeconds`.
+When the command returns a successful `Result`, Xeno.JS stores its value
+(`result.getValueOrThrow()`) using the configured `processedTtlSeconds`.
 
 For example:
 
@@ -205,7 +257,9 @@ const result = Result.ok({
 })
 ```
 
-The successful payload is stored.
+Only the successful payload is stored. On replay, the pipeline creates a new
+`Result.ok(payload)`; it does not persist and replay the original `Result`
+object or its error metadata.
 
 A subsequent request with the same request ID can receive:
 
@@ -238,11 +292,14 @@ The idempotency lock is released and the failed result is returned.
 
 A later request with the same request ID can therefore attempt the command again.
 
-This is different from a successful execution, where the result remains available for the configured processed-result TTL.
+This is different from a successful execution, where the payload remains
+available for the configured processed-result TTL.
 
 ## What happens when the command throws?
 
-If command execution throws an exception, Xeno.JS releases the idempotency lock and rethrows the exception.
+If the next pipeline behavior or command handler throws, Xeno.JS releases the
+idempotency lock and rethrows the value. The CQRS exception behavior handles
+that thrown value separately.
 
 The exception is not stored as a processed result.
 
@@ -260,13 +317,13 @@ If the handler throws:
 Command execution
       │
       ▼
-   exception
+   thrown value
       │
       ▼
  release lock
       │
       ▼
- rethrow exception
+ rethrow value
 ```
 
 ## Configure both TTLs
@@ -274,22 +331,23 @@ Command execution
 A typical configuration explicitly sets both TTL values:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.idempotency = {
-      lockTtlSeconds: 30,
-      processedTtlSeconds: 300,
-    }
-  })
-  .build()
+import { XenoAppBuilder, withIdempotency } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withIdempotency((options) => {
+    options.lockTtlSeconds = 30
+    options.processedTtlSeconds = 300
+  }))
+
+const application = await app.build()
 ```
 
 Use:
 
-* `lockTtlSeconds` for the lifetime of an in-progress idempotency lock;
-* `processedTtlSeconds` for the lifetime of a successful command result.
+- `lockTtlSeconds` for the lifetime of an in-progress idempotency lock;
+- `processedTtlSeconds` for the lifetime of a successful command payload.
 
-Both values must be positive integers.
+Use positive integers for both values.
 
 If they are omitted, Xeno.JS uses the built-in defaults.
 
@@ -298,23 +356,22 @@ If they are omitted, Xeno.JS uses the built-in defaults.
 The following example shows the relevant application configuration:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder, withIdempotency } from '@xeno-js/core'
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.commandBus.idempotency = {
-      lockTtlSeconds: 30,
-      processedTtlSeconds: 300,
-    }
-  })
+const app = new XenoAppBuilder()
+  .addPipeline(withIdempotency((options) => {
+    options.lockTtlSeconds = 30
+    options.processedTtlSeconds = 300
+  }))
   .addServices((services) => {
-    services.addTransient('CREATE_USER_HANDLER', (container) => {
+    services.addTransient('CREATE_USER_HANDLER', (scope) => {
       return new CreateUserHandler(
-        container.resolve('USER_REPOSITORY'),
+        scope.resolve('USER_REPOSITORY'),
       )
     })
   })
-  .build()
+
+const application = await app.build()
 ```
 
 Your command can then be executed normally through the mediator:
@@ -332,34 +389,21 @@ The idempotency pipeline operates around the command execution without requiring
 
 ## Idempotency applies to Commands
 
-Idempotency is configured under:
-
-```ts
-config.commandBus.idempotency
-```
-
-It is therefore part of the Command pipeline.
-
-It does not apply to:
-
-```ts
-config.queryBus
-```
-
-Queries have different execution semantics and are not processed through the idempotency pipeline.
+`withIdempotency()` adds idempotency to the Command pipeline. The CQRS module
+does not add this behavior to the Query pipeline.
 
 If you need query result caching, see [Caching](./caching).
 
-## Idempotency requires a cache
+## Idempotency uses a cache
 
-The built-in idempotency store uses the configured Xeno.JS cache to store:
+The built-in idempotency store uses the Xeno.JS cache to store:
 
-* active idempotency locks;
-* successfully processed command results.
+- active idempotency locks;
+- successfully processed command payloads.
 
-Make sure a cache implementation is configured before enabling idempotency.
-
-If the cache is not available, application configuration cannot construct the idempotency store required by the pipeline.
+When idempotency is enabled and no cache has been registered, the CQRS module
+configures the default in-memory cache. Register a cache explicitly if the
+application needs a different provider or cache configuration.
 
 ## Troubleshooting
 
@@ -367,10 +411,10 @@ If the cache is not available, application configuration cannot construct the id
 
 Check:
 
-1. `config.commandBus.idempotency` is configured;
+1. `withIdempotency()` is passed to `addPipeline()`;
 2. the command is executed through the Xeno.JS mediator;
 3. the requests use the same `requestId`;
-4. a cache implementation is configured;
+4. application building succeeds, so the CQRS module can configure the behavior and cache;
 5. the processed-result TTL has not expired.
 
 Remember that using a different request ID represents a different idempotent operation.
@@ -397,43 +441,30 @@ Failed `Result` values are not stored as processed results. The lock is released
 
 Check `processedTtlSeconds`.
 
-Once the stored successful result expires, a later request with the same request ID can be processed again.
+Once the stored successful payload expires, a later request with the same request ID can be processed again.
 
 Choose a processed-result TTL that matches how long your application needs to recognize repeated requests as duplicates.
 
-### Idempotency configuration throws an error
+### Choose valid TTL values
 
-Check that:
+Use positive integer values for:
 
 ```ts
 lockTtlSeconds
 processedTtlSeconds
 ```
 
-are positive integers.
-
-Values such as these are invalid:
-
-```ts
-lockTtlSeconds: 0
-```
-
-```ts
-processedTtlSeconds: -1
-```
-
-```ts
-lockTtlSeconds: 1.5
-```
+The pipeline does not validate TTL values, so avoid zero, negative, or
+fractional values.
 
 ## Related documentation
 
-* [Application Overview](../overview)
-* [Create a Command](../cqrs/command)
-* [Create a Command Handler](../cqrs/handler)
-* [Configure Concurrency](./concurrency)
-* [Enable Caching](./caching)
-* [Handle Exceptions](./exception)
+- [Application Overview](../overview)
+- [Create a Command](../cqrs/command)
+- [Create a Command Handler](../cqrs/handler)
+- [Configure Concurrency](./concurrency)
+- [Enable Caching](./caching)
+- [Handle Exceptions](./exception)
 
 ---
 

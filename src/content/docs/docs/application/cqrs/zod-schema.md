@@ -31,28 +31,29 @@ faqs:
 
 When you validate Xeno.JS commands and queries with Zod, use `ZodUtils` to create the schema instead of manually rebuilding the request metadata.
 
-`ZodUtils` is exported by `@xeno-js/shared` and provides:
+`ZodUtils` is exported by `@xeno-js/zod` and provides:
 
-* `createCommandSchema()` for commands;
-* `createQuerySchema()` for queries.
+- `createCommandSchema()` for commands;
+- `createQuerySchema()` for queries.
 
 Both helpers combine your application-specific fields with the Xeno.JS base schema and return a strict Zod object.
 
 This means you do not need to manually add:
 
-* `intent`;
-* `type`;
-* query `cacheOptions`.
+- `intent`;
+- `type`;
+- query `cacheOptions`.
 
 ## Before you start
 
 You need:
 
-* `@xeno-js/shared`;
-* `zod`;
-* a Command or Query;
-* the Zod validation pipeline enabled;
-* a schema registered under the same `intent` as the request.
+- `@xeno-js/core`;
+- `@xeno-js/zod`;
+- `zod`;
+- a Command or Query;
+- the Zod validation pipeline enabled;
+- a schema registered under the same `intent` as the request.
 
 For validation configuration, see [Validation Pipeline](../pipelines/validation).
 
@@ -64,7 +65,7 @@ Use `ZodUtils.createCommandSchema()` when creating a schema for a `Command`.
 
 ```ts
 import { z } from 'zod'
-import { ZodUtils } from '@xeno-js/shared'
+import { ZodUtils } from '@xeno-js/zod'
 
 const createUserSchema = ZodUtils.createCommandSchema(
   'CreateUserCommand',
@@ -104,7 +105,7 @@ Use `ZodUtils.createQuerySchema()` for a `Query`.
 
 ```ts
 import { z } from 'zod'
-import { ZodUtils } from '@xeno-js/shared'
+import { ZodUtils } from '@xeno-js/zod'
 
 const getUserSchema = ZodUtils.createQuerySchema(
   'GetUserQuery',
@@ -142,7 +143,7 @@ A Xeno.JS `Query` contains `cacheOptions`.
 For example:
 
 ```ts
-import { Query } from '@xeno-js/shared'
+import { Query } from '@xeno-js/core'
 
 export class GetUserQuery extends Query<User> {
   constructor(
@@ -169,7 +170,7 @@ The generated query schema validates these cache options automatically.
 | `ttl`            | No       | Cache lifetime in seconds.                      |
 | `bypassCache`    | No       | Bypasses a cached value for the request.        |
 | `consistentRead` | No       | Requests a read that bypasses the cached value. |
-| `isUserScoped`   | yes      | Whether the cache is user-scoped.               |
+| `isUserScoped`   | Yes      | Whether the cache is user-scoped.               |
 
 `cacheKey` must be a non-empty string.
 
@@ -257,8 +258,8 @@ For example:
 
 ```ts
 import { z } from 'zod'
-import { AppBuilder } from '@xeno-js/core'
-import { ZodUtils } from '@xeno-js/shared'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { ZodUtils, withZodValidation } from '@xeno-js/zod'
 
 const createUserSchema = ZodUtils.createCommandSchema(
   'CreateUserCommand',
@@ -275,15 +276,13 @@ const getUserSchema = ZodUtils.createQuerySchema(
   },
 )
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CreateUserCommand: createUserSchema,
-        GetUserQuery: getUserSchema,
-      },
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      CreateUserCommand: createUserSchema,
+      GetUserQuery: getUserSchema,
     }
-  })
+  }))
 ```
 
 The schema registry is keyed by request `intent`.
@@ -329,7 +328,13 @@ src/
 ### `create-user.command.ts`
 
 ```ts
-import { Command } from '@xeno-js/shared'
+import { Command } from '@xeno-js/core'
+
+export interface User {
+  id: string
+  email: string
+  name: string
+}
 
 export class CreateUserCommand extends Command<User> {
   constructor(
@@ -345,7 +350,7 @@ export class CreateUserCommand extends Command<User> {
 
 ```ts
 import { z } from 'zod'
-import { ZodUtils } from '@xeno-js/shared'
+import { ZodUtils } from '@xeno-js/zod'
 
 export const createUserSchema = ZodUtils.createCommandSchema(
   'CreateUserCommand',
@@ -359,17 +364,16 @@ export const createUserSchema = ZodUtils.createCommandSchema(
 ### `bootstrap.ts`
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
 import { createUserSchema } from './application/users/create-user.schema'
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        CreateUserCommand: createUserSchema,
-      },
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      CreateUserCommand: createUserSchema,
     }
-  })
+  }))
 
 await app.build()
 ```
@@ -391,7 +395,13 @@ src/
 ### `get-user.query.ts`
 
 ```ts
-import { Query } from '@xeno-js/shared'
+import { Query } from '@xeno-js/core'
+
+export interface User {
+  id: string
+  email: string
+  name: string
+}
 
 export class GetUserQuery extends Query<User> {
   constructor(
@@ -412,7 +422,7 @@ export class GetUserQuery extends Query<User> {
 
 ```ts
 import { z } from 'zod'
-import { ZodUtils } from '@xeno-js/shared'
+import { ZodUtils } from '@xeno-js/zod'
 
 export const getUserSchema = ZodUtils.createQuerySchema(
   'GetUserQuery',
@@ -425,17 +435,16 @@ export const getUserSchema = ZodUtils.createQuerySchema(
 ### `src/bootstrap.ts`
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
 import { getUserSchema } from './application/users/get-user.schema'
 
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        GetUserQuery: getUserSchema,
-      },
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      GetUserQuery: getUserSchema,
     }
-  })
+  }))
 
 await app.build()
 ```
@@ -564,7 +573,7 @@ Check:
 2. the schema is registered under the request `intent`;
 3. the request's `intent` exactly matches the registry key;
 4. the request is executed through the configured mediator;
-5. the installed `@xeno-js/shared` version exposes `ZodUtils`.
+5. `ZodUtils` is imported from `@xeno-js/zod`.
 
 See [Validation Pipeline](../pipelines/validation) for the complete validation configuration.
 
@@ -603,10 +612,10 @@ For queries, it also supplies the base `cacheOptions` schema.
 
 ## Related Documentation
 
-* [Creating Commands](./command)
-* [Creating Queries](./query)
-* [Validation Pipeline](../pipelines/validation)
-* [Creating Handlers](./handler)
+- [Creating Commands](./command)
+- [Creating Queries](./query)
+- [Validation Pipeline](../pipelines/validation)
+- [Creating Handlers](./handler)
 
 ---
 

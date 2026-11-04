@@ -230,7 +230,7 @@ Xeno.JS uses explicit programmatic registration.
 For example:
 
 ```typescript
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((services) => {
     services.addScoped('USER_REPOSITORY', (container) => {
       return new UserRepository(

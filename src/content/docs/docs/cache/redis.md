@@ -5,9 +5,8 @@ keywords:
 - Xeno.JS
 - Redis
 - Redis cache
-- ioredis
 - cache
-- AppBuilder
+-XenoAppBuilder
 - TOKENS.CACHE
 tags:
 - cache
@@ -17,11 +16,11 @@ tags:
 - typescript
 faqs:
 - question: How do I configure Redis as the Xeno.JS cache?
-  answer: Disable the in-memory cache and provide the Redis connection options through app.addCache().
+  answer: Pass the withRedis plugin to app.addCache(). The plugin enables Redis by default and can be configured through its setup callback.
 - question: Which Redis client does Xeno.JS use?
-  answer: Xeno.JS uses ioredis for its Redis cache implementation.
+  answer: The Redis client cannot be verified from the plugin configuration shown here.
 - question: Which Redis options can I configure?
-  answer: Xeno.JS exposes host, port, password, username, TLS, and maxRetriesPerRequest through the Redis cache configuration.
+  answer: The withRedis setup callback receives Redis configuration that includes host, port, and an options object with username and password. Other Redis options are not established by this configuration.
 - question: How do I resolve the Redis cache?
   answer: Resolve TOKENS.CACHE after app.build(); it returns the configured Redis-backed cache through the common cache API.
 - question: Do I need to use the Redis client directly?
@@ -31,51 +30,46 @@ faqs:
 
 ## Introduction
 
-Xeno.JS can use Redis as the application's cache backend.
+Xeno.JS can use Redis as the application's cache backend through the `withRedis` cache plugin.
 
-The Redis integration is configured through `AppBuilder.addCache()` and uses `ioredis`.
+Pass the plugin to `XenoAppBuilder.addCache()`. The plugin supplies a Redis cache provider to the cache module.
 
 ## Install Redis Support
 
-Install the Redis client dependency:
+Install the Redis integration package:
 
 ```bash
-npm install ioredis
+npm install @xeno-js/redis
 ```
 
 ## Configure Redis
 
-Disable the in-memory cache and provide the Redis configuration:
+Pass `withRedis` to `addCache()`. Its setup callback receives Redis configuration; the plugin defaults to enabled, with host `localhost` and port `6379`.
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withRedis } from '@xeno-js/redis'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addCache((options, config) => {
-  options.inMemory = false
-
-  options.redis = {
-    host: config.get('REDIS_HOST', 'localhost'),
-    port: config.getNumber('REDIS_PORT', 6379),
-    password: config.getOrThrow('REDIS_PASSWORD'),
-    username: config.getOrThrow('REDIS_USERNAME'),
-    tls: config.get('REDIS_TLS') === 'true',
-    maxRetriesPerRequest: getNumber('REDIS_MAX_RETRIES', 3),
+app.addCache(withRedis((options, config) => {
+  options.host = config.get('REDIS_HOST') ?? 'localhost'
+  options.port = config.getNumber('REDIS_PORT') ?? 6379
+  options.options = {
+    username: config.get('REDIS_USERNAME'),
+    password: config.get('REDIS_PASSWORD'),
   }
-})
+}))
 ```
 
-The relevant Redis options are:
+The Redis configuration fields shown by the plugin are:
 
-| Option                 | Description                                                     |
-| ---------------------- | --------------------------------------------------------------- |
-| `host`                 | Redis server hostname. Defaults to `localhost`.                 |
-| `port`                 | Redis server port. Defaults to `6379`.                          |
-| `password`             | Optional Redis password.                                        |
-| `username`             | Optional Redis username.                                        |
-| `tls`                  | Enables TLS when `true`.                                        |
-| `maxRetriesPerRequest` | Maximum number of retries for a Redis request. Defaults to `3`. |
+| Field       | Description                                                            |
+| ----------- | ---------------------------------------------------------------------- |
+| `isEnabled` | Enables the Redis provider when `true`; defaults to `true`.            |
+| `host`      | Redis server hostname; defaults to `localhost`.                        |
+| `port`      | Redis server port; defaults to `6379`.                                 |
+| `options`   | Options object initialized with `username` and `password` from configuration.                   |
 
 ## Using Environment Variables
 
@@ -86,25 +80,21 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_USERNAME=
 REDIS_PASSWORD=
-REDIS_TLS=false
-REDIS_MAX_RETRIES=3
 ```
 
 Then configure the application:
 
 ```ts
-app.addCache((options. config) => {
-  options.inMemory = false
+import { withRedis } from '@xeno-js/redis'
 
-  options.redis = {
-    host: config.get('REDIS_HOST', 'localhost'),
-    port: config.getNumber('REDIS_PORT', 6379),
-    password: config.getOrThrow('REDIS_PASSWORD'),
-    username: config.getOrThrow('REDIS_USERNAME'),
-    tls: config.get('REDIS_TLS') === 'true',
-    maxRetriesPerRequest: getNumber('REDIS_MAX_RETRIES', 3),
+app.addCache(withRedis((options, config) => {
+  options.host = config.get('REDIS_HOST') ?? 'localhost'
+  options.port = config.getNumber('REDIS_PORT') ?? 6379
+  options.options = {
+    username: config.get('REDIS_USERNAME'),
+    password: config.get('REDIS_PASSWORD'),
   }
-})
+}))
 ```
 
 ## Resolve the Redis Cache
@@ -114,18 +104,12 @@ The application does not resolve Redis directly.
 Resolve the common Xeno.JS cache token:
 
 ```ts
-import { AppBuilder, TOKENS } from '@xeno-js/core'
+import { XenoAppBuilder, TOKENS } from '@xeno-js/core'
+import { withRedis } from '@xeno-js/redis'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addCache((options) => {
-  options.inMemory = false
-
-  options.redis = {
-    host: 'localhost',
-    port: 6379,
-  }
-})
+app.addCache(withRedis(() => {}))
 
 await app.build()
 
@@ -169,22 +153,19 @@ await cache.increment('counter', 60)
 ## Complete Example
 
 ```ts
-import { AppBuilder, TOKENS } from '@xeno-js/core'
+import { XenoAppBuilder, TOKENS } from '@xeno-js/core'
+import { withRedis } from '@xeno-js/redis'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addCache((options, config) => {
-  options.inMemory = false
-
-  options.redis = {
-    host: config.get('REDIS_HOST', 'localhost'),
-    port: config.getNumber('REDIS_PORT', 6379),
-    password: config.getOrThrow('REDIS_PASSWORD'),
-    username: config.getOrThrow('REDIS_USERNAME'),
-    tls: config.get('REDIS_TLS') === 'true',
-    maxRetriesPerRequest: getNumber('REDIS_MAX_RETRIES', 3),
+app.addCache(withRedis((options, config) => {
+  options.host = config.get('REDIS_HOST') ?? 'localhost'
+  options.port = config.getNumber('REDIS_PORT') ?? 6379
+  options.options = {
+    username: config.get('REDIS_USERNAME'),
+    password: config.get('REDIS_PASSWORD'),
   }
-})
+}))
 
 await app.build()
 
@@ -201,35 +182,34 @@ console.log(value)
 
 ### Redis Is Not Being Used
 
-Make sure the in-memory cache is disabled:
+Pass the Redis cache plugin to `addCache()`:
 
 ```ts
-options.inMemory = false
+app.addCache(withRedis(() => {}))
 ```
 
-and that `options.redis` is configured.
+The plugin selects its Redis provider by default. Set `isEnabled` to `false` in its setup callback to use the in-memory cache instead.
 
 ### Redis Connection Fails
 
 Check:
 
-* `REDIS_HOST`
-* `REDIS_PORT`
-* `REDIS_USERNAME`
-* `REDIS_PASSWORD`
-* `REDIS_TLS`
-* Redis availability
+- `REDIS_HOST`
+- `REDIS_PORT`
+- `REDIS_USERNAME`
+- `REDIS_PASSWORD`
+- Redis availability
 
 ### The Cache Is Not Registered
 
-If both `inMemory` and `redis` are disabled or undefined, Xeno.JS cannot configure a cache and application startup fails.
+If the cache module receives neither an enabled in-memory configuration nor a cache provider, its configuration fails.
 
 ## Related Documentation
 
-* [Cache Overview](./overview)
-* [Dependency Injection Resolution](../dependency-injection/resolution)
-* [Caching Pipeline](../application/pipelines/caching)
-* [Idempotency](../application/pipelines/idempotency)
+- [Cache Overview](./overview)
+- [Dependency Injection Resolution](../dependency-injection/resolution)
+- [Caching Pipeline](../application/pipelines/caching)
+- [Idempotency](../application/pipelines/idempotency)
 
 ---
 

@@ -19,7 +19,7 @@ faqs:
 - question: How do I create a handler in Xeno.JS?
   answer: Extend BaseHandler with the request and response types and implement the executeAsync() method.
 - question: How do I register a handler?
-  answer: Register the handler in AppBuilder.addServices() using the request intent as the service token.
+  answer: Register the handler in XenoAppBuilder.addServices() using the request intent as the service token.
 - question: How is a handler connected to a command or query?
   answer: The handler registration token must exactly match the command or query intent.
 - question: How do I inject dependencies into a handler?
@@ -40,20 +40,20 @@ The handler is associated with a Command or Query through its `intent`.
 
 You need:
 
-* a Xeno.JS `AppBuilder`;
-* a Command or Query;
-* a handler extending `BaseHandler`;
-* the CQRS pipeline enabled with `addPipeline()`;
-* a handler registration whose token matches the request `intent`.
+- a Xeno.JS `XenoAppBuilder`;
+- a Command or Query;
+- a handler extending `BaseHandler`;
+- the CQRS pipeline enabled with `addPipeline()`;
+- a handler registration whose token matches the request `intent`.
 
 For example:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addPipeline()
 ```
 
-`AppBuilder` also creates the application context during initialization, so `BaseHandler` can access the current user context when needed.
+`XenoAppBuilder` configures the application context during build, so `BaseHandler` can access the current user context when needed. `BaseHandler` requires the user-context factory in its constructor; the context module provides it under `TOKENS.USER_CONTEXT_FACTORY`.
 
 ## Create a Handler
 
@@ -134,7 +134,7 @@ export class FindUserHandler extends BaseHandler<
 
 The public `handle()` method receives an `AbortSignal` and checks whether the operation has already been aborted before executing the handler.
 
-The current `BaseHandler` implementation pass that signal from `handle()` into `executeAsync()`.
+The current `BaseHandler` implementation passes that signal from `handle()` into `executeAsync()`.
 
 So, the `signal` parameter declared by `executeAsync()` is automatically populated by `BaseHandler`.
 
@@ -146,6 +146,7 @@ For example:
 
 ```ts
 import type { ResultType } from '@xeno-js/shared'
+import type { IFactory, UserContext } from '@xeno-js/shared'
 import { BaseHandler } from '@xeno-js/core'
 
 import type { CreateUserCommand } from './create-user.command'
@@ -166,7 +167,7 @@ export class CreateUserHandler extends BaseHandler<
 > {
   constructor(
     private readonly userRepository: UserRepository,
-    userContextFactory: UserContextFactory,
+    userContextFactory: IFactory<void, UserContext>,
   ) {
     super(userContextFactory)
   }
@@ -190,7 +191,7 @@ This keeps dependency construction outside the handler itself.
 
 ## Register a Handler
 
-Register handlers through `AppBuilder.addServices()`.
+Register handlers through `XenoAppBuilder.addServices()`.
 
 The registration token must match the request `intent`.
 
@@ -203,12 +204,14 @@ super('CreateUserCommand')
 register the handler as:
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 container.addTransient(
   'CreateUserCommand',
   (scope) => {
     return new CreateUserHandler(
       scope.resolve('USER_REPOSITORY'),
-      scope.resolve('USER_CONTEXT_FACTORY'),
+      scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
     )
   },
 )
@@ -229,21 +232,22 @@ CreateUserHandler
 
 The intent and registration token must match exactly.
 
-## Register a Handler with `AppBuilder`
+## Register a Handler with `XenoAppBuilder`
 
 A complete application configuration can look like this:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { TOKENS } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addTransient(
       'CreateUserCommand',
       (scope) => {
         return new CreateUserHandler(
           scope.resolve('USER_REPOSITORY'),
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
@@ -264,7 +268,9 @@ Register dependencies before resolving them from the handler factory.
 For example:
 
 ```ts
-const app = new AppBuilder()
+import { TOKENS } from '@xeno-js/shared'
+
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addScoped(
       'USER_REPOSITORY',
@@ -280,7 +286,7 @@ const app = new AppBuilder()
       (scope) => {
         return new CreateUserHandler(
           scope.resolve('USER_REPOSITORY'),
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
@@ -325,12 +331,14 @@ export class GetProfileHandler extends BaseHandler<
 }
 ```
 
-`BaseHandler` receives the `USER_CONTEXT_FACTORY` dependency from the application context.
+`BaseHandler` requires the user-context factory in its constructor. The application context registers it under `TOKENS.USER_CONTEXT_FACTORY`.
 
 When registering the handler manually, resolve it from the service scope:
 
 ```ts
-scope.resolve('USER_CONTEXT_FACTORY')
+import { TOKENS } from '@xeno-js/shared'
+
+scope.resolve(TOKENS.USER_CONTEXT_FACTORY)
 ```
 
 This dependency is registered by Xeno.JS's application context setup.
@@ -342,7 +350,7 @@ A Command defines its intent when it extends `Command`.
 For example:
 
 ```ts
-import { Command } from '@xeno-js/shared'
+import { Command } from '@xeno-js/core'
 
 export class CreateUserCommand extends Command<User> {
   constructor(
@@ -357,11 +365,13 @@ export class CreateUserCommand extends Command<User> {
 Register the corresponding handler with the same intent:
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 container.addTransient(
   'CreateUserCommand',
   (scope) => {
     return new CreateUserHandler(
-      scope.resolve('USER_CONTEXT_FACTORY'),
+      scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
     )
   },
 )
@@ -376,7 +386,7 @@ Queries use the same mechanism.
 For example:
 
 ```ts
-import { Query } from '@xeno-js/shared'
+import { Query } from '@xeno-js/core'
 
 export class FindUserQuery extends Query<User> {
   constructor(
@@ -399,12 +409,14 @@ export class FindUserQuery extends Query<User> {
 Register the handler using the same intent:
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 container.addTransient(
   'FindUserQuery',
   (scope) => {
     return new FindUserHandler(
       scope.resolve('USER_REPOSITORY'),
-      scope.resolve('USER_CONTEXT_FACTORY'),
+      scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
     )
   },
 )
@@ -414,9 +426,9 @@ For query-specific caching configuration, see [Caching](../pipelines/caching).
 
 ## Execute the Handler Through the Mediator
 
-Handlers are normally not called directly.
+Handlers are normally not called directly. The mediator resolves the pipeline and handler from the active service scope, so execute requests within an application scope.
 
-Send a Command through the mediator:
+Send a Command through the mediator while an application service scope is active:
 
 ```ts
 const result = await mediator.send(
@@ -428,7 +440,7 @@ const result = await mediator.send(
 )
 ```
 
-Or execute a Query:
+Or execute a Query while an application service scope is active:
 
 ```ts
 const result = await mediator.query(
@@ -437,7 +449,7 @@ const result = await mediator.query(
 )
 ```
 
-The mediator uses the request `intent` to resolve the corresponding handler.
+The mediator uses the request `intent` to resolve the corresponding handler from the active service scope.
 
 This means that the following three pieces must agree:
 
@@ -468,7 +480,7 @@ src/
 ### `create-user.command.ts`
 
 ```ts
-import { Command } from '@xeno-js/shared'
+import { Command } from '@xeno-js/core'
 
 export interface User {
   id: string
@@ -518,17 +530,18 @@ export class CreateUserHandler extends BaseHandler<
 ### `app.ts`
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { TOKENS } from '@xeno-js/shared'
 
 import { CreateUserHandler } from './application/users/create-user.handler'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addTransient(
       'CreateUserCommand',
       (scope) => {
         return new CreateUserHandler(
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
@@ -545,13 +558,15 @@ Once the application is built, the handler is available to the CQRS execution fl
 A more typical application handler delegates persistence to a repository:
 
 ```ts
+import type { IFactory, UserContext } from '@xeno-js/shared'
+
 export class CreateUserHandler extends BaseHandler<
   CreateUserCommand,
   User
 > {
   constructor(
     private readonly userRepository: UserRepository,
-    userContextFactory: UserContextFactory,
+    userContextFactory: IFactory<void, UserContext>,
   ) {
     super(userContextFactory)
   }
@@ -572,7 +587,9 @@ export class CreateUserHandler extends BaseHandler<
 Register both services:
 
 ```ts
-const app = new AppBuilder()
+import { TOKENS } from '@xeno-js/shared'
+
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addScoped(
       'USER_REPOSITORY',
@@ -588,7 +605,7 @@ const app = new AppBuilder()
       (scope) => {
         return new CreateUserHandler(
           scope.resolve('USER_REPOSITORY'),
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
@@ -646,10 +663,12 @@ super('CreateUserCommand')
 requires:
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 container.addTransient(
   'CreateUserCommand',
   (scope) => new CreateUserHandler(
-    scope.resolve('USER_CONTEXT_FACTORY'),
+    scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
   ),
 )
 ```
@@ -667,7 +686,7 @@ Do not resolve and execute handlers manually outside the application scope when 
 If the mediator reports that the CQRS pipeline is unavailable, ensure that the application includes:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addPipeline()
 ```
 
@@ -682,6 +701,8 @@ await app.build()
 If a handler constructor dependency cannot be resolved, verify that the dependency is registered before the handler is created:
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 .addServices((container) => {
   container.addScoped(
     'USER_REPOSITORY',
@@ -694,7 +715,7 @@ If a handler constructor dependency cannot be resolved, verify that the dependen
     'CreateUserCommand',
     (scope) => new CreateUserHandler(
       scope.resolve('USER_REPOSITORY'),
-      scope.resolve('USER_CONTEXT_FACTORY'),
+      scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
     ),
   )
 })
@@ -706,29 +727,29 @@ The token passed to `scope.resolve()` must correspond to a registered service.
 
 Before running your application, verify:
 
-* [ ] the handler extends `BaseHandler`;
-* [ ] the request type matches the Command or Query;
-* [ ] the response type matches the request response;
-* [ ] `executeAsync()` is implemented;
-* [ ] required dependencies are declared in the constructor;
-* [ ] the handler is registered with `addServices()`;
-* [ ] the registration token exactly matches the request `intent`;
-* [ ] `addPipeline()` is enabled;
-* [ ] the application is built with `await app.build()`;
-* [ ] the Command is sent with `mediator.send()`;
-* [ ] the Query is executed with `mediator.query()`.
+- [ ] the handler extends `BaseHandler`;
+- [ ] the request type matches the Command or Query;
+- [ ] the response type matches the request response;
+- [ ] `executeAsync()` is implemented;
+- [ ] required dependencies are declared in the constructor;
+- [ ] the handler is registered with `addServices()`;
+- [ ] the registration token exactly matches the request `intent`;
+- [ ] `addPipeline()` is enabled;
+- [ ] the application is built with `await app.build()`;
+- [ ] the Command is sent with `mediator.send()`;
+- [ ] the Query is executed with `mediator.query()`.
 
 ## Related Documentation
 
-* [CQRS Overview](./overview)
-* [Creating Commands](./command)
-* [Creating Queries](./query)
-* [Validation Pipeline](../pipelines/validation)
-* [Caching](../pipelines/caching)
-* [Idempotency](../pipelines/idempotency)
-* [Concurrency](../pipelines/concurrency)
-* [Dependency Injection](../../fundamentals/dependency-injection)
-* [App Builder](../../fundamentals/app-builder)
+- [CQRS Overview](./overview)
+- [Creating Commands](./command)
+- [Creating Queries](./query)
+- [Validation Pipeline](../pipelines/validation)
+- [Caching](../pipelines/caching)
+- [Idempotency](../pipelines/idempotency)
+- [Concurrency](../pipelines/concurrency)
+- [Dependency Injection](../../fundamentals/dependency-injection)
+- [App Builder](../../fundamentals/app-builder)
 
 ---
 

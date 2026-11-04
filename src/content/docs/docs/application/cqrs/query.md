@@ -20,13 +20,13 @@ faqs:
 - question: How do I create a Query in Xeno.JS?
   answer: Extend the Query class, define the query parameters, provide cache options, and connect the query to a handler.
 - question: How do I execute a Query?
-  answer: Execute the query through the mediator using mediator.query(query, signal).
+  answer: Call mediator.query(query, signal) inside an active service scope.
 - question: Do Xeno.JS Queries require cache options?
   answer: Yes. The Query constructor requires an ICacheableOptions object, even when query caching is not enabled.
 - question: How do I enable Query caching?
-  answer: Enable the query pipeline with queryBus.isEnabled through AppBuilder.addPipeline().
+  answer: Add withQueryCaching() to XenoAppBuilder.addPipeline() and configure a cache provider if needed.
 - question: How do I validate a Query?
-  answer: Configure validation through AppBuilder.addPipeline() and register a Zod schema using the Query intent as its key.
+  answer: Add withZodValidation() from @xeno-js/zod to addPipeline() and register a Zod schema under the Query intent.
 - question: Can I bypass the cache for a Query?
   answer: Yes. Set bypassCache or consistentRead to true in the Query cache options.
 - question: Can Query results be scoped to the current user?
@@ -51,29 +51,29 @@ A Xeno.JS Query:
 
 You need:
 
-* an `AppBuilder` instance;
-* CQRS pipeline configuration through `addPipeline()`;
-* a Query class;
-* a Query handler;
-* a service scope available when the Query is executed.
+- an `XenoAppBuilder` instance;
+- CQRS pipeline configuration through `addPipeline()`;
+- a Query class;
+- a Query handler;
+- a service scope available when the Query is executed.
 
 If you use validation, you also need a Zod schema or a custom validation strategy.
 
-If you use Query caching, you must enable the Query pipeline.
+If you use Query caching, add the `withQueryCaching()` plugin to the Query pipeline.
 
 ## Enable CQRS
 
-Configure the CQRS pipeline through `AppBuilder.addPipeline()`.
+Configure CQRS through `XenoAppBuilder.addPipeline()`.
 
 The minimal configuration is:
 
 ```ts
-import { AppBuilder } from 'xeno'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addPipeline()
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 `addPipeline()` registers the CQRS infrastructure required to execute Commands and Queries.
@@ -82,10 +82,10 @@ It also initializes the default application services used by the CQRS pipeline.
 
 ## Create a Query
 
-Extend the `Query` class from `@xeno-js/shared`.
+Extend the `Query` class from `@xeno-js/core`.
 
 ```ts
-import { Query } from '@xeno-js/shared'
+import { Query } from '@xeno-js/core'
 
 export interface User {
   id: string
@@ -254,37 +254,35 @@ Use user-scoped caching for data that must not be shared between users.
 
 ## Enable Query caching
 
-Query caching is enabled through `queryBus.isEnabled`.
+Query caching is enabled by adding the `withQueryCaching()` plugin to `addPipeline()`.
 
-Configure it in `addPipeline()`:
+Configure it as follows:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-  })
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
 
-const container = await app.build()
+const app = new XenoAppBuilder()
+  .addPipeline(withQueryCaching())
+
+await app.build()
 ```
 
-Once enabled, Xeno.JS adds Query caching to the Query pipeline.
+When the plugin is enabled and no cache is already registered, the CQRS module configures the in-memory cache by default. To use another provider, configure it through `addCache()`.
 
 You do not need to add `QueryCachingPipeline` manually.
 
 ### Configure the cache provider
 
-`AppBuilder` provides an in-memory cache configuration by default.
+`XenoAppBuilder` provides an in-memory cache configuration by default.
 
 You can explicitly enable the in-memory cache:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addCache((config) => {
     config.inMemory = true
   })
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-  })
+  .addPipeline(withQueryCaching())
 
 await app.build()
 ```
@@ -292,24 +290,27 @@ await app.build()
 A Redis configuration can also be supplied through `addCache()`:
 
 ```ts
-const app = new AppBuilder()
-  .addCache((config) => {
-    config.inMemory = false
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+import { withRedis } from '@xeno-js/redis'
 
-    config.redis = {
-      // Redis configuration
+const app = new XenoAppBuilder()
+  .addCache(withRedis((options, config) => {
+    options.host = config.get('REDIS_HOST') ?? 'localhost'
+    options.port = config.getNumber('REDIS_PORT') ?? 6379
+    options.options = {
+      ...options.options,
+      username: config.getOrThrow('REDIS_USERNAME'),
+      password: config.getOrThrow('REDIS_PASSWORD'),
     }
-  })
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-  })
+  }))
+  .addPipeline(withQueryCaching())
 
 await app.build()
 ```
 
-The exact Redis options depend on the configured `CacheConfig` type.
+`withRedis()` is provided by `@xeno-js/redis`; its options are adapter-specific. `withQueryCaching()` comes from `@xeno-js/core`.
 
-If no cache strategy is configured, the cache module cannot initialize.
+If you explicitly configure `addCache()`, provide a valid cache strategy. With no explicit cache registration, enabling query caching uses the in-memory provider.
 
 ## Create a Query schema
 
@@ -350,14 +351,15 @@ export const getUserQuerySchema = z.object({
 The schema is registered using the Query intent:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.validation.zod = {
-      schemas: {
-        GetUserQuery: getUserQuerySchema,
-      },
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withZodValidation } from '@xeno-js/zod'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withZodValidation((options) => {
+    options.schemas = {
+      GetUserQuery: getUserQuerySchema,
     }
-  })
+  }))
 ```
 
 See [Validation Pipeline](../pipelines/validation) for the validation configuration and behavior.
@@ -380,10 +382,11 @@ A Query needs a handler registered under the same `intent`.
 Extend `BaseHandler` and implement `executeAsync()`:
 
 ```ts
+import { AppError } from '@xeno-js/shared'
 import type { ResultType } from '@xeno-js/shared'
 import { Result } from '@xeno-js/shared'
 
-import { BaseHandler } from '@/application'
+import { BaseHandler } from '@xeno-js/core'
 import type { User } from './user.types'
 import { GetUserQuery } from './get-user.query'
 
@@ -397,9 +400,7 @@ export class GetUserHandler extends BaseHandler<
     const user = await this.findUser(request.userId)
 
     if (!user) {
-      return Result.fail(
-        new Error('User not found'),
-      )
+      return Result.fail(AppError.notFound('GetUserHandler', 'User not found'))
     }
 
     return Result.ok(user)
@@ -433,13 +434,16 @@ super('GetUserQuery', {
 register the handler using `GetUserQuery`:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { TOKENS } from '@xeno-js/shared'
+
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addTransient(
       'GetUserQuery',
       (scope) => {
         return new GetUserHandler(
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
@@ -464,14 +468,17 @@ If the intent and registration token differ, Xeno.JS cannot resolve the handler.
 ## Execute a Query
 
 Queries are executed through the mediator with `mediator.query()`.
+The mediator resolves the Query pipeline and Handler from the active service scope.
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 const query = new GetUserQuery('user-123')
 
-const result = await mediator.query(
-  query,
-  new AbortController().signal,
-)
+const result = await application.runInScope(async (services) => {
+  const mediator = services[TOKENS.MEDIATOR]
+  return mediator.query(query, new AbortController().signal)
+})
 ```
 
 The result is a `ResultType<TResponse>`.
@@ -514,7 +521,7 @@ export interface User {
 ### `get-user.query.ts`
 
 ```ts
-import { Query } from '@xeno-js/shared'
+import { Query } from '@xeno-js/core'
 
 import type { User } from './user.types'
 
@@ -551,7 +558,7 @@ export const getUserQuerySchema = z.object({
 import type { ResultType } from '@xeno-js/shared'
 import { Result } from '@xeno-js/shared'
 
-import { BaseHandler } from '@/application'
+import { BaseHandler } from '@xeno-js/core'
 
 import { GetUserQuery } from './get-user.query'
 import type { User } from './user.types'
@@ -577,56 +584,54 @@ export class GetUserHandler extends BaseHandler<
 ### `bootstrap.ts`
 
 ```ts
-import { AppBuilder } from 'xeno'
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+import { TOKENS } from '@xeno-js/shared'
+import { withZodValidation } from '@xeno-js/zod'
 
 import { GetUserHandler } from './application/users/get-user.handler'
+import { GetUserQuery } from './application/users/get-user.query'
 import { getUserQuerySchema } from './application/users/get-user.query.schema'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addTransient(
       'GetUserQuery',
       (scope) => {
         return new GetUserHandler(
-          scope.resolve('USER_CONTEXT_FACTORY'),
+          scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
         )
       },
     )
   })
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-
-    config.validation.zod = {
-      schemas: {
+  .addPipeline([
+    withQueryCaching(),
+    withZodValidation((options) => {
+      options.schemas = {
         GetUserQuery: getUserQuerySchema,
-      },
-    }
-  })
+      }
+    }),
+  ])
 
-const container = await app.build()
-
-const mediator = container.resolve('MEDIATOR')
+const application = await app.build()
 
 const query = new GetUserQuery('user-123')
 
-const result = await mediator.query(
-  query,
-  new AbortController().signal,
-)
+const result = await application.runInScope(async (services) => {
+  const mediator = services[TOKENS.MEDIATOR]
+  return mediator.query(query, new AbortController().signal)
+})
 
-if (result.isOk()) {
-  console.log(result.getValueOrThrow())
-}
+if (result.isOk()) console.log(result.getValueOrThrow())
 ```
 
 This setup provides:
 
-* a Query with typed input and output;
-* a registered Query handler;
-* Zod validation;
-* Query caching;
-* a cache key based on the Query parameter;
-* execution through the mediator.
+- a Query with typed input and output;
+- a registered Query handler;
+- Zod validation;
+- Query caching;
+- a cache key based on the Query parameter;
+- execution through the mediator.
 
 ## Understand Query caching behavior
 
@@ -719,10 +724,12 @@ super('GetUserQuery', {
 must be registered as:
 
 ```ts
+import { TOKENS } from '@xeno-js/shared'
+
 container.addTransient(
   'GetUserQuery',
   (scope) => new GetUserHandler(
-    scope.resolve('USER_CONTEXT_FACTORY'),
+    scope.resolve(TOKENS.USER_CONTEXT_FACTORY),
   ),
 )
 ```
@@ -731,18 +738,16 @@ container.addTransient(
 
 Check:
 
-1. `queryBus.isEnabled` is `true`;
+1. `withQueryCaching()` is passed to `addPipeline()`;
 2. `addPipeline()` is called;
 3. the Query has a non-empty `cacheKey`;
-4. `addCache()` has a valid cache strategy;
+4. if `addCache()` is configured explicitly, it has a valid cache strategy (otherwise query caching uses the default in-memory cache);
 5. the Query parameters are represented in the cache key.
 
 For example:
 
 ```ts
-.addPipeline((config) => {
-  config.queryBus.isEnabled = true
-})
+.addPipeline(withQueryCaching())
 ```
 
 and:
@@ -762,7 +767,7 @@ super('GetUserQuery', {
 Check whether caching is enabled:
 
 ```ts
-config.queryBus.isEnabled = true
+withQueryCaching()
 ```
 
 Configuring a cache provider alone does not add Query caching to the Query pipeline.
@@ -771,19 +776,19 @@ Configuring a cache provider alone does not add Query caching to the Query pipel
 
 Check:
 
-1. `addPipeline()` is configured;
-2. `validation.zod` contains a schema;
+1. `addPipeline()` includes `withZodValidation(...)`;
+2. the plugin registers a schema;
 3. the schema is registered using the exact Query intent;
 4. the Query is executed through the mediator.
 
 For example:
 
 ```ts
-config.validation.zod = {
-  schemas: {
+withZodValidation((options) => {
+  options.schemas = {
     GetUserQuery: getUserQuerySchema,
-  },
-}
+  }
+})
 ```
 
 The key must match:
@@ -828,14 +833,14 @@ isUserScoped: true
 
 ## Related documentation
 
-* [CQRS Overview](./overview) — Find the Query, Command, and Handler guides.
-* [Creating Commands](./command) — Create and execute Commands.
-* [Creating Handlers](./handler) — Create and register Query and Command handlers.
-* [Validation Pipeline](../pipelines/validation) — Validate Queries and Commands with Zod or custom validation.
-* [Caching Pipeline](../pipelines/caching) — Configure and understand Query caching.
-* [Performance Pipeline](../pipelines/performance) — Track slow Query executions.
-* [Logging Pipeline](../pipelines/logging) — Configure CQRS logging.
-* [Exception Pipeline](../pipelines/exception) — Handle exceptions during Query execution.
+- [CQRS Overview](./overview) — Find the Query, Command, and Handler guides.
+- [Creating Commands](./command) — Create and execute Commands.
+- [Creating Handlers](./handler) — Create and register Query and Command handlers.
+- [Validation Pipeline](../pipelines/validation) — Validate Queries and Commands with Zod or custom validation.
+- [Caching Pipeline](../pipelines/caching) — Configure and understand Query caching.
+- [Performance Pipeline](../pipelines/performance) — Track slow Query executions.
+- [Logging Pipeline](../pipelines/logging) — Configure CQRS logging.
+- [Exception Pipeline](../pipelines/exception) — Handle exceptions during Query execution.
 
 ---
 

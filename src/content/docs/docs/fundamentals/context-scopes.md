@@ -7,8 +7,8 @@ keywords:
 - request context
 - service scope
 - scoped services
-- ContainerUtils
-- resolveServiceScoped
+- getScopedServices
+- runInScope
 - UserContext
 - dependency injection scope
 tags:
@@ -20,9 +20,9 @@ faqs:
 - question: How do I access the current request context in Xeno.JS?
   answer: Resolve the context accessor and call getContext() to access the current RequestContext.
 - question: How do I access the current service scope?
-  answer: Resolve the SERVICE_SCOPE_ACCESSOR and call getScope() to retrieve the active service scope.
+  answer: Use getScopedServices() to access registered services through the active scope, or getServices().serviceScopeAccessor.getScope() to retrieve the scope itself.
 - question: How do I resolve a scoped service from the Xeno.JS container?
-  answer: Use ContainerUtils.resolveServiceScoped() with the service token and application container while an active service scope exists.
+  answer: Use getScopedServices() while a scope is active, or runInScope() to create a scope for an operation.
 - question: How do I register a scoped service?
   answer: Register it with container.addScoped() and resolve it through the active service scope.
 - question: How do I access the current user identity?
@@ -39,23 +39,34 @@ Xeno.JS uses **request context** and **service scopes** to make request-specific
 
 Use this page when you need to:
 
-* access the current request context;
-* access the current user identity;
-* resolve a scoped service from application code;
-* work with `ContainerUtils.resolveServiceScoped()`;
-* create or use a service scope explicitly;
-* understand when scoped services are available;
-* access context from commands, queries, handlers, or transport code.
+- access the current request context;
+- access the current user identity;
+- resolve a scoped service from application code;
+- use `getScopedServices()` or `runInScope()`;
+- create or use a service scope explicitly;
+- understand when scoped services are available;
+- access context from commands, queries, handlers, or transport code.
 
 ## Before you start
 
 You should already have:
 
-* an [`AppBuilder`](./app-builder);
-* services registered in the Xeno.JS container;
-* an understanding of [Dependency Injection](./dependency-injection).
+- an [`XenoAppBuilder`](./app-builder);
+- services registered in the Xeno.JS container;
+- an understanding of [Dependency Injection](./dependency-injection).
 
-`AppBuilder` configures the context infrastructure automatically, so you normally do not need to register the request context yourself.
+With the Node configuration service, `XenoAppBuilder` adds the default context module during `build()` when none has been configured. With the Vite configuration service, configure a context plugin explicitly.
+
+After `build()`, use the returned `XenoApplication` to access services. `getServices()` resolves root services, `getScopedServices()` resolves services through the active scope, and `runInScope()` runs an operation in a new scope.
+
+In the examples below, `application` refers to the value returned by `await builder.build()`. The service proxy exposes registry keys as properties. For example, the built-in logger key is `logger`, so it can be accessed by its registry name or by the token value:
+
+```ts
+import { TOKENS } from '@xeno-js/shared'
+
+const { logger } = application.getServices()
+const loggerByToken = application.getServices().LOGGER
+```
 
 ---
 
@@ -69,10 +80,10 @@ The request context stores information associated with the current application e
 
 You can use it to access:
 
-* the current `RequestContext`;
-* the current user identity;
-* the current service scope;
-* the current network context.
+- the current `RequestContext`;
+- the current user identity;
+- the current service scope;
+- the current network context.
 
 ### Service scope
 
@@ -101,7 +112,7 @@ The service can then be resolved from the active scope.
 If you need the current `RequestContext`, resolve the context accessor:
 
 ```ts
-const contextAccessor = app.resolve('CONTEXT_ACCESSOR')
+const { contextAccessor } = application.getServices()
 
 const context = contextAccessor.getContext()
 ```
@@ -119,7 +130,7 @@ Use the context accessor when application code needs request-specific informatio
 To access the current authenticated identity:
 
 ```ts
-const identityAccessor = app.resolve('IDENTITY_ACCESSOR')
+const { identityAccessor } = application.getServices()
 
 const identity = identityAccessor.getIdentity()
 ```
@@ -129,9 +140,9 @@ The result is `undefined` when there is no active identity.
 You can also update the identity associated with the current context:
 
 ```ts
-const contextAccessor = app.resolve('CONTEXT_ACCESSOR')
+const {requestContext} = application.getServices()
 
-contextAccessor.updateIdentity(identity)
+requestContext.updateIdentity(identity)
 ```
 
 This updates the identity for the current context execution.
@@ -174,7 +185,7 @@ For general request context access, use the context/accessor APIs. For handler-s
 Register services with scoped lifetime using `addScoped()`:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addScoped(
       'USER_REPOSITORY',
@@ -195,79 +206,30 @@ This makes scoped lifetime useful for services that should share state during on
 
 ## Resolve a Scoped Service
 
-There are two ways to work with a scoped service.
+Use the application returned by `build()` to resolve scoped services.
 
-### Resolve directly from a service scope
+### Resolve through the active scope
 
-If you already have the scope:
-
-```ts
-const scope = contextAccessor.getScope()
-
-if (!scope) {
-  throw new Error('An active service scope is required.')
-}
-
-const repository = scope.resolve('USER_REPOSITORY')
-```
-
-This is useful when your code already has access to `IServiceScope`.
-
-### Resolve with `ContainerUtils.resolveServiceScoped()`
-
-When you have the application container but want to resolve a service using the currently active scope, use `ContainerUtils.resolveServiceScoped()`.
+When a request or another execution has already established a scope, use `getScopedServices()`:
 
 ```ts
-import { ContainerUtils } from '@xeno-js/core'
-
-const repository = ContainerUtils.resolveServiceScoped(
-  'USER_REPOSITORY',
-  app,
-)
+const { USER_REPOSITORY: repository } = application.getScopedServices()
 ```
 
-`resolveServiceScoped()`:
+`getScopedServices()` throws if there is no active scope. It returns the registered services through that scope; the property names are the keys in the application registry.
 
-1. gets the active service scope from the container's context;
-2. requires an active scope;
-3. resolves the requested service through that scope;
-4. returns the scoped service instance.
+### Start a new scoped operation
 
-This is particularly useful at integration boundaries where you have the application container available but do not want to manually retrieve the current scope.
-
-For example, an HTTP entry point can resolve a scoped controller:
+For work outside an existing request or execution, use `runInScope()`. The callback receives the services resolved through the new scope:
 
 ```ts
-import { ContainerUtils } from '@xeno-js/core'
-
-const controller = ContainerUtils.resolveServiceScoped(
-  'FIND_USER_CONTROLLER',
-  app,
-)
-
-const result = await controller.handle()
+const result = await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+  // Use the repository within this scope.
+})
 ```
 
-The important distinction is:
-
-```ts
-// Root container
-app.resolve('USER_REPOSITORY')
-```
-
-versus:
-
-```ts
-// Active scope
-ContainerUtils.resolveServiceScoped(
-  'USER_REPOSITORY',
-  app,
-)
-```
-
-A scoped service belongs to the active scope, so it must not be resolved directly from the root container.
-
-If no active scope exists, `resolveServiceScoped()` throws an error indicating that an active service scope is required.
+`runInScope()` creates the request context and service scope for the operation, then disposes the scope when the operation completes. Use `getScopedServices()` inside an existing active scope; use `runInScope()` when the operation needs its own scope.
 
 ---
 
@@ -279,7 +241,7 @@ If a factory receives a service scope, resolve its dependencies from that scope:
 container.addScoped('USER_SERVICE', (scope) => {
   return new UserService(
     scope.resolve('USER_REPOSITORY'),
-    scope.resolve('LOGGER'),
+    scope.resolve(TOKENS.LOGGER),
   )
 })
 ```
@@ -338,7 +300,7 @@ container.addSingleton('CONFIGURATION_SERVICE', () => {
 
 container.addScoped('UNIT_OF_WORK', (scope) => {
   return new UnitOfWork(
-    scope.resolve('DB_CONTEXT'),
+    scope.resolve(TOKENS.DB_CONTEXT),
   )
 })
 
@@ -355,78 +317,55 @@ See [Dependency Injection](./dependency-injection) for registration and lifetime
 
 ## Create a Scope Manually
 
-You can create a service scope directly from the service container:
+The `XenoApplication` returned by `build()` does not expose the container's `createScope()` method. Use `runInScope()` to create and dispose a scope for application work:
 
 ```ts
-const scope = app.createScope()
-
-try {
-  const service = scope.resolve('USER_SERVICE')
-
-  await service.execute()
-} finally {
-  await scope.dispose()
-}
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+  // Use the service within this scope.
+})
 ```
 
-Always dispose manually created scopes when they are no longer needed.
-
-Manual scopes are useful for application executions that are not already running inside an existing request context.
+Use this for executions that are not already running inside an existing request context.
 
 ---
 
-## Use the Scope Factory
+## Use `runInScope()`
 
-When your code needs to create scopes through dependency injection, use the scope factory provided by Xeno.JS.
-
-The factory creates a new service scope:
+`runInScope()` creates the request context and service scope, passes the scoped services proxy to the callback, and disposes the scope when the callback completes:
 
 ```ts
-const scope = scopeFactory.create()
-
-try {
-  const service = scope.resolve('USER_SERVICE')
-
-  await service.execute()
-} finally {
-  await scope.dispose()
-}
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+  // Use the service within this scope.
+})
 ```
 
-Prefer the existing application/request scope when one is already active. Create a new scope only when the execution boundary requires one.
+Prefer the existing application/request scope when one is already active. Start a new scope only when the execution boundary requires one.
 
 ---
 
 ## Run Code with a Request Context
 
-`IRequestContext.runAsync()` establishes the context and service scope for an asynchronous execution:
+Use `runInScope()` to establish a context and service scope for an asynchronous execution:
 
 ```ts
-const requestContext = app.resolve('REQUEST_CONTEXT')
-
-const result = await requestContext.runAsync(
-  requestContextData,
-  async () => {
-    const service = ContainerUtils.resolveServiceScoped(
-      'USER_SERVICE',
-      app,
-    )
-
-    return await service.execute()
-  },
-)
+const result = await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+  // Run the operation that uses the service.
+})
 ```
 
 During the callback:
 
-* the request context is available;
-* the service scope is available;
-* scoped services can be resolved;
-* context accessors can retrieve the current context and scope.
+- the request context is available;
+- the service scope is available;
+- scoped services can be resolved;
+- context accessors can retrieve the current context and scope.
 
 When the callback completes, the scope is disposed.
 
-This makes `runAsync()` the appropriate boundary when you need to execute code with a request context outside an already established execution.
+Use `IRequestContext.runAsync()` when working directly with the request-context contract; for application code, `runInScope()` provides the scope and services together.
 
 ---
 
@@ -435,7 +374,7 @@ This makes `runAsync()` the appropriate boundary when you need to execute code w
 If authentication or another application boundary establishes a new identity during execution, update the current context:
 
 ```ts
-const requestContext = app.resolve('REQUEST_CONTEXT')
+const {requestContext} = application.getServices()
 
 requestContext.updateIdentity(identity)
 ```
@@ -449,9 +388,9 @@ Subsequent context and identity access within the same execution can observe the
 Network information associated with the current request can be accessed through the request context:
 
 ```ts
-const requestContext = app.resolve('REQUEST_CONTEXT')
+const {networkContextAccessor} = application.getServices()
 
-const networkContext = requestContext.getNetworkContext()
+const networkContext = networkContextAccessor.getNetworkContext()
 ```
 
 The value is available only when the current execution has an associated network context.
@@ -467,7 +406,7 @@ Context accessors are safe to call when no execution context is active.
 For example:
 
 ```ts
-const context = contextAccessor.getContext()
+const context = application.getServices().contextAccessor.getContext()
 
 if (!context) {
   // No active context.
@@ -477,29 +416,26 @@ if (!context) {
 Similarly:
 
 ```ts
-const scope = contextAccessor.getScope()
+const scope = application.getServices().serviceScopeAccessor.getScope()
 
 if (!scope) {
   // No active service scope.
 }
 ```
 
-`ContainerUtils.resolveServiceScoped()` behaves differently: it requires an active scope and throws when one is not available.
+`getScopedServices()` behaves differently: it requires an active scope and throws when one is not available.
 
 This distinction is important:
 
 ```ts
 // Optional access
-const scope = contextAccessor.getScope()
+const scope = application.getServices().serviceScopeAccessor.getScope()
 
 // Required scoped resolution
-const service = ContainerUtils.resolveServiceScoped(
-  'USER_SERVICE',
-  app,
-)
+const service = application.getScopedServices().USER_SERVICE
 ```
 
-Use the accessor when absence is a valid condition. Use `resolveServiceScoped()` when the operation requires a scoped service.
+Use the accessor when absence is a valid condition. Use `getScopedServices()` when the operation requires a scoped service in an existing scope, or `runInScope()` when it must create one.
 
 ---
 
@@ -512,22 +448,13 @@ If a job needs scoped services, establish an execution boundary before resolving
 For example:
 
 ```ts
-const requestContext = app.resolve('REQUEST_CONTEXT')
-
-await requestContext.runAsync(
-  backgroundContext,
-  async () => {
-    const service = ContainerUtils.resolveServiceScoped(
-      'USER_SERVICE',
-      app,
-    )
-
-    await service.execute()
-  },
-)
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+  // Run the background operation using this scoped service.
+})
 ```
 
-This gives the job its own service scope and ensures the scope is disposed when the execution finishes.
+This gives the job its own request context and service scope, and disposes the scope when the execution finishes.
 
 Do not rely on a request scope remaining available after the request execution has completed.
 
@@ -566,48 +493,29 @@ export class FindUserHandler extends BaseHandler<
 
 For handlers, prefer constructor injection for declared dependencies.
 
-Use `ContainerUtils.resolveServiceScoped()` mainly at integration or composition boundaries where you have the application container and need to resolve a service from the currently active scope.
+Use `getScopedServices()` at integration or composition boundaries when an execution has already established the scope.
 
 See:
 
-* [Creating Commands](../application/cqrs/command)
-* [Creating Queries](../application/cqrs/query)
-* [Creating and Registering Handlers](../application/cqrs/handler)
+- [Creating Commands](../application/cqrs/command)
+- [Creating Queries](../application/cqrs/query)
+- [Creating and Registering Handlers](../application/cqrs/handler)
 
 ---
 
-## When to Use `ContainerUtils.resolveServiceScoped()`
+## When to Use `getScopedServices()`
 
-`ContainerUtils.resolveServiceScoped()` is especially useful when application code sits at the boundary between a transport and the Xeno.JS application layer.
+`getScopedServices()` is useful when application code sits at the boundary between a transport and the Xeno.JS application layer and needs a service from the active scope.
 
 For example:
 
 ```ts
-const controller = ContainerUtils.resolveServiceScoped(
-  'FIND_USER_CONTROLLER',
-  app,
-)
+const controller = application.getScopedServices().FIND_USER_CONTROLLER
 
-return await controller.handle()
+// Use the controller within the active scope.
 ```
 
-This avoids manually retrieving the current scope:
-
-```ts
-const scope = app
-  .resolve('SERVICE_SCOPE_ACCESSOR')
-  .getScope()
-
-if (!scope) {
-  throw new Error('An active service scope is required.')
-}
-
-const controller = scope.resolve(
-  'FIND_USER_CONTROLLER',
-)
-```
-
-Both approaches resolve through the active scope. `ContainerUtils.resolveServiceScoped()` is the shorter public utility for this common case.
+This method requires an active scope. For work outside an existing scope, use `runInScope()` instead.
 
 ---
 
@@ -615,22 +523,15 @@ Both approaches resolve through the active scope. `ContainerUtils.resolveService
 
 ### `Active service scope is required to execute Scoped service`
 
-You called `ContainerUtils.resolveServiceScoped()` without an active service scope.
+You called `getScopedServices()` without an active service scope.
 
-Check that the code runs inside an established request/context execution:
+Use `runInScope()` when the operation needs to create its own scope:
 
 ```ts
-await requestContext.runAsync(
-  context,
-  async () => {
-    const service = ContainerUtils.resolveServiceScoped(
-      'USER_SERVICE',
-      app,
-    )
-
-    await service.execute()
-  },
-)
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+  // Run the operation using this scoped service.
+})
 ```
 
 If the code is already inside a request execution, verify that the request/context middleware has established the Xeno.JS context before the service is resolved.
@@ -641,22 +542,22 @@ Do not resolve a scoped service directly from the root container:
 
 ```ts
 // Incorrect for a scoped service
-app.resolve('USER_SERVICE')
+application.getServices().USER_SERVICE
 ```
 
-Use an active scope:
+Use an active scope or create one for the operation:
 
 ```ts
-ContainerUtils.resolveServiceScoped(
-  'USER_SERVICE',
-  app,
-)
+application.getScopedServices().USER_SERVICE
 ```
 
 or:
 
 ```ts
-scope.resolve('USER_SERVICE')
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+  // Run the operation using this scoped service.
+})
 ```
 
 ### `getScope()` returns `undefined`
@@ -672,7 +573,7 @@ If the scope exists but the requested token is not registered, normal container 
 Verify that the service is registered before the application is built:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((container) => {
     container.addScoped(
       'USER_SERVICE',
@@ -711,9 +612,9 @@ constructor(
 
 over resolving application dependencies dynamically inside the handler.
 
-### Use `resolveServiceScoped()` at application boundaries
+### Use `getScopedServices()` or `runInScope()` at application boundaries
 
-`ContainerUtils.resolveServiceScoped()` is useful when a transport, adapter, or other boundary has access to the application container and needs a service from the active scope.
+Use `getScopedServices()` when a transport, adapter, or other boundary is already running in a scope. Use `runInScope()` when the operation needs a new scope.
 
 ### Do not resolve scoped services from the root container
 
@@ -723,19 +624,9 @@ Always use an active scope for scoped dependencies.
 
 If Xeno.JS already established a scope for the current execution, reuse it.
 
-### Dispose manually created scopes
+### Let `runInScope()` manage the scope lifetime
 
-If you create a scope yourself, always dispose it:
-
-```ts
-const scope = app.createScope()
-
-try {
-  // Work with the scope.
-} finally {
-  await scope.dispose()
-}
-```
+`runInScope()` disposes the scope when the callback completes. Keep scoped-service work inside that callback.
 
 ### Keep context access transport-independent
 
@@ -747,27 +638,28 @@ Application code should consume context and identity through Xeno.JS APIs rather
 
 Before shipping context-dependent code, verify:
 
-* [ ] scoped services are registered with `addScoped()`;
-* [ ] scoped services are resolved through an active scope;
-* [ ] `ContainerUtils.resolveServiceScoped()` is used when resolving from the application container at a boundary;
-* [ ] request context exists before resolving scoped services;
-* [ ] context accessors handle `undefined` when no context is expected;
-* [ ] manually created scopes are disposed;
-* [ ] scoped services are not used after their scope is disposed;
-* [ ] handlers use dependency injection for their declared dependencies;
-* [ ] transport-specific request objects do not leak into application services unnecessarily.
+- [ ] scoped services are registered with `addScoped()`;
+- [ ] scoped services are resolved through an active scope;
+- [ ] `getScopedServices()` is used only when an active scope exists;
+- [ ] `runInScope()` is used to create a scope for work outside an existing execution;
+- [ ] request context exists before resolving scoped services;
+- [ ] context accessors handle `undefined` when no context is expected;
+- [ ] scoped-service work completes before the `runInScope()` callback returns;
+- [ ] scoped services are not used after their scope is disposed;
+- [ ] handlers use dependency injection for their declared dependencies;
+- [ ] transport-specific request objects do not leak into application services unnecessarily.
 
 ---
 
 ## Related Documentation
 
-* [Fundamentals Overview](./overview)
-* [Dependency Injection](./dependency-injection)
-* [App Builder](./app-builder)
-* [Creating Commands](../application/cqrs/command)
-* [Creating Queries](../application/cqrs/query)
-* [Creating and Registering Handlers](../application/cqrs/handler)
-* [Application Overview](../application/overview)
+- [Fundamentals Overview](./overview)
+- [Dependency Injection](./dependency-injection)
+- [App Builder](./app-builder)
+- [Creating Commands](../application/cqrs/command)
+- [Creating Queries](../application/cqrs/query)
+- [Creating and Registering Handlers](../application/cqrs/handler)
+- [Application Overview](../application/overview)
 
 ---
 

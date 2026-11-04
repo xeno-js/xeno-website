@@ -15,25 +15,25 @@ tags:
 - cqrs
 faqs:
 - question: How do I enable the Performance Pipeline?
-  answer: Call addPipeline() on AppBuilder.
+  answer: Pass withPerformance() to XenoAppBuilder.addPipeline().
 - question: What is the default performance threshold?
   answer: The default global threshold is 500 milliseconds.
 - question: Can I configure a different threshold for a specific intent?
-  answer: Yes. Use config.performance.intentThresholdMs and set the threshold using the request intent as the key.
+  answer: Yes. Configure intentThresholdMs with request intents as keys and thresholdMs objects as values.
 - question: What happens when an intent has no specific threshold?
-  answer: Xeno.JS uses the global config.performance.thresholdMs value as the fallback.
+  answer: Xeno.JS uses the global thresholdMs option, or 500 milliseconds if no global value is configured.
 ---
 
 ## Introduction
 
 The Performance Pipeline measures how long commands and queries take to execute and logs a warning when their execution time exceeds the configured threshold.
 
-You enable it through `AppBuilder.addPipeline()`.
+You enable it by passing `withPerformance()` to `XenoAppBuilder.addPipeline()`.
 
 The pipeline supports two levels of configuration:
 
-* `thresholdMs`: global threshold used for all intents.
-* `intentThresholdMs`: optional thresholds for specific intents.
+- `thresholdMs`: global threshold used for all intents.
+- `intentThresholdMs`: optional thresholds for specific intents.
 
 When an intent has a specific threshold configured, that value takes precedence over the global threshold.
 
@@ -42,22 +42,26 @@ When an intent has a specific threshold configured, that value takes precedence 
 Add the pipeline when configuring your application:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline()
+import { XenoAppBuilder, withPerformance } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withPerformance())
   .build()
 ```
 
-Calling `addPipeline()` enables the CQRS pipelines, including the Performance Pipeline.
+`withPerformance()` adds the Performance Pipeline to the common pipeline behaviors used by commands and queries.
 
 ## Configure the Global Threshold
 
-Use `config.performance.thresholdMs` to define the default threshold for commands and queries.
+Use the `thresholdMs` option to define the default threshold for commands and queries.
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.performance.thresholdMs = 500
-  })
+import { XenoAppBuilder, withPerformance } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withPerformance((options) => {
+    options.thresholdMs = 500
+  }))
   .build()
 ```
 
@@ -73,62 +77,63 @@ The global threshold is used whenever the current request intent does not have a
 
 ## Configure Thresholds by Intent
 
-You can configure a different threshold for individual intents with `config.performance.intentThresholdMs`.
+Use `intentThresholdMs` as a registry of per-intent threshold overrides. Each key must match the request's `intent`; each value is an object containing a `thresholdMs` property.
 
-The object key is the request `intent`, which corresponds to the token associated with the registered handler.
+An intent-specific threshold takes precedence over the global `thresholdMs` option.
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.performance.thresholdMs = 500
+import { XenoAppBuilder, withPerformance } from '@xeno-js/core'
 
-    config.performance.intentThresholdMs = {
-      CREATE_USER_HANDLER: 300,
+const app = new XenoAppBuilder()
+  .addPipeline(withPerformance((options) => {
+    options.thresholdMs = 500
+    options.intentThresholdMs = {
+      CREATE_USER_HANDLER: { thresholdMs: 300 },
     }
-  })
+  }))
   .build()
 ```
 
 In this example:
 
-* all requests use `500ms` by default;
-* requests with intent `CREATE_USER_HANDLER` use `300ms`;
-* the specific `CREATE_USER_HANDLER` threshold overrides the global threshold.
+- all requests use `500ms` by default;
+- requests with intent `CREATE_USER_HANDLER` use `300ms`;
+- the specific `CREATE_USER_HANDLER` threshold overrides the global threshold.
 
 This is useful when different application operations have different expected execution times.
 
-## Global and Intent-Specific Thresholds
+## Global and Intent-Registry Thresholds
 
-You can configure multiple intents independently:
+You can configure multiple intents independently in the `intentThresholdMs` registry:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.performance.thresholdMs = 500
+import { XenoAppBuilder, withPerformance } from '@xeno-js/core'
 
-    config.performance.intentThresholdMs = {
-      CREATE_USER_HANDLER: 300,
-      UPDATE_USER_HANDLER: 400,
-      DELETE_USER_HANDLER: 250,
-      GET_USER_HANDLER: 100,
+const app = new XenoAppBuilder()
+  .addPipeline(withPerformance((options) => {
+    options.thresholdMs = 500
+    options.intentThresholdMs = {
+      CREATE_USER_HANDLER: { thresholdMs: 300 },
+      UPDATE_USER_HANDLER: { thresholdMs: 400 },
+      DELETE_USER_HANDLER: { thresholdMs: 250 },
+      GET_USER_HANDLER: { thresholdMs: 100 },
     }
-  })
+  }))
   .build()
 ```
 
 The effective threshold for a request is selected in this order:
 
-1. `config.performance.intentThresholdMs[request.intent]`
-2. `config.performance.thresholdMs`
+1. `options.intentThresholdMs[request.intent].thresholdMs`
+2. `options.thresholdMs`
 3. the default global threshold of `500ms`
 
 For example, with:
 
 ```ts
-config.performance.thresholdMs = 500
-
-config.performance.intentThresholdMs = {
-  CREATE_USER_HANDLER: 300,
+options.thresholdMs = 500
+options.intentThresholdMs = {
+  CREATE_USER_HANDLER: { thresholdMs: 300 },
 }
 ```
 
@@ -148,23 +153,24 @@ An intent-specific threshold is therefore an override, not an additional thresho
 You can keep the global threshold and override only the operations that require different limits:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.performance.thresholdMs = 1000
+import { XenoAppBuilder, withPerformance } from '@xeno-js/core'
 
-    config.performance.intentThresholdMs = {
-      CREATE_USER_HANDLER: 300,
-      CHECKOUT_HANDLER: 800,
+const app = new XenoAppBuilder()
+  .addPipeline(withPerformance((options) => {
+    options.thresholdMs = 1000
+    options.intentThresholdMs = {
+      CREATE_USER_HANDLER: { thresholdMs: 300 },
+      CHECKOUT_HANDLER: { thresholdMs: 800 },
     }
-  })
+  }))
   .build()
 ```
 
 Here:
 
-* `CREATE_USER_HANDLER` uses `300ms`;
-* `CHECKOUT_HANDLER` uses `800ms`;
-* every other intent uses `1000ms`.
+- `CREATE_USER_HANDLER` uses `300ms`;
+- `CHECKOUT_HANDLER` uses `800ms`;
+- every other intent uses `1000ms`.
 
 ## Performance Warnings
 
@@ -176,55 +182,59 @@ Performance warning: CREATE_USER_HANDLER took 342.17ms
 
 The warning contains:
 
-* the request intent;
-* the measured execution time in milliseconds.
+- the request intent;
+- the measured execution time in milliseconds.
 
 A warning is logged only when the execution time is **greater than** the effective threshold.
 
 For example, with a threshold of `300ms`:
 
-* `299ms` → no warning;
-* `300ms` → no warning;
-* `301ms` → warning.
+- `299ms` → no warning;
+- `300ms` → no warning;
+- `301ms` → warning.
 
 ## Threshold Validation
 
-All thresholds must be positive integers.
+The global `thresholdMs` must be greater than zero. Intent-specific `thresholdMs` values must be positive integers.
 
 For example, this configuration is invalid:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    config.performance.thresholdMs = 0
+import { XenoAppBuilder, withPerformance } from '@xeno-js/core'
 
-    config.performance.intentThresholdMs = {
-      CREATE_USER_HANDLER: -100,
+const app = new XenoAppBuilder()
+  .addPipeline(withPerformance((options) => {
+    options.thresholdMs = 0
+    options.intentThresholdMs = {
+      CREATE_USER_HANDLER: { thresholdMs: -100 },
     }
-  })
+  }))
+  .build()
 ```
 
-Threshold values must be greater than zero and must be integers.
+The global threshold rejects negative values and zero, but is not checked for integer precision. The pipeline validates each intent-specific threshold as a positive integer.
 
-For intent-specific thresholds, each configured value is validated independently.
+Each configured intent threshold is validated independently.
 
 ## Complete Example
 
 The following example configures a global threshold together with different thresholds for selected handlers:
 
 ```ts
-const app = new AppBuilder()
-  .addPipeline((config) => {
-    // Fallback threshold for all intents.
-    config.performance.thresholdMs = 500
+import { XenoAppBuilder, withPerformance } from '@xeno-js/core'
 
-    // Overrides for specific handler intents.
-    config.performance.intentThresholdMs = {
-      CREATE_USER_HANDLER: 300,
-      UPDATE_USER_HANDLER: 400,
-      CHECKOUT_HANDLER: 1000,
+const app = new XenoAppBuilder()
+  .addPipeline(withPerformance((options) => {
+    // Fallback threshold for all intents.
+    options.thresholdMs = 500
+
+    // Overrides for selected intents.
+    options.intentThresholdMs = {
+      CREATE_USER_HANDLER: { thresholdMs: 300 },
+      UPDATE_USER_HANDLER: { thresholdMs: 400 },
+      CHECKOUT_HANDLER: { thresholdMs: 1000 },
     }
-  })
+  }))
   .build()
 ```
 
@@ -244,10 +254,12 @@ The Performance Pipeline applies to both commands and queries executed through t
 The intent-specific configuration works the same way for both:
 
 ```ts
-config.performance.intentThresholdMs = {
-  CREATE_USER_HANDLER: 300,
-  GET_USER_HANDLER: 100,
-}
+withPerformance((options) => {
+  options.intentThresholdMs = {
+    CREATE_USER_HANDLER: { thresholdMs: 300 },
+    GET_USER_HANDLER: { thresholdMs: 100 },
+  }
+})
 ```
 
 The intent identifies the operation being executed, regardless of whether it is a command or query.
@@ -256,35 +268,20 @@ The intent identifies the operation being executed, regardless of whether it is 
 
 ### My intent-specific threshold is ignored
 
-Check that the key in `intentThresholdMs` exactly matches the request `intent`:
+Check that the registry key in `intentThresholdMs` exactly matches the request `intent`, and that its value contains `thresholdMs`:
 
 ```ts
-config.performance.intentThresholdMs = {
-  CREATE_USER_HANDLER: 300,
-}
-
-// Check if you added the handler in the container with the same key
-container.addScoped('CREATE_USER_HANDLER', () => new CreateUserHandler())
-
-// Check if you are using the correct intent in the command or query
-export class CreateUserCommand extends Command<null> {
-  constructor() {
-    super('CREATE_USER_HANDLER')
-  }
-}
-
-// Che if you are using the correct key in the registry
-export type MyRegistry {
-  CREATE_USER_HANDLER: CreateUserHandler
+options.intentThresholdMs = {
+  CREATE_USER_HANDLER: { thresholdMs: 300 },
 }
 ```
 
-The key must be the same intent associated with the handler.
+The pipeline compares the key directly with `request.intent`.
 
 If the intent does not match, Xeno.JS falls back to:
 
 ```ts
-config.performance.thresholdMs
+options.thresholdMs
 ```
 
 ### I expected a warning at exactly the threshold
@@ -294,14 +291,14 @@ The pipeline logs a warning only when execution time is greater than the thresho
 With:
 
 ```ts
-config.performance.thresholdMs = 500
+options.thresholdMs = 500
 ```
 
 an execution time of exactly `500ms` does not generate a warning.
 
 ### My threshold value is rejected
 
-Check that the value is a positive integer.
+Check that the global value is greater than zero. Intent-specific values must be positive integers.
 
 Valid:
 
@@ -311,23 +308,24 @@ Valid:
 1000
 ```
 
-Invalid:
+Invalid global values:
 
 ```ts
 0
 -100
-250.5
 ```
+
+An intent-specific value such as `250.5` is also invalid because intent thresholds must be integers.
 
 ## Related Documentation
 
-* [Application](../overview)
-* [CQRS](../cqrs/overview)
-* [Commands](../cqrs/command)
-* [Queries](../cqrs/query)
-* [Handlers](../cqrs/handler)
-* [Exception Pipeline](./exception)
-* [Logging Pipeline](./logging)
+- [Application](../overview)
+- [CQRS](../cqrs/overview)
+- [Commands](../cqrs/command)
+- [Queries](../cqrs/query)
+- [Handlers](../cqrs/handler)
+- [Exception Pipeline](./exception)
+- [Logging Pipeline](./logging)
 
 ---
 

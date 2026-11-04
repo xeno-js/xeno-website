@@ -18,7 +18,7 @@ tags:
 - cqrs
 faqs:
 - question: How do I enable logging for commands and queries?
-  answer: Add the CQRS pipeline with AppBuilder. The Logging Pipeline is included automatically.
+  answer: Add the CQRS pipeline with XenoAppBuilder. The CQRS module adds the Logging Pipeline as a common behavior for commands and queries.
 - question: How do I configure the minimum log level?
   answer: Use addLogger() and set config.level.
 - question: Does the Logging Pipeline log successful requests?
@@ -26,9 +26,9 @@ faqs:
 - question: Does the Logging Pipeline log failed Results?
   answer: Yes. When the request returns a failed Result, the pipeline logs the error and returns the original Result unchanged.
 - question: Does the Logging Pipeline log thrown exceptions?
-  answer: Yes. If the request execution throws, the pipeline logs the exception and rethrows it.
+  answer: The Logging Pipeline logs and rethrows thrown exceptions to the surrounding behavior; the CQRS Exception Pipeline can then return a failed Result.
 - question: Can I send logs to Pino or Sentry?
-  answer: Yes. Xeno.JS supports console logging, Pino, Sentry, and custom logger clients.
+  answer: Yes. Register the corresponding provider plugins with addLogger(); provider-specific options belong to those plugins.
 ---
 
 ## Introduction
@@ -37,10 +37,10 @@ The Logging Pipeline logs the execution of commands and queries handled through 
 
 It records:
 
-* when a request starts;
-* when a request completes successfully;
-* when a request returns a failed `Result`;
-* when request execution throws an exception.
+- when a request starts;
+- when a request completes successfully;
+- when a request returns a failed `Result`;
+- when request execution throws an exception.
 
 The pipeline uses the application logger, so you can configure where logs are written without changing your commands or handlers.
 
@@ -48,25 +48,26 @@ The pipeline uses the application logger, so you can configure where logs are wr
 
 You need:
 
-* an `AppBuilder` instance;
-* a command or query handled through the Xeno.JS mediator;
-* the CQRS pipeline enabled with `addPipeline()`.
+- an `XenoAppBuilder` instance;
+- a command or query handled through the Xeno.JS mediator;
+- the CQRS pipeline enabled with `addPipeline()`.
 
 You do **not** need to register the `LoggingPipeline` manually.
 
 ## Enable logging
 
-Enable the CQRS pipeline through `AppBuilder`:
+Enable the CQRS pipeline through `XenoAppBuilder`:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addPipeline()
-  .build()
+
+const application = await app.build()
 ```
 
-When `addPipeline()` is configured, Xeno.JS adds the logging pipeline together with the other common CQRS pipelines.
+When `addPipeline()` is configured, the CQRS module adds the Logging Pipeline as a common behavior. It also adds a logger if none has been registered.
 
 Both commands and queries use the logging pipeline.
 
@@ -77,28 +78,31 @@ Use `addLogger()` to configure the logger used by the application.
 For example, to configure the minimum log level:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { LOG_LEVEL } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addLogger((config) => {
     config.level = LOG_LEVEL.INFO
   })
   .addPipeline()
-  .build()
+
+const application = await app.build()
 ```
 
-The available configuration includes:
+The `addLogger()` setup callback configures core logger settings. Provider
+options are configured through the provider's logger plugin:
 
 | Option          | Description                                                    |
 | --------------- | -------------------------------------------------------------- |
 | `level`         | Minimum log level forwarded to the configured logging clients. |
 | `console`       | Enables or disables console logging.                           |
-| `sentry.config` | Configures Sentry logging.                                     |
-| `pino.config`   | Configures Pino logging.                                       |
 | `customLoggers` | Registers custom logging clients.                              |
 
-The default `AppBuilder` configuration uses console logging and the `DEBUG` level.
+`addLogger()` also accepts a logger plugin or an array of plugins. If the CQRS
+module needs a logger and none has been registered, it adds one during
+application build. See the [logger overview](../logging/overview) for logger
+defaults and provider setup.
 
 ## Choose the log level
 
@@ -107,129 +111,133 @@ Xeno.JS filters messages below the configured minimum level.
 For example:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { LOG_LEVEL } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addLogger((config) => {
     config.level = LOG_LEVEL.WARN
   })
   .addPipeline()
-  .build()
+
+const application = await app.build()
 ```
 
 With `LOG_LEVEL.WARN`, informational messages from the Logging Pipeline are filtered out, while warnings and errors remain available to logging clients.
 
 The Logging Pipeline itself uses:
 
-* `info` for request start;
-* `info` for successful completion;
-* `error` for failed `Result` values;
-* `error` for thrown exceptions.
+- `info` for request start;
+- `info` for successful completion;
+- `error` for failed `Result` values;
+- `error` for thrown exceptions.
 
 ## Configure console logging
 
-Console logging is enabled by default.
+The default Console provider is enabled by default. The CQRS module adds a
+logger when needed, so logging works without manually registering one.
 
 You can configure it explicitly:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addLogger((config) => {
     config.console = true
   })
-  .addPipeline()
-  .build()
+
+app.addPipeline()
+
+const application = await app.build()
 ```
 
 To disable the console logger:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addLogger((config) => {
     config.console = false
   })
-  .addPipeline()
-  .build()
+
+app.addPipeline()
+
+const application = await app.build()
 ```
 
-Disabling the console logger does not disable the Logging Pipeline itself. The pipeline can still send logs to other configured logging clients.
+Disabling the Console provider does not disable the Logging Pipeline itself.
+Logs can still be sent to other configured logger clients.
 
 ## Configure Pino
 
-Xeno.JS can use Pino as a logging client.
-
-Configure it through `pino.config`:
+Register the Pino logger plugin from `@xeno-js/pino`. The plugin callback
+receives Pino-specific options; these are separate from the core logger setup
+callback:
 
 ```ts
-const app = new AppBuilder()
-  .addLogger((config) => {
-    config.pino.config = {
-      destination: 'stdout',
-      prettyPrint: true,
-      env: 'development',
-    }
-  })
-  .addPipeline()
-  .build()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
+
+const app = new XenoAppBuilder()
+  .addLogger(withPinoLogger((options) => {
+    options.destination = 'stdout'
+  }))
+
+app.addPipeline()
+
+const application = await app.build()
 ```
 
 ### Write Pino logs to a file
 
-Set `destination` to `file` and provide a file path:
+Set `destination` to `file` and provide a file path through the Pino plugin:
 
 ```ts
-const app = new AppBuilder()
-  .addLogger((config) => {
-    config.pino.config = {
-      destination: 'file',
-      filePath: 'logs/app.log',
-      prettyPrint: false,
-      env: 'production',
-    }
-  })
-  .addPipeline()
-  .build()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
+
+const app = new XenoAppBuilder()
+  .addLogger(withPinoLogger((options) => {
+    options.destination = 'file'
+    options.filePath = 'logs/app.log'
+  }))
 ```
 
 Supported destinations are:
 
-* `stdout`;
-* `file`.
+- `stdout`;
+- `file`.
 
-If `filePath` is omitted when using the `file` destination, Xeno.JS uses `logs/app.log`.
+If `filePath` is omitted when using the `file` destination, Xeno.JS uses
+`logs/app.log`.
 
-Pino logging also applies its own redaction for sensitive fields such as:
-
-* `password`;
-* `token`;
-* `secret`;
-* `authorization`;
-* `headers.authorization`.
+For Pino behavior, including formatting, defaults, and redaction, see
+[Pino Logger](../logging/pino-logger). Those options belong to the Pino
+integration, not to the core logger configuration.
 
 ## Configure Sentry
 
-Xeno.JS can also send warning and error logs to Sentry.
+Register the Sentry Node logger plugin from `@xeno-js/sentry-node`. Sentry
+provider options belong to that plugin; the core logger setup callback does
+not configure them.
 
 Configure the Sentry DSN:
 
 ```ts
-const app = new AppBuilder()
-  .addLogger((config) => {
-    config.sentry.config = {
-      dsn: process.env.SENTRY_DSN,
-      environment: process.env.NODE_ENV,
-    }
-  })
-  .addPipeline()
-  .build()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
+
+const app = new XenoAppBuilder()
+  .addLogger(withSentryNodeLogger((options) => {
+    options.dsn = process.env.SENTRY_DSN ?? ''
+    options.environment = process.env.NODE_ENV
+  }))
+
+app.addPipeline()
+
+const application = await app.build()
 ```
 
-The Sentry DSN is required when Sentry logging is enabled.
-
-If `environment` is not provided, Xeno.JS uses `NODE_ENV` and falls back to `development`.
-
-Sentry logging is primarily used for warnings and errors. Informational and debug messages are not sent as Sentry events.
+The Sentry Node integration requires a DSN when enabled. Its environment and
+other provider-specific behavior are described in [Sentry Node Logger](../logging/sentry-node).
 
 ## Use multiple logging clients
 
@@ -238,21 +246,26 @@ You can configure more than one logging destination.
 For example, console and Pino can be enabled together:
 
 ```ts
-const app = new AppBuilder()
-  .addLogger((config) => {
-    config.console = true
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
+import { LOG_LEVEL } from '@xeno-js/shared'
 
-    config.pino.config = {
-      destination: 'stdout',
-      prettyPrint: true,
-      env: 'development',
-    }
-  })
+const app = new XenoAppBuilder()
+  .addLogger([
+    withConsoleLogger((options) => {
+      options.level = LOG_LEVEL.INFO
+    }),
+    withPinoLogger((options) => {
+      options.destination = 'stdout'
+    }),
+  ])
   .addPipeline()
-  .build()
+
+const application = await app.build()
 ```
 
-The application logger forwards each accepted message to the configured logging clients.
+Pass provider plugins together in one `addLogger()` call. The application
+logger forwards each accepted message to the configured logging clients.
 
 ## Add a custom logger
 
@@ -280,17 +293,20 @@ const customLogger = (): ILoggerClient => ({
 Register it with `addLogger()`:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addLogger((config) => {
     config.customLoggers = [
       () => customLogger(),
     ]
   })
-  .addPipeline()
-  .build()
+
+app.addPipeline()
+
+const application = await app.build()
 ```
 
-Custom logger factories receive the application service scope, so they can resolve application services when required.
+Custom logger factories use the scope contract described in the
+[logger overview](../logging/overview) when they need service resolution.
 
 ## What does the Logging Pipeline log?
 
@@ -329,7 +345,9 @@ Exception while handling COMMAND CREATE_USER
 
 The failed `Result` is returned unchanged.
 
-Thrown exceptions are logged and then rethrown.
+The Logging Pipeline logs a thrown value and rethrows it. When the CQRS
+Exception Pipeline is also active, it can convert that thrown value into a
+failed `Result`; see [Exception Pipeline](./exception).
 
 ## Logging failed Results
 
@@ -351,41 +369,42 @@ It logs the error and returns the same result to the caller.
 
 ## Logging thrown exceptions
 
-If execution throws an exception:
+If execution throws an exception, the Logging Pipeline logs it and rethrows it
+to the surrounding CQRS behavior. With the Exception Pipeline enabled, the
+mediator returns a failed `Result`:
 
 ```ts
-try {
-  await mediator.send(command)
-} catch (error) {
-  // The Logging Pipeline has already logged the exception.
+const result = await mediator.send(command)
+
+if (!result.isOk()) {
+  // The failure is available as a Result.
 }
 ```
 
-The pipeline logs the exception and rethrows it.
-
-This means the Logging Pipeline does not act as the application's exception handler. Use the [Exception Pipeline](./exception) when you need to configure exception handling behavior.
+The Logging Pipeline does not convert exceptions itself; the CQRS Exception
+Pipeline handles that conversion.
 
 ## Complete example
 
 A typical application can configure logging and the CQRS pipeline together:
 
 ```ts
-import { AppBuilder } from 'xeno-js'
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 import { LOG_LEVEL } from '@xeno-js/shared'
 
-const app = new AppBuilder()
-  .addLogger((config) => {
-    config.level = LOG_LEVEL.INFO
-    config.console = true
-
-    config.pino.config = {
-      destination: 'stdout',
-      prettyPrint: true,
-      env: 'development',
-    }
-  })
+const app = new XenoAppBuilder()
+  .addLogger([
+    withConsoleLogger((options) => {
+      options.level = LOG_LEVEL.INFO
+    }),
+    withPinoLogger((options) => {
+      options.destination = 'stdout'
+    }),
+  ])
   .addPipeline()
-  .build()
+
+const application = await app.build()
 ```
 
 After the application is built, commands and queries executed through the configured mediator are logged automatically.
@@ -410,65 +429,63 @@ the normal `info` messages generated by the Logging Pipeline will not be forward
 
 ## Pino logs are not written to the expected destination
 
-Check the Pino configuration:
+Check that the Pino plugin is passed to `addLogger()` and configure its
+destination in the plugin callback:
 
 ```ts
-config.pino.config = {
-  destination: 'file',
-  filePath: 'logs/app.log',
-}
+app.addLogger(withPinoLogger((options) => {
+  options.destination = 'file'
+  options.filePath = 'logs/app.log'
+}))
 ```
 
 For a file destination:
 
-* `destination` must be `file`;
-* `filePath` should point to the desired output file.
+- `destination` must be `file`;
+- `filePath` should point to the desired output file.
 
 For standard output:
 
 ```ts
-config.pino.config = {
-  destination: 'stdout',
-}
+app.addLogger(withPinoLogger((options) => {
+  options.destination = 'stdout'
+}))
 ```
 
 **[Pino Logger Documentation](../logging/pino-logger)**
 
-## Sentry logging is failing during startup
+## Sentry events are not appearing
 
-If Sentry logging is enabled, verify that the configuration contains a DSN:
+Check that the Sentry Node plugin is registered and that it receives a DSN:
 
 ```ts
-config.sentry.config = {
-  dsn: process.env.SENTRY_DSN,
-}
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
+
+app.addLogger(withSentryNodeLogger((options, config) => {
+  options.dsn = config.get('SENTRY_DSN') ?? ''
+}))
 ```
 
-If the Sentry configuration is enabled without a DSN, application initialization fails with:
-
-```text
-Sentry DSN is required when Sentry logging is enabled.
-```
-
-**[Sentry Node Logger Documentation](../logging/sentry-node)**
+For the Sentry plugin's configuration and environment-variable behavior, see
+[Sentry Node Logger](../logging/sentry-node).
 
 ---
 
 ## See Loggers Documentation
 
-* [Loggers Documentation](../logging/overview)
+- [Loggers Documentation](../logging/overview)
 
 ---
 
 ## Related docs
 
-* [Application overview](../overview)
-* [Exception Pipeline](./exception)
-* [Performance Pipeline](./performance)
-* [Creating Commands](../cqrs/command)
-* [Creating Queries](../cqrs/query)
-* [Creating Handlers](../cqrs/handler)
-* [Loggers Documentation](../logging/overview)
+- [Application overview](../overview)
+- [Exception Pipeline](./exception)
+- [Performance Pipeline](./performance)
+- [Creating Commands](../cqrs/command)
+- [Creating Queries](../cqrs/query)
+- [Creating Handlers](../cqrs/handler)
+- [Loggers Documentation](../logging/overview)
 
 ---
 

@@ -17,13 +17,13 @@ tags:
 - middleware
 faqs:
 - question: How do I configure Supabase authentication with Xeno.JS?
-  answer: Configure the Supabase project URL and key with AppBuilder.addAuth(), optionally configure the application redirect URL and cookie options, enable the middleware, and build the application.
+  answer: Register withSupabase() with XenoAppBuilder.addAuth(), configure the Supabase project URL and key, enable middleware for HTTP requests, and build the application.
 - question: Does Xeno.JS support Supabase bearer tokens?
-  answer: Yes. The authentication extractor can read an Authorization Bearer token from the HTTP request.
+  answer: Yes. The authentication extractors read a Bearer access token from the Authorization header.
 - question: Does Xeno.JS support Supabase authentication cookies?
-  answer: Yes. The standard authentication extractor can fall back to the configured authentication cookie, whose default name is sb-access-token.
+  answer: Yes. CSR mode can fall back to a cookie named by csr.cookieName, which defaults to sb-access-token; SSR mode reads cookies using ssr.cookiePrefix.
 - question: Does Xeno.JS support Supabase SSR authentication?
-  answer: Yes. Xeno.JS provides a Supabase SSR integration that can read the Authorization header and Supabase SSR authentication cookies, including chunked cookies.
+  answer: Yes. The SSR integration reads a Bearer token or matching Supabase SSR cookies, including numbered cookie chunks.
 - question: Should I trust a Supabase session object supplied by the client?
   answer: No. The application should rely on the configured authentication service to establish the authenticated server-side identity.
 ---
@@ -37,21 +37,24 @@ The integration configures the Supabase authentication service and connects it t
 The basic setup is:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+await app.build()
 ```
 
-`addAuth()` configures the authentication service.
+`withSupabase()` creates the Supabase authentication plugin. `addAuth()` queues that plugin with the builder; the selected CSR or SSR module registers the scoped authentication service when `build()` resolves the queued modules.
 
-`addMiddlewares()` enables the HTTP middleware that extracts the credential and establishes the authenticated request identity.
+`addMiddlewares()` enables the HTTP middleware that extracts the credential and establishes the authenticated request identity. It is required for authentication of incoming HTTP requests.
 
 For a general explanation of the authentication model, see [Authentication Overview](./overview).
 
@@ -61,15 +64,17 @@ For a general explanation of the authentication model, see [Authentication Overv
 
 You need:
 
-* a Supabase project;
-* the Supabase project URL;
-* a Supabase key;
-* an application configuration source for these values;
-* Xeno.JS authentication and middleware enabled.
+- `@xeno-js/core` and `@xeno-js/supabase`;
+- `@supabase/ssr` when using SSR mode;
+- a Supabase project;
+- the Supabase project URL;
+- a Supabase key appropriate to the application runtime;
+- an application configuration source for these values;
+- Xeno.JS authentication and middleware enabled.
 
 For SSR applications, you also need to configure the SSR-specific authentication options described below.
 
-Keep Supabase credentials in application configuration or environment variables rather than hard-coding them in source code.
+Install `@xeno-js/core`, `@xeno-js/supabase`, and `@supabase/supabase-js`. Add `@supabase/ssr` when using SSR mode. Keep keys in application configuration or environment variables rather than hard-coding them. Do not expose a privileged service-role key to an untrusted client.
 
 ---
 
@@ -77,40 +82,48 @@ Keep Supabase credentials in application configuration or environment variables 
 
 At minimum, configure:
 
-* `SUPABASE_URL` — the Supabase project URL;
-* `SUPABASE_KEY` — the key used by the Xeno.JS Supabase integration.
+- `SUPABASE_URL` — the Supabase project URL;
+- `SUPABASE_KEY` — the key used by the Xeno.JS Supabase integration.
 
 Example:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+await app.build()
 ```
 
-The Supabase URL and key are used to create the server-side Supabase authentication client.
+`withSupabase()` reads `SUPABASE_URL` and `SUPABASE_KEY` by default, and throws during builder configuration if either value is missing. The values create the Supabase client; `ssr` selects the server-side client while omitting it selects the standard client.
 
 ---
 
 ## Configure the application URL
 
-If your authentication flow needs a redirect URL, configure `redirectTo`.
+If Supabase OAuth sign-in needs a redirect URL, configure `redirectTo`.
 
 For example:
 
 ```ts
-app.addAuth((options, config) => {
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
+
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-  options.redirectTo = config.get('APP_URL')
-})
+  options.redirectTo = config.get('SUPABASE_REDIRECT_TO')
+}))
 ```
 
 A typical configuration uses:
@@ -118,10 +131,10 @@ A typical configuration uses:
 ```text
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_KEY=your-supabase-key
-APP_URL=https://app.example.com
+SUPABASE_REDIRECT_TO=https://app.example.com/auth/callback
 ```
 
-`redirectTo` represents the application URL used by the authentication integration when a provider or authentication flow requires a redirect.
+`redirectTo` defaults to `SUPABASE_REDIRECT_TO` and is passed to Supabase when `signInWithProvider()` starts an OAuth sign-in. It is not a general application URL setting.
 
 ---
 
@@ -129,42 +142,47 @@ APP_URL=https://app.example.com
 
 Xeno.JS supports cookie-based authentication in addition to bearer-token authentication.
 
-Cookie behavior can be configured through `cookieOpts`.
+Cookie behavior has separate settings for the standard client and SSR mode.
 
 For example:
 
 ```ts
-app.addAuth((options, config) => {
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
+
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
 
-  options.redirectTo = config.get('APP_URL')
-
-  options.cookieOpts = {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,
+  options.ssr = {
+    cookieOptions: {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    },
   }
-})
+}))
 ```
 
-These options control how the authentication cookies are handled by the server-side integration.
+In SSR mode, `ssr.cookieOptions` configures cookie attributes. Xeno.JS defaults to `path: '/'`, `httpOnly: true`, `sameSite: 'lax'`, and `secure: true`. In CSR mode, use `csr.cookieName` to configure the cookie name that the request extractor checks; it does not configure Supabase client storage.
 
-Use secure cookie settings in production. In particular, `secure: true` ensures that the cookie is sent only over HTTPS.
+Use secure cookie settings in production. In particular, `secure: true` marks cookies for HTTPS-only transport. For local HTTP development, override it with `false`; do not disable it in production.
 
 ---
 
 ## How Xeno.JS extracts the authentication credential
 
-Supabase authentication can reach Xeno.JS through either an HTTP authorization header or authentication cookies.
+Supabase authentication can reach Xeno.JS through a Bearer authorization header or, depending on the selected mode, a cookie.
 
 ### Bearer token
 
 The standard authentication extractor looks for:
 
 ```http
-Authorization: Bearer <token>
+Authorization: Bearer <access-token>
 ```
 
 For example:
@@ -172,7 +190,7 @@ For example:
 ```http
 GET /api/orders HTTP/1.1
 Host: api.example.com
-Authorization: Bearer eyJ...
+Authorization: Bearer <access-token>
 ```
 
 The extracted token is passed to the configured authentication service.
@@ -183,9 +201,9 @@ The authentication service is responsible for validating the credential and prod
 
 ## Cookie-based authentication
 
-The standard extractor can also fall back to the configured authentication cookie.
+In CSR mode, the standard extractor can also fall back to a cookie named by `csr.cookieName`.
 
-The default authentication cookie name is:
+The default cookie name is:
 
 ```text
 sb-access-token
@@ -193,12 +211,14 @@ sb-access-token
 
 Therefore, an authenticated request may carry its credential through a cookie rather than the `Authorization` header.
 
+The cookie value in CSR mode is treated as the access token. This setting configures the request extractor; it does not change the Supabase client's storage settings.
+
 The important distinction is:
 
 ```text
 HTTP request
     │
-    ├── Authorization: Bearer <token>
+    ├── Authorization: Bearer <access-token>
     │
     └── authentication cookie
              │
@@ -215,7 +235,7 @@ HTTP request
         request Identity
 ```
 
-The extractor determines **where the credential comes from**.
+The extractor determines **where the credential comes from**. In SSR mode, `ssr.cookiePrefix` configures the cookie name prefix used by the SSR extractor; it defaults to `sb-access-token`, and numbered chunks use names such as `sb-access-token.0`.
 
 The authentication service determines **whether the credential is valid and which claims it represents**.
 
@@ -225,15 +245,17 @@ The authentication service determines **whether the credential is valid and whic
 
 For server-side rendering, Xeno.JS provides a dedicated Supabase SSR integration.
 
-The server-side integration uses `@supabase/ssr` and creates the Supabase server client with request-scoped cookie access.
+The server-side integration requires `@supabase/ssr` and creates the Supabase server client with cookie access through the active Xeno.JS service scope.
 
 The SSR extractor can read:
 
-* an `Authorization` bearer token;
-* Supabase authentication cookies;
-* chunked Supabase authentication cookies.
+- an `Authorization` bearer token;
+- the cookie name configured by `ssr.cookiePrefix` (default: `sb-access-token`);
+- chunked Supabase authentication cookies.
 
 This matters because Supabase SSR sessions may be represented by cookies whose data is split across multiple cookie values.
+
+The SSR extractor checks the bearer header first, then reads the matching cookie. It joins numbered chunks and extracts `access_token` from the cookie payload. Set `ssr.cookiePrefix` to the cookie name used by your Supabase SSR client; the default is `sb-access-token`.
 
 Do not treat the standard bearer-token extractor and the SSR extractor as interchangeable implementation details. Choose the authentication configuration according to how your application receives the Supabase credential.
 
@@ -244,50 +266,43 @@ Do not treat the standard bearer-token extractor and the SSR extractor as interc
 A complete SSR-oriented configuration can include:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-
-  options.redirectTo = config.get('APP_URL')
-
-  options.cookieOpts = {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,
+  options.redirectTo = config.get('SUPABASE_REDIRECT_TO')
+  options.ssr = {
+    cookiePrefix: 'sb-access-token',
+    cookieEncoding: 'base64url',
+    cookieOptions: {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    },
   }
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+await app.build()
 ```
 
-The SSR configuration also supports the SSR-specific authentication options exposed by Xeno.JS.
+Defining `options.ssr` selects the SSR module. The Supabase integration also exposes these mode-specific settings:
 
-Conceptually, the configuration is:
+- `ssr.options` — options forwarded to the Supabase SSR client;
+- `ssr.cookieEncoding` — cookie encoding (`raw` or `base64url`);
+- `ssr.cookieHandler` — a custom request cookie handler; if omitted, Xeno.JS resolves its default handler from the active service scope;
+- `ssr.cookieOptions` — cookie attributes used by the SSR integration;
+- `ssr.cookiePrefix` — cookie name or prefix read by the SSR token extractor;
+- `csr.options` — options forwarded to the standard Supabase client;
+- `csr.cookieName` — cookie name checked by the standard token extractor.
 
-```ts
-interface AuthSsrConfig<TOptions> extends AuthConfig<TOptions> {
-  ssrOpts?: (container) => ISsrCookieHandler
-  cookieOpts: CookieHandlerOptions
-  customAuth?: {
-    authHeaderExtractor: () => IServiceExtractor<
-      Request['headers'],
-      string | undefined
-    >
-    authExtendedService: () => IExtendendAuthService
-  }
-}
-```
-
-`ssrOpts` allows the application to provide the SSR cookie handling implementation.
-
-`cookieOpts` configures authentication cookie behavior.
-
-`customAuth` is available when the application needs to replace the built-in authentication service or credential extractor. See [Custom Authentication](./custom).
+Authentication services and the default cookie handler are scoped to the active service scope. Do not retain these request-specific instances in a singleton. In the default Node context, Xeno.JS propagates request context through `AsyncLocalStorage`; SSR cookie access therefore belongs to the current request, not a shared singleton.
 
 ---
 
@@ -317,7 +332,7 @@ HTTP request
         request Identity
 ```
 
-Cookie reads and writes are associated with the current HTTP request and response.
+The default handler reads cookies from the current network context and buffers cookie updates for the HTTP response path. A custom `ssr.cookieHandler` can replace it when the application supplies its own request/response cookie integration.
 
 This allows server-side authentication state to participate in the same Xeno.JS authentication flow as bearer-token authentication.
 
@@ -332,21 +347,24 @@ Configuring `addAuth()` does not by itself make an HTTP request authenticated.
 The HTTP middleware must also be enabled:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+await app.build()
 ```
 
 The authentication middleware connects the incoming HTTP credential to the configured authentication service.
 
-The resulting identity is stored in the request context and can then be consumed by application-level authorization.
+The resulting identity is stored in the request context and can then be consumed by application-level authorization. In the default Node runtime, `AsyncLocalStorage` carries the `RequestContext` across asynchronous work.
 
 The overall flow is:
 
@@ -380,28 +398,33 @@ Authorization determines **whether that identity is allowed to execute a specifi
 
 ## Complete configuration example
 
-A typical application composition root can look like this:
+A typical SSR application composition root can look like this:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-
-  options.redirectTo = config.get('APP_URL')
-
-  options.cookieOpts = {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,
+  options.redirectTo = config.get('SUPABASE_REDIRECT_TO')
+  options.ssr = {
+    cookiePrefix: 'sb-access-token',
+    cookieEncoding: 'base64url',
+    cookieOptions: {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    },
   }
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+await app.build()
 ```
 
 The responsibilities are intentionally separated:
@@ -410,10 +433,12 @@ The responsibilities are intentionally separated:
 | ---------------------- | ------------------------------------------- |
 | `options.url`          | Supabase project URL                        |
 | `options.key`          | Supabase authentication key                 |
-| `options.redirectTo`   | Application redirect URL                    |
-| `options.cookieOpts`   | Authentication cookie behavior              |
-| `app.addMiddlewares()` | Enables HTTP authentication processing      |
-| `app.build()`          | Builds the configured application container |
+| `options.redirectTo`   | OAuth redirect destination                  |
+| `options.ssr.cookieOptions`| SSR cookie attributes                   |
+| `options.ssr.cookiePrefix` | SSR cookie name or prefix for extraction|
+| `options.csr.cookieName`  | CSR fallback cookie name                 |
+| `app.addMiddlewares()`      | Enables HTTP authentication processing |
+| `app.build()`  | Resolves queued modules and returns the application |
 
 ---
 
@@ -447,15 +472,15 @@ This distinction is especially important when protecting commands, queries, or r
 Bearer authentication is appropriate when the client explicitly sends an access token:
 
 ```http
-Authorization: Bearer <token>
+Authorization: Bearer <access-token>
 ```
 
 This is common for:
 
-* APIs;
-* service-to-service HTTP clients;
-* clients that already manage access tokens;
-* non-browser clients.
+- APIs;
+- service-to-service HTTP clients;
+- clients that already manage access tokens;
+- non-browser clients.
 
 In this case, Xeno.JS extracts the bearer token and passes it to the authentication service.
 
@@ -467,10 +492,10 @@ Use the SSR integration when the application relies on Supabase's server-side co
 
 This is particularly relevant for applications where:
 
-* authentication state is stored in cookies;
-* server-side rendering needs access to the authenticated session;
-* the request and response participate in cookie management;
-* Supabase SSR cookies may be chunked.
+- authentication state is stored in cookies;
+- server-side rendering needs access to the authenticated session;
+- the request and response participate in cookie management;
+- Supabase SSR cookies may be chunked.
 
 The SSR integration handles these cookies through the server-side Supabase client.
 
@@ -483,12 +508,19 @@ The SSR integration handles these cookies through the server-side Supabase clien
 Make sure both authentication and middleware are configured:
 
 ```ts
-app.addAuth((options, config) => {
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
+
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
+
+await app.build()
 ```
 
 Configuring `addAuth()` without enabling the middleware does not establish authentication for incoming HTTP requests.
@@ -500,7 +532,7 @@ Configuring `addAuth()` without enabling the middleware does not establish authe
 Verify that the request contains the expected header:
 
 ```http
-Authorization: Bearer <token>
+Authorization: Bearer <access-token>
 ```
 
 Also verify that the token is sent to the Xeno.JS HTTP execution path so that the authentication middleware can process the request.
@@ -512,12 +544,12 @@ Also verify that the token is sent to the Xeno.JS HTTP execution path so that th
 Check:
 
 1. the authentication cookie is present in the request;
-2. the cookie name matches the configured authentication cookie;
+2. in CSR mode, the cookie name matches `csr.cookieName`; in SSR mode, it matches `ssr.cookiePrefix`;
 3. the cookie is available to the request path and domain;
 4. HTTPS is used when secure cookies are enabled;
 5. SSR applications use the SSR authentication configuration when the session is managed through Supabase SSR cookies.
 
-The default authentication cookie name is:
+The default CSR cookie name and SSR cookie prefix are:
 
 ```text
 sb-access-token
@@ -529,10 +561,11 @@ sb-access-token
 
 For SSR applications, verify that:
 
-* the request contains the Supabase authentication cookies;
-* the server-side Supabase integration is configured;
-* the application is using the SSR extractor when required;
-* cookie access is associated with the current request and response.
+- the request contains the Supabase authentication cookies;
+- the server-side Supabase integration is configured;
+- the application is using the SSR extractor when required;
+- the request cookie names match `ssr.cookiePrefix`;
+- the SSR cookie handler is resolved in the active request scope.
 
 If the Supabase session uses chunked cookies, make sure the complete cookie set reaches the server.
 
@@ -540,13 +573,13 @@ If the Supabase session uses chunked cookies, make sure the complete cookie set 
 
 ## Related documentation
 
-* [Authentication Overview](./overview)
-* [Custom Authentication](./custom)
-* [Authentication Middleware](../middleware/authentication)
-* [Authentication Extractors](../middleware/extractors)
-* [Authorization Overview](../authorization/overview)
-* [Authorization Policies](../authorization/policies)
-* [Supabase SSR documentation](https://supabase.com/docs/guides/auth/server-side/creating-a-client)
+- [Authentication Overview](./overview)
+- [Custom Authentication](./custom)
+- [Authentication Middleware](../middleware/authentication)
+- [Authentication Extractors](../middleware/extractors)
+- [Authorization Overview](../authorization/overview)
+- [Authorization Policies](../authorization/policies)
+- [Supabase SSR documentation](https://supabase.com/docs/guides/auth/server-side/creating-a-client)
 
 ---
 

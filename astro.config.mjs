@@ -49,8 +49,9 @@ export default defineConfig({
           items: [
             { label: 'Overview', link: '/docs/fundamentals/overview'},
             { label: 'XenoRegistry', link: '/docs/fundamentals/xeno-registry'},
-            { label: 'Xeno AppBuilder', link: '/docs/fundamentals/app-builder' },
+            { label: 'XenoXenoAppBuilder', link: '/docs/fundamentals/app-builder' },
             { label: 'Contexts Scopes', link: '/docs/fundamentals/context-scopes' },
+            { label: 'Xeno Application', link: '/docs/fundamentals/xeno-application' },
           ]
         },
         {
@@ -135,8 +136,7 @@ export default defineConfig({
               label: 'Datasources',
               collapsed: false,
               items: [
-                { label: 'Base PostgreSQL Data Source', link: '/docs/data/datasources/base-postgresql-datasource' },
-                { label: 'Base Sqlite Data Source', link: '/docs/data/datasources/base-sqlite-datasource' },
+                { label: 'Data Source', link: '/docs/data/datasources/datasource' },
               ]
             },
           ]

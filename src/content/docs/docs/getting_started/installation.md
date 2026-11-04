@@ -92,7 +92,7 @@ For a TypeScript Node.js application, install TypeScript and Node.js types as de
 npm install --save-dev typescript @types/node
 ```
 
-The core package can then be configured and bootstrapped through `AppBuilder`.
+The core package can then be configured and bootstrapped through `XenoAppBuilder`.
 
 ## Optional Dependencies
 

@@ -1,6 +1,6 @@
 ---
 title: Custom Authentication
-description: Replace the built-in Supabase authentication service and token extractor with a custom authentication provider in Xeno.JS.
+description: Configure a custom authentication service and token extractor through Xeno.JS AuthModuleOptions.
 keywords:
 - Xeno.JS
 - custom authentication
@@ -16,44 +16,45 @@ tags:
 - custom authentication
 - middleware
 faqs:
-- question: Can I replace Supabase authentication in Xeno.JS?
-  answer: Yes. AppBuilder supports a custom authentication service and a custom HTTP token extractor through options.customAuth.
+- question: Can I use a custom provider instead of Supabase?
+  answer: Yes. Configure authService and, optionally, tokenExtractor in the AuthModuleOptions passed to XenoAppBuilder.addAuth().
 - question: What does a custom token extractor do?
   answer: A custom token extractor retrieves the authentication credential from the incoming HTTP request headers.
 - question: What does a custom authentication service do?
   answer: A custom authentication service validates the extracted credential and returns AuthClaims that Xeno.JS maps to the request identity.
 - question: What interface must a custom authentication service implement?
-  answer: The service configured through customAuth.authExtendedService must implement IExtendendAuthService, which extends IBaseAuthService and IAuthService.
+  answer: The service returned by authService must implement IExtendendAuthService, which extends IBaseAuthService and IAuthService.
 - question: Can I use a custom token extractor with SSR mode?
-  answer: Yes, but when a custom extractor is configured it takes precedence over the built-in bearer and Supabase SSR token extractors.
+  answer: Yes. For a custom provider, AuthModuleOptions.tokenExtractor takes precedence over the default BearerTokenExtractor. The Supabase SSR integration supplies its own extractor when its SSR options are configured.
 - question: What claims must a custom authentication service return?
-  answer: AuthClaims requires sub and also supports email, name, tenantId, roles, and permissions.
+  answer: AuthClaims requires a sub string and defines email, name, tenantId, roles, and permissions with optional values.
 ---
 
 ## How do I replace Supabase with my own authentication provider?
 
-Xeno.JS uses Supabase by default when authentication is configured, but you can replace it with your own authentication service.
+Xeno.JS does not select Supabase by default. `addAuth()` configures the authentication service explicitly; use the Supabase plugin for Supabase or provide your own service through `AuthModuleOptions`.
 
 A custom authentication integration has two separate responsibilities:
 
 1. **Token extraction** — retrieve the credential from the incoming HTTP request.
 2. **Credential validation** — validate that credential and return the authenticated user's claims.
 
-Configure both through `customAuth`:
+Configure the authentication service and optionally provide a token extractor through `addAuth()`:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+// Import the application-specific MyAuthService and MyTokenExtractor implementations.
+
+const app = new XenoAppBuilder()
 
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new MyTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.authService = () => new MyAuthService()
+  options.tokenExtractor = () => new MyTokenExtractor()
 })
 
 app.addMiddlewares()
 
-const container = await app.build()
+await app.build()
 ```
 
 You do not need to configure Supabase credentials when using a custom authentication service.
@@ -68,7 +69,7 @@ With a custom provider, the request authentication flow is:
 HTTP request
       │
       ▼
-Custom token extractor
+Configured token extractor
       │
       ▼
 AuthenticationMiddleware
@@ -96,39 +97,49 @@ The authentication service answers:
 
 Keeping these responsibilities separate allows the authentication provider and the HTTP credential format to change independently.
 
+The middleware writes the resulting identity to the request context. In the default Node context, `AsyncLocalStorage` carries that request context through asynchronous work.
+
 ---
 
-## Configure `customAuth`
+## Configure custom authentication
 
-The authentication configuration exposes:
+`addAuth()` accepts a setup action that receives the authentication module options and configuration service. The relevant options are:
 
 ```ts
-customAuth: {
-  authHeaderExtractor: () =>
-    IServiceExtractor<Request['headers'], string | undefined>
+import type {
+  IExtendendAuthService,
+  IServiceExtractor,
+  IServiceScope,
+  Optional,
+} from '@xeno-js/shared'
 
-  authExtendedService: () =>
-    IExtendendAuthService
+interface AuthModuleOptions<TRegistry> {
+  authService: (scope: IServiceScope<TRegistry>) => IExtendendAuthService
+  tokenExtractor?: (
+    scope: IServiceScope<TRegistry>,
+  ) => IServiceExtractor<Request['headers'], string | undefined>
+  defaultCookieName?: Optional<string>
 }
 ```
 
-There are two required components.
+`authService` is required; `tokenExtractor` is optional.
 
-| Property              | Responsibility                                                                                   |
-| --------------------- | ------------------------------------------------------------------------------------------------ |
-| `authHeaderExtractor` | Creates the service that extracts the credential from HTTP headers                               |
-| `authExtendedService` | Creates the authentication service that validates the credential and returns authentication data |
+| Property             | Responsibility                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------- |
+| `authService`        | Creates the scoped authentication service that validates credentials and returns authentication data   |
+| `tokenExtractor`     | Creates the extractor used to retrieve a credential from request headers; optional                     |
+| `defaultCookieName`  | Cookie name checked by the default bearer extractor; defaults to `sb-access-token`                      |
 
 Example:
 
 ```ts
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new MyTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.authService = () => new MyAuthService()
+  options.tokenExtractor = () => new MyTokenExtractor()
 })
 ```
+
+`authService` is required. The authentication module registers its result as a scoped service and passes the active service scope to its factory. Resolve any scoped dependencies from that scope. A custom token extractor is registered as a singleton; keep it stateless and do not capture request-scoped services in its factory.
 
 ---
 
@@ -155,8 +166,8 @@ IServiceExtractor<
 
 The extractor receives the request headers and returns either:
 
-* the authentication credential;
-* `undefined` when no credential is present.
+- the authentication credential;
+- `undefined` when no credential is present.
 
 ### Example: custom `Authorization` header
 
@@ -177,7 +188,7 @@ export class MyTokenExtractor
   implements IServiceExtractor<Request['headers'], string | undefined>
 {
   extract(headers: Request['headers']): string | undefined {
-    const authorization = headers.authorization
+    const authorization = headers.get('authorization')
 
     if (!authorization) {
       return undefined
@@ -187,19 +198,18 @@ export class MyTokenExtractor
       return undefined
     }
 
-    return authorization.slice('Token '.length)
+    const token = authorization.slice('Token '.length).trim()
+    return token || undefined
   }
 }
 ```
 
-Register it through `customAuth`:
+Register it through `AuthModuleOptions.tokenExtractor`:
 
 ```ts
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new MyTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.authService = () => new MyAuthService()
+  options.tokenExtractor = () => new MyTokenExtractor()
 })
 ```
 
@@ -220,7 +230,7 @@ interface IExtendendAuthService
 
 ### Base authentication contract
 
-The authentication middleware relies on these methods:
+The base service contract exposes these methods:
 
 ```ts
 interface IBaseAuthService {
@@ -239,12 +249,15 @@ authenticate(token: string): Promise<ResultType<AuthClaims>>
 ```
 
 It receives the credential returned by the token extractor and must return the authenticated user's claims.
+When no token is extracted, the gatekeeper calls `getUser()` instead. `isAuthenticated()` remains part of the service contract but the HTTP authentication middleware does not call it in this flow.
+
+The extended interface also requires `signInWithProvider()`, `getSession()`, `signOut()`, and `exchangeCodeForSession()`. Implement these methods even if the HTTP middleware does not use them; application features may resolve the extended authentication service for those operations.
 
 ---
 
 ## Implement the authentication service
 
-A provider-specific service can implement the contract directly:
+A provider-specific service must implement the full contract. The following is a skeleton, not a production implementation:
 
 ```ts
 import type {
@@ -304,7 +317,7 @@ export class MyAuthService implements IExtendendAuthService {
 }
 ```
 
-The exact implementation of these methods depends on your authentication provider.
+Replace every placeholder with provider-specific behavior before registering the service. In particular, do not ship methods that always return `false` or throw placeholder errors.
 
 The important requirement for HTTP authentication is that `authenticate()` returns valid `AuthClaims`.
 
@@ -312,7 +325,7 @@ The important requirement for HTTP authentication is that `authenticate()` retur
 
 ## Return `AuthClaims`
 
-Xeno.JS defines authentication claims as:
+Xeno.JS defines the claims shape as:
 
 ```ts
 interface AuthClaims {
@@ -325,9 +338,10 @@ interface AuthClaims {
 }
 ```
 
-`sub` is the user identifier.
+`sub` is the user identifier. It is required and must be a GUID string because the identity mapper converts it to the request identity's `userId`.
 
 The remaining fields provide identity and authorization information that can be propagated into the application request context.
+Treat provider claims as untrusted until the provider has validated them. For JWTs, verify the signature and the expected issuer, audience, and expiry before using identity or authorization claims.
 
 For example:
 
@@ -365,7 +379,7 @@ AuthClaims
     └── permissions → permissions
 ```
 
-The `sub` and `tenantId` values are parsed as GUID values during this mapping.
+The `sub` and `tenantId` values are parsed as GUID values during this mapping. An absent or invalid value maps to an undefined identifier; return valid GUID strings for identifiers you expect authorization to consume.
 
 This means your custom authentication provider should return identifiers in the format expected by the application's Xeno.JS identity model.
 
@@ -376,23 +390,23 @@ This means your custom authentication provider should return identifiers in the 
 A complete composition root can look like this:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
 
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new MyTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.authService = () => new MyAuthService()
+  options.tokenExtractor = () => new MyTokenExtractor()
 })
 
 app.addMiddlewares()
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 Authentication middleware must be enabled with `addMiddlewares()`.
 
-Without the middleware module, the custom extractor is not used to authenticate incoming HTTP requests.
+Without the middleware module, the custom extractor is not used to authenticate incoming HTTP requests. If middleware runs without an authentication service, Xeno.JS assigns the guest identity; it does not enforce authentication by default.
 
 ---
 
@@ -417,7 +431,7 @@ export class ApiTokenExtractor
   implements IServiceExtractor<Request['headers'], string | undefined>
 {
   extract(headers: Request['headers']): string | undefined {
-    return headers['x-api-token']
+    return headers.get('x-api-token') ?? undefined
   }
 }
 ```
@@ -426,10 +440,8 @@ Register it:
 
 ```ts
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new ApiTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.authService = () => new MyAuthService()
+  options.tokenExtractor = () => new ApiTokenExtractor()
 })
 ```
 
@@ -460,6 +472,9 @@ If your provider issues JWTs, the custom authentication service can validate the
 For example, conceptually:
 
 ```ts
+import { Result } from '@xeno-js/shared'
+import type { AuthClaims, ResultType } from '@xeno-js/shared'
+
 async authenticate(token: string): Promise<ResultType<AuthClaims>> {
   const claims = await this.jwtVerifier.verify(token)
 
@@ -474,7 +489,7 @@ async authenticate(token: string): Promise<ResultType<AuthClaims>> {
 }
 ```
 
-The provider-specific verification library is your responsibility.
+The provider-specific verification library is your responsibility. Verify the signature and the expected issuer, audience, and expiry; decoding a JWT payload alone does not authenticate it.
 
 Xeno.JS consumes the resulting `AuthClaims`; it does not require the authentication provider to use a particular token format.
 
@@ -487,6 +502,9 @@ The authentication service can also delegate validation to an external identity 
 For example:
 
 ```ts
+import { Result } from '@xeno-js/shared'
+import type { AuthClaims, ResultType } from '@xeno-js/shared'
+
 async authenticate(token: string): Promise<ResultType<AuthClaims>> {
   const user = await this.identityProvider.validate(token)
 
@@ -517,56 +535,53 @@ The provider can be a JWT issuer, API gateway, OAuth/OIDC service, internal iden
 
 ---
 
-## Custom authentication takes precedence over Supabase
+## Choose one authentication provider
 
-When `customAuth` is configured, Xeno.JS uses the custom authentication service instead of creating the built-in Supabase authentication service.
+Xeno.JS does not create a Supabase authentication service unless the Supabase plugin is explicitly configured. The builder queues only one authentication module: after one `addAuth()` call queues it, later calls to `addAuth()` are ignored.
 
-This means you should not configure custom authentication as an additional authentication provider expecting both services to participate.
+Configure one provider per application. Do not expect multiple authentication services to participate in the same request.
 
-Choose one authentication implementation:
+For example, choose either the Supabase plugin:
 
 ```text
-Default
+withSupabase(...)
     ↓
 Supabase authentication service
 ```
 
-or:
+or the custom configuration:
 
 ```text
-Custom
+addAuth(...)
     ↓
 IExtendendAuthService implementation
 ```
 
-The custom service becomes the authentication service used by the authentication flow.
+The selected module provides the authentication service used by the authentication flow.
 
 ---
 
 ## Custom token extraction takes precedence over built-in extractors
 
-Xeno.JS normally selects a token extractor based on the middleware configuration.
+The authentication module registers a token extractor. If `tokenExtractor` is omitted, Xeno.JS uses its default `BearerTokenExtractor`.
 
-Without a custom extractor:
+Default:
 
 ```text
-SSR enabled
-    → Supabase SSR token extractor
-
-SSR disabled
-    → Bearer token extractor
-       + configured authentication cookie
+BearerTokenExtractor
+    → Authorization: Bearer <token>
+    → cookie named by defaultCookieName (default: sb-access-token)
 ```
 
-When `customAuth.authHeaderExtractor` is configured:
+When `tokenExtractor` is configured:
 
 ```text
-customAuth.authHeaderExtractor
+AuthModuleOptions.tokenExtractor
         ↓
 custom token extractor
 ```
 
-The custom extractor is used instead of the built-in extractor.
+The configured extractor replaces the default. Supabase's SSR plugin supplies its own SSR extractor when SSR is enabled; Xeno.JS core does not select an SSR extractor based on an application mode.
 
 This is important when using a custom provider with a non-standard header or credential format.
 
@@ -608,17 +623,17 @@ This keeps transport-specific logic separate from provider-specific authenticati
 
 ## Authentication errors
 
-If the custom authentication service returns a failed `ResultType` from `authenticate()`, Xeno.JS treats the request authentication as failed.
+If the custom authentication service returns a failed `ResultType` from `authenticate()` for an extracted token, Xeno.JS treats the request authentication as failed.
 
-The authentication middleware returns an unauthorized HTTP response instead of continuing to the application action.
+The authentication middleware returns an error response using the error status, or `401 Unauthorized` when the error has no status, instead of continuing to the next middleware.
 
 Therefore, your authentication service should return an appropriate failed result when:
 
-* the token is invalid;
-* the token is expired;
-* the token cannot be verified;
-* the credential is revoked;
-* the authentication provider rejects the credential.
+- the token is invalid;
+- the token is expired;
+- the token cannot be verified;
+- the credential is revoked;
+- the authentication provider rejects the credential.
 
 Do not convert invalid credentials into successful claims.
 
@@ -636,7 +651,7 @@ getUser()
 
 to resolve the current authenticated user.
 
-If no authenticated user can be resolved, the request receives the guest identity rather than fabricated authentication claims.
+If `getUser()` succeeds with no user, or returns a failed result, the gatekeeper returns the guest identity. The authentication middleware does not reject guest identities by itself; configure authorization or route protection where authenticated access is required.
 
 This makes `getUser()` relevant for authentication mechanisms where the current user can be resolved without passing an explicit token to `authenticate()`.
 
@@ -675,20 +690,17 @@ See [Authorization Overview](../authorization/overview) and [Authorization Polic
 
 ## Troubleshooting
 
-### `customAuth` is configured but Supabase is still being used
+### The custom authentication service is not used
 
-Check that `customAuth` is configured inside `addAuth()`:
+Check that `authService` is configured in the `addAuth()` setup action:
 
 ```ts
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new MyTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.authService = () => new MyAuthService()
 })
 ```
 
-Do not configure the custom service elsewhere and expect `AppBuilder` to discover it automatically.
+The auth module requires `authService`; registering a class elsewhere does not make the builder discover it automatically. Also check that another `addAuth()` call did not queue the authentication module first, because subsequent calls are ignored.
 
 ---
 
@@ -705,10 +717,10 @@ is configured.
 Also verify that the custom extractor is returned by the factory:
 
 ```ts
-authHeaderExtractor: () => new MyTokenExtractor()
+tokenExtractor: () => new MyTokenExtractor()
 ```
 
-The property expects a factory that creates an `IServiceExtractor`; it is not the extractor instance itself.
+The property expects a factory that receives the service scope and creates an `IServiceExtractor`; it is not the extractor instance itself. The extractor instance is singleton-scoped, so do not capture request-scoped services in its factory.
 
 ---
 
@@ -728,7 +740,7 @@ credential
 authenticate(token)
 ```
 
-If the extractor returns `undefined`, the authentication flow may resolve the current user through `getUser()` instead of calling `authenticate()` with a token.
+If the extractor returns `undefined`, the gatekeeper calls `getUser()` instead of `authenticate()`. A failed `getUser()` result becomes a guest identity, not an authentication error response.
 
 ---
 
@@ -780,12 +792,12 @@ If the values are not valid GUIDs, they will not produce the expected `Identity`
 
 ## Related documentation
 
-* [Authentication Overview](./overview)
-* [Supabase Authentication](./supabase)
-* [Authentication Middleware](../middleware/authentication)
-* [Authentication Extractors](../middleware/extractors)
-* [Authorization Overview](../authorization/overview)
-* [Authorization Policies](../authorization/policies)
+- [Authentication Overview](./overview)
+- [Supabase Authentication](./supabase)
+- [Authentication Middleware](../middleware/authentication)
+- [Authentication Extractors](../middleware/extractors)
+- [Authorization Overview](../authorization/overview)
+- [Authorization Policies](../authorization/policies)
 
 ---
 

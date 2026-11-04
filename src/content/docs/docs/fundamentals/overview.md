@@ -1,9 +1,9 @@
 ---
 title: "Fundamentals"
-description: "Learn the core concepts for composing and running a Xeno.JS application, including the Xeno Registry, App Builder, Service Container, dependency injection, service lifetimes, modules, and application context."
+description: "Learn the core concepts for composing and running a Xeno.JS application, including the XenoRegistry type, App Builder, Service Container, dependency injection, service lifetimes, modules, and application context."
 canonical: "https://www.xeno-js.it/docs/fundamentals/overview"
 publishedAt: "2026-09-30"
-updatedAt: "2026-09-30"
+updatedAt: "2026-11-04"
 author:
   name: "Xeno.JS Team"
   url: "https://www.xeno-js.it"
@@ -34,7 +34,7 @@ faqs:
   - question: "What are the Fundamentals of Xeno.JS?"
     answer: "The Fundamentals section explains the core building blocks used to compose and run a Xeno.JS application, including the Xeno Registry, App Builder, Service Container, dependency injection, service lifetimes, modules, and context and scopes."
   - question: "What does the App Builder do in Xeno.JS?"
-    answer: "The App Builder is used to compose a Xeno.JS application by configuring services, context, middleware, pipelines, and infrastructure integrations before the application runtime is built."
+    answer: "The App Builder queues and initializes application modules, configures services and infrastructure integrations, and returns the configured runtime application from build()."
   - question: "What is the Service Container in Xeno.JS?"
     answer: "The Service Container manages runtime dependencies and supports explicit service lifetimes such as singleton, scoped, and transient."
   - question: "Why are service lifetimes important?"
@@ -47,8 +47,8 @@ directAnswer:
   answer: "The Fundamentals are the core building blocks used to compose and run a Xeno.JS application, from dependency registration and application building to runtime dependency resolution, service lifetimes, modules, context, and scopes."
 keyFacts:
   - "Xeno.JS Fundamentals focus on application composition and runtime foundations."
-  - "The Xeno Registry defines the dependency vocabulary used by an application."
-  - "The App Builder composes application capabilities before the runtime container is built."
+  - "XenoRegistry defines the compile-time service keys and types used by typed registration and resolution."
+  - "The App Builder composes application capabilities and returns a configured runtime application from build()."
   - "The Service Container manages runtime dependencies and service lifetimes."
   - "Xeno.JS supports singleton, scoped, and transient service lifetimes."
   - "Modules provide a way to organize application composition."
@@ -69,7 +69,7 @@ The goal is to make the application's composition explicit and predictable.
 
 The Fundamentals section covers the following concepts:
 
-* **Xeno Registry** — the central place for defining application-level tokens and registrations.
+* **XenoRegistry** — the type contract for built-in and application-specific service keys and types.
 * **App Builder** — the entry point for composing and configuring a Xeno.JS application.
 * **Service Container** — the runtime container responsible for resolving application dependencies.
 * **Dependency Injection** — how services and dependencies are explicitly provided and resolved.
@@ -91,7 +91,7 @@ A simplified model looks like this:
 Application
     │
     ▼
-Xeno Registry
+XenoRegistry (type contract)
     │
     ▼
 App Builder
@@ -121,11 +121,11 @@ The exact configuration depends on the application, but the underlying model rem
 
 ## Xeno Registry
 
-The **Xeno Registry** provides a common architectural vocabulary for registering and identifying application dependencies.
+The **XenoRegistry** is a TypeScript type that defines the service keys and types available to typed dependency-injection APIs.
 
-Rather than relying on implicit global state or convention-based discovery, dependencies can be represented through explicit tokens and registrations.
+It combines built-in service keys with application-specific keys. The registry does not store runtime registrations or service instances; the Service Container manages those at runtime.
 
-The registry becomes particularly useful as an application grows and more services, repositories, infrastructure components, and application capabilities need to be composed together.
+The App Builder and Service Container use this type contract so that registrations and resolutions can be checked against the declared service types.
 
 See [Xeno Registry](./xeno-registry) for more information.
 
@@ -135,7 +135,7 @@ See [Xeno Registry](./xeno-registry) for more information.
 
 The **App Builder** is the main composition entry point for a Xeno.JS application.
 
-It allows the application to progressively configure its runtime before producing the final application container.
+It lets the application queue and configure modules, services, context, middleware, pipelines, and infrastructure integrations. `build()` initializes the queued modules and returns the configured runtime application; the builder retains the Service Container internally.
 
 Typical configuration can include:
 
@@ -156,9 +156,9 @@ See [App Builder](./app-builder) for more information.
 
 ## Service Container
 
-Once the application has been configured, Xeno.JS uses a **service container** to manage and resolve registered dependencies.
+During application composition, Xeno.JS uses a **Service Container** to manage registrations and resolve dependencies.
 
-The container is responsible for turning the application's registrations into runtime instances and respecting the lifetime associated with each service.
+The container invokes registration factories as dependencies are resolved and respects each service's lifetime.
 
 This creates a clear distinction between:
 
@@ -166,7 +166,7 @@ This creates a clear distinction between:
 2. **composition** — configuring those registrations;
 3. **resolution** — obtaining the required dependency at runtime.
 
-See [Service Container](../dependency-injection/service-container) for more information.
+See [Dependency Injection](./dependency-injection) for more information about the Service Container and its registration and resolution APIs.
 
 ---
 
@@ -174,23 +174,7 @@ See [Service Container](../dependency-injection/service-container) for more info
 
 Dependency Injection is one of the mechanisms used to keep application dependencies explicit.
 
-Instead of a component creating its own infrastructure dependencies, those dependencies can be provided by the application's composition.
-
-For example, an application service can depend on an abstraction without deciding how that abstraction is instantiated:
-
-```text
-Application Service
-        │
-        ▼
-   Dependency
-   (abstraction)
-        │
-        ▼
- Service Container
-        │
-        ▼
- Concrete Implementation
-```
+Instead of a component creating its own infrastructure dependencies, the application's composition can register an implementation under a typed service key and provide the resolved dependency to that component.
 
 This separates the responsibility of **using a dependency** from the responsibility of **composing the dependency**.
 
@@ -220,19 +204,19 @@ As an application grows, registering every capability directly in the main compo
 
 A module can encapsulate the composition required for a particular capability while still participating in the application's overall composition model.
 
-See [Modules](./modules) for more information.
+The [App Builder](./app-builder) page explains how to add and configure a custom module.
 
 ---
 
 ## Context & Scopes
 
-Application execution often requires contextual information that should be available throughout a particular scope of execution.
+Application execution often requires contextual information and scoped dependencies that should be available within a particular execution boundary.
 
-Xeno.JS provides mechanisms for working with **context** and **scopes**, allowing contextual state and scoped dependencies to follow an execution boundary.
+Xeno.JS provides a request context and service scopes for application execution. A scope defines where scoped dependencies are shared; context accessors expose execution-specific information such as the current `RequestContext` and identity.
 
-This is particularly important for request-oriented or otherwise scoped execution, where multiple components may need access to the same contextual information without passing it manually through every method call.
+For work outside an existing execution, `runInScope()` creates a context and service scope for the operation and disposes the scope when the operation completes.
 
-See [Context & Scopes](./context-and-scopes) for more information.
+See [Context and Scopes](./context-scopes) for more information.
 
 ---
 
@@ -241,7 +225,7 @@ See [Context & Scopes](./context-and-scopes) for more information.
 The Fundamentals concepts are closely related:
 
 ```text
-                 Xeno Registry
+                 XenoRegistry (type)
                        │
                        ▼
                   App Builder
@@ -277,8 +261,8 @@ If you are new to Xeno.JS, the recommended order is:
 
 1. [Xeno Registry](./xeno-registry)
 2. [App Builder](./app-builder)
-3. [Service Container](../dependency-injection/service-container)
-4. [Context & Scopes](./context-and-scopes)
+3. [Dependency Injection](./dependency-injection)
+4. [Context and Scopes](./context-scopes)
 
 These concepts form the foundation for understanding the rest of the framework.
 

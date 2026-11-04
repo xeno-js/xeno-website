@@ -18,9 +18,9 @@ tags:
 - queries
 faqs:
 - question: How do I enable query caching?
-  answer: Configure queryBus.isEnabled through AppBuilder.addPipeline() and configure a cache with AppBuilder.addCache().
+  answer: Pass withQueryCaching() to XenoAppBuilder.addPipeline(). If no cache is registered, Xeno.JS configures the default in-memory cache.
 - question: Does the caching pipeline apply to commands?
-  answer: No. The built-in caching pipeline is added to the Query pipeline.
+  answer: Query result caching runs in the Query pipeline. Enabling withQueryCaching() also adds command-side cache invalidation for successful commands that declare cacheInvalidation.
 - question: How do I make a query cacheable?
   answer: Create the query with cacheOptions containing a cacheKey and the desired cache settings.
 - question: What happens when a cached value is found?
@@ -48,7 +48,7 @@ The built-in caching behavior:
 4. executes the query when there is no cached value;
 5. stores successful query results using the configured TTL.
 
-The Caching Pipeline is part of the **Query pipeline**. It is not added to the Command pipeline.
+Query result caching runs in the **Query pipeline**. When `withQueryCaching()` is enabled, Xeno.JS also adds a command pipeline behavior that invalidates cache entries declared by successful commands.
 
 If you first need to create a Query, see [Create a Query](../cqrs/query).
 
@@ -56,82 +56,77 @@ If you first need to create a Query, see [Create a Query](../cqrs/query).
 
 You need:
 
-* an `AppBuilder` instance;
-* a configured cache;
-* a Query;
-* a Query Handler;
-* the Query executed through the Xeno.JS mediator.
+- an `XenoAppBuilder` instance;
+- a cache, which Xeno.JS configures in-memory by default when query caching is enabled;
+- a Query;
+- a Query Handler;
+- the Query executed through the Xeno.JS mediator.
 
-The cache can use the built-in in-memory implementation or Redis.
+The cache can use the built-in in-memory implementation or Redis. Configure a cache explicitly only when you need to choose or customize its provider.
 
 For the complete Query creation workflow, including how to extend `Query` and define its parameters, see [Create a Query](../cqrs/query).
 
 ## Enable the cache
 
-Configure the cache through `AppBuilder.addCache()`.
+To use the default in-memory cache, configure it through `XenoAppBuilder.addCache()`:
 
 For example, to use the built-in in-memory cache:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
   .addCache()
   .build()
 ```
 
-The default `AppBuilder` cache configuration uses the in-memory cache.
+The default `XenoAppBuilder` cache configuration uses the in-memory cache.
 
-You can also explicitly configure it:
+You can also explicitly set its in-memory option:
 
 ```ts
-const app = new AppBuilder()
-  .addCache((config) => {
-    config.inMemory = true
-    config.redis = undefined
+import { XenoAppBuilder } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addCache((options) => {
+    options.inMemory = true
   })
   .build()
 ```
 
-If you want to use Redis instead, configure the Redis connection:
+To use Redis, pass the `withRedis()` plugin to `addCache()`:
 
 ```ts
-const app = new AppBuilder()
-  .addCache((config) => {
-    config.inMemory = false
-    config.redis = {
-      host: 'localhost',
-      port: 6379,
-      username: undefined,
-      password: undefined,
-      tls: false,
-      maxRetriesPerRequest: undefined,
-    }
-  })
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withRedis } from '@xeno-js/redis'
+
+const app = new XenoAppBuilder()
+  .addCache(withRedis(() => {}))
   .build()
 ```
 
-At least one cache strategy must be configured.
+See [Redis Cache](../../cache/redis) for Redis configuration options.
 
 ## Enable query caching
 
-After configuring the cache, enable the Query pipeline through `addPipeline()`:
+Enable query caching by passing `withQueryCaching()` to `addPipeline()`:
 
 ```ts
-const app = new AppBuilder()
-  .addCache()
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-  })
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withQueryCaching())
   .build()
 ```
 
-This configuration enables the query-specific caching behavior.
+This plugin enables the query-specific caching behavior. If no cache has already been registered, Xeno.JS automatically configures the default in-memory cache.
 
-The two configuration steps have different responsibilities:
+The two configuration steps have different responsibilities when you configure both:
 
-* `addCache()` configures the cache implementation;
-* `addPipeline()` with `queryBus.isEnabled = true` enables the Query pipeline behavior.
+- `addCache()` configures or selects the cache implementation;
+- `addPipeline(withQueryCaching())` enables query caching.
 
-Both are required when using the built-in query caching pipeline.
+Calling `addCache()` is optional when the default in-memory cache is sufficient.
 
 ## Create a cacheable Query
 
@@ -161,11 +156,11 @@ The Query itself is covered in detail in [Create a Query](../cqrs/query).
 
 That page should be your starting point when you need to:
 
-* create a Query class;
-* define Query parameters;
-* create a Query Handler;
-* connect the Query to its handler;
-* add validation to the Query.
+- create a Query class;
+- define Query parameters;
+- create a Query Handler;
+- connect the Query to its handler;
+- add validation to the Query.
 
 This page focuses only on the caching options used by the Query.
 
@@ -215,13 +210,13 @@ cacheOptions: {
 }
 ```
 
-The value is passed to the configured cache when the successful Query result is stored.
+The value is a TTL in seconds and is passed to the configured cache when the successful Query result is stored.
 
 Choose a TTL according to how long the cached result can safely remain available for your application.
 
 ## Use user-scoped caching
 
-Set `isUserScoped` to `true` when the cached result must be isolated per user:
+Set `isUserScoped` to `true` when the cached result must be isolated per user. The active identity must provide a `userId`; otherwise, the key builder falls back to the contextual key:
 
 ```ts
 super('GetCurrentUserQuery', {
@@ -251,7 +246,7 @@ export class GetCurrentUserQuery extends Query<User> {
 }
 ```
 
-Use user-scoped caching when the same logical Query can return different data for different users.
+Use user-scoped caching when the same logical Query can return different data for different users. The key builder includes the current user ID when available and applies the tenant context as well.
 
 ## Bypass the cache
 
@@ -293,11 +288,11 @@ successful result
 store result in cache
 ```
 
-If you want to force a fresh read while still allowing the successful result to refresh the cache, this behavior can be useful.
+This skips the cached value and executes the Query handler; it does not change the consistency guarantees of the underlying data source. A successful result is still written to the cache.
 
 ## Use consistent reads
 
-Set `consistentRead` to `true` when the Query should skip the cached value and execute against the normal Query path:
+Set `consistentRead` to `true` to skip the cached value and execute the Query handler. This option bypasses the cache; it does not change the consistency guarantees of the underlying data source:
 
 ```ts
 super('GetUserQuery', {
@@ -461,13 +456,11 @@ The following example shows the relevant application configuration and a cacheab
 ### Application configuration
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addCache()
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-  })
+  .addPipeline(withQueryCaching())
   .build()
 ```
 
@@ -514,20 +507,17 @@ For the complete Query implementation and Handler registration workflow, see [Cr
 
 Check:
 
-1. `addCache()` is configured;
-2. a cache strategy is available;
-3. `config.queryBus.isEnabled = true`;
-4. the Query defines a non-empty `cacheKey`;
-5. the Query is executed through the Xeno.JS mediator.
+1. `withQueryCaching()` is passed to `addPipeline()`;
+2. the Query defines a non-empty `cacheKey`;
+3. the Query is executed through the Xeno.JS mediator.
 
 For example:
 
 ```ts
-const app = new AppBuilder()
-  .addCache()
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-  })
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withQueryCaching())
   .build()
 ```
 
@@ -551,6 +541,8 @@ If the Query result depends on the current user, use:
 isUserScoped: true
 ```
 
+The current identity must contain a distinct `userId` for each user. Without it, the key builder falls back to the contextual key.
+
 For example:
 
 ```ts
@@ -565,20 +557,19 @@ super('GetCurrentUserQuery', {
 
 ### The application fails while enabling query caching
 
-Make sure a cache implementation has been configured.
+Make sure `withQueryCaching()` is passed to `addPipeline()`. If no cache is already registered, Xeno.JS configures the default in-memory cache automatically.
 
 For example:
 
 ```ts
-const app = new AppBuilder()
-  .addCache()
-  .addPipeline((config) => {
-    config.queryBus.isEnabled = true
-  })
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+
+const app = new XenoAppBuilder()
+  .addPipeline(withQueryCaching())
   .build()
 ```
 
-A cache strategy must be available before the Query caching pipeline can be configured.
+Use `addCache()` only when you need to select or customize a cache provider.
 
 ### Cache errors appear in the logs
 
@@ -590,13 +581,13 @@ Check the cache configuration if these warnings persist, especially when using R
 
 ## Related documentation
 
-* [Application Overview](../overview)
-* [Create a Query](../cqrs/query)
-* [Create a Query Handler](../cqrs/handler)
-* [Enable Validation](./validation)
-* [Enable Performance Tracking](./performance)
-* [Configure Idempotency](./idempotency)
-* [Configure Concurrency](./concurrency)
+- [Application Overview](../overview)
+- [Create a Query](../cqrs/query)
+- [Create a Query Handler](../cqrs/handler)
+- [Enable Validation](./validation)
+- [Enable Performance Tracking](./performance)
+- [Configure Idempotency](./idempotency)
+- [Configure Concurrency](./concurrency)
 
 ---
 

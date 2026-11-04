@@ -6,7 +6,7 @@ keywords:
 - dependency injection
 - service container
 - ServiceContainer
-- AppBuilder
+- XenoAppBuilder
 - service registration
 - service resolution
 - dependency injection container
@@ -18,9 +18,9 @@ faqs:
 - question: What is the Xeno.JS service container?
   answer: The service container is the dependency injection container used to register and resolve application services.
 - question: How do I register a service with Xeno.JS?
-  answer: Use AppBuilder.addServices() and register the service with addSingleton(), addScoped(), or addTransient().
+  answer: Use XenoAppBuilder.addServices() and register the service with addSingleton(), addScoped(), or addTransient().
 - question: How do I resolve a registered service?
-  answer: Use AppBuilder.resolve() when resolving a root-level service, or resolve() on an active IServiceScope for scoped services.
+  answer: After build(), use the returned application's getServices() for root services, getScopedServices() inside an active scope, or runInScope() for work that needs its own scope.
 - question: Can I resolve a scoped service directly from the root container?
   answer: No. Scoped services require an active service scope.
 - question: Can I register the same token more than once?
@@ -35,14 +35,14 @@ The container gives you explicit dependency injection without requiring decorato
 
 Use it when you need to:
 
-* register application services;
-* connect an interface or token to an implementation;
-* define how long a service instance should live;
-* resolve dependencies from other services;
-* share dependencies across application components;
-* keep dependency configuration in your application composition root.
+- register application services;
+- connect an interface or token to an implementation;
+- define how long a service instance should live;
+- resolve dependencies from other services;
+- share dependencies across application components;
+- keep dependency configuration in your application composition root.
 
-For most applications, you interact with the container through `AppBuilder` rather than creating a `ServiceContainer` directly.
+For most applications, you interact with the container through `XenoAppBuilder` rather than creating a `ServiceContainer` directly.
 
 ## Before you start
 
@@ -52,28 +52,30 @@ You need `@xeno-js/core` installed:
 npm install @xeno-js/core
 ```
 
-The usual application entry point is an `AppBuilder`:
+The usual application entry point is an `XenoAppBuilder`:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 ```
 
-`AppBuilder` owns the application's service container and exposes the registration and resolution APIs you normally need.
+`XenoAppBuilder` owns the application's service container and exposes the
+registration APIs used during composition. `build()` returns the configured
+runtime application, not the container.
 
 ---
 
 ## Register Services
 
-Register application services with `AppBuilder.addServices()`.
+Register application services with `XenoAppBuilder.addServices()`.
 
-The callback receives the service container:
+The callback receives the service registration API:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addServices((services) => {
   services.addScoped('USER_REPOSITORY', (scope) => {
@@ -107,7 +109,7 @@ This makes the dependency relationship visible directly in the registration.
 You can register multiple services in the same `addServices()` callback:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addServices((services) => {
   services.addScoped('USER_REPOSITORY', (scope) => {
@@ -133,7 +135,7 @@ app.addServices((services) => {
 `addServices()` is chainable:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((services) => {
     services.addScoped('USER_REPOSITORY', (scope) => {
       return new UserRepository(
@@ -157,33 +159,36 @@ Every registration must use one of the available lifetimes:
 
 For details, see:
 
-* [Singleton](./lifetimes/singleton)
-* [Scoped](./lifetimes/scoped)
-* [Transient](./lifetimes/transient)
-* [Lifetimes](./lifetimes)
+- [Singleton](./lifetimes/singleton)
+- [Scoped](./lifetimes/scoped)
+- [Transient](./lifetimes/transient)
 
 ---
 
 ## Resolve a Service
 
-If you have an `AppBuilder`, you can resolve a registered root-level service with `app.resolve()`:
+`XenoAppBuilder.resolve()` can resolve a registered root-level service:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
   .addServices((services) => {
     services.addSingleton('CONFIG_SERVICE', () => {
       return new ConfigService()
     })
   })
 
+const config = app.resolve('CONFIG_SERVICE') //`XenoAppBuilder.resolve()` before build()
+
 await app.build()
 
-const config = app.resolve('CONFIG_SERVICE')
+const config = app.getServices().CONFIG_SERVICE // `getServices()` after build()
 ```
 
-`AppBuilder.resolve()` delegates resolution to its service container.
+`XenoAppBuilder.resolve()` delegates resolution to the root service container.
 
-This is useful for services that can be resolved directly from the root container, such as singleton and transient services.
+Use this builder method for root-level resolution during composition, such as
+singleton and transient services without scoped dependencies. In runtime code,
+use `getServices()` on the application returned by `build()`.
 
 Scoped services are different: they require an active scope.
 
@@ -206,6 +211,10 @@ services.addScoped('USER_SERVICE', (scope) => {
   )
 })
 ```
+
+The scope supplied to a factory depends on the registration and resolution:
+singleton factories receive the root scope, while scoped and transient
+factories receive the scope used to resolve them.
 
 This is the standard Xeno.JS pattern for explicit dependency injection.
 
@@ -237,98 +246,73 @@ Then resolve the service where it is needed.
 
 A service scope is required when working with scoped services.
 
-You can create a scope from the service container:
+`build()` returns the runtime application, not the service container. For
+application work that needs scoped services, use `runInScope()`:
 
 ```ts
-const container = await app.build()
+const application = await app.build()
 
-const scope = container.createScope()
-
-const repository = scope.resolve('USER_REPOSITORY')
-
-await scope.dispose()
+await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+})
 ```
 
-A scope provides the lifetime boundary for scoped services.
+`runInScope()` creates the request context and service scope for the operation,
+then disposes the scope when the operation completes.
 
 Within the same scope:
 
 ```ts
-const first = scope.resolve('USER_REPOSITORY')
-const second = scope.resolve('USER_REPOSITORY')
+await application.runInScope(async (services) => {
+  const first = services.USER_REPOSITORY
+  const second = services.USER_REPOSITORY
 
-console.log(first === second) // true
+  console.log(first === second) // true
+})
 ```
 
 A different scope receives a different scoped instance:
 
 ```ts
-const scope1 = container.createScope()
-const scope2 = container.createScope()
-
-const repository1 = scope1.resolve('USER_REPOSITORY')
-const repository2 = scope2.resolve('USER_REPOSITORY')
+const repository1 = await application.runInScope(
+  async (services) => services.USER_REPOSITORY,
+)
+const repository2 = await application.runInScope(
+  async (services) => services.USER_REPOSITORY,
+)
 
 console.log(repository1 === repository2) // false
-
-await scope1.dispose()
-await scope2.dispose()
 ```
 
 For request-scoped application code, Xeno.JS can manage the active scope through its context system. See [Context & Scopes](../context-scopes).
 
 ---
 
-## Resolve a Scoped Service with `ContainerUtils`
+## Resolve a Scoped Service from the Application
 
-If you already have the application container and need to resolve a scoped service from the current active scope, use `ContainerUtils.resolveServiceScoped()`:
-
-```ts
-import { ContainerUtils } from '@xeno-js/core'
-
-const repository = ContainerUtils.resolveServiceScoped(
-  'USER_REPOSITORY',
-  app,
-)
-```
-
-This is useful at application or transport boundaries where you have the application container but want the service associated with the current active scope.
-
-A scoped service cannot be resolved directly from the root container:
+When an execution already has an active scope, use `getScopedServices()`:
 
 ```ts
-app.resolve('USER_REPOSITORY')
+const { USER_REPOSITORY: repository } =
+  application.getScopedServices()
 ```
 
-Instead, when an active scope exists:
-
-```ts
-ContainerUtils.resolveServiceScoped(
-  'USER_REPOSITORY',
-  app,
-)
-```
-
-If there is no active scope, `resolveServiceScoped()` throws:
-
-```text
-Active service scope is required to execute Scoped service.
-```
-
-See [Context & Scopes](../context-scopes) for more information about active scopes.
+If there is no active scope, `getScopedServices()` throws. For work outside an
+existing request or execution, use `runInScope()` as shown above. See
+[Context & Scopes](../context-scopes) for more information about active scopes.
 
 ---
 
 ## Build the Application
 
-Service registrations added through `AppBuilder.addServices()` are applied when the application is built.
+Service registrations added through `XenoAppBuilder.addServices()` are applied when the application is built.
 
 A typical bootstrap looks like this:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addServices((services) => {
   services.addScoped('USER_REPOSITORY', (scope) => {
@@ -344,10 +328,11 @@ app.addServices((services) => {
   })
 })
 
-const container = await app.build()
+const application = await app.build()
 ```
 
-After `build()` completes, the application container is ready to resolve the registered services.
+After `build()` completes, use the returned runtime application to access
+registered services. It is not the service container.
 
 ---
 
@@ -371,9 +356,9 @@ USER_DATA_SOURCE
 Register the services explicitly:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addServices((services) => {
   services.addScoped('USER_DATA_SOURCE', () => {
@@ -399,12 +384,20 @@ app.addServices((services) => {
   })
 })
 
-await app.build()
+const application = await app.build()
 ```
 
 The dependency graph is defined entirely through registrations.
 
-When `USER_CONTROLLER` is resolved, its factory resolves `USER_SERVICE`, which resolves `USER_REPOSITORY`, which resolves `USER_DATA_SOURCE`.
+When `USER_CONTROLLER` is resolved in a scope, its factory resolves
+`USER_SERVICE`, which resolves `USER_REPOSITORY`, which resolves
+`USER_DATA_SOURCE`:
+
+```ts
+await application.runInScope(async (services) => {
+  const controller = services.USER_CONTROLLER
+})
+```
 
 ---
 
@@ -478,7 +471,7 @@ Resolving a token that has not been registered fails.
 For example:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addServices((services) => {
   services.addScoped('USER_SERVICE', () => {
@@ -486,7 +479,7 @@ app.addServices((services) => {
   })
 })
 
-await app.build()
+const application = await app.build()
 
 app.resolve('USER_REPOSITORY')
 ```
@@ -502,7 +495,7 @@ When this happens, check:
 1. the token used by `resolve()`;
 2. the token used during registration;
 3. that the registration is inside `addServices()`;
-4. that `app.build()` has completed before resolving from the built container.
+4. that the token is registered before attempting resolution.
 
 Token names must match exactly.
 
@@ -528,24 +521,21 @@ The container reports:
 [DI Container Error]: Scoped service 'USER_REPOSITORY' requires an active scope.
 ```
 
-Use an active scope instead:
+Use an application scope instead:
 
 ```ts
-const container = await app.build()
-const scope = container.createScope()
+const application = await app.build()
 
-const repository = scope.resolve('USER_REPOSITORY')
-
-await scope.dispose()
+await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+})
 ```
 
-Or, when an active application scope already exists:
+Or, when an application scope already exists:
 
 ```ts
-const repository = ContainerUtils.resolveServiceScoped(
-  'USER_REPOSITORY',
-  app,
-)
+const { USER_REPOSITORY: repository } =
+  application.getScopedServices()
 ```
 
 ---
@@ -612,39 +602,26 @@ See [Captive Dependencies](./captive-dependencies).
 
 ---
 
-## Dispose the Container and Scopes
+## Dispose Scoped Services
 
-The service container and scopes implement disposal.
+`runInScope()` disposes the scope when the scoped operation completes. Disposable
+scoped and transient instances are tracked by the scope used to resolve them.
+Singleton instances are tracked by the root scope.
 
-Dispose a scope when it is no longer needed:
+`ServiceContainer.dispose()` disposes the root scope, then clears its singleton
+instances and registrations. This API belongs to a directly owned
+`ServiceContainer`; `XenoAppBuilder.build()` returns a runtime application, not
+that container. The application API shown here does not expose
+`ServiceContainer.dispose()`.
 
-```ts
-const scope = container.createScope()
-
-try {
-  const service = scope.resolve('USER_SERVICE')
-
-  // Use the service.
-} finally {
-  await scope.dispose()
-}
-```
-
-Dispose the application container during application shutdown:
-
-```ts
-await container.dispose()
-```
-
-Services that expose a `dispose()` method can participate in container or scope cleanup.
-
-This is particularly useful for services that own resources that must be released explicitly.
+The container disposes tracked instances in reverse creation order. If disposal
+of one instance fails, it logs the error and continues disposing the others.
 
 ---
 
 ## When to Use the Service Container Directly
 
-Most application code should use `AppBuilder.addServices()` for registration.
+Most application code should use `XenoAppBuilder.addServices()` for registration.
 
 Use the underlying container directly when you are building infrastructure, modules, or integration code that receives an `IServiceContainer`.
 
@@ -662,7 +639,8 @@ async function configureModule(
 }
 ```
 
-Application code generally does not need to instantiate `ServiceContainer` manually.
+Application code generally does not need to instantiate or manage
+`ServiceContainer` manually.
 
 The normal application flow is:
 
@@ -697,7 +675,9 @@ services.addScoped('USER_SERVICE', ...)
 must be resolved with:
 
 ```ts
-scope.resolve('USER_SERVICE')
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+})
 ```
 
 not a different token.
@@ -709,12 +689,12 @@ The service was registered with `addScoped()` but was resolved from the root con
 Use:
 
 ```ts
-const scope = container.createScope()
-
-const service = scope.resolve('USER_SERVICE')
+await application.runInScope(async (services) => {
+  const service = services.USER_SERVICE
+})
 ```
 
-or use `ContainerUtils.resolveServiceScoped()` when an active scope already exists.
+or use `application.getScopedServices()` when an active scope already exists.
 
 ### `already registered`
 
@@ -732,13 +712,14 @@ Inspect the resolution path in the error and remove the dependency cycle.
 
 A singleton is trying to resolve a scoped service.
 
-Review the lifetimes of the services involved and move the scoped dependency to a scoped/transient component, or change the dependency boundary.
+Review the resolution path and keep scoped work outside the singleton's
+construction path. A transient dependency does not make a scoped dependency
+safe when the transient is being resolved as part of singleton construction.
 
-### Resolution after disposal fails
+### Scoped service used outside its operation
 
-A disposed scope can no longer resolve services.
-
-Make sure the scope remains alive for the complete operation that uses its services.
+Do not retain a scoped service beyond the `runInScope()` callback that created
+it. The scope closes when that operation completes.
 
 ---
 
@@ -746,29 +727,29 @@ Make sure the scope remains alive for the complete operation that uses its servi
 
 Before considering your dependency injection setup complete:
 
-* [ ] Every service has a unique registration token.
-* [ ] Every service uses the appropriate lifetime.
-* [ ] Dependencies are resolved explicitly inside registration factories.
-* [ ] Scoped services are only resolved from an active scope.
-* [ ] The application is built before resolving services from the built container.
-* [ ] There are no circular dependencies.
-* [ ] Singletons do not depend on scoped services.
-* [ ] Scopes are disposed when their work is complete.
-* [ ] The application container is disposed during application shutdown when appropriate.
+- [ ] Every service has a unique registration token.
+- [ ] Every service uses the appropriate lifetime.
+- [ ] Dependencies are resolved explicitly inside registration factories.
+- [ ] Scoped services are only resolved from an active scope.
+- [ ] Resolve root services through the runtime application's `getServices()`.
+- [ ] Resolve scoped services through `getScopedServices()` only in an active scope, or use `runInScope()`.
+- [ ] There are no circular dependencies.
+- [ ] Singletons do not depend on scoped services.
+- [ ] Use `runInScope()` so each application scope is closed when its work completes.
+- [ ] Scoped services are used only during the scope that created them.
 
 ## Related Documentation
 
-* [Dependency Injection](./overview)
-* [Registration](./registration)
-* [Lifetimes](./lifetimes)
-* [Singleton](./lifetimes/singleton)
-* [Scoped](./lifetimes/scoped)
-* [Transient](./lifetimes/transient)
-* [Resolution](./resolution)
-* [Dependency Graph](./dependency-graph)
-* [Captive Dependencies](./captive-dependencies)
-* [Context & Scopes](../context-scopes)
-* [App Builder](../app-builder)
+- [Dependency Injection](./overview)
+- [Registration](./registration)
+- [Singleton](./lifetimes/singleton)
+- [Scoped](./lifetimes/scoped)
+- [Transient](./lifetimes/transient)
+- [Resolution](./resolution)
+- [Dependency Graph](./dependency-graph)
+- [Captive Dependencies](./captive-dependencies)
+- [Context & Scopes](../context-scopes)
+- [App Builder](../app-builder)
 
 ---
 

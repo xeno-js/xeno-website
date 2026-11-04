@@ -19,9 +19,9 @@ tags:
 - typescript
 faqs:
 - question: How do I enable Pino in Xeno.JS?
-  answer: Call addLogger() and provide options.pino.config.
+  answer: Register the withPinoLogger() plugin with app.addLogger().
 - question: Do I resolve the Pino instance directly from the Xeno.JS container?
-  answer: No. Xeno.JS registers the application ILogger under TOKENS.LOGGER. Pino is one of the logger clients used by that logger.
+  answer: No. Xeno.JS exposes the application logger through the built application's service proxy. Pino is one of the logger clients used by that logger.
 - question: What Pino destinations does Xeno.JS support?
   answer: Xeno.JS supports stdout and file destinations.
 - question: Where does Pino write logs by default?
@@ -29,13 +29,13 @@ faqs:
 - question: What file does Xeno.JS use when the Pino file destination is selected?
   answer: The default file path is logs/app.log.
 - question: Is Pino pretty printing enabled by default?
-  answer: Yes. Xeno.JS enables pretty printing by default when the Pino environment is development.
+  answer: No. Pino pretty printing is disabled by default and must be explicitly enabled via prettyPrint.
 - question: Can I disable Pino pretty printing?
-  answer: Yes. Set prettyPrint to false in the Pino configuration.
+  answer: Yes. prettyPrint is disabled by default unless explicitly set to true.
 - question: Does Pino use the Xeno.JS log level?
   answer: Yes. Xeno.JS passes the configured minimum log level to its Pino logger adapter, which filters messages below that level.
 - question: Does Xeno.JS redact sensitive fields in Pino?
-  answer: Yes. Xeno.JS configures Pino redaction for password, token, secret, authorization, and headers.authorization.
+  answer: Yes. Xeno.JS configures standard redaction paths for sensitive data such as passwords, tokens, secrets, cookies, and authorization headers.
 - question: Can Pino be used together with Console or Sentry?
   answer: Yes. Pino can be configured alongside the other Xeno.JS logger providers.
 ---
@@ -49,32 +49,38 @@ You do not replace the Xeno.JS logger with a Pino-specific API. Instead, you ena
 The basic configuration is:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options) => {
-  options.pino.config = {
-    destination: 'stdout',
-  }
-})
+app.addLogger(
+  withPinoLogger((options) => {
+    options.destination = 'stdout'
+  })
+)
 
-const container = await app.build()
+await app.build()
 ```
 
-After the application is built, resolve `TOKENS.LOGGER` and use the returned logger.
+`build()` returns the application instance. After building, resolve the application logger through its service proxy:
+
+```ts
+const application = await app.build()
+const { logger } = application.getServices()
+```
 
 ---
 
 ## Prerequisites
 
-Install Xeno.JS and Pino:
+Install Xeno.JS and its Pino integration:
 
 ```bash
-npm install @xeno-js/core @xeno-js/shared pino
+npm install @xeno-js/core @xeno-js/shared @xeno-js/pino
 ```
 
-`pino` is an optional peer dependency of `@xeno-js/core`.
+`@xeno-js/pino` provides the Pino adapter. Install any external dependencies required by that adapter according to its package metadata; `pino` is not an optional peer dependency of `@xeno-js/core`.
 
 If you enable pretty printing, Xeno.JS configures Pino to use the `pino-pretty` transport. Install it as well:
 
@@ -88,25 +94,24 @@ You only need `pino-pretty` when pretty printing is enabled.
 
 ## Enable Pino
 
-Pino is enabled when `options.pino.config` is defined.
+Register `withPinoLogger()` with `addLogger()` to enable the Pino provider. The plugin's setup callback receives Pino adapter options directly.
 
 For example:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options) => {
-  options.pino.config = {}
-})
+app.addLogger(withPinoLogger(() => {}))
 
-const container = await app.build()
+const application = await app.build()
 ```
 
-The empty configuration uses the Xeno.JS defaults.
+The plugin is enabled by default. Set `isEnabled` to `false` in its setup callback to skip registering the Pino logger.
 
-Pino is not enabled by merely installing the `pino` package. It becomes a Xeno.JS logging provider when `pino.config` is configured.
+Installing the adapter alone does not register it with the application.
 
 ---
 
@@ -115,26 +120,22 @@ Pino is not enabled by merely installing the `pino` package. It becomes a Xeno.J
 The minimum log level is configured through the Xeno.JS logger configuration:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { LOG_LEVEL } from '@xeno-js/shared'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addLogger((options) => {
   options.level = LOG_LEVEL.INFO
-
-  options.pino.config = {
-    destination: 'stdout',
-  }
 })
 ```
 
 Xeno.JS supports:
 
-* `LOG_LEVEL.DEBUG`
-* `LOG_LEVEL.INFO`
-* `LOG_LEVEL.WARN`
-* `LOG_LEVEL.ERROR`
+- `LOG_LEVEL.DEBUG`
+- `LOG_LEVEL.INFO`
+- `LOG_LEVEL.WARN`
+- `LOG_LEVEL.ERROR`
 
 The configured level is the minimum level accepted by the Xeno.JS logger.
 
@@ -158,7 +159,7 @@ DEBUG
 INFO
 ```
 
-The Pino adapter applies the same minimum level before calling the corresponding Pino method.
+The Xeno.JS logger applies its configured minimum level before sending an event to the configured providers. `addLogger()` accepts either a setup callback or logger plugin(s); it is not additive across multiple calls. To register Pino alongside other providers, pass the plugins together in one array. The Pino plugin callback receives Pino adapter options, not the `LoggerConfig` passed to the setup callback.
 
 ---
 
@@ -175,11 +176,9 @@ type Destination = 'stdout' | 'file'
 This is the default:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {
-    destination: 'stdout',
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.destination = 'stdout'
+}))
 ```
 
 If `destination` is omitted, Xeno.JS uses `stdout`.
@@ -189,12 +188,10 @@ If `destination` is omitted, Xeno.JS uses `stdout`.
 Configure:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {
-    destination: 'file',
-    filePath: 'logs/app.log',
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.destination = 'file'
+  options.filePath = 'logs/app.log'
+}))
 ```
 
 If `destination` is `file` and `filePath` is omitted, Xeno.JS uses:
@@ -214,12 +211,10 @@ Make sure the application process has permission to create and write to the conf
 Pino has an optional `env` configuration:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {
-    env: 'production',
-    destination: 'stdout',
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.env = 'production'
+  options.destination = 'stdout'
+}))
 ```
 
 If `env` is not specified, Xeno.JS uses:
@@ -238,51 +233,43 @@ Xeno.JS enables pretty printing by default when the configured environment is `d
 For example:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {
-    env: 'development',
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.env = 'development'
+}))
 ```
 
 is equivalent to using:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {
-    env: 'development',
-    prettyPrint: true,
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.env = 'development'
+  options.prettyPrint = true
+}))
 ```
 
 To explicitly disable it:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {
-    env: 'development',
-    prettyPrint: false,
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.env = 'development'
+  options.prettyPrint = false
+}))
 ```
 
 To explicitly enable it:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {
-    env: 'production',
-    prettyPrint: true,
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.env = 'production'
+  options.prettyPrint = true
+}))
 ```
 
 When pretty printing is enabled, Xeno.JS configures the Pino `pino-pretty` transport with:
 
-* colorized output;
-* standard translated timestamps;
-* `pid` and `hostname` omitted from the pretty output.
+- colorized output;
+- standard translated timestamps;
+- `pid` and `hostname` omitted from the pretty output.
 
 If you enable pretty printing, make sure `pino-pretty` is installed.
 
@@ -297,20 +284,18 @@ Xeno.JS registers the application logger under `TOKENS.LOGGER`.
 Resolve it after building the application:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
-import { TOKENS } from '@xeno-js/shared'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options) => {
-  options.pino.config = {
-    destination: 'stdout',
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.destination = 'stdout'
+}))
 
-const container = await app.build()
+const application = await app.build()
 
-const logger = container.resolve(TOKENS.LOGGER)
+const { logger } = application.getServices()
 ```
 
 The returned value implements the Xeno.JS `ILogger` interface.
@@ -337,34 +322,38 @@ Pino does not have to be the only provider.
 For example, you can enable Console and Pino together:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
+import { XenoAppBuilder, withConsoleLogger } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
+const app = new XenoAppBuilder()
 
-const app = new AppBuilder()
-
-app.addLogger((options) => {
-  options.console = true
-
-  options.pino.config = {
-    destination: 'stdout',
-  }
-})
+app.addLogger([
+  withConsoleLogger((options) => {
+    options.isEnabled = true
+  }),
+  withPinoLogger((options) => {
+    options.destination = 'stdout'
+  }),
+])
 ```
 
 You can also configure Pino and Sentry:
 
 ```ts
-app.addLogger((options) => {
-  options.console = false
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
+import { withSentryNodeLogger } from '@xeno-js/sentry-node'
 
-  options.pino.config = {
-    destination: 'stdout',
-  }
+const app = new XenoAppBuilder()
 
-  options.sentry.config = {
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV,
-  }
-})
+app.addLogger([
+  withPinoLogger((options) => {
+    options.destination = 'stdout'
+  }),
+  withSentryNodeLogger((options) => {
+    options.dsn = process.env.SENTRY_DSN ?? ''
+    options.environment = process.env.NODE_ENV
+  }),
+])
 ```
 
 The Xeno.JS logger sends accepted events to all configured logger clients.
@@ -475,14 +464,14 @@ Likewise, application-provided structured data or error objects can contain sens
 
 Avoid logging:
 
-* passwords;
-* authentication tokens;
-* secrets;
-* credentials;
-* cookies;
-* authorization headers;
-* complete request bodies;
-* other sensitive application data.
+- passwords;
+- authentication tokens;
+- secrets;
+- credentials;
+- cookies;
+- authorization headers;
+- complete request bodies;
+- other sensitive application data.
 
 ---
 
@@ -546,27 +535,21 @@ Pino is configured with its standard error serializer, so error information is s
 A complete application configuration can look like this:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
-import { LOG_LEVEL, TOKENS } from '@xeno-js/shared'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options, config) => {
-  options.level = LOG_LEVEL.INFO
+app.addLogger(withPinoLogger((options, config) => {
+  options.destination = 'file'
+  options.filePath = config.get('LOG_FILE_PATH', 'logs/app.log')
+  options.env = 'production'
+  options.prettyPrint = false
+}))
 
-  options.console = false
+const application = await app.build()
 
-  options.pino.config = {
-    destination: 'file',
-    filePath: config.get('LOG_FILE_PATH', 'logs/app.log'),
-    env: 'production',
-    prettyPrint: false,
-  }
-})
-
-const container = await app.build()
-
-const logger = container.resolve(TOKENS.LOGGER)
+const { logger } = application.getServices()
 
 logger.info('Application started')
 
@@ -581,14 +564,12 @@ try {
 
 This configuration:
 
-* filters out `DEBUG`;
-* accepts `INFO`, `WARN`, and `ERROR`;
-* disables Console;
-* writes Pino logs to `logs/app.log`;
-* uses structured JSON output;
-* uses the Xeno.JS safe context;
-* applies Pino redaction;
-* exposes the logger through `TOKENS.LOGGER`.
+- registers the Pino provider without enabling Console;
+- writes Pino logs to `logs/app.log`;
+- uses structured JSON output;
+- uses the Xeno.JS safe context;
+- applies Pino redaction;
+- resolves the application logger through the built application's service proxy.
 
 ---
 
@@ -597,20 +578,16 @@ This configuration:
 For local development, pretty printing can make Pino output easier to read:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
-import { LOG_LEVEL } from '@xeno-js/shared'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options) => {
-  options.level = LOG_LEVEL.DEBUG
-
-  options.pino.config = {
-    env: 'development',
-    destination: 'stdout',
-    prettyPrint: true,
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.env = 'development'
+  options.destination = 'stdout'
+  options.prettyPrint = true
+}))
 
 await app.build()
 ```
@@ -624,20 +601,16 @@ Make sure `pino-pretty` is installed when using this configuration.
 For structured logs, disable pretty printing:
 
 ```ts
-import { AppBuilder } from '@xeno-js/core'
-import { LOG_LEVEL } from '@xeno-js/shared'
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withPinoLogger } from '@xeno-js/pino'
 
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
-app.addLogger((options) => {
-  options.level = LOG_LEVEL.INFO
-
-  options.pino.config = {
-    env: 'production',
-    destination: 'stdout',
-    prettyPrint: false,
-  }
-})
+app.addLogger(withPinoLogger((options) => {
+  options.env = 'production'
+  options.destination = 'stdout'
+  options.prettyPrint = false
+}))
 
 await app.build()
 ```
@@ -650,33 +623,25 @@ This keeps the output in Pino's structured format, which can then be consumed by
 
 ### Pino Does Not Produce Any Logs
 
-Make sure `pino.config` is defined:
+Make sure you register the Pino plugin:
 
 ```ts
-app.addLogger((options) => {
-  options.pino.config = {}
-})
+app.addLogger(withPinoLogger(() => {}))
 ```
 
-Installing Pino alone does not enable the Xeno.JS Pino provider.
+The plugin is enabled by default; installing its package alone does not register it with the application.
 
-Also check the configured minimum level:
-
-```ts
-options.level = LOG_LEVEL.INFO
-```
-
-A `DEBUG` event will not be emitted with that configuration.
+Also check whether the configured Xeno.JS logger minimum level filters out the event before it reaches the provider.
 
 ### Pino Cannot Be Imported
 
-Make sure the provider dependency is installed:
+If `withPinoLogger` cannot be imported, make sure the provider package is installed:
 
 ```bash
-npm install pino
+npm install @xeno-js/pino
 ```
 
-`pino` is an optional peer dependency of `@xeno-js/core`.
+Install any external dependencies required by the adapter according to its package metadata. They are not optional peer dependencies of `@xeno-js/core`.
 
 ### Pretty Printing Fails
 
@@ -693,10 +658,10 @@ Xeno.JS configures the Pino transport with `pino-pretty` when pretty printing is
 Check:
 
 ```ts
-options.pino.config = {
-  destination: 'file',
-  filePath: 'logs/app.log',
-}
+app.addLogger(withPinoLogger((options) => {
+  options.destination = 'file'
+  options.filePath = 'logs/app.log'
+}))
 ```
 
 If `filePath` is omitted, Xeno.JS uses:
@@ -717,10 +682,10 @@ Xeno.JS registers the application `ILogger`, not the Pino instance, under the DI
 TOKENS.LOGGER
 ```
 
-Resolve:
+Resolve the logger from the built application:
 
 ```ts
-const logger = container.resolve(TOKENS.LOGGER)
+const { logger } = application.getServices()
 ```
 
 and use the Xeno.JS logging API.
@@ -731,11 +696,11 @@ Pino remains an implementation behind the Xeno.JS logger abstraction.
 
 ## Related Docs
 
-* [Logging Overview](./overview)
-* [Sentry Node](./sentry-node)
-* [Dependency Injection — Resolution](../dependency-injection/resolution)
-* [Context & Scopes](../fundamentals/context-scopes)
-* [Pipelines — Logging](../application/pipelines/logging)
+- [Logging Overview](./overview)
+- [Sentry Node](./sentry-node)
+- [Dependency Injection — Resolution](../dependency-injection/resolution)
+- [Context & Scopes](../fundamentals/context-scopes)
+- [Pipelines — Logging](../application/pipelines/logging)
 
 ---
 

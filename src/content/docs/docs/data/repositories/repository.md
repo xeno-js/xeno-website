@@ -1,12 +1,11 @@
 ---
 title: Repository
-description: Learn how to implement a repository with Xeno.JS, register it in AppBuilder, resolve it through dependency injection, and use its CRUD operations.
+description: Learn how to implement a repository with Xeno.JS, register it in XenoAppBuilder, resolve it through dependency injection, and use its CRUD operations.
 keywords:
 - Xeno.JS
 - Repository
 - IRepository
-- AppBuilder
-- dependency injection
+- XenoAppBuilder
 - dependency injection
 - data source
 - mapper
@@ -19,9 +18,9 @@ faqs:
 - question: How do I create a repository in Xeno.JS?
   answer: Extend the abstract Repository<T, TDto> class and pass an IWriteDataSource<TDto> and IMapper<T, TDto> to its constructor.
 - question: How do I register a repository in Xeno.JS?
-  answer: Register the concrete repository with AppBuilder.addServices() using the service container, normally with addScoped(), addSingleton(), or addTransient().
+  answer: Register the concrete repository with XenoAppBuilder.addServices() using the service container, normally with addScoped(), addSingleton(), or addTransient().
 - question: How do I resolve a repository?
-  answer: Resolve the token from an IServiceScope when the repository is registered as scoped, or from the root container when it is registered as singleton or transient.
+  answer: Resolve scoped repositories through XenoApplication.runInScope(); root resolution cannot retrieve scoped services.
 - question: Does Repository implement CRUD operations?
   answer: Yes. The Xeno.JS Repository base class implements findById, findAll, save, update, and delete using the configured data source and mapper.
 ---
@@ -34,6 +33,10 @@ You normally create a repository by extending the abstract `Repository<T, TDto>`
 
 ```ts
 import { Repository } from '@xeno-js/core'
+import type { IMapper, IWriteDataSource } from '@xeno-js/core'
+
+import type { User } from './user'
+import type { UserDto } from './user.dto'
 
 export class UserRepository extends Repository<User, UserDto> {
   constructor(
@@ -47,11 +50,11 @@ export class UserRepository extends Repository<User, UserDto> {
 
 The base `Repository` already implements the standard operations:
 
-* `findById()`
-* `findAll()`
-* `save()`
-* `update()`
-* `delete()`
+- `findById()`
+- `findAll()`
+- `save()`
+- `update()`
+- `delete()`
 
 Your concrete repository therefore normally contains the **entity/DTO types and constructor dependencies**, rather than reimplementing those CRUD methods.
 
@@ -91,15 +94,15 @@ npm install @xeno-js/core
 
 You also need implementations of:
 
-* the DTO used by the data source;
-* `IWriteDataSource<TDto>`;
-* `IMapper<TEntity, TDto>`.
+- the DTO used by the data source;
+- `IWriteDataSource<TDto>`;
+- `IMapper<TEntity, TDto>`.
 
 `Repository` is exported from `@xeno-js/core`.
 
 ```ts
 import {
-  AppBuilder,
+ XenoAppBuilder,
   Repository,
 } from '@xeno-js/core'
 ```
@@ -167,6 +170,9 @@ A concrete mapper can therefore be implemented as:
 
 ```ts
 import type { IMapper } from '@xeno-js/core'
+
+import type { User } from './user'
+import type { UserDto } from './user.dto'
 
 export class UserMapper implements IMapper<User, UserDto> {
   toDto(entity: User): UserDto {
@@ -247,50 +253,46 @@ IWriteDataSource.update()
 
 The repository depends on `IWriteDataSource<TDto>`.
 
-The contract contains both read and write operations:
+The contract extends `IDisposable` and contains both read and write operations:
 
 ```ts
-interface IWriteDataSource<TDto> {
+import type { IDisposable, Optional, UserContext } from '@xeno-js/core'
+
+interface IWriteDataSource<TDto> extends IDisposable {
   findAll(
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
   ): Promise<TDto[]>
 
   findById(
     id: string | number,
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
   ): Promise<Optional<TDto>>
 
   insert(
     dto: TDto,
-    signal: Optional<AbortSignal>,
+    signal?: Optional<AbortSignal>,
   ): Promise<void>
 
   delete(
     dto: TDto,
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
   ): Promise<void>
 
   update(
     id: string | number,
     dto: Partial<TDto>,
-    ctx: UserContext,
-    signal: Optional<AbortSignal>,
+    ctx?: Optional<UserContext>,
+    signal?: Optional<AbortSignal>,
   ): Promise<void>
+
+  dispose(): Promise<void>
 }
 ```
 
-Your concrete data source is responsible for the actual persistence operation.
-
-For example, the application can have:
-
-```ts
-export class UserDataSource implements IWriteDataSource<UserDto> {
-  // database implementation
-}
-```
+The concrete data source must implement these operations and `dispose()`. It is responsible for the actual persistence operation and releasing any resources it owns.
 
 The important separation is:
 
@@ -370,6 +372,18 @@ If your repository needs operations beyond the base CRUD contract, you can add m
 For example:
 
 ```ts
+import type {
+  IMapper,
+  IWriteDataSource,
+  Optional,
+  ResultType,
+  UserContext,
+} from '@xeno-js/core'
+import { Repository } from '@xeno-js/core'
+
+import type { User } from './user'
+import type { UserDto } from './user.dto'
+
 export class UserRepository extends Repository<User, UserDto> {
   constructor(
     dataSource: IWriteDataSource<UserDto>,
@@ -383,18 +397,20 @@ export class UserRepository extends Repository<User, UserDto> {
     ctx: UserContext,
     signal: Optional<AbortSignal>,
   ): Promise<ResultType<Optional<User>>> {
-    // application-specific implementation
+    throw new Error('Implement the application-specific email lookup.')
   }
 }
 ```
 
 Only methods that are not provided by the base `Repository` need to be added by the concrete repository.
 
-## 6. Register the Repository in AppBuilder
+## 6. Register the Repository in `XenoAppBuilder`
 
 Xeno.JS uses explicit dependency injection registration.
 
-The application composition root is `AppBuilder`.
+The application composition root is `XenoAppBuilder`.
+
+The registration examples assume `app` uses the typed `Registry` shown in the next section.
 
 Use:
 
@@ -418,7 +434,7 @@ services.addScoped('USER_REPOSITORY', (container) => {
 A complete registration therefore looks like:
 
 ```ts
-const app = new AppBuilder()
+const app = new XenoAppBuilder()
 
 app.addServices((services) => {
   services.addScoped('USER_DATA_SOURCE', (container) => {
@@ -479,51 +495,38 @@ services.addScoped('USER_REPOSITORY', (container) => {
 })
 ```
 
-A scoped service must be resolved from a scope.
-
-This is important:
+A scoped service must be resolved from an active scope. `XenoAppBuilder.build()` returns the runtime application, so use `XenoApplication.runInScope()`:
 
 ```ts
-container.resolve('USER_REPOSITORY')
+import type { UserContext } from '@xeno-js/core'
+
+const application = await app.build()
+const userContext: UserContext = {
+  userId: 'd108b2d2-1df8-45ca-8a27-686f9f443269',
+  tenantId: '6fdeff88-9f53-4c58-b24f-2e2db77d95ce',
+}
+
+const result = await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+  return repository.findAll(userContext, undefined)
+})
 ```
 
-cannot be used for a scoped registration from the root container.
-
-Instead:
-
-```ts
-const scope = container.createScope()
-
-const repository = scope.resolve('USER_REPOSITORY')
-```
+The application manages the scope lifetime and disposes it when the callback completes.
 
 ### Singleton
 
 A singleton is shared by the container:
 
-```ts
-services.addSingleton('USER_REPOSITORY', (container) => {
-  return new UserRepository(
-    container.resolve('USER_DATA_SOURCE'),
-    container.resolve('USER_MAPPER'),
-  )
-})
-```
+Register a repository as singleton only when its data source and mapper are also root-resolvable and safe to share. Do not use the scoped `USER_DATA_SOURCE` and `USER_MAPPER` registrations shown above for this lifetime.
 
-It can be resolved directly from the root container:
+For a repository registered as singleton (not the scoped registration shown above), `XenoAppBuilder.resolve()` resolves it from the root container:
 
 ```ts
 const repository = app.resolve('USER_REPOSITORY')
 ```
 
-or:
-
-```ts
-const container = await app.build()
-const repository = container.resolve('USER_REPOSITORY')
-```
-
-A singleton should only be used when its dependencies and application semantics are compatible with singleton lifetime.
+A singleton should only be used when its dependencies and application semantics are compatible with singleton lifetime. In particular, do not capture scoped dependencies in a singleton.
 
 ### Transient
 
@@ -538,13 +541,7 @@ services.addTransient('USER_REPOSITORY', (container) => {
 })
 ```
 
-It can be resolved from the root container:
-
-```ts
-const repository = app.resolve('USER_REPOSITORY')
-```
-
-The appropriate lifetime depends on the dependencies used by the concrete repository.
+Because the dependencies registered above are scoped, resolve this transient repository inside `application.runInScope()`. Root resolution is only valid when the transient repository's dependency graph is also root-resolvable. A repository that depends on scoped services must not be registered as a singleton.
 
 ## 8. Extend the XenoRegistry for Application Services
 
@@ -556,7 +553,6 @@ For example:
 
 ```ts
 import type {
-  Dictionary,
   IMapper,
   IWriteDataSource,
 } from '@xeno-js/core'
@@ -564,21 +560,21 @@ import type {
 import type {
   XenoRegistry,
 } from '@xeno-js/core'
+import type { User } from './user'
+import type { UserDto } from './user.dto'
+import type { UserRepository } from './user.repository'
 
-type Registry = XenoRegistry<
-  Dictionary,
-  {
-    USER_DATA_SOURCE: IWriteDataSource<UserDto>
-    USER_MAPPER: IMapper<User, UserDto>
-    USER_REPOSITORY: UserRepository
-  }
->
+interface Registry extends XenoRegistry {
+  USER_DATA_SOURCE: IWriteDataSource<UserDto>
+  USER_MAPPER: IMapper<User, UserDto>
+  USER_REPOSITORY: UserRepository
+}
 ```
 
 The builder can then use that registry:
 
 ```ts
-const app = new AppBuilder<Registry>()
+const app = new XenoAppBuilder<Registry>()
 ```
 
 This makes the custom tokens part of the compile-time registry used by `addServices()` and `resolve()`.
@@ -603,29 +599,30 @@ A complete composition root can therefore look like this:
 
 ```ts
 import type {
-  Dictionary,
   IMapper,
   IWriteDataSource,
 } from '@xeno-js/core'
+import type { User } from './domain/users/user'
+import type { UserDto } from './infrastructure/users/user.dto'
+import { UserMapper } from './infrastructure/users/user.mapper'
+import { UserDataSource } from './infrastructure/users/user.data-source'
+import { UserRepository } from './infrastructure/users/user.repository'
 
 import {
-  AppBuilder,
+ XenoAppBuilder,
 } from '@xeno-js/core'
 
 import type {
   XenoRegistry,
 } from '@xeno-js/core'
 
-type Registry = XenoRegistry<
-  Dictionary,
-  {
-    USER_DATA_SOURCE: IWriteDataSource<UserDto>
-    USER_MAPPER: IMapper<User, UserDto>
-    USER_REPOSITORY: UserRepository
-  }
->
+interface Registry extends XenoRegistry {
+  USER_DATA_SOURCE: IWriteDataSource<UserDto>
+  USER_MAPPER: IMapper<User, UserDto>
+  USER_REPOSITORY: UserRepository
+}
 
-const app = new AppBuilder<Registry>()
+const app = new XenoAppBuilder<Registry>()
 
 app.addServices((services) => {
   services.addScoped('USER_DATA_SOURCE', (container) => {
@@ -646,80 +643,33 @@ app.addServices((services) => {
   })
 })
 
-const container = await app.build()
+const application = await app.build()
 ```
 
-At this point the repository has been registered, but a scoped repository must still be resolved from a scope.
+At this point the repository has been registered. `build()` returns the runtime application, not the service container.
 
 ## 10. Resolve a Scoped Repository
 
-Create a service scope:
+Resolve the repository within the scope managed by the runtime application:
 
 ```ts
-const scope = container.createScope()
-
-const repository = scope.resolve('USER_REPOSITORY')
+const result = await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+  return repository.findById(userId, userContext, undefined)
+})
 ```
 
-The resolved value is typed as:
+The registry types `services.USER_REPOSITORY` as `UserRepository`. The scope is disposed when the callback completes.
 
-```ts
-UserRepository
-```
+## 11. Resolve the Repository from `XenoAppBuilder`
 
-because `USER_REPOSITORY` was declared in the application registry as:
-
-```ts
-USER_REPOSITORY: UserRepository
-```
-
-You can now use the repository:
-
-```ts
-const result = await repository.findById(
-  userId,
-  userContext,
-  undefined,
-)
-```
-
-Or:
-
-```ts
-const result = await repository.findAll(
-  userContext,
-  undefined,
-)
-```
-
-## 11. Resolve the Repository From AppBuilder
-
-`AppBuilder` also exposes:
+`XenoAppBuilder` also exposes:
 
 ```ts
 app.resolve(token)
 ```
 
-However, this delegates to the root service container.
-
-Therefore it can resolve services registered as singleton or transient:
-
-```ts
-const repository = app.resolve('USER_REPOSITORY')
-```
-
-It cannot resolve a scoped repository directly.
-
-For a scoped repository use:
-
-```ts
-const container = await app.build()
-const scope = container.createScope()
-
-const repository = scope.resolve('USER_REPOSITORY')
-```
-
-This distinction follows the Xeno.JS DI contract: scoped services require an active `IServiceScope`.
+This resolves from the root service container; it cannot resolve a scoped repository. Resolve scoped repositories through the runtime application's `runInScope()` method, as shown above.
 
 ## 12. Use the Repository in an Application Service
 
@@ -928,11 +878,11 @@ The repository checks whether the operation has already been aborted before invo
 
 The repository tests explicitly verify this behavior for:
 
-* `findById`;
-* `findAll`;
-* `save`;
-* `delete`;
-* `update`.
+- `findById`;
+- `findAll`;
+- `save`;
+- `delete`;
+- `update`.
 
 One implementation detail that matters when reasoning about this behavior is that `save`, `delete`, and `update` perform their mapper operation before the abort check. The data-source operation is not invoked after the signal has already been aborted.
 
@@ -953,6 +903,7 @@ const result = await repository.findById(
 The repository itself wraps successful operations with `Result.ok(...)`.
 
 For a missing entity, `findById()` returns a successful result whose value is `undefined`.
+If a data-source or mapper operation throws, the repository does not catch that exception or convert it into a `Result`; the returned promise rejects.
 
 Therefore a missing entity should not be confused with a repository failure.
 
@@ -967,8 +918,8 @@ findById()
     ├── entity not found
     │      └── Result.ok(undefined)
     │
-    └── underlying operation fails
-           └── failure/error propagation
+    └── underlying operation throws
+           └── rejected promise; the base class does not convert it to Result
 ```
 
 ## 16. Repository vs Data Source
@@ -1070,6 +1021,9 @@ src/
 ### `user.repository.ts`
 
 ```ts
+import type { User } from '../../domain/users/user'
+import type { UserDto } from './user.dto'
+
 import {
   Repository,
 } from '@xeno-js/core'
@@ -1093,29 +1047,32 @@ export class UserRepository extends Repository<User, UserDto> {
 
 ```ts
 import type {
-  Dictionary,
   IMapper,
+  Optional,
+  UserContext,
   IWriteDataSource,
 } from '@xeno-js/core'
+import type { User } from './domain/users/user'
+import type { UserDto } from './infrastructure/users/user.dto'
+import { UserMapper } from './infrastructure/users/user.mapper'
+import { UserDataSource } from './infrastructure/users/user.data-source'
+import { UserRepository } from './infrastructure/users/user.repository'
 
 import {
-  AppBuilder,
+  XenoAppBuilder,
 } from '@xeno-js/core'
 
 import type {
   XenoRegistry,
 } from '@xeno-js/core'
 
-type Registry = XenoRegistry<
-  Dictionary,
-  {
-    USER_DATA_SOURCE: IWriteDataSource<UserDto>
-    USER_MAPPER: IMapper<User, UserDto>
-    USER_REPOSITORY: UserRepository
-  }
->
+interface Registry extends XenoRegistry {
+  USER_DATA_SOURCE: IWriteDataSource<UserDto>
+  USER_MAPPER: IMapper<User, UserDto>
+  USER_REPOSITORY: UserRepository
+}
 
-const app = new AppBuilder<Registry>()
+const app = new XenoAppBuilder<Registry>()
 
 app.addServices((services) => {
   services.addScoped('USER_DATA_SOURCE', (container) => {
@@ -1136,21 +1093,18 @@ app.addServices((services) => {
   })
 })
 
-const container = await app.build()
-
-const scope = container.createScope()
-
-try {
-  const repository = scope.resolve('USER_REPOSITORY')
-
-  const result = await repository.findById(
-    userId,
-    userContext,
-    undefined,
-  )
-} finally {
-  await scope.dispose()
+const application = await app.build()
+const userId = 'user-123'
+const userContext: UserContext = {
+  userId: 'd108b2d2-1df8-45ca-8a27-686f9f443269',
+  tenantId: '6fdeff88-9f53-4c58-b24f-2e2db77d95ce',
 }
+const signal: Optional<AbortSignal> = undefined
+
+const result = await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+  return repository.findById(userId, userContext, signal)
+})
 ```
 
 The important application workflow is:
@@ -1172,9 +1126,9 @@ The important application workflow is:
        ↓
 8. build()
        ↓
-9. createScope() when using scoped services
+9. runInScope() for scoped services
        ↓
-10. scope.resolve('USER_REPOSITORY')
+10. Resolve USER_REPOSITORY inside the scope
        ↓
 11. repository.findById(...)
     repository.findAll(...)
@@ -1221,27 +1175,22 @@ app.addServices((services) => {
 })
 ```
 
-Also check that `build()` has been called before resolving services from the built application container.
+Also check that `build()` has completed before resolving services. For a scoped repository, resolve it inside `application.runInScope()`.
 
-### A scoped repository cannot be resolved from `AppBuilder`
+### A scoped repository cannot be resolved from `XenoAppBuilder`
 
 This is expected.
 
 A scoped service requires an active scope.
 
-Use:
+Use the runtime application's scoped execution API:
 
 ```ts
-const container = await app.build()
-const scope = container.createScope()
-
-const repository = scope.resolve('USER_REPOSITORY')
-```
-
-instead of:
-
-```ts
-app.resolve('USER_REPOSITORY')
+const application = await app.build()
+await application.runInScope(async (services) => {
+  const repository = services.USER_REPOSITORY
+  // Use the repository within this scope.
+})
 ```
 
 ### A repository dependency cannot be resolved
@@ -1271,18 +1220,15 @@ must be registered before the repository can be constructed.
 Extend the application's `XenoRegistry`:
 
 ```ts
-type Registry = XenoRegistry<
-  Dictionary,
-  {
-    USER_REPOSITORY: UserRepository
-  }
->
+interface Registry extends XenoRegistry {
+  USER_REPOSITORY: UserRepository
+}
 ```
 
 and construct:
 
 ```ts
-const app = new AppBuilder<Registry>()
+const app = new XenoAppBuilder<Registry>()
 ```
 
 This makes the custom token part of the registry used by the DI APIs.
@@ -1311,31 +1257,31 @@ The base repository uses them for different operations:
 
 Before using a repository in an application, verify:
 
-* [ ] The entity type is defined.
-* [ ] The persistence DTO is defined.
-* [ ] `IMapper<Entity, Dto>` is implemented.
-* [ ] `IWriteDataSource<Dto>` is implemented.
-* [ ] The concrete repository extends `Repository<Entity, Dto>`.
-* [ ] The mapper is registered in the DI container.
-* [ ] The data source is registered in the DI container.
-* [ ] The repository is registered with `addServices()`.
-* [ ] The repository token is included in the application's registry when type-safe custom tokens are desired.
-* [ ] The application is built before resolving services.
-* [ ] A scope is created when resolving a scoped repository.
-* [ ] The repository is resolved using the same token used during registration.
+- [ ] The entity type is defined.
+- [ ] The persistence DTO is defined.
+- [ ] `IMapper<Entity, Dto>` is implemented.
+- [ ] `IWriteDataSource<Dto>` is implemented.
+- [ ] The concrete repository extends `Repository<Entity, Dto>`.
+- [ ] The mapper is registered in the DI container.
+- [ ] The data source is registered in the DI container.
+- [ ] The repository is registered with `addServices()`.
+- [ ] The repository token is included in the application's registry when type-safe custom tokens are desired.
+- [ ] The application is built before resolving services.
+- [ ] Scoped repository work runs inside `XenoApplication.runInScope()`.
+- [ ] The repository is resolved using the same token used during registration.
 
 ---
 
 ## Related Docs
 
-* [Data Overview](../overview)
-* [Node PostgreSQL](../node-postgresql)
-* [SQLite](../sqllite)
-* [Unit of Work](../unit-of-work)
-* [Service Registration](../../dependency-injection/registration)
-* [Service Resolution](../../dependency-injection/resolution)
-* [Dependency Graph](../../dependency-injection/dependency-graph)
-* [Read Dao](./read-dao)
+- [Data Overview](../overview)
+- [Node PostgreSQL](../node-postgresql)
+- [SQLite](../sqllite)
+- [Unit of Work](../unit-of-work)
+- [Service Registration](../../dependency-injection/registration)
+- [Service Resolution](../../dependency-injection/resolution)
+- [Dependency Graph](../../dependency-injection/dependency-graph)
+- [Read Dao](./read-dao)
 
 ---
 

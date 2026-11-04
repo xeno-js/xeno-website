@@ -168,7 +168,7 @@ Application components should not be responsible for constructing the entire dep
 
 Composition should happen at a well-defined boundary.
 
-In Xeno.JS, `AppBuilder` provides the main composition mechanism for configuring modules, services, infrastructure, pipelines, logging, database integrations, and other application capabilities before the application is built.
+In Xeno.JS, `XenoAppBuilder` provides the main composition mechanism for configuring modules, services, infrastructure, pipelines, logging, database integrations, and other application capabilities before the application is built.
 
 Conceptually:
 

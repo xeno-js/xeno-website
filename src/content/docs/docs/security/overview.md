@@ -34,17 +34,17 @@ faqs:
 - question: Is CSRF protection enabled by default?
   answer: No. CSRF protection is enabled when a csrf configuration is supplied to addMiddlewares().
 - question: Is CORS enabled by default?
-  answer: Yes. AppBuilder defaults cors to true and withCredentials to true. The allowed origin defaults to APP_URL or the local application URL when APP_URL is not configured.
+  answer: Yes. XenoAppBuilder enables CORS and preflight handling with credentials by default. The allowed origin defaults to APP_URL or the local application URL when APP_URL is not configured.
 - question: Does Xeno.JS provide rate limiting by default?
-  answer: Yes. The default middleware configuration contains a rate limit of 3 requests per 100 seconds unless it is changed through addMiddlewares().
+  answer: Yes. Rate limiting is enabled by default with a limit of 100 requests per 60 seconds; configure it through addMiddlewares() to change these values.
 ---
 
 ## Introduction
 
 Xeno.JS provides security controls at two different boundaries:
 
-* the **HTTP boundary**, where incoming requests are inspected and authenticated;
-* the **application boundary**, where authenticated identities are authorized to execute application requests.
+- the **HTTP boundary**, where incoming requests are inspected and authenticated;
+- the **application boundary**, where authenticated identities are authorized to execute application requests.
 
 These responsibilities are deliberately separate.
 
@@ -55,14 +55,16 @@ HTTP request
     │
     ├── Origin validation
     │
-    ├── CORS / OPTIONS handling
+    ├── OPTIONS handling
     │
     ├── HTTP method validation
     │
-    ├── Authentication
-    │       └── credential → Identity
+    ├── CORS
     │
     ├── Rate limiting
+    │
+    ├── Authentication
+    │       └── credential → Identity
     │
     ├── CSRF validation
     │
@@ -98,16 +100,19 @@ The HTTP security layer is enabled through `AppBuilder.addMiddlewares()`.
 A minimal authenticated application looks like this:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 
 app.addMiddlewares()
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 There are two important calls:
@@ -124,7 +129,7 @@ app.addMiddlewares(...)
 
 installs the HTTP middleware stack and connects it to the authentication service when authentication has been configured.
 
-If `addMiddlewares()` is called without `addAuth()`, Xeno configures the authentication middleware with a `NoAuthGateKeeper`. In other words, the middleware chain exists, but it does not require a real authentication service.
+If `addMiddlewares()` is called without `addAuth()`, Xeno configures the authentication middleware with a `NoAuthGateKeeper`, which returns a guest identity instead of authenticating credentials.
 
 ---
 
@@ -170,13 +175,13 @@ Identity
 Request context
 ```
 
-If authentication fails, `AuthenticationMiddleware` returns an unauthorized response instead of continuing the middleware chain.
+If authentication fails, `AuthenticationMiddleware` returns an error response instead of continuing the middleware chain, using the authentication error's status or `401 Unauthorized` by default.
 
 See:
 
-* [Authentication Overview](./authentication/overview)
-* [Supabase Authentication](./authentication/supabase)
-* [Custom Authentication](./authentication/custom)
+- [Authentication Overview](./authentication/overview)
+- [Supabase Authentication](./authentication/supabase)
+- [Custom Authentication](./authentication/custom)
 
 ---
 
@@ -189,18 +194,18 @@ Authorization answers:
 Authorization is configured through the CQRS pipeline:
 
 ```ts
-app.addPipeline((options) => {
-  options.authorization = {
-    policies: {
-      CreateInvoice: {
-        userId: true,
-        tenantId: true,
-        roles: ['admin', 'billing'],
-        permissions: ['invoice:create'],
-      },
+import { withAuthZ } from '@xeno-js/core'
+
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
+    CreateInvoice: {
+      userId: true,
+      tenantId: true,
+      roles: ['admin', 'billing'],
+      permissions: ['invoice:create'],
     },
   }
-})
+}))
 ```
 
 The authorization pipeline evaluates the configured strategies before passing the request to the next application pipeline stage.
@@ -221,13 +226,13 @@ AuthorizationPipeline
 Application handler
 ```
 
-All configured strategies are evaluated. If one fails, the authorization pipeline stops and returns the failure.
+Strategies run sequentially. If one fails, the authorization pipeline stops and returns that failure.
 
 See:
 
-* [Authorization Overview](./authorization/overview)
-* [Authorization Policies](./authorization/policies)
-* [Custom Authorization](./authorization/custom)
+- [Authorization Overview](./authorization/overview)
+- [Authorization Policies](./authorization/policies)
+- [Custom Authorization](./authorization/custom)
 
 ---
 
@@ -241,28 +246,28 @@ The current middleware composition is:
 Request context
       │
       ▼
+SSR cookie response handling  (when isSSR is enabled)
+      │
+      ▼
 Origin validation
       │
       ▼
-OPTIONS handling       (when enabled)
+OPTIONS handling       (when CORS preflight is enabled and routes are configured)
+      │
+      ▼
+HTTP method checks     (when routes are configured)
       │
       ▼
 CORS                   (when enabled)
       │
       ▼
-HTTP method checks     (when routeRegistry is configured)
+Rate limiting
       │
       ▼
 Authentication
       │
       ▼
-Rate limiting
-      │
-      ▼
-CSRF cookie generation
-      │
-      ▼
-CSRF validation
+CSRF cookie generation and validation (when csrf is configured)
       │
       ▼
 Application execution
@@ -274,12 +279,13 @@ Some stages are conditional.
 | ------------------ | ------------------------------ |
 | Request context    | `addMiddlewares()`             |
 | Origin validation  | `addMiddlewares()`             |
-| OPTIONS handling   | `optionsMiddleware: true`      |
-| CORS               | `cors: true`                   |
-| HTTP method checks | `routeRegistry`                |
-| Authentication     | `addAuth()`                    |
-| Rate limiting      | configured `rateLimite` values |
-| CSRF               | `csrf` configuration           |
+| OPTIONS handling    | `cors.enablePreflight: true` and routes configured |
+| CORS                | `cors.enabled: true`            |
+| HTTP method checks  | Routes supplied through `addRoutes()` |
+| Authentication      | `addMiddlewares()`; `addAuth()` supplies a real authentication service |
+| Rate limiting       | `rateLimit.enabled: true`       |
+| CSRF                | `csrf` configuration            |
+| SSR cookie response | `isSSR: true`                   |
 
 The exact middleware chain is built by Xeno when the middleware module is configured.
 
@@ -287,34 +293,31 @@ The exact middleware chain is built by Xeno when the middleware module is config
 
 ## Default security configuration
 
-`AppBuilder` starts with the following relevant middleware defaults:
+`XenoAppBuilder` starts with the following relevant middleware defaults:
 
 ```ts
 {
   isSSR: false,
 
-  rateLimite: {
-    maxRequests: 3,
-    windowSeconds: 100,
+  rateLimit: {
+    enabled: true,
+    maxRequests: 100,
+    windowSeconds: 60,
   },
 
   csrf: undefined,
 
-  optionsMiddleware: false,
-
-  routeRegistry: undefined,
+  cors: {
+    enabled: true,
+    enablePreflight: true,
+    withCredentials: true,
+    allowOrigins: [],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  },
 
   trustedIpHeader: undefined,
 
   trustedProxies: [],
-
-  allowOrigins: [],
-
-  allowHeaders: [],
-
-  cors: true,
-
-  withCredentials: true,
 
   authCookieName: 'sb-access-token',
 }
@@ -324,13 +327,14 @@ This means that some security behavior is already active without additional conf
 
 In particular:
 
-* CORS is enabled;
-* credentials are enabled;
-* origin validation is enabled;
-* rate limiting has a default configuration;
-* CSRF is not enabled until configured;
-* route-specific method checks are not enabled until a route registry is supplied;
-* SSR token extraction is not selected unless `isSSR` is enabled.
+- CORS is enabled;
+- CORS preflight handling is enabled when routes are configured;
+- credentials are enabled;
+- origin validation is enabled;
+- rate limiting has a default configuration;
+- CSRF is not enabled until configured;
+- route-specific method checks are enabled when routes are supplied through `addRoutes()`;
+- `isSSR` enables the SSR cookie response middleware; it does not select an authentication token extractor.
 
 ---
 
@@ -341,10 +345,10 @@ Authentication is configured independently from the other HTTP controls.
 For the built-in Supabase integration:
 
 ```ts
-app.addAuth((options, config) => {
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
-})
+}))
 ```
 
 The authentication service is registered before the middleware module is configured.
@@ -365,13 +369,13 @@ The middleware configuration accepts an explicit origin list:
 
 ```ts
 app.addMiddlewares((options) => {
-  options.allowOrigins = [
-    'https://app.example.com',
-  ]
+  options.cors = {
+    allowOrigins: ['https://app.example.com'],
+  }
 })
 ```
 
-If `allowOrigins` is empty, Xeno derives the default origin from:
+If `options.cors.allowOrigins` is empty, Xeno derives the default origin from:
 
 1. `APP_URL`, when configured;
 2. otherwise `http://localhost:<PORT>`.
@@ -381,13 +385,13 @@ The origin is checked independently by the origin middleware.
 Therefore:
 
 ```ts
-options.allowOrigins
+options.cors.allowOrigins
 ```
 
 controls **which request origins are accepted**, while:
 
 ```ts
-options.cors
+options.cors.enabled
 ```
 
 controls whether CORS response handling is enabled.
@@ -401,13 +405,18 @@ These are related but separate concerns.
 Credentials are enabled by default:
 
 ```ts
-options.withCredentials = true
+options.cors = {
+  withCredentials: true,
+}
 ```
 
-When credentials are enabled, the middleware rejects a wildcard origin:
+Avoid a wildcard allow-origin list when credentials are enabled. Xeno's origin check accepts `'*'`; the CORS middleware responds with the requesting origin and credentials enabled rather than rejecting that configuration. Prefer an explicit allowlist:
 
 ```ts
-options.allowOrigins = ['*']
+options.cors = {
+  allowOrigins: ['https://app.example.com'],
+  withCredentials: true,
+}
 ```
 
 Use explicit origins when browser credentials are enabled.
@@ -441,7 +450,6 @@ interface CsrfConfig {
   headerName?: string
   cookieMaxAgeSeconds?: number
   sameSite?: 'strict' | 'lax' | 'none'
-  enforceOrigin?: boolean
 }
 ```
 
@@ -457,7 +465,7 @@ CsrfMiddleware
         └── validates state-changing requests
 ```
 
-The CSRF middleware checks `POST`, `PUT`, `DELETE`, and `PATCH` requests.
+The CSRF middleware checks `POST`, `PUT`, `DELETE`, and `PATCH` requests. A matching route policy with `withCsrf: false` exempts that route.
 
 For these methods it requires:
 
@@ -486,7 +494,7 @@ Rate limiting is configured through:
 
 ```ts
 app.addMiddlewares((options) => {
-  options.rateLimite = {
+  options.rateLimit = {
     maxRequests: 30,
     windowSeconds: 60,
   }
@@ -495,8 +503,8 @@ app.addMiddlewares((options) => {
 
 The configuration controls:
 
-* `maxRequests` — maximum number of requests;
-* `windowSeconds` — duration of the rate-limit window.
+- `maxRequests` — maximum number of requests;
+- `windowSeconds` — duration of the rate-limit window.
 
 When the limit is exceeded, the middleware returns:
 
@@ -516,8 +524,9 @@ The default configuration is:
 
 ```ts
 {
-  maxRequests: 3,
-  windowSeconds: 100,
+  enabled: true,
+  maxRequests: 100,
+  windowSeconds: 60,
 }
 ```
 
@@ -529,24 +538,21 @@ See [Rate Limiting](./middleware/rate-limit).
 
 ## Restrict HTTP methods
 
-Route-specific method validation can be enabled with `routeRegistry`:
+Route-specific method validation is derived from the route definitions supplied through `addRoutes()`:
 
 ```ts
-app.addMiddlewares((options) => {
-  options.routeRegistry = {
-    '/users': ['GET', 'POST'],
-    '/users/:id': ['GET', 'PATCH', 'DELETE'],
-  }
-})
+app.addRoutes(routes)
 ```
 
-When a route registry is configured, Xeno installs method validation middleware.
+When routes are configured, Xeno checks incoming methods against the methods declared for each route.
 
-OPTIONS handling can be enabled separately:
+OPTIONS preflight handling is configured under `cors` and is enabled by default:
 
 ```ts
 app.addMiddlewares((options) => {
-  options.optionsMiddleware = true
+  options.cors = {
+    enablePreflight: true,
+  }
 })
 ```
 
@@ -587,7 +593,7 @@ app.addMiddlewares((options) => {
 })
 ```
 
-With SSR enabled, the default token extractor changes from the normal bearer extractor to the Supabase SSR token extractor.
+`isSSR` enables the SSR cookie response middleware. It does not change the default authentication extractor. Supabase SSR cookie extraction is configured by the Supabase authentication integration; see [Supabase Authentication](./authentication/supabase).
 
 The normal extractor is:
 
@@ -598,7 +604,7 @@ Authorization: Bearer <token>
 BearerTokenExtractor
 ```
 
-The SSR extractor can process:
+The Supabase SSR integration can process:
 
 ```text
 Authorization header
@@ -618,12 +624,12 @@ The authentication integration can be replaced with a custom authentication serv
 
 ```ts
 app.addAuth((options) => {
-  options.customAuth = {
-    authHeaderExtractor: () => new MyTokenExtractor(),
-    authExtendedService: () => new MyAuthService(),
-  }
+  options.tokenExtractor = (_scope) => new MyTokenExtractor()
+  options.authService = (_scope) => new MyAuthService()
 })
 ```
+
+`authService` is required and is created per service scope. `tokenExtractor` is optional and defaults to the bearer-and-cookie extractor; a custom extractor factory is registered as a singleton.
 
 The two components have separate responsibilities:
 
@@ -650,18 +656,16 @@ Authorization belongs to the application pipeline.
 For example:
 
 ```ts
-app.addPipeline((options) => {
-  options.authorization = {
-    policies: {
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
       CreateInvoice: {
         userId: true,
         tenantId: true,
         roles: ['admin', 'billing'],
         permissions: ['invoice:create'],
       },
-    },
   }
-})
+}))
 ```
 
 The policy can combine multiple strategy types.
@@ -726,25 +730,27 @@ invoice.tenantId
 
 Application-specific ownership rules belong in application authorization logic or custom authorization strategies.
 
+An intent without a matching policy requirement is not denied by default. Configure a policy for each operation that must be restricted.
+
 ---
 
 ## Execute HTTP requests through the middleware stack
 
-When application code needs to execute through the configured HTTP middleware, use the Xeno execution bridge:
+To execute a controller operation through the configured HTTP middleware, use the application's `handle()` method:
 
 ```ts
-ContainerUtils.runExecute(...)
+const response = await app.handle(request, controllerToken, input)
 ```
 
-The configured middleware chain must be involved in the execution path for HTTP concerns such as:
+`controllerToken` must be the registry key for a registered controller. `handle()` dispatches through the HTTP middleware and requires middleware and an HTTP adapter to have been registered. The chain applies HTTP concerns such as:
 
-* authentication;
-* CORS;
-* origin validation;
-* method checks;
-* rate limiting;
-* CSRF;
-* request context.
+- authentication;
+- CORS;
+- origin validation;
+- method checks;
+- rate limiting;
+- CSRF;
+- request context.
 
 Conceptually:
 
@@ -752,7 +758,7 @@ Conceptually:
 HTTP request
       │
       ▼
-runExecute(...)
+app.handle(...)
       │
       ▼
 configured middleware
@@ -803,33 +809,35 @@ Rate limiting ≠ Authorization
 A typical secured application can compose the controls explicitly:
 
 ```ts
-const app = new AppBuilder()
+import { XenoAppBuilder, withAuthZ } from '@xeno-js/core'
+import { withSupabase } from '@xeno-js/supabase'
 
-app.addAuth((options, config) => {
+const app = new XenoAppBuilder()
+
+app.addAuth(withSupabase((options, config) => {
   options.url = config.get('SUPABASE_URL')!
   options.key = config.get('SUPABASE_KEY')!
 
   options.redirectTo = config.get('APP_URL')
 
-  options.cookieOpts = {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: true,
+  options.ssr = {
+    cookieOptions: {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    },
   }
-})
+}))
 
 app.addMiddlewares((options, config) => {
-  options.allowOrigins = [
-    config.get('APP_URL')!,
-  ]
-
-  options.withCredentials = true
-
-  options.rateLimite = {
-    maxRequests: 30,
-    windowSeconds: 60,
+  options.isSSR = true
+  options.cors = {
+    allowOrigins: [config.get('APP_URL')!],
+    withCredentials: true,
   }
+
+  options.rateLimit = { maxRequests: 30, windowSeconds: 60 }
 
   options.csrf = {
     secret: config.get('CSRF_SECRET')!,
@@ -840,19 +848,17 @@ app.addMiddlewares((options, config) => {
   }
 })
 
-app.addPipeline((options) => {
-  options.authorization = {
-    policies: {
-      CreateInvoice: {
-        userId: true,
-        tenantId: true,
-        permissions: ['invoice:create'],
-      },
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
+    CreateInvoice: {
+      userId: true,
+      tenantId: true,
+      permissions: ['invoice:create'],
     },
   }
-})
+}))
 
-const container = await app.build()
+const application = await app.build()
 ```
 
 This produces a security flow of:
@@ -861,16 +867,19 @@ This produces a security flow of:
 HTTP request
     │
     ▼
+SSR cookie response (when enabled)
+    │
+    ▼
 Origin validation
     │
     ▼
-CORS / method handling
-    │
-    ▼
-Authentication
+OPTIONS handling, method checks, then CORS
     │
     ▼
 Rate limiting
+    │
+    ▼
+Authentication
     │
     ▼
 CSRF validation
@@ -906,8 +915,7 @@ app.addMiddlewares(...)
 
 If `addAuth()` is omitted, Xeno uses `NoAuthGateKeeper`.
 
-> Pay Attention: if you want to use only authentication service, yuo can add only `addAuth()` and not `addMiddlewares()`,
-> the you can resolve the authentication service calling `const authService = container.resolve(TOKENS.AUTH_SERVICE)`
+If application code uses the authentication service without HTTP middleware, register it with `addAuth()` and resolve it from an active service scope. The service is scoped; resolving it directly from the root container is not valid.
 
 ---
 
@@ -932,18 +940,18 @@ CSRF is not enabled merely because authentication is enabled.
 Check:
 
 ```ts
-options.allowOrigins
+options.cors?.allowOrigins
 ```
 
 and:
 
 ```ts
-options.withCredentials
+options.cors?.withCredentials
 ```
 
-When credentials are enabled, `*` cannot be used as the allowed origin.
+Prefer explicit allowed origins when credentials are enabled.
 
-If `allowOrigins` is empty, check `APP_URL` and `PORT`, because Xeno derives a default origin from them.
+If `cors.allowOrigins` is empty, check `APP_URL` and `PORT`, because Xeno derives a default origin from them.
 
 ---
 
@@ -952,15 +960,16 @@ If `allowOrigins` is empty, check `APP_URL` and `PORT`, because Xeno derives a d
 Check:
 
 ```ts
-options.rateLimite
+options.rateLimit
 ```
 
 The default is:
 
 ```ts
 {
-  maxRequests: 3,
-  windowSeconds: 100,
+  enabled: true,
+  maxRequests: 100,
+  windowSeconds: 60,
 }
 ```
 
@@ -975,15 +984,13 @@ Authentication and authorization are separate.
 Make sure the application has configured the pipeline:
 
 ```ts
-app.addPipeline((options) => {
-  options.authorization = {
-    policies: {
-      CreateInvoice: {
-        roles: ['admin'],
-      },
+app.addPipeline(withAuthZ((opts) => {
+  opts.policies = {
+    CreateInvoice: {
+      roles: ['admin'],
     },
   }
-})
+}))
 ```
 
 Authentication alone creates an identity; it does not automatically authorize every application request.
@@ -994,31 +1001,31 @@ Authentication alone creates an identity; it does not automatically authorize ev
 
 ### Docs Authentication
 
-* [Authentication Overview](./authentication/overview)
-* [Supabase Authentication](./authentication/supabase)
-* [Custom Authentication](./authentication/custom)
+- [Authentication Overview](./authentication/overview)
+- [Supabase Authentication](./authentication/supabase)
+- [Custom Authentication](./authentication/custom)
 
 ### Docs Authorization
 
-* [Authorization Overview](./authorization/overview)
-* [Authorization Policies](./authorization/policies)
-* [Custom Authorization](./authorization/custom)
+- [Authorization Overview](./authorization/overview)
+- [Authorization Policies](./authorization/policies)
+- [Custom Authorization](./authorization/custom)
 
 ### HTTP middleware
 
-* [Middleware Overview](./middleware/overview)
-* [Authentication Middleware](./middleware/authentication)
-* [CSRF Protection](./middleware/csrf)
-* [CORS](./middleware/cors)
-* [HTTP Methods](./middleware/methods)
-* [Rate Limiting](./middleware/rate-limit)
-* [Extractors](./middleware/extractors)
-* [Middleware Execution](./middleware/execution)
+- [Middleware Overview](./middleware/overview)
+- [Authentication Middleware](./middleware/authentication)
+- [CSRF Protection](./middleware/csrf)
+- [CORS](./middleware/cors)
+- [HTTP Methods](./middleware/methods)
+- [Rate Limiting](./middleware/rate-limit)
+- [Extractors](./middleware/extractors)
+- [Middleware Execution](./middleware/execution)
 
 ### Helpers
 
-* [HTTP Helpers](./helpers/http)
-* [Sanitization Helpers](./helpers/sanitize)
+- [HTTP Helpers](./helpers/http)
+- [Sanitization Helpers](./helpers/sanitize)
 
 ---
 
