@@ -139,6 +139,17 @@ export default defineConfig({
                 { label: 'Data Source', link: '/docs/data/datasources/datasource' },
               ]
             },
+            {
+              label: 'Entities',
+              collapsed: false,
+              items: [
+                { label: 'Unique Id', link: '/docs/data/entities/unique-id' },
+                { label: 'Value Objects', link: '/docs/data/entities/value-object' },
+                { label: 'Entity', link: '/docs/data/entities/entity' },
+                { label: 'Aggregates root', link: '/docs/data/entities/aggregate-root' },
+                { label: 'Events', link: '/docs/data/entities/events' },
+              ]
+            },
           ]
         },
         {
@@ -168,6 +179,22 @@ export default defineConfig({
               collapsed: false,
               items: [
                 { label: 'Overview', link: '/docs/security/authorization/overview' },
+              ]
+            },
+            {
+              label: 'Middlewares',
+              collapsed: false,
+              items: [
+                { label: 'Overview', link: '/docs/security/middlewares/overview' },
+                { label: 'RequestContext', link: '/docs/security/middlewares/request-context-midleware' },
+                { label: 'Rate Limit', link: '/docs/security/middlewares/rate-limit' },
+                { label: 'Options Middleware', link: '/docs/security/middlewares/options-middleware' },
+                { label: 'Allow Origin Middleware', link: '/docs/security/middlewares/allow-origin' },
+                { label: 'Allow Method Middleware', link: '/docs/security/middlewares/allow-method' },
+                { label: 'CORS Middleware', link: '/docs/security/middlewares/cors-middleware' },
+                { label: 'CSRF Middleware', link: '/docs/security/middlewares/csrf-middleware' },
+                { label: 'Cookie Middleware', link: '/docs/security/middlewares/cookie-middleware' },
+                { label: 'Auth Middleware', link: '/docs/security/middlewares/authentication-middleware' },
               ]
             },
           ]

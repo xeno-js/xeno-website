@@ -429,16 +429,16 @@ await app.build()
 
 The responsibilities are intentionally separated:
 
-| Configuration          | Responsibility                              |
-| ---------------------- | ------------------------------------------- |
-| `options.url`          | Supabase project URL                        |
-| `options.key`          | Supabase authentication key                 |
-| `options.redirectTo`   | OAuth redirect destination                  |
-| `options.ssr.cookieOptions`| SSR cookie attributes                   |
-| `options.ssr.cookiePrefix` | SSR cookie name or prefix for extraction|
-| `options.csr.cookieName`  | CSR fallback cookie name                 |
-| `app.addMiddlewares()`      | Enables HTTP authentication processing |
-| `app.build()`  | Resolves queued modules and returns the application |
+| Configuration               | Responsibility                                      |
+| ----------------------      | -------------------------------------------         |
+| `options.url`               | Supabase project URL                                |
+| `options.key`               | Supabase authentication key                         |
+| `options.redirectTo`        | OAuth redirect destination                          |
+| `options.ssr.cookieOptions` | SSR cookie attributes                               |
+| `options.ssr.cookiePrefix`  | SSR cookie name or prefix for extraction            |
+| `options.csr.cookieName`    | CSR fallback cookie name                            |
+| `app.addMiddlewares()`      | Enables HTTP authentication processing              |
+| `app.build()`               | Resolves queued modules and returns the application |
 
 ---
 

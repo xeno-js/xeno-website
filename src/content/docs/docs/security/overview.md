@@ -275,17 +275,17 @@ Application execution
 
 Some stages are conditional.
 
-| Control            | Enabled by                     |
-| ------------------ | ------------------------------ |
-| Request context    | `addMiddlewares()`             |
-| Origin validation  | `addMiddlewares()`             |
-| OPTIONS handling    | `cors.enablePreflight: true` and routes configured |
-| CORS                | `cors.enabled: true`            |
-| HTTP method checks  | Routes supplied through `addRoutes()` |
-| Authentication      | `addMiddlewares()`; `addAuth()` supplies a real authentication service |
-| Rate limiting       | `rateLimit.enabled: true`       |
-| CSRF                | `csrf` configuration            |
-| SSR cookie response | `isSSR: true`                   |
+| Control              | Enable by                                          |
+| ------------------   | ------------------------------                     |
+| Request context      | `addMiddlewares()`                                 |
+| Origin validation    | `addMiddlewares()`                                 |
+| OPTIONS handling     | `cors.enablePreflight: true` and routes configured |
+| CORS                 | `cors.enabled: true`                               |
+| HTTP method checks   | Routes supplied through `addRoutes()`              |
+| Authentication       | `addMiddlewares()`; `addAuth()` supplies a real authentication service |
+| Rate limiting        | `rateLimit.enabled: true`                          |
+| CSRF                 | `csrf` configuration                               |
+| SSR cookie response  | `isSSR: true`                                      |
 
 The exact middleware chain is built by Xeno when the middleware module is configured.
 
