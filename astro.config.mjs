@@ -161,6 +161,24 @@ export default defineConfig({
           ]
         },
         {
+          label: 'HTTP',
+          collapsed: true,
+          items: [
+            { label: 'Server HTTP', link: '/docs/http/server' },
+            { label: 'Routes', link: '/docs/http/routes' },
+            { label: 'Controller', link: '/docs/http/controller' },
+            { label: 'Api Response Dto', link: '/docs/http/api-response' },
+            { label: 'Helpers HTTP', link: '/docs/http/helper-http' },
+            {
+              label: 'HTTP Plugins', items: [
+                { label: 'Node', link: '/docs/http/plugins/node' },
+                { label: 'Fastify', link: '/docs/http/plugins/fastify' },
+                { label: 'Vercel', link: '/docs/http/plugins/vercel' }, 
+              ], 
+            }
+          ]
+        },
+        {
           label: 'Security',
           collapsed: true,
           items: [
