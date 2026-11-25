@@ -1,17 +1,17 @@
 ---
-title: "Project Structure"
-description: "Understand the structure of a Xeno.JS project created with the CLI."
+title: "Xeno CLI Project Structure for Core and Vue"
+description: "See the files the Xeno CLI generates for Core and Vue projects, including entry points, registries, database integrations, managed features, and configuration."
 canonical: "https://www.xeno-js.it/docs/getting_started/project-structure"
 publishedAt: "2026-09-30"
-updatedAt: "2026-09-30"
+updatedAt: "2026-11-25"
 author:
   name: "Xeno.JS Team"
   url: "https://www.xeno-js.it"
 type: "documentation"
 section: "getting-started"
 category: "project-structure"
-topics: "CLI, project structure, scaffolding, Xeno Core"
-keywords: "Xeno.JS, CLI, project structure, scaffold, Core"
+topics: "Xeno CLI, Core project structure, Vue project structure, TypeScript scaffolding"
+keywords: "Xeno CLI, project structure, Core scaffold, Vue scaffold, TypeScript generator, xeno.json"
 sidebar:
   group: "Getting Started"
   order: 3
@@ -33,17 +33,19 @@ relatedTopics:
   - "Architecture Overview"
 faqs:
 - question: "What does the Xeno CLI generate for a Core project?"
-  answer: "It generates the application entry point, bootstrap, registry, environment files, TypeScript configuration, package configuration, README, and database files when a database is selected."
-- question: "Does the CLI create application, domain, infrastructure, and presentation folders?"
-  answer: "The current Core scaffold does not generate those folders by default. It starts with a small application composition structure under src."
-answerSummary: "A new Xeno Core project starts with a small composition root rather than a large predefined folder hierarchy."
+  answer: "A Core scaffold includes src/bootstrap.ts, src/registry.ts, a target-specific entry point, root configuration, and xeno.json. Selected integrations add files such as Drizzle configuration and schema."
+- question: "What does the Xeno CLI generate for a Vue project?"
+  answer: "A Vue scaffold includes src/App.vue, src/main.ts, src/registry.ts, Vite configuration, root configuration, and xeno.json. Router and Tailwind files appear when selected."
+- question: "Does the CLI create feature folders by default?"
+  answer: "No. A new project starts with application composition and configuration. Run xeno-js g feature <Name> to add a feature module, then generate commands or queries inside it."
+answerSummary: "The Xeno CLI creates Core and Vue projects from selected options. It generates composition files first; feature folders are added with managed generators."
 directAnswer:
-  question: "What does a newly created Xeno project look like?"
-  answer: "The CLI creates a minimal Core application under src with bootstrap.ts, main.ts, and registry.ts, plus configuration files at the project root. Additional files are generated according to the selected options."
+  question: "What does the Xeno CLI generate for a new project?"
+  answer: "A Core project includes src/bootstrap.ts, src/registry.ts, a target-specific entry point, and root configuration. A Vue project includes src/App.vue, src/main.ts, and src/registry.ts. Selected integrations add their files, and xeno.json records scaffold metadata."
 keyFacts:
-- "The Core scaffold creates src/bootstrap.ts."
-- "The Core scaffold creates src/main.ts."
-- "The Core scaffold creates src/registry.ts."
+- "Core projects include src/bootstrap.ts and src/registry.ts, plus an entry point for the selected target."
+- "Vue projects include src/App.vue, src/main.ts, and src/registry.ts."
+- "The CLI writes xeno.json to track scaffold metadata and managed sections."
 - "Database selection adds drizzle.config.ts and src/schema.ts."
 - "The CLI creates .env and .env.example."
 - "The CLI runs npm install after generation."
@@ -52,19 +54,25 @@ keyFacts:
 
 ## Introduction
 
-When you create a project with the Xeno CLI, the CLI generates a concrete starting project rather than an abstract architecture template.
+The Xeno CLI creates a Core backend or Vue frontend project from the options you select. It writes the application entry points, registry, configuration, and `xeno.json` scaffold metadata. Optional integrations add their own dependencies and files.
 
-For a Core project:
+Create a Core project:
 
 ```bash
 npx @xeno-js/cli new my-app --core
 ```
 
-the CLI asks which integrations you want and then generates the corresponding files.
+Create a Vue project:
+
+```bash
+npx @xeno-js/cli new my-app --vue
+```
+
+The CLI asks which target and integrations to use, generates the matching files, then optionally initializes Git and runs `npm install`.
 
 ## A new Core project
 
-With the default Core scaffold and no database selected, the project starts approximately like this:
+With the Console target and no database selected, the generated project contains:
 
 ```text
 my-app/
@@ -77,125 +85,64 @@ my-app/
 ├── .gitignore
 ├── package.json
 ├── readme
-└── tsconfig.json
+├── tsconfig.json
+└── xeno.json
 ```
 
-The exact project changes according to the options selected during creation.
+The Node.js and Fastify targets also generate `src/routes.ts` and an HTTP entry point in `src/main.ts`. The Vercel target adds `src/routes.ts`, `api/index.ts`, `public/index.html`, and `vercel.json`; it uses `api/index.ts` as its serverless entry point.
 
-If a database is enabled, for example, the CLI also generates:
+Selecting a database adds `drizzle.config.ts` and `src/schema.ts`. The CLI supports PostgreSQL and SQLite through Drizzle.
 
-```text
-my-app/
-├── src/
-│   ├── bootstrap.ts
-│   ├── main.ts
-│   ├── registry.ts
-│   └── schema.ts
-├── drizzle.config.ts
-└── ...
-```
-
-The current Core scaffold supports PostgreSQL through Drizzle and SQLite/libSQL.
+The Core scaffold does not create feature or domain folders by default. Generate them when the application needs its first feature.
 
 ## `src/bootstrap.ts`
 
-`bootstrap.ts` is the composition root generated by the CLI.
+`bootstrap.ts` is the Core project's composition root. The CLI generates an `XenoAppBuilder`, configures the selected integrations, and exports `XenoApp` for the application entry point.
 
-It creates an `XenoAppBuilder`, configures the selected Xeno modules, and builds the application container.
+The builder starts with request context, cache, logging, pipeline, and service registration. The selected options add database, authentication, HTTP server, routes, HTTP client, validation, and observability configuration.
 
-The generated file can include:
+Generated sections use `xeno` markers. Later CLI generators update those sections and `xeno.json`; keep generated sections intact so managed generation can verify and update them.
 
-- request context;
-- middleware configuration;
-- application pipelines;
-- database configuration;
-- cache configuration;
-- authentication;
-- logging;
-- custom service registration.
-
-The selected CLI options determine which parts are added to the builder.
-
-For example, a project with a database selected receives the corresponding `.addDb(...)` configuration.
+For example, the default Console scaffold builds this chain:
 
 ```typescript
-//Example
 const builder = new XenoAppBuilder<MyRegistry>()
-    .addContext()
-    .addDb((opts, config) => {
-          opts.enableSqlLite = false
-          opts.connectionString = config.getOrThrow('DATABASE_URL');
-    })
-
-export const XenoApp = await builder.build()
+  .addContext()
+  .addCache(undefined)
+  .addLogger([withConsoleLogger(() => {})])
+  .addPipeline()
+  .addServices((services) => {
+    // xeno:services:start
+    // xeno:services:end
+  });
 ```
 
 ## `src/registry.ts`
 
-`registry.ts` contains the application's Xeno registry type.
+`registry.ts` defines the application's Xeno registry type. The Core registry extends `XenoRegistry`; database options add the database context and transaction types.
 
-The generated registry extends `XenoRegistry` and, when a database is selected, can also include the generated database schema type.
-
-It is the place where application-specific injection tokens can be declared.
-
-For example:
+Add application tokens in the registry as the project grows. The CLI inserts generated handler and controller types into managed registry sections.
 
 ```ts
-import { DbSchema } from './schema'
-export interface MyRegistry extends XenoRegistry<DbSchema> {
-  USER_REPOSITORY: IUserRepository
+export interface MyRegistry extends XenoRegistry {
+  // xeno:registry:start
+  // xeno:registry:end
 }
 ```
-
-The CLI generates the registry itself; application-specific contracts are added as the project grows.
 
 ## `src/main.ts`
 
-`main.ts` is the generated application entry point.
+The generated entry point depends on the selected Core target:
 
-It:
+- Console loads `dotenv`, builds the Xeno application, and passes command-line arguments to `main`.
+- Node.js and Fastify start the HTTP server and read the port from configuration.
+- Vercel uses `api/index.ts` to pass requests to the Xeno Vercel adapter.
 
-1. loads environment configuration;
-2. calls `bootstrap()`;
-3. resolves the application logger;
-4. starts the application;
-5. handles startup errors.
-
-The generated file intentionally leaves the application-specific logic to the project.
-
-```typescript
-//Example
-import 'dotenv/config';
-import { XenoApp } from './bootstrap';
-import { TOKENS } from '@xeno-js/core';
-
-/**
- * Main Application Entry Point
- */
-async function main() {
-  try {
-    console.info('⏳ Bootstrapping my-xeno-app application...');
-    
-    // Initialize the dependency injection container and infrastructure modules
-    const container = await XenoApp();
-    
-    const logger = container.resolve(TOKENS.LOGGER)
-    logger.info('✅ Application started successfully!');
-
-    // TODO: Implement your logic here
-    
-  } catch (error) {
-    console.error('❌ Critical error during startup:', error);
-    process.exit(1);
-  }
-}
-
-main();
-```
+Application-specific behavior belongs in the features and handlers you add to the scaffold.
 
 ## Database files
 
-When you select a database during project creation, the CLI adds database-specific files.
+Selecting a database during project creation adds Drizzle configuration and a starting schema.
 
 ### PostgreSQL
 
@@ -206,7 +153,7 @@ drizzle.config.ts
 src/schema.ts
 ```
 
-`src/schema.ts` contains an initial `usersTable` example and the generated `DbSchema` type.
+It adds the PostgreSQL adapter and reads the connection string from `DATABASE_URL`.
 
 ### SQLite
 
@@ -217,88 +164,72 @@ drizzle.config.ts
 src/schema.ts
 ```
 
-but uses the SQLite Drizzle primitives and a `SqliteSchema` type.
+It uses the SQLite Drizzle primitives and reads the database URL from `SQLITE_DATABASE_URL`.
 
-The schema is a starting point that you can replace or extend with the tables required by your application.
+Both generated schemas are starting points. Replace or extend them with the tables required by the application.
 
 ## Environment files
 
-The CLI creates both:
+The CLI creates `.env` and `.env.example`. Their variables depend on the selected integrations.
 
-```text
-.env
-.env.example
-```
-
-The generated variables depend on the selected integrations.
-
-For example, a project using PostgreSQL receives `DATABASE_URL`, while a project using Redis receives the corresponding Redis configuration variables.
-
-`.env` is ignored by the generated `.gitignore`, while `.env.example` is kept as a reference for the required configuration.
+For example, PostgreSQL uses `DATABASE_URL`, SQLite uses `SQLITE_DATABASE_URL`, Redis adds its connection settings, and Supabase adds authentication settings. The generated `.gitignore` excludes `.env`; keep secrets there and use `.env.example` to document required variables.
 
 ## `package.json`
 
-The CLI generates the project's `package.json`.
+The Core `package.json` includes `@xeno-js/core`, `@xeno-js/shared`, `dotenv`, TypeScript, and `tsx`. The CLI adds packages for selected features, such as a Drizzle adapter, Axios, Cockatiel, Pino, Sentry, Redis, Supabase, or Zod.
 
-The base Core project includes:
-
-- `@xeno-js/core`;
-- `dotenv`;
-- TypeScript;
-- `tsx`.
-
-Optional dependencies are added according to the choices made during scaffolding.
-
-For example:
-
-- Drizzle and database packages when a database is selected;
-- Axios when HTTP client support is selected;
-- Cockatiel when resilience support is selected;
-- Pino or Sentry for logging and observability;
-- Redis support;
-- Supabase authentication;
-- Zod validation.
-
-The generated project also includes scripts for starting and building the application, with database scripts added when database support is enabled.
+The generated scripts include `start` and `build`. Database options add Drizzle generation, push, and migration scripts. The Vercel target uses `vercel dev` for local startup.
 
 ## What happens after generation
 
-The CLI does not only write the files.
-
-After generation it:
-
-1. optionally initializes a Git repository;
-2. runs `npm install`;
-3. prints the generated project location;
-4. shows the next commands to run.
-
-The generated project is therefore ready to continue from the scaffold immediately after the `new` command completes.
+The CLI creates the selected files, writes `xeno.json` to record scaffold metadata, and then optionally initializes a Git repository. It runs `npm install` after generation and prints the project path and next steps.
 
 ## Adding application code
 
-The initial project is intentionally small.
-
-The CLI does **not** generate a complete business domain or a large hierarchy of empty folders.
-
-You start with the composition root and configuration files, then add application components as needed.
-
-For example:
+Start by generating a feature, then generate commands or queries inside it:
 
 ```bash
-xeno-js g command CreateUser --core
+xeno-js g feature Users
+xeno-js g command CreateUser --feature Users
+xeno-js g query FindUser --feature Users
 ```
 
-or:
+Run these commands from the project root. The CLI reads `xeno.json` to detect the project type. Use `--core` or `--vue` only to verify that target.
 
-```bash
-xeno-js g query FindUser --core
+The feature generator creates `src/features/users/users.module.ts`. A command or query adds its request and handler under that feature's `application` folder, then registers them in the module and `src/registry.ts`. When Zod is enabled, the generator also creates a payload schema. Vue projects receive a composable for each operation.
+
+Generated handlers return `NOT_IMPLEMENTED` until you add the application behavior. If you enabled Zod, update the generated payload schema when you change the payload type.
+
+For Node.js, Fastify, or Vercel Core projects, run `xeno-js g http` to expose an existing operation as a route. Routes are protected by default. Creating a public route requires explicit confirmation.
+
+## A Vue project
+
+The Vue scaffold includes Vue, Vite, the Xeno Vue integration, a Pinia-backed request context, and its own registry. A basic project starts with:
+
+```text
+my-app/
+├── src/
+│   ├── App.vue
+│   ├── main.ts
+│   └── registry.ts
+├── .env
+├── .env.example
+├── .gitignore
+├── index.html
+├── package.json
+├── README.md
+├── tsconfig.json
+├── vite.config.ts
+└── xeno.json
 ```
 
-The generators add the corresponding CQRS application components to the project.
+Selecting Vue Router adds `src/router/index.ts` and `src/views/HomeView.vue`. Selecting Tailwind adds `src/assets/style.css` and the Vite integration. Axios, Cockatiel, Supabase, Sentry, and Zod are optional.
+
+The Vue entry point configures the selected integrations, provides the Xeno service container to the app, and mounts `App.vue`. Use the same feature and operation commands from the project root to add application code.
 
 ## CLI documentation
 
-For the CLI commands, generation options, and available generators, see:
+For CLI commands, project options, and generators, see:
 
 [CLI Overview](../cli/overview)
 
