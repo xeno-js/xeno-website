@@ -1,0 +1,63 @@
+---
+// Motion-driven reveal, 3D tilt, cursor spotlight and floating layers for the homepage
+---
+
+<script>
+  import { animate, inView } from 'motion';
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  const spring = { type: 'spring', stiffness: 160, damping: 18 } as const;
+
+  // Cursor spotlight works without motion, it is only CSS variables
+  if (finePointer) {
+    document.querySelectorAll<HTMLElement>('.spotlight').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        el.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+  }
+
+  if (!reduce) {
+    const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    items.forEach((el) => (el.style.opacity = '0'));
+
+    inView(items, (el) => {
+      const target = el as HTMLElement;
+      const delay = Number(target.dataset.revealDelay ?? 0);
+      animate(target, { opacity: 1, y: [28, 0] }, { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] });
+    }, { margin: '0px 0px -10% 0px' });
+
+    document.querySelectorAll<HTMLElement>('[data-float]').forEach((el, i) => {
+      animate(el, { y: [0, -10, 0] }, {
+        duration: 5 + i * 0.8,
+        delay: i * 0.4,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      });
+    });
+
+    if (finePointer) {
+      document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
+        const max = Number(el.dataset.tilt ?? 6);
+        const baseX = Number(el.dataset.baseX ?? 0);
+        const baseY = Number(el.dataset.baseY ?? 0);
+
+        animate(el, { rotateX: baseX, rotateY: baseY }, { duration: 0 });
+
+        el.addEventListener('pointermove', (e) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          animate(el, { rotateX: baseX - py * max * 2, rotateY: baseY + px * max * 2 }, spring);
+        });
+        el.addEventListener('pointerleave', () => {
+          animate(el, { rotateX: baseX, rotateY: baseY }, spring);
+        });
+      });
+    }
+  }
+</script>

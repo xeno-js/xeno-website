@@ -1,115 +1,71 @@
 ---
-// src/components/homepage/PackagesExplore.astro
 import Button from "../ui/Button.astro";
 
-interface PackageItem {
-  name: string;
-  description: string;
-  icon: string;
-  docsUrl: string;
-  githubUrl: string;
-  delay: number;
-}
-
-const packages: PackageItem[] = [
+const packages = [
   {
     name: "@xeno-js/core",
-    description: "Dependency Injection, scopes, request context, CQRS execution, pipelines, modules, transactions, repositories, and infrastructure composition.",
+    description: "Build Node.js applications with dependency injection, scopes, request context, CQRS, pipelines, modules, transactions and repositories.",
     icon: "bi-cpu",
     docsUrl: "/docs/introduction",
-    githubUrl: "https://github.com/xeno-js/xeno-js",
-    delay: 0,
+    githubUrl: "https://github.com/xeno-js/core",
   },
   {
     name: "@xeno-js/vue",
-    description: "Use explicit frontend composition, CQRS-style commands and queries, pipelines, context, validation, and data sources inside Vue applications.",
+    description: "Use explicit application composition, commands, queries, pipelines, context, validation and data sources in Vue.",
     icon: "bi-browser-edge",
-    docsUrl: "/docs/introduction",
-    githubUrl: "https://github.com/xeno-js/xeno-fe",
-    delay: 100,
+    docsUrl: "/docs/vue/plugin-vue",
+    githubUrl: "https://github.com/xeno-js/vue",
   },
   {
     name: "@xeno-js/shared",
-    description: "Domain primitives, value objects, aggregates, domain events, Result types, errors, and application contracts.",
+    description: "Define domain logic with value objects, aggregates, domain events, Result types, errors and application contracts.",
     icon: "bi-layers-half",
-    docsUrl: "/docs/introduction",
-    githubUrl: "https://github.com/xeno-js/xeno-shared",
-    delay: 200,
+    docsUrl: "/docs/introduction/architecture-overview",
+    githubUrl: "https://github.com/xeno-js/shared",
   },
   {
-    name: "@xeno-js/cli",
-    description: "Scaffold projects and generate application components instead of rebuilding the same structure by hand.",
-    icon: "bi-terminal",
-    docsUrl: "/docs/introduction",
-    githubUrl: "https://github.com/xeno-js/xeno-cli",
-    delay: 300,
+    name: "@xeno-js/vercel",
+    description: "Vercel integration for using Xeno.JS applications on the Vercel platform.",
+    icon: "bi-cloud-upload",
+    docsUrl: "/docs/http/plugins/vercel",
+    githubUrl: "https://github.com/xeno-js/vercel",
   },
 ];
 ---
 
-<section class="py-32 bg-[var(--bg-tertiary)] relative overflow-hidden" id="packages">
-  
-  <!-- Sottile linea di accento superiore -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-[var(--color-primary)] to-transparent opacity-20"></div>
-
-  <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    
-    <!-- Intestazione -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6" data-aos="fade-right">
-      <div class="max-w-2xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase">
-          <i class="bi bi-boxes"></i> THE ECOSYSTEM
-        </div>
-        <h2 class="text-[var(--h2-size)] font-[var(--h1-weight)] text-[var(--text-main)] mb-3 tracking-tight">
-          One architecture. <span class="text-[var(--color-primary)]">Different responsibilities</span>
-        </h2>
-        <p class="text-[var(--text-muted)]">
-          Explore Xeno.Js Ecosystem
-        </p>
-      </div>
+<section class="py-24 px-6 relative" id="packages">
+  <div class="max-w-[var(--container-max)] mx-auto">
+    <div data-reveal class="max-w-2xl mb-14">
+      <span class="eyebrow mb-5"><i class="bi bi-boxes"></i> The ecosystem</span>
+      <h2 class="section-title !mt-5">
+        Packages for your <span class="text-[var(--color-primary)]">application stack.</span>
+      </h2>
     </div>
 
-    <!-- Griglia 2x2 -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {packages.map((pkg) => (
-        <div 
-          class="group relative p-8 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-300 hover:shadow-[0_0_30px_var(--accent-glow)] flex flex-col min-h-[220px]" 
-          data-aos="fade-up" 
-          data-aos-delay={pkg.delay}
-        >
-          <div class="flex justify-between items-start mb-8">
-            <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] group-hover:text-[var(--color-primary)] group-hover:border-[var(--color-primary)] transition-all duration-300 text-xl shadow-sm">
-              <i class={`bi ${pkg.icon}`}></i>
-            </div>
-          </div>
-          <div class="mt-auto flex flex-col flex-grow">
-            <h3 class="font-[family-name:var(--font-mono)] text-[var(--text-code)] font-bold mb-2 text-lg">
-              {pkg.name}
-            </h3>
-            <p class="text-[var(--text-muted)] text-[var(--small-size)] m-0 leading-relaxed mb-6 flex-grow">
-              {pkg.description}
-            </p>
-            <div class="flex items-center gap-3 mt-auto">
-              <Button 
-                href={pkg.docsUrl} 
-                variant="primary" 
-                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-[var(--bg-primary)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm"
-              >
-                <i class="bi bi-book"></i> Docs
+      {packages.map((pkg, i) => (
+        <div class="perspective" data-reveal data-reveal-delay={(i % 2) * 0.1}>
+          <article data-tilt="4" class="glass spotlight h-full p-8 flex flex-col min-h-[240px]">
+            <span class="icon-chip mb-8"><i class={`bi ${pkg.icon}`}></i></span>
+            <h3 class="font-[family-name:var(--font-mono)] !text-[var(--text-code)] !text-lg !mt-0 !mb-2">{pkg.name}</h3>
+            <p class="!text-[var(--text-muted)] text-sm leading-relaxed flex-grow">{pkg.description}</p>
+            <div class="flex items-center gap-3 mt-2">
+              <Button href={pkg.docsUrl} variant="primary" class="!px-4 !py-2 !text-sm">
+                <i class="bi bi-book"></i> Docs<span class="sr-only"> for {pkg.name}</span>
               </Button>
-              <Button
-                href={pkg.githubUrl}
-                variant="secondary"
-                class="w-full sm:w-auto px-4 py-2 text-base shadow-[0_0_30px_var(--accent-glow)]"
-                target="_blank"
-              >
-                <i class="bi bi-github"></i> GitHub
+              <Button href={pkg.githubUrl} variant="secondary" class="!px-4 !py-2 !text-sm" target="_blank">
+                <i class="bi bi-github"></i> GitHub<span class="sr-only"> repository for {pkg.name}</span>
               </Button>
             </div>
-          </div>
+          </article>
         </div>
       ))}
     </div>
 
+    <div class="mt-8 text-center">
+      <Button href="https://github.com/orgs/xeno-js/repositories" variant="primary" class="!px-4 !py-2 !text-sm" target="_blank">
+        Explore all repositories
+      </Button>
+    </div>
   </div>
 </section>

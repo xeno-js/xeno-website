@@ -1,92 +1,109 @@
 ---
-
+const points = [
+  {
+    id: "ioc",
+    icon: "bi-box-seam",
+    title: "Explicit dependency injection",
+    text: "Register dependencies in code without decorators or directory scanning. The registrations show how the application is composed.",
+  },
+  {
+    id: "cqrs",
+    icon: "bi-arrow-left-right",
+    title: "Commands, queries and pipelines",
+    text: "Use commands and queries for application operations. Pipelines run validation, logging, caching and resilience around handlers.",
+  },
+  {
+    id: "model",
+    icon: "bi-layers",
+    title: "Application patterns for Node.js and Vue",
+    text: "Use domain primitives, contracts, commands, queries, pipelines and explicit context across backend and Vue applications.",
+  },
+];
 ---
-<section class="py-24 bg-[var(--bg-secondary)]">
-  <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section Header -->
-    <div class="mb-16 max-w-3xl" data-aos="fade-up">
-      <div
-        class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-semibold mb-4 tracking-wider uppercase"
-      >
-        <i class="bi bi-gem"></i> The core idea
-      </div>
-      <h2
-        class="text-[var(--h2-size)] font-[var(--h2-weight)] text-[var(--text-main)] mb-4 tracking-tight leading-tight"
-      >
-        Why Xeno.<span class="text-[var(--color-primary)]">JS</span>
+
+<section class="py-24 px-6">
+  <div class="max-w-[var(--container-max)] mx-auto">
+    <div data-reveal class="max-w-3xl mb-14">
+      <span class="eyebrow mb-5"><i class="bi bi-gem"></i> The core idea</span>
+      <h2 class="section-title !mt-5">
+        What Xeno.<span class="text-[var(--color-primary)]">JS</span> provides
       </h2>
-      <p
-        class="text-[var(--body-size)] text-[var(--text-muted)] leading-relaxed"
-      >
-Xeno.JS makes the application architecture explicit. <br>
-
-It gives TypeScript applications clear boundaries for domain logic,
-use cases, dependencies, request context, and cross-cutting execution. <br>
-
-Keep the HTTP framework, UI framework, and infrastructure you already use.
-Xeno.JS sits underneath them and gives the application layer a structure
-that remains visible as the codebase grows.
+      <p class="section-lead">
+        Xeno.JS provides dependency injection, CQRS, pipelines and request context for TypeScript applications. These building blocks help separate business logic from HTTP, databases and UI concerns while working with your existing stack.
       </p>
     </div>
 
-    <!-- List of 3 Features -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-10">
-      <!-- Feature 1 -->
-      <div
-        class="flex flex-col pb-8 border-b border-[var(--color-primary)]"
-        data-aos="fade-up"
-        data-aos-delay="100"
-      >
-        <div class="text-[var(--color-primary)] text-3xl mb-5">
-          <i class="bi bi-box-seam"></i>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {points.map((p, i) => (
+        <div class="perspective" data-reveal data-reveal-delay={i * 0.1}>
+          <article data-tilt="6" data-concept={p.id} class="pillar-card glass spotlight h-full p-8">
+            <span class="icon-chip mb-6">
+              <i class={`bi ${p.icon}`}></i>
+            </span>
+            <h3 class="!text-[var(--text-main)] !mt-0 !mb-3">{p.title}</h3>
+            <p class="!text-[var(--text-muted)] !m-0">{p.text}</p>
+          </article>
         </div>
-        <h3
-          class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0"
-        >
-          Zero-Magic Inversion of Control
-        </h3>
-        <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          No decorators or directory scanning. Dependencies are registered explicitly, making application composition visible and deterministic.
-        </p>
-      </div>
-
-      <!-- Feature 2 -->
-      <div
-        class="flex flex-col pb-8 border-b border-[var(--color-primary)]"
-        data-aos="fade-up"
-        data-aos-delay="200"
-      >
-        <div class="text-[var(--color-primary)] text-3xl mb-5">
-          <i class="bi bi-arrow-left-right"></i>
-        </div>
-        <h3
-          class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0"
-        >
-          Native CQRS & Pipeline
-        </h3>
-        <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          Commands and Queries make application intent explicit. Pipelines keep validation, logging, caching, resilience, and other cross-cutting concerns outside business logic.
-        </p>
-      </div>
-
-      <!-- Feature 3 -->
-      <div
-        class="flex flex-col pb-8 border-b border-[var(--color-primary)]"
-        data-aos="fade-up"
-        data-aos-delay="300"
-      >
-        <div class="text-[var(--color-primary)] text-3xl mb-5">
-          <i class="bi bi-layers"></i>
-        </div>
-        <h3
-          class="text-[var(--h3-size)] font-[var(--h3-weight)] text-[var(--text-main)] mb-3 mt-0"
-        >
-          One Application Model
-        </h3>
-        <p class="text-[var(--text-muted)] text-[var(--body-size)] m-0">
-          Use the same architectural language across Node.js and Vue: domain primitives, application contracts, commands, queries, pipelines, and explicit context.
-        </p>
-      </div>
+      ))}
     </div>
   </div>
 </section>
+
+<style>
+  .pillar-card {
+    transition: border-color 200ms ease;
+  }
+
+  .pillar-card .icon-chip {
+    transition:
+      transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 200ms ease,
+      background-color 200ms ease;
+  }
+
+  .pillar-card .icon-chip i {
+    display: inline-block;
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* 1. Zero-Magic IoC: leggera rotazione del chip come attivazione esplicita */
+  .pillar-card[data-concept="ioc"]:hover .icon-chip,
+  .pillar-card[data-concept="ioc"]:focus-within .icon-chip {
+    transform: translateY(-2px) rotate(-3deg);
+    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  }
+
+  /* 2. Native CQRS & Pipeline: micro-shift orizzontale sull'icona delle frecce */
+  .pillar-card[data-concept="cqrs"]:hover .icon-chip,
+  .pillar-card[data-concept="cqrs"]:focus-within .icon-chip {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  }
+
+  .pillar-card[data-concept="cqrs"]:hover .icon-chip i,
+  .pillar-card[data-concept="cqrs"]:focus-within .icon-chip i {
+    transform: translateX(2px);
+  }
+
+  /* 3. One Application Model: leggera espansione verticale del chip */
+  .pillar-card[data-concept="model"]:hover .icon-chip,
+  .pillar-card[data-concept="model"]:focus-within .icon-chip {
+    transform: translateY(-3px) scale(1.04);
+    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pillar-card,
+    .pillar-card .icon-chip,
+    .pillar-card .icon-chip i {
+      transition: none;
+    }
+
+    .pillar-card:hover .icon-chip,
+    .pillar-card:focus-within .icon-chip,
+    .pillar-card:hover .icon-chip i,
+    .pillar-card:focus-within .icon-chip i {
+      transform: none;
+    }
+  }
+</style>

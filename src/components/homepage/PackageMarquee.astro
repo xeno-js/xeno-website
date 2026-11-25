@@ -1,0 +1,132 @@
+---
+const rows = [
+  ["axios", "core", "fastify", "node", "pino", "postgresql", "redis"],
+  ["sentry", "shared", "sqlite", "supabase", "vercel", "vue", "zod"],
+];
+---
+
+<section class="packages" aria-labelledby="package-marquee-title">
+  <div class="packages-header">
+    <div class="text-center w-full">
+      <p class="packages-label">THE XENO.JS ECOSYSTEM</p>
+      <h2 id="package-marquee-title">Xeno.JS packages and integrations</h2>
+    </div>
+  </div>
+
+  <div class="marquee">
+    {rows.map((row, index) => (
+      <div class:list={["marquee-row", index === 1 && "reverse"]}>
+        <div class="marquee-track">
+          {[0, 1].map((copy) => (
+            <ul class="package-list" aria-hidden={copy === 1 ? "true" : undefined} translate="no">
+              {row.map((name) => (
+                <li class="package">
+                  <span class="package-mark" aria-hidden="true">✳</span>
+                  <span><span class="package-scope">@xeno-js/</span>{name}</span>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .packages {
+    border-block: 1px solid var(--border-color);
+    padding: 2.5rem 0 3rem;
+    background: var(--bg-secondary);
+  }
+
+  .packages-header {
+    max-width: var(--container-max);
+    margin: 0 auto 1.5rem;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .packages-label {
+    margin: 0 0 0.4rem;
+    color: var(--color-primary);
+    font: 600 0.7rem var(--font-mono);
+    letter-spacing: 0.12em;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    letter-spacing: -0.02em;
+  }
+
+  .marquee {
+    display: grid;
+    gap: 0.75rem;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    min-width: 200%;
+    animation: marquee 42s linear infinite;
+  }
+
+  .reverse .marquee-track {
+    animation-direction: reverse;
+  }
+
+  .marquee:hover .marquee-track,
+  .packages[data-paused] .marquee-track {
+    animation-play-state: paused;
+  }
+
+  .package-list {
+    display: flex;
+    justify-content: space-around;
+    flex: 1 0 50%;
+    list-style: none;
+    margin: 0;
+    padding: 0 0.75rem 0 0;
+  }
+
+  .package {
+    display: flex;
+    align-items: center;
+    flex: none;
+    padding: 0.85rem 1.15rem;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    background: var(--glass-bg);
+    color: var(--text-main);
+    font: 600 0.875rem var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .package-mark {
+    color: var(--color-primary);
+  }
+
+  .package-scope {
+    color: var(--text-muted);
+  }
+
+  @keyframes marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { mask-image: none; padding: 0 1.5rem; }
+    .marquee-track { display: block; width: auto; min-width: 0; animation: none; }
+    .package-list { flex-wrap: wrap; justify-content: start; padding: 0; }
+    .package-list[aria-hidden="true"] { display: none; }
+    .package { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+    .package > span:last-child { min-width: 0; }
+  }
+</style>

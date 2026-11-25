@@ -87,6 +87,7 @@ export default defineConfig({
                 { label: 'Logging Pipeline', link: '/docs/application/pipelines/logging' },
                 { label: 'Performance Pipeline', link: '/docs/application/pipelines/performance' },
                 { label: 'Validation Pipeline', link: '/docs/application/pipelines/validation' },
+                { label: 'Identity Enrichment Pipeline', link: '/docs/application/pipelines/enrichment-identity' },
                 { label: 'Concurrency Pipeline', link: '/docs/application/pipelines/concurrency' },
                 { label: 'Idempotency Pipeline', link: '/docs/application/pipelines/idempotency' },
                 { label: 'Caching Pipeline', link: '/docs/application/pipelines/caching' },
@@ -215,6 +216,13 @@ export default defineConfig({
                 { label: 'Auth Middleware', link: '/docs/security/middlewares/authentication-middleware' },
               ]
             },
+          ]
+        },
+        {
+          label: 'Vue',
+          collapsed: true,
+          items: [
+            { label: 'Overview', link: '/docs/vue/plugin-vue' },
           ]
         },
         {

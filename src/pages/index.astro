@@ -1,31 +1,32 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/homepage/Hero.astro';
+import PackageMarquee from '../components/homepage/PackageMarquee.astro';
 import ValueProposition from '../components/homepage/ValueProposition.astro';
 import Features from '../components/homepage/Features.astro';
 import CodeShowCase from '../components/homepage/CodeShowCase.astro';
-import DemoCTA from '../components/homepage/DemoCTA.astro';
+import MotionEffects from '../components/homepage/MotionEffects.astro';
 import SupportSection from '../components/homepage/SupportSection.astro';
 import Vision from '../components/homepage/Vision.astro';
 import WhenXenoFits from '../components/homepage/WhenXenoFits.astro';
 
-// Current page path for active state handling
 const currentPath = Astro.url.pathname;
 ---
 
 <Layout 
-  title="Xeno.JS - Home" 
-  description="Xeno.JS is an application architecture framework for TypeScript with explicit dependency injection, DDD, CQRS and modular application boundaries."
-  canonicalURL={Astro.url.href}
+  title="TypeScript Application Architecture Framework | Xeno.JS"
+  description="Build TypeScript and Node.js applications with explicit dependency injection, CQRS, DDD and pipelines. Use Xeno.JS with your existing HTTP framework."
+  canonicalURL={new URL('/', Astro.site).href}
   faqs={[]}
 >
   <Hero />
+  <PackageMarquee />
   <WhenXenoFits />
   <ValueProposition />
   <Features />
   <CodeShowCase />
-  <!-- <DemoCTA /> -->
-   <Vision/>
+  <Vision />
   <SupportSection />
+  <MotionEffects />
 
 </Layout>
