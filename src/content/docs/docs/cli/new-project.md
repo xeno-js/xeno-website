@@ -1,90 +1,138 @@
 ---
-title: 'New Project Scaffolding: Architectural Initialization'
-description: 'Discover how the Xeno.JS CLI NewProjectCommand performs interactive scaffolding using CoreScaffoldStrategy and VueScaffoldStrategy.'
-keywords: 'NewProjectCommand, Scaffolding, CLI Architecture, CoreScaffoldStrategy, VueScaffoldStrategy, CommandRunner, Xeno.JS CLI'
-author: 'Xeno'
+title: "Create a Project"
+description: "Create a Xeno.JS Core or Vue project with the interactive CLI."
+canonical: "https://www.xeno-js.it/docs/cli/new-project"
+updatedAt: "2026-11-25"
+author:
+  name: "Xeno.JS Team"
+  url: "https://www.xeno-js.it"
+type: "documentation"
+section: "cli"
+category: "project-scaffolding"
+topics: "Xeno.JS CLI, Core Scaffolding, Vue Scaffolding, Project Targets"
+keywords: "Xeno.JS CLI, new project, Core, Vue, Console, Node, Fastify, Vercel"
 sidebar:
+  group: "CLI"
   order: 2
+breadcrumbs:
+  - name: "Docs"
+    url: "https://www.xeno-js.it/docs"
+  - name: "CLI"
+    url: "https://www.xeno-js.it/docs/cli"
+  - name: "Create a Project"
+    url: "https://www.xeno-js.it/docs/cli/new-project"
+related:
+  next:
+    - "/docs/cli/generate-cqrs"
+prerequisites:
+  - "/docs/cli/overview"
+relatedTopics:
+  - "/docs/fundamentals/app-builder"
+faqs:
+  - question: "What project type is selected by default?"
+    answer: "The new command creates a Core project by default. Use --vue to create a Vue project."
+  - question: "How do I select a Console project?"
+    answer: "Select Console in the interactive Core target prompt. The CLI does not use a --console flag."
+  - question: "Is Pinia optional in the Vue scaffold?"
+    answer: "Pinia is included in the Vue scaffold for the generated request context."
+answerSummary: "The new command creates a Core or Vue project through interactive prompts and installs its dependencies."
+directAnswer:
+  question: "How do I create a Xeno.JS project?"
+  answer: "Run xeno-js new with a project name and optionally --core or --vue, then select the project options in the prompts."
+keyFacts:
+  - "The default project type is Core."
+  - "Core supports Console, Node, Fastify, and Vercel targets."
+  - "Vue includes Pinia for request context."
+  - "The CLI installs dependencies and optionally initializes Git."
 ---
 
 ## Introduction
 
-Creating enterprise infrastructure usually requires days of configuration to align linters, bundlers, IoC containers, and system modules. The `NewProjectCommand` in the Xeno.JS CLI automates this process in seconds, ensuring that every new ecosystem (backend or frontend) is born already adhering to the framework's strict architectural standards.
-
----
-
-## The `new` Command
-
-The entry point for creating a project is the `new` command:
+The `new` command creates a project, writes its composition and configuration
+files, and installs the selected dependencies.
 
 ```bash
 xeno-js new <project-name> [--core | --vue]
-
 ```
 
-If the target flag is not specified, the CLI applies `--core` as the default behavior, orienting the setup toward a Node.js architecture.
+Core is the default. Use `--vue` for a Vue project:
+
+```bash
+xeno-js new my-api --core
+xeno-js new my-web --vue
+```
+
+The CLI asks which integrations to configure and whether to initialize Git.
+It then runs `npm install` in the project directory.
 
 ---
 
-## The Strategy Pattern for Scaffolding
+## Core Projects
 
-Under the hood, the CLI architecture uses the Strategy pattern (`IScaffoldStrategy<T>`) to decouple prompting logic and generator selection based on the target environment. The command evaluates the flags passed by the user and instantiates the correct strategy:
+During Core setup, select one target:
 
-### 1. `CoreScaffoldStrategy` (Backend)
+| Target | Generated entry point |
+| --- | --- |
+| Console | `src/main.ts`, passing command-line arguments to `main(...args)` |
+| Node | `src/main.ts` and the Node HTTP adapter |
+| Fastify | `src/main.ts` and the Fastify HTTP adapter |
+| Vercel | `api/index.ts`, `vercel.json`, and `public/index.html` |
 
-Optimized for creating Node.js microservices or monoliths based on `@xeno-js/core`.
-This strategy launches interactive prompts to configure critical infrastructural layers:
+Select Console in the prompt rather than passing `--console`. HTTP route
+generation is available only for Node, Fastify, and Vercel.
 
-* **Database**: Choose between Drizzle PostgreSQL, SQLite, or None.
+Core options include PostgreSQL, SQLite or no database, Axios, Cockatiel,
+Supabase Auth, Redis, Pino, Sentry, and Zod. Configure the environment variables
+for the integrations you select before starting the application.
 
-* **Networking & Resilience**: Installation of Axios and Cockatiel.
+For Vercel, the generated configuration rewrites `/api/*` to the serverless
+entry point and other paths to the static index page.
 
-* **Cache & Concurrency**: Inclusion of Redis for distributed idempotency.
+Start a Console, Node, or Fastify project with:
 
-* **Security & Validation**: Configuration of Supabase Auth and Zod.
+```bash
+cd my-api
+npm run start
+```
 
-* **Observability**: Choice of logging drivers between Pino (structured JSON) and Sentry (APM).
-
-### 2. `VueScaffoldStrategy` (Frontend)
-
-Optimized for Single Page Applications based on `@xeno-js/vue`.
-Includes specific prompts for the browser ecosystem:
-
-* **State & Routing**: Integration of Pinia and Vue Router.
-
-* **Styling**: Automatic setup of Tailwind CSS v4.
-
-* **Resilience & Observability**: Configuration of Cockatiel, Axios, and Sentry Vue SDK.
-
-* **Security**: Supabase Auth (for the client) and Zod for browser-side payload validation.
+For a Vercel project, `npm run start` runs `vercel dev`.
 
 ---
 
-## Dynamic Generator Orchestration
+## Vue Projects
 
-Once the responses are collected through prompts, the strategy selects and queues only the necessary **Generators** (`IGenerator<T>`). This "pay-for-what-you-use" approach prevents the generation of useless files or configurations:
+The Vue scaffold includes Pinia for request context. Its optional integrations
+include Vue Router, Tailwind CSS, Axios, Cockatiel, Supabase Auth, Sentry, and
+Zod.
 
-* If the user selects a database, the `DrizzleGenerator` (or `DrizzleSqlLiteGenerator`) is queued, which immediately scaffolds `drizzle.config.ts` and a base `schema.ts` file.
+```bash
+cd my-web
+npm run dev
+```
 
-* If the target is Vue, the `ViteconfigGenerator` produces a `vite.config.ts`, automatically injecting the Tailwind CSS plugin if requested.
-
-* Cross-cutting generators like the `EnvGenerator` (or `EnvVueGenerator`) dynamically compile the `.env` and `.env.example` files, populating them only with the keys of the selected libraries (e.g., `VITE_SENTRY_DSN` or `REDIS_HOST`).
-
-* The `TsconfigGenerator` models the `tsconfig.json` by inserting the correct `moduleResolution` directive and ECMAScript target based on the environment.
-
-The bootstrap engine (`Bootstrapper`) then cyclically executes the `generate()` method of each generator, physically writing the files to disk via `FileUtils`.
+The scaffold currently declares `@xeno-js/core` with a `^5.1.0` version range.
+The published `5.1.0` package imports Node's `async_hooks`, which Vite cannot
+bundle for browsers. A Vue production build therefore requires a compatible
+Core release; check the resolved version when diagnosing the build.
 
 ---
 
-## Finalization: The Role of the `CommandRunner`
+## Generated Project Metadata
 
-The final step of the `new` command ensures that the project is immediately operational. The CLI delegates system process execution to the `CommandRunner` service in a cross-platform manner (handling differences between Unix and Windows environments):
+The scaffold creates `xeno.json` alongside the application files. The CLI uses
+it to detect the project type, selected integrations, and managed sections
+when generating features and operations.
 
-1. **Git Initialization**: If the user accepted in the prompt, it executes `git init` to prepare the repository for versioning.
+Keep this file and the managed section markers intact. The generator is
+designed for projects created by the current CLI, not arbitrary existing
+projects.
 
-2. **Dependency Installation**: Executes `npm install` within the new directory, resolving and downloading the packages defined by the `PackageJsonCoreGenerator` or `PackageJsonVueGenerator`.
+---
 
-The final result is a complete, typed architecture, wired for Dependency Injection, and ready to host the first domain Handlers.
+## Where to Go Next
+
+See [Generate Application Components](./generate-cqrs) to add your first feature,
+command, or query.
 
 ---
 

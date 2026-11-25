@@ -231,7 +231,8 @@ export default defineConfig({
           items: [
             { label: 'Overview', link: '/docs/cli/overview'},
             { label: 'Create Project', link: '/docs/cli/new-project'},
-            { label: 'Generate Command', link: '/docs/cli/generate-cqrs'},
+            { label: 'Generate Application', link: '/docs/cli/generate-cqrs'},
+            { label: 'Generate HTTP', link: '/docs/cli/generate-http'},
           ]
         },
         {

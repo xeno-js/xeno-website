@@ -1,58 +1,127 @@
 ---
-title: 'Xeno.JS CLI: Enterprise Scaffolding Toolkit'
-description: 'Official overview of @xeno-js/cli, the command-line tool for automating the architectural scaffolding of Xeno.JS projects.'
-keywords: 'Xeno.JS CLI, scaffolding, DDD, CQRS, code generator, @xeno-js/cli, architectural automation'
-author: 'Xeno'
+title: "Xeno.JS CLI"
+description: "Create Xeno.JS Core and Vue projects and generate features, commands, queries, and HTTP routes."
+canonical: "https://www.xeno-js.it/docs/cli/overview"
+updatedAt: "2026-11-25"
+author:
+  name: "Xeno.JS Team"
+  url: "https://www.xeno-js.it"
+type: "documentation"
+section: "cli"
+category: "tooling"
+topics: "Xeno.JS CLI, Project Scaffolding, Features, CQRS, HTTP Routes"
+keywords: "Xeno.JS CLI, project scaffolding, command generator, query generator, HTTP route generator"
 sidebar:
+  group: "CLI"
   order: 1
+breadcrumbs:
+  - name: "Docs"
+    url: "https://www.xeno-js.it/docs"
+  - name: "CLI"
+    url: "https://www.xeno-js.it/docs/cli"
+  - name: "Overview"
+    url: "https://www.xeno-js.it/docs/cli/overview"
+related:
+  next:
+    - "/docs/cli/new-project"
+prerequisites: []
+relatedTopics:
+  - "/docs/fundamentals/overview"
+  - "/docs/fundamentals/xeno-registry"
+faqs:
+  - question: "What does the Xeno.JS CLI generate?"
+    answer: "The CLI creates Core and Vue projects, features, commands, queries, and HTTP routes for supported Core targets."
+  - question: "Does the CLI implement application behavior?"
+    answer: "No. Generated handlers return NOT_IMPLEMENTED until you implement the use case."
+  - question: "Can the CLI generate code in any existing project?"
+    answer: "The managed generators require a project created by the current CLI with valid xeno.json metadata and intact managed sections."
+answerSummary: "The Xeno.JS CLI scaffolds Core and Vue projects and registers generated application components in CLI-managed sections."
+directAnswer:
+  question: "What is the Xeno.JS CLI?"
+  answer: "The Xeno.JS CLI is a command-line tool for creating projects and generating registered features, CQRS operations, and HTTP routes."
+keyFacts:
+  - "Core is the default project type; Vue is selected with --vue."
+  - "Core projects can target Console, Node, Fastify, or Vercel."
+  - "Commands and queries belong to a feature and are registered automatically."
+  - "HTTP generation is a separate interactive step for supported Core targets."
+  - "Generated handlers and payload schemas require application-specific implementation."
 ---
 
 ## Introduction
 
-**Xeno.JS CLI** (`@xeno-js/cli`) is the official command-line interface designed to initialize, configure, and manage projects based on the Xeno.JS framework. Its primary goal is to automate infrastructural scaffolding to natively enforce **Domain-Driven Design (DDD)** and **Command Query Responsibility Segregation (CQRS)** patterns, eliminating boilerplate for both Node.js backend environments (`@xeno-js/core`) and frontend applications (`@xeno-js/vue`).
+The Xeno.JS CLI (`@xeno-js/cli`) creates projects and generates application
+components using explicit composition.
 
-Through the CLI, the development team eliminates human error in Dependency Injection wiring and ensures that every new component respects the framework's strict architectural conventions.
+The CLI creates the starting structure. Your application defines the business
+behavior, payloads, dependencies, and access rules.
 
 ---
 
 ## Installation
 
-The CLI can be installed globally for quick access to generators in existing workspaces, or executed on-demand via `npx` to bootstrap new ecosystems:
+Node.js 20 or later is required. Install the CLI globally:
 
 ```bash
-# Global installation
 npm install -g @xeno-js/cli
-
-# On-demand execution to initialize a new project
-npx xeno-js new my-xeno-app
-
 ```
 
----
+Or run it without a global installation:
 
-## Main Commands Overview
+```bash
+npx @xeno-js/cli new my-app --core
+```
 
-The CLI acts as an executive "guardrail," channeling development through specific commands that manage the creation and extension of the architecture in a predictable manner.
-
-* **`new <project-name> [--core | --vue]`**: Performs the interactive bootstrap of an entire architecture (backend or frontend), pre-configuring the environment (Git, variables, configuration files) and installing only the selected dependencies.
-
-* **`generate <type> <Name> [--core | --vue]`** (Alias: `g`): Dynamically generates all files necessary for a CQRS operation (Command or Query). It instantly creates and wires Handlers, Models, Controllers (in the backend), reactive Composables (in the frontend), and schemas, updating the relevant IoC registries.
-
-* **`--help` / `-h` / `--h`**: Shows the interactive quick start guide and the list of supported aliases directly in the terminal.
+The examples below use `xeno-js` from a global installation. With `npx`, replace
+`xeno-js` with `npx @xeno-js/cli`. Use a CLI release that includes the managed
+generators described here.
 
 ---
 
-## Strategic and Architectural Advantages
+## Commands
 
-Adopting `@xeno-js/cli` is not just a convenience (Developer Experience), but a true architectural governance choice that significantly reduces the *Time-to-First-Feature*:
+| Command | Purpose |
+| --- | --- |
+| `xeno-js new <name> [--core \| --vue]` | Create a Core or Vue project. |
+| `xeno-js g feature <Name>` | Create and register a feature module. |
+| `xeno-js g command <Name> --feature <Feature>` | Generate and register a command and handler. |
+| `xeno-js g query <Name> --feature <Feature>` | Generate and register a query and handler. |
+| `xeno-js g http` | Interactively expose an operation over HTTP. |
+| `xeno-js --help` | Show the CLI usage guide. |
 
-* **Interactive Configuration (Pay-for-what-you-use):** Starts project creation through guided prompts that install and configure only the essential dependencies selected by the team (e.g., Zod, Supabase, Drizzle ORM, Pino, Sentry, Pinia, and Tailwind CSS), preventing bundle and `package.json` bloat.
+`generate` is the full command name; `g` is its alias. Run generators from the
+root of a project created by the current CLI. The project type is detected from
+`xeno.json`; an optional `--core` or `--vue` flag verifies that type.
 
-* **CQRS Architectural Scaffolding:** With a single command, the CLI scaffolds the entire lifecycle of a business intent. In the backend, it generates Controllers, Handlers, Commands/Queries, and DB/Zod schemas; in the frontend, it generates files for the Presentation Layer (Composables) and the Application Layer (Handlers and Models).
+---
 
-* **Target Agnosticism:** Natively manages project structures for Backend (pure TypeScript) and Frontend (Vue.js), automatically setting up critical files (`tsconfig.json`, `vite.config.ts`, `.env`) and configuring infrastructure bootstrappers.
+## How Generation Fits Together
 
-* **CI/CD & Git Ready:** Instantly initializes Git repositories and triggers NPM installations automatically, delivering a "ready-to-code" ecosystem to the team from the very first run.
+```text
+Project
+  └── Feature module
+       ├── Command or query
+       ├── Handler
+       ├── Optional Zod schema
+       └── Presentation
+            ├── Vue composable, for Vue projects
+            └── HTTP controller and route, when explicitly generated
+```
+
+The CLI updates the registry and the relevant module and composition root.
+HTTP exposure is a separate step, available for Core projects targeting Node,
+Fastify, or Vercel.
+
+Generated handlers return `NOT_IMPLEMENTED` until you implement them. When Zod
+is enabled, update the generated schema alongside the payload type.
+
+---
+
+## Where to Go Next
+
+1. [Create a Project](./new-project)
+2. [Generate Application Components](./generate-cqrs)
+3. [Generate HTTP Routes](./generate-http)
+4. [Xeno Registry](../fundamentals/xeno-registry)
 
 ---
 
