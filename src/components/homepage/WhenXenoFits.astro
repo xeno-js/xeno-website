@@ -1,220 +1,43 @@
 ---
-const pillars = [
-  {
-    id: "arch",
-    tag: "Architecture",
-    icon: "bi-boxes",
-    title: "Structure a TypeScript application around clear boundaries.",
-    description:
-      "Keep domain logic separate from the transport and infrastructure your application uses.",
-    points: [
-      "Explicit dependency injection",
-      "CQRS with commands and queries",
-      "Application and domain boundaries",
-      "Request-scoped execution context",
-      "Modular infrastructure adapters",
-      "Full-stack Vue integration",
-    ],
-  },
-  {
-    id: "fit",
-    tag: "Ideal use cases",
-    icon: "bi-bullseye",
-    title: "When to use Xeno.JS",
-    description:
-      "Xeno.JS can help when your application has business logic that needs more structure than request handlers alone provide.",
-    points: [
-      "Your backend is growing and its dependencies are hard to follow.",
-      "Your domain logic is mixed with database code.",
-      "You need commands, queries and reusable pipelines.",
-      "You prefer explicit registration without decorator metadata.",
-      "You want similar application patterns in Node.js and Vue.",
-    ],
-  },
+const packages = [
+  { name: '@xeno-js/core', icon: 'bi-cpu', description: 'Dependency injection, CQRS, pipelines and the Node.js application runtime.', docs: '/docs/introduction', github: 'https://github.com/xeno-js/core' },
+  { name: '@xeno-js/shared', icon: 'bi-diamond', description: 'Domain primitives, contracts, aggregates and Result types.', docs: '/docs/introduction/architecture-overview', github: 'https://github.com/xeno-js/shared' },
+  { name: '@xeno-js/cli', icon: 'bi-terminal', description: 'Scaffold projects and generate application components.', docs: '/docs/cli/overview', github: 'https://github.com/xeno-js/xeno-cli' },
+  { name: '@xeno-js/vue', icon: 'bi-window', description: 'Use application composition, commands and queries in Vue.', docs: '/docs/vue/plugin-vue', github: 'https://github.com/xeno-js/vue' },
 ];
 ---
 
-<section class="py-24 px-6 relative overflow-x-clip">
-  <div class="max-w-[var(--container-max)] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-    <!-- Colonna Sticky: resta ancorata durante lo scroll della colonna 3D -->
-    <div class="lg:col-span-5 lg:sticky lg:top-28" data-reveal>
-      <span class="eyebrow mb-5">
-        <i class="bi bi-layers"></i> Architecture & Fit
-      </span>
-      <h2 class="section-title !mt-3 !mb-4">
-        Structure TypeScript applications as they <span class="text-[var(--color-primary)]">grow</span>.
-      </h2>
-      <p class="section-lead !mb-8">
-        Xeno.JS helps teams separate use cases, domain logic and infrastructure while keeping their choice of HTTP framework.
-      </p>
-
-      <div class="space-y-3">
-        {pillars.map((p, idx) => (
-          <a
-            href={`#pillar-${p.id}`}
-            data-pillar-jump={p.id}
-            class="glass spotlight block p-4 transition-colors hover:border-[var(--color-primary)]/50"
-          >
-            <div class="flex items-center justify-between gap-3">
-              <span class="font-[family-name:var(--font-mono)] text-xs text-[var(--color-primary)]">
-                0{idx + 1} · {p.tag}
-              </span>
-              <i class="bi bi-arrow-down-right text-[var(--text-muted)]"></i>
-            </div>
-            <div class="text-sm font-medium text-[var(--text-main)] mt-1">
-              {p.title}
-            </div>
-          </a>
-        ))}
-      </div>
+<!-- Carousel with pagination -->
+<section id="packages" data-pin class="hx-pin px-6">
+  <div class="hx-pin-sticky mx-auto max-w-[var(--container-max)]">
+    <div data-reveal class="max-w-3xl">
+      <p class="hx-eyebrow mb-3">05 / Ecosystem</p>
+      <h2 class="hx-title">Choose the pieces you need.</h2>
+      <p class="hx-lead mt-5">Start with the core and add integrations for your transport, database and tooling.</p>
     </div>
-
-    <!-- Colonna Destra: Carosello su mobile, stack 3D su desktop -->
-    <div class="lg:col-span-7 min-w-0">
-      <div
-        id="pillars-carousel"
-        role="region"
-        aria-roledescription="carousel"
-        aria-label="Architecture and ideal use cases"
-        class="flex lg:block overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-smooth gap-4 lg:gap-0 lg:space-y-10 pb-2 lg:pb-0 -mx-6 px-6 lg:mx-0 lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {pillars.map((p, i) => (
-          <div
-            id={`pillar-${p.id}`}
-            data-carousel-slide
-            class="w-[88vw] sm:w-[70vw] lg:w-auto max-w-[460px] lg:max-w-none shrink-0 lg:shrink snap-center lg:snap-align-none perspective scroll-mt-28"
-            data-reveal
-            data-reveal-delay={i * 0.12}
-          >
-            <article
-              data-tilt="4"
-              data-base-x={i === 0 ? "3" : "-2"}
-              data-base-y={i === 0 ? "-5" : "5"}
-              data-float
-              class:list={[
-                "glass spotlight h-full p-6 sm:p-10 !border-[var(--color-primary)]/40",
-              ]}
-            >
-              <span class="eyebrow mb-5">
-                <i class={`bi ${p.icon}`}></i> {p.tag}
-              </span>
-              <h3 class="section-title !text-2xl sm:!text-3xl !mt-3 !mb-3">
-                {p.title}
-              </h3>
-              <p class="section-lead !mb-8">
-                {p.description}
-              </p>
-
-              <ul class="list-none p-0 m-0 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {p.points.map((item) => (
-                  <li class="flex items-start gap-3 text-sm text-[var(--text-main)] rounded-[var(--border-radius)] border border-[var(--glass-border)] bg-white/[0.02] p-3">
-                    <i class="bi bi-check2-circle text-[var(--color-primary)] text-base leading-5 shrink-0"></i>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+    <div data-carousel class="mt-8">
+      <div data-carousel-rail tabindex="0" role="region" aria-roledescription="carousel" aria-label="Xeno.JS packages" class="hx-rail -mx-6 px-6 [perspective:1200px] sm:mx-0 sm:px-0">
+        {packages.map((pkg, index) => (
+          <div data-carousel-slide data-active={index === 0 ? 'true' : 'false'} class="hx-slide" role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${packages.length}`}>
+            <article class="hx-glass hx-tilt flex min-h-64 flex-col p-7">
+              <span class="hx-pop flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--glass-border)] bg-[var(--accent-glow)] text-xl text-[var(--color-primary)]"><i class={`bi ${pkg.icon}`} aria-hidden="true"></i></span>
+              <h3 class="hx-pop mt-6 font-[family-name:var(--font-mono)] text-base font-semibold text-[var(--color-primary)]">{pkg.name}</h3>
+              <p class="mt-3 flex-1 text-[var(--text-muted)]">{pkg.description}</p>
+              <div class="mt-5 flex gap-6 text-sm font-semibold"><a href={pkg.docs} class="inline-flex min-h-11 items-center text-[var(--text-main)] hover:text-[var(--color-primary)]">Documentation<span class="sr-only"> for {pkg.name}</span></a><a href={pkg.github} class="inline-flex min-h-11 items-center text-[var(--text-muted)] hover:text-[var(--color-primary)]">GitHub<span class="sr-only"> for {pkg.name}</span></a></div>
             </article>
           </div>
         ))}
       </div>
-
-      <!-- Controlli carosello visibili solo su mobile -->
-      <div class="flex lg:hidden items-center justify-center items-center mt-4 gap-4" aria-label="Carousel controls">
-        <div class="flex items-center gap-2" data-carousel-dots>
-          {pillars.map((p, idx) => (
-            <button
-              type="button"
-              data-carousel-dot={idx}
-              aria-label={`Go to ${p.tag}`}
-              aria-current={idx === 0 ? "true" : "false"}
-              class:list={[
-                "h-2 rounded-full transition-[width,background-color] duration-200 cursor-pointer",
-                idx === 0
-                  ? "w-7 bg-[var(--color-primary)]"
-                  : "w-2 bg-[var(--border-color-hover)]",
-              ]}
-            />
+      <div data-carousel-controls hidden class="flex items-center justify-center gap-3">
+        <button type="button" data-carousel-prev aria-label="Previous package" class="hx-arrow"><i class="bi bi-arrow-left" aria-hidden="true"></i></button>
+        <div class="flex items-center">
+          {packages.map((pkg, index) => (
+            <button type="button" data-carousel-dot={index} aria-label={`Go to ${pkg.name}`} aria-current={index === 0 ? 'true' : 'false'} class="hx-dot-hit"><span class="hx-dot" aria-current={index === 0 ? 'true' : 'false'}></span></button>
           ))}
         </div>
-
+        <button type="button" data-carousel-next aria-label="Next package" class="hx-arrow"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
       </div>
+      <div class="hx-progress mx-auto mt-4 max-w-xs" aria-hidden="true"><span data-pin-bar></span></div>
     </div>
   </div>
 </section>
-
-<script>
-  const track = document.getElementById("pillars-carousel");
-  const slides = Array.from(track?.querySelectorAll<HTMLElement>("[data-carousel-slide]") ?? []);
-  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
-  const prevBtn = document.querySelector<HTMLButtonElement>("[data-carousel-prev]");
-  const nextBtn = document.querySelector<HTMLButtonElement>("[data-carousel-next]");
-  const jumpLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-pillar-jump]"));
-
-  if (track && slides.length > 0) {
-    let activeIndex = 0;
-
-    const updateUI = (index: number) => {
-      activeIndex = Math.max(0, Math.min(index, slides.length - 1));
-      dots.forEach((dot, idx) => {
-        const isActive = idx === activeIndex;
-        dot.setAttribute("aria-current", isActive ? "true" : "false");
-        dot.classList.toggle("w-7", isActive);
-        dot.classList.toggle("bg-[var(--color-primary)]", isActive);
-        dot.classList.toggle("w-2", !isActive);
-        dot.classList.toggle("bg-[var(--border-color-hover)]", !isActive);
-      });
-    };
-
-    const goToSlide = (index: number) => {
-      const clamped = Math.max(0, Math.min(index, slides.length - 1));
-      const target = slides[clamped];
-      if (!target) return;
-
-      const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-      if (!isDesktop) {
-        track.scrollTo({
-          left: target.offsetLeft - track.offsetLeft,
-          behavior: "smooth",
-        });
-      }
-      updateUI(clamped);
-    };
-
-    track.addEventListener(
-      "scroll",
-      () => {
-        if (window.matchMedia("(min-width: 1024px)").matches) return;
-        const trackCenter = track.scrollLeft + track.clientWidth / 2;
-        let closestIdx = 0;
-        let closestDist = Infinity;
-
-        slides.forEach((slide, idx) => {
-          const slideCenter = slide.offsetLeft - track.offsetLeft + slide.clientWidth / 2;
-          const dist = Math.abs(trackCenter - slideCenter);
-          if (dist < closestDist) {
-            closestDist = dist;
-            closestIdx = idx;
-          }
-        });
-
-        if (closestIdx !== activeIndex) {
-          updateUI(closestIdx);
-        }
-      },
-      { passive: true }
-    );
-
-    dots.forEach((dot, idx) => {
-      dot.addEventListener("click", () => goToSlide(idx));
-    });
-
-    prevBtn?.addEventListener("click", () => goToSlide(activeIndex - 1));
-    nextBtn?.addEventListener("click", () => goToSlide(activeIndex + 1));
-
-    jumpLinks.forEach((link, idx) => {
-      link.addEventListener("click", () => {
-        goToSlide(idx);
-      });
-    });
-  }
-</script>

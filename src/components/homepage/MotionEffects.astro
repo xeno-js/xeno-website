@@ -1,63 +1,157 @@
----
-// Motion-driven reveal, 3D tilt, cursor spotlight and floating layers for the homepage
----
-
 <script>
-  import { animate, inView } from 'motion';
+  import { animate, inView, scroll, stagger } from 'motion';
 
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const desktop = window.matchMedia('(min-width: 1024px) and (prefers-reduced-motion: no-preference)');
+  const $ = <T extends HTMLElement>(selector: string, root: ParentNode = document) => root.querySelector<T>(selector);
+  const $$ = <T extends HTMLElement>(selector: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(selector));
 
-  const spring = { type: 'spring', stiffness: 160, damping: 18 } as const;
+  // Entrance animations. The independent `translate` property keeps `transform` free for the 3D tilt.
+  if (!reduced.matches) {
+    animate('[data-hero-word]', { opacity: [0, 1], translate: ['0px 36px', '0px 0px'], filter: ['blur(10px)', 'blur(0px)'] }, { delay: stagger(0.07), duration: 0.7, ease: [0.22, 1, 0.36, 1] });
+    animate('[data-hero-in]', { opacity: [0, 1], translate: ['0px 24px', '0px 0px'] }, { delay: stagger(0.1, { startDelay: 0.35 }), duration: 0.7, ease: 'easeOut' });
+    inView('[data-reveal]', (element) => {
+      animate(element, { opacity: [0, 1], translate: ['0px 28px', '0px 0px'] }, { duration: 0.6, ease: 'easeOut' });
+    }, { margin: '0px 0px -8% 0px' });
 
-  // Cursor spotlight works without motion, it is only CSS variables
-  if (finePointer) {
-    document.querySelectorAll<HTMLElement>('.spotlight').forEach((el) => {
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-        el.style.setProperty('--my', `${e.clientY - r.top}px`);
+    // Background orbs drift at different speeds while the page scrolls.
+    scroll(animate('.hx-orb-a', { transform: ['translateY(0px)', 'translateY(-320px)'] }, { ease: 'linear' }));
+    scroll(animate('.hx-orb-b', { transform: ['translateY(0px)', 'translateY(260px)'] }, { ease: 'linear' }));
+    scroll(animate('.hx-orb-c', { transform: ['translateY(0px)', 'translateY(-180px)'] }, { ease: 'linear' }));
+  }
+
+  // Pointer-driven tilt for cards.
+  if (!reduced.matches && finePointer.matches) {
+    $$('.hx-tilt').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width;
+        const py = (event.clientY - rect.top) / rect.height;
+        card.style.setProperty('--ry', `${((px - 0.5) * 14).toFixed(2)}deg`);
+        card.style.setProperty('--rx', `${((0.5 - py) * 14).toFixed(2)}deg`);
+        card.style.setProperty('--mx', `${(px * 100).toFixed(1)}%`);
+        card.style.setProperty('--my', `${(py * 100).toFixed(1)}%`);
       });
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
+    });
+
+    // Hero: the layered card and floating chips follow the pointer at different depths.
+    const hero = $('[data-hero]');
+    const card = $('[data-hero-card]');
+    const chips = $$('[data-hero-chip]');
+    $$('[data-layer-z]').forEach((layer) => { layer.style.transform = `translateZ(${layer.dataset.layerZ}px)`; });
+    hero?.addEventListener('pointermove', (event) => {
+      const rect = hero.getBoundingClientRect();
+      const nx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const ny = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      if (card) card.style.transform = `rotateY(${(nx * 12 - 6).toFixed(2)}deg) rotateX(${(-ny * 8 + 3).toFixed(2)}deg)`;
+      chips.forEach((chip) => { chip.style.translate = `${(nx * Number(chip.dataset.heroChip)).toFixed(1)}px ${(ny * Number(chip.dataset.heroChip) * 0.6).toFixed(1)}px`; });
+    });
+    hero?.addEventListener('pointerleave', () => {
+      if (card) card.style.transform = '';
+      chips.forEach((chip) => { chip.style.translate = ''; });
     });
   }
 
-  if (!reduce) {
-    const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
-    items.forEach((el) => (el.style.opacity = '0'));
+  // Marquee bands move in opposite directions with scroll.
+  const bands = $('[data-scroll-bands]');
+  const forward = $('[data-scroll-band="forward"]');
+  const reverse = $('[data-scroll-band="reverse"]');
+  if (bands && forward && reverse && !reduced.matches) {
+    const options = { target: bands, offset: ['start end', 'end start'] } as const;
+    scroll(animate(forward, { transform: ['translateX(0%)', 'translateX(-30%)'] }, { ease: 'linear' }), options);
+    scroll(animate(reverse, { transform: ['translateX(-30%)', 'translateX(0%)'] }, { ease: 'linear' }), options);
+  }
 
-    inView(items, (el) => {
-      const target = el as HTMLElement;
-      const delay = Number(target.dataset.revealDelay ?? 0);
-      animate(target, { opacity: 1, y: [28, 0] }, { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] });
-    }, { margin: '0px 0px -10% 0px' });
+  // Text highlight: words light up as the paragraph crosses the viewport.
+  const highlight = $('[data-highlight]');
+  if (highlight) {
+    const words = $$('.hx-hl-word', highlight);
+    const paint = (count: number) => words.forEach((word, index) => { word.dataset.on = String(index < count); });
+    if (reduced.matches) {
+      paint(words.length);
+    } else {
+      paint(0);
+      scroll((progress: number) => paint(Math.round(progress * words.length)), { target: highlight, offset: ['start 85%', 'end 45%'] });
+    }
+  }
 
-    document.querySelectorAll<HTMLElement>('[data-float]').forEach((el, i) => {
-      animate(el, { y: [0, -10, 0] }, {
-        duration: 5 + i * 0.8,
-        delay: i * 0.4,
-        repeat: Infinity,
-        ease: 'easeInOut',
+  // Sticky storytelling: the pinned counter follows the card nearest the viewport center.
+  const steps = $$('[data-step]');
+  const stepCurrent = $('[data-step-current]');
+  const stepLabel = $('[data-step-label]');
+  const stepBar = $('[data-step-bar]');
+  if (steps.length) {
+    const activate = (index: number) => {
+      steps.forEach((step, i) => { step.dataset.active = String(i === index); });
+      if (stepCurrent) stepCurrent.textContent = String(index + 1).padStart(2, '0');
+      if (stepLabel) stepLabel.textContent = steps[index].dataset.stepTitle ?? '';
+      if (stepBar) stepBar.style.transform = `scaleX(${(index + 1) / steps.length})`;
+    };
+    activate(0);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { if (entry.isIntersecting) activate(steps.indexOf(entry.target as HTMLElement)); });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    steps.forEach((step) => observer.observe(step));
+  }
+
+  // Carousel with pagination.
+  const rail = $('[data-carousel-rail]');
+  const controls = $('[data-carousel-controls]');
+  if (rail && controls) {
+    const slides = $$('[data-carousel-slide]', rail);
+    const dots = $$('[data-carousel-dot]', controls);
+    const previous = $<HTMLButtonElement>('[data-carousel-prev]', controls);
+    const next = $<HTMLButtonElement>('[data-carousel-next]', controls);
+    let current = 0;
+    const maxScroll = () => Math.max(1, rail.scrollWidth - rail.clientWidth);
+    // Stops are spread evenly over the scrollable range, so every dot is reachable even when several cards fit on screen.
+    const update = () => {
+      const last = slides.length - 1;
+      current = Math.round(Math.min(1, rail.scrollLeft / maxScroll()) * last);
+      slides.forEach((slide, index) => { slide.dataset.active = String(index === current); });
+      dots.forEach((dot, index) => {
+        dot.setAttribute('aria-current', String(index === current));
+        dot.firstElementChild?.setAttribute('aria-current', String(index === current));
       });
-    });
+      if (previous) previous.disabled = current === 0;
+      if (next) next.disabled = current === last;
+    };
+    const pin = $('[data-pin]');
+    const pinBar = $('[data-pin-bar]');
+    const goTo = (index: number) => {
+      const fraction = Math.max(0, Math.min(index, slides.length - 1)) / (slides.length - 1);
+      if (pin?.hasAttribute('data-pinned')) {
+        // While pinned, page scroll drives the rail, so move the page to the matching progress.
+        const range = Math.max(1, pin.offsetHeight - window.innerHeight);
+        const top = pin.getBoundingClientRect().top + window.scrollY + fraction * range;
+        window.scrollTo({ top, behavior: reduced.matches ? 'instant' : 'smooth' });
+      } else {
+        rail.scrollTo({ left: fraction * maxScroll(), behavior: reduced.matches ? 'instant' : 'smooth' });
+      }
+    };
+    previous?.addEventListener('click', () => goTo(current - 1));
+    next?.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index)));
+    rail.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    controls.hidden = false;
+    update();
 
-    if (finePointer) {
-      document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
-        const max = Number(el.dataset.tilt ?? 6);
-        const baseX = Number(el.dataset.baseX ?? 0);
-        const baseY = Number(el.dataset.baseY ?? 0);
-
-        animate(el, { rotateX: baseX, rotateY: baseY }, { duration: 0 });
-
-        el.addEventListener('pointermove', (e) => {
-          const r = el.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width - 0.5;
-          const py = (e.clientY - r.top) / r.height - 0.5;
-          animate(el, { rotateX: baseX - py * max * 2, rotateY: baseY + px * max * 2 }, spring);
-        });
-        el.addEventListener('pointerleave', () => {
-          animate(el, { rotateX: baseX, rotateY: baseY }, spring);
-        });
-      });
+    // Pinned mode (desktop and mobile): vertical scroll moves the rail horizontally.
+    if (pin && !reduced.matches) {
+      pin.setAttribute('data-pinned', '');
+      const size = () => { pin.style.height = `${Math.round(window.innerHeight + Math.max(maxScroll() * 1.6, window.innerHeight * 0.4))}px`; };
+      size();
+      window.addEventListener('resize', size);
+      scroll((progress: number) => {
+        rail.scrollLeft = progress * maxScroll();
+        if (pinBar) pinBar.style.transform = `scaleX(${progress.toFixed(3)})`;
+      }, { target: pin, offset: ['start start', 'end end'] });
     }
   }
 </script>

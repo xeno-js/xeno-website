@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
-  site: 'https://xeno-js.it',
+  site: 'https://www.xeno-js.it',
   integrations: [
     starlight({
       title: 'Xeno.JS',
@@ -14,7 +14,7 @@ export default defineConfig({
         baseUrl: 'https://github.com/xeno-js/xeno-website/tree/main'
       },
       description: 'Xeno.JS is an application architecture framework for TypeScript with explicit dependency injection, DDD, CQRS and modular application boundaries.',
-      customCss: ['./src/styles/global.css'],
+      customCss: ['./src/styles/global.css', './src/styles/docs.css'],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/xeno-js/xeno-js' }],
       logo: {
         src: './static/img/logo.png',

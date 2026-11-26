@@ -1,108 +1,69 @@
----
-import Button from "../ui/Button.astro";
+﻿---
+import Button from '../ui/Button.astro';
 
 const layers = [
-  {
-    icon: "bi-browser-edge",
-    label: "UI",
-    pkg: "@xeno-js/vue",
-    detail: "Vue components · Composables",
-    z: 100,
-    accent: false,
-  },
-  {
-    icon: "bi-window-stack",
-    label: "Transport",
-    pkg: "@xeno-js/fastify · @xeno-js/node · @xeno-js/vercel",
-    detail: "Fastify · Node · Vercel",
-    z: 75,
-    accent: false,
-  },
-  {
-    icon: "bi-diagram-3",
-    label: "Application",
-    pkg: "@xeno-js/core",
-    detail: "Commands · Queries · Pipelines · Context",
-    z: 45,
-    accent: true,
-  },
-  {
-    icon: "bi-gem",
-    label: "Domain",
-    pkg: "@xeno-js/shared",
-    detail: "Aggregates · Value Objects · Result",
-    z: 0,
-    accent: false,
-  },
+  { number: '04', name: 'Interface', detail: '@xeno-js/vue', icon: 'bi-window' },
+  { number: '03', name: 'Transport', detail: '@xeno-js/node, @xeno-js/fastify, @xeno-js/vercel', icon: 'bi-hdd-network' },
+  { number: '02', name: 'Application', detail: '@xeno-js/core (Commands, queries, pipelines)', icon: 'bi-boxes' },
+  { number: '01', name: 'Domain', detail: '@xeno-js/shared (Business rules, value objects)', icon: 'bi-diamond' },
 ];
 
-const stack = ["TypeScript", "Node.js", "DDD", "CQRS", "Explicit DI"];
+const title = [
+  { text: 'Structure', accent: false },
+  { text: 'your', accent: false },
+  { text: 'TypeScript', accent: true },
+  { text: 'backend', accent: true },
+  { text: 'around', accent: false },
+  { text: 'business', accent: false },
+  { text: 'logic.', accent: false },
+];
 ---
 
-<section class="relative overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32 px-6 md:h-screen">
-  <div class="absolute inset-0 bg-grid pointer-events-none" aria-hidden="true"></div>
-  <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[720px] h-[720px] rounded-full bg-[var(--color-primary)] opacity-[0.12] blur-[140px] pointer-events-none" aria-hidden="true"></div>
-
-  <div class="relative z-10 max-w-[var(--container-max)] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-    <div class="lg:col-span-6">
-      <div data-reveal data-reveal-delay="0.05" class="mb-6">
-        <span class="eyebrow"><i class="bi bi-box-seam"></i> Application architecture framework</span>
-      </div>
-
-      <h1 data-reveal data-reveal-delay="0.12" class="text-4xl sm:text-5xl lg:text-6xl !leading-[1.05] !tracking-[-0.035em] !mb-6">
-        TypeScript <span class="text-[var(--color-primary)]">application architecture</span> for Node.js
-      </h1>
-
-      <p data-reveal data-reveal-delay="0.2" class="text-lg sm:text-xl !text-[var(--text-muted)] max-w-xl !mb-4">
-        <strong>Xeno.JS is an application architecture framework for TypeScript.</strong> It helps you organize backend use cases, dependencies and domain logic.
-      </p>
-      <p data-reveal data-reveal-delay="0.26" class="!text-[var(--text-muted)] max-w-xl !mb-10">
-  Use explicit dependency injection, CQRS, request context and pipelines with Xeno.JS's own HTTP server and plugins, while keeping HTTP separate from the application layer.
-</p>
-
-      <div data-reveal data-reveal-delay="0.32" class="flex flex-col sm:flex-row gap-4 mb-10">
-        <Button href="/docs/getting_started/installation" variant="primary" class="px-8 py-3.5">
-          Install Xeno.JS <i class="bi bi-arrow-right"></i>
-        </Button>
-        <Button href="#packages" variant="secondary" class="px-8 py-3.5">
-          Explore packages
-        </Button>
-      </div>
-
-      <ul data-reveal data-reveal-delay="0.4" class="flex flex-wrap gap-2 list-none p-0 m-0" aria-label="Built on">
-        {stack.map((s) => (
-          <li class="px-3 py-1 rounded-full text-xs font-medium text-[var(--text-muted)] border border-[var(--glass-border)] bg-[var(--glass-bg)]">{s}</li>
+<section class="relative px-6 pb-16 pt-16 sm:pb-24 sm:pt-24" data-hero>
+  <div class="relative mx-auto grid max-w-[var(--container-max)] items-center gap-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+    <div>
+      <span data-hero-in class="hx-glass mb-7 inline-flex items-center gap-2 !rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+        <span class="h-2 w-2 rounded-full bg-[var(--color-primary)] shadow-[0_0_12px_var(--color-primary)]"></span> Open source, MIT licensed
+      </span>
+      <h1 class="max-w-3xl text-5xl font-extrabold leading-[1.06] tracking-[-0.045em] sm:text-6xl xl:text-7xl" aria-label="Structure your TypeScript backend around business logic.">
+        {title.map((word) => (
+          <>
+            <span data-hero-word aria-hidden="true" class:list={['hx-word', word.accent && 'text-[var(--color-primary)]']}>{word.text}</span>{' '}
+          </>
         ))}
-      </ul>
+      </h1>
+      <p data-hero-in class="mt-7 max-w-xl text-lg leading-relaxed text-[var(--text-muted)] sm:text-xl">
+        Xeno.JS is an open-source Node.js framework for growing applications. Keep business logic clear with explicit dependency injection, CQRS and pipelines.
+      </p>
+      <p data-hero-in class="mt-4 max-w-xl text-base text-[var(--text-muted)]">
+        Build with Node.js or Fastify, deploy on Vercel, or run scoped application work without an HTTP server.
+      </p>
+      <div data-hero-in class="mt-9 flex flex-wrap gap-3">
+        <Button href="/docs/getting_started/installation" variant="primary" class="min-h-12 px-6">Install Xeno.JS <i class="bi bi-arrow-up-right" aria-hidden="true"></i></Button>
+        <Button href="#code" variant="secondary" class="min-h-12 px-6">See the code <i class="bi bi-arrow-down" aria-hidden="true"></i></Button>
+      </div>
     </div>
 
-    {/* 3D layered architecture stage */}
-    <div class="lg:col-span-6 perspective" aria-hidden="true">
-      <div
-        data-tilt="8"
-        data-base-x="14"
-        data-base-y="-20"
-        class="preserve-3d relative mx-auto w-full max-w-[460px] py-10 space-y-6"
-      >
-        {layers.map((l, i) => (
-          <div class="preserve-3d" style={`transform: translateZ(${l.z}px)`}>
-            <div
-              data-float
-              class:list={[
-                "glass spotlight p-5 flex items-center gap-4",
-                l.accent && "!border-[var(--color-primary)]/50",
-              ]}
-              style={l.accent ? "box-shadow: 0 0 60px -10px var(--accent-glow), var(--glass-shadow), inset 0 1px 0 var(--glass-highlight)" : undefined}
+    <div data-hero-in data-hero-stage class="relative px-2 py-8 [perspective:1400px] sm:px-8" role="group" aria-label="Xeno.JS application layers">
+      <div aria-hidden="true" class="absolute inset-8 rounded-[2rem] opacity-30 [transform:rotate(-5deg)]"></div>
+      <div aria-hidden="true" class="absolute inset-8 rounded-[2rem] [transform:rotate(4deg)]"></div>
+      <div data-hero-card class="hx-3d hx-stack p-5 sm:p-7" style="transition: transform 0.2s ease-out; will-change: transform;">
+        <div class="mb-6 flex items-center justify-between border-b border-[var(--glass-border)] pb-4 font-[family-name:var(--font-mono)] text-xs text-[var(--text-muted)]">
+          <span>application.layers</span><span>4 layers</span>
+        </div>
+        <ol class="m-0 list-none space-y-3 p-0 [transform-style:preserve-3d]">
+          {layers.map((layer, index) => (
+            <li
+              data-layer-z={(4 - index) * 14}
+              class:list={['hx-layer flex items-center gap-4 rounded-2xl border p-4', layer.name === 'Application' ? 'border-[var(--color-primary)] bg-[var(--accent-glow)] shadow-[0_8px_28px_-12px_var(--color-primary)]' : 'border-[var(--glass-border)] bg-[var(--bg-primary)]/60']}
             >
-              <span class="icon-chip shrink-0"><i class={`bi ${l.icon}`}></i></span>
-              <div class="min-w-0">
-                <div class="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-muted)]">{l.label}</div>
-                <div class="font-[family-name:var(--font-mono)] text-sm font-bold text-[var(--text-code)] truncate">{l.pkg}</div>
-                {l.detail && <div class="text-xs text-[var(--text-muted)] mt-0.5">{l.detail}</div>}
-              </div>
-            </div>
-          </div>
-        ))}
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--glass-border)] text-[var(--color-primary)]"><i class={`bi ${layer.icon}`} aria-hidden="true"></i></span>
+              <span class="min-w-0 flex-1"><span class="block font-semibold text-[var(--text-main)]">{layer.name}</span><span class="block text-xs text-[var(--text-muted)]">{layer.detail}</span></span>
+              <span class="font-[family-name:var(--font-mono)] text-xs text-[var(--text-muted)]">{layer.number}</span>
+            </li>
+          ))}
+        </ol>
+        <p class="mb-0 mt-5 text-xs text-[var(--text-muted)]">Choose the integrations your application needs.</p>
       </div>
     </div>
   </div>

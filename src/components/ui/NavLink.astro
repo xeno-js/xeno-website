@@ -12,7 +12,7 @@ const { href, active = false, class: className = '', isMobile = false } = Astro.
 <a 
   href={href} 
   class:list={[
-    "transition-all duration-200 font-medium text-[length:var(--body-size)] relative flex items-center",
+    "transition-colors duration-200 font-medium text-[length:var(--body-size)] relative flex items-center",
     // Desktop vs Mobile active state handling
     isMobile 
       ? (active ? "text-[var(--color-primary)] font-semibold pl-2 border-l-2 border-[var(--color-primary)] bg-[var(--bg-secondary)] py-2 rounded-r-[var(--border-radius)]" : "text-[var(--text-muted)] hover:text-[var(--text-main)] py-2")

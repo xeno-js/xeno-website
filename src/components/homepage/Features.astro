@@ -1,72 +1,57 @@
 ---
-import Button from "../ui/Button.astro";
 
-const packages = [
-  {
-    name: "@xeno-js/core",
-    description: "Build Node.js applications with dependency injection, scopes, request context, CQRS, pipelines, modules, transactions and repositories.",
-    icon: "bi-cpu",
-    docsUrl: "/docs/introduction",
-    githubUrl: "https://github.com/xeno-js/core",
-  },
-  {
-    name: "@xeno-js/vue",
-    description: "Use explicit application composition, commands, queries, pipelines, context, validation and data sources in Vue.",
-    icon: "bi-browser-edge",
-    docsUrl: "/docs/vue/plugin-vue",
-    githubUrl: "https://github.com/xeno-js/vue",
-  },
-  {
-    name: "@xeno-js/shared",
-    description: "Define domain logic with value objects, aggregates, domain events, Result types, errors and application contracts.",
-    icon: "bi-layers-half",
-    docsUrl: "/docs/introduction/architecture-overview",
-    githubUrl: "https://github.com/xeno-js/shared",
-  },
-  {
-    name: "@xeno-js/cli",
-    description: "Scaffold projects and generate application components instead of rebuilding the same structure by hand.",
-    icon: "bi-terminal",
-    docsUrl: "/docs/cli/overview",
-    githubUrl: "https://github.com/xeno-js/xeno-cli",
-    delay: 300,
-  },
-];
 ---
 
-<section class="py-24 px-6 relative" id="packages">
-  <div class="max-w-[var(--container-max)] mx-auto">
-    <div data-reveal class="max-w-2xl mb-14">
-      <span class="eyebrow mb-5"><i class="bi bi-boxes"></i> The ecosystem</span>
-      <h2 class="section-title !mt-5">
-        Packages for your <span class="text-[var(--color-primary)]">application stack.</span>
-      </h2>
+<!-- Bento grid -->
+<section id="quickstart" class="px-6 py-20 sm:py-28">
+  <div class="mx-auto max-w-[var(--container-max)]">
+    <div data-reveal class="max-w-3xl">
+      <p class="hx-eyebrow mb-3">03 / What you get</p>
+      <h2 class="hx-title">Install the core. Build from there.</h2>
+      <p class="hx-lead mt-5">Start in an existing TypeScript project, or use the CLI to scaffold a new one. You need Node.js 20 or later and npm.</p>
     </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {packages.map((pkg, i) => (
-        <div class="perspective" data-reveal data-reveal-delay={(i % 2) * 0.1}>
-          <article data-tilt="4" class="glass spotlight h-full p-8 flex flex-col min-h-[240px]">
-            <span class="icon-chip mb-8"><i class={`bi ${pkg.icon}`}></i></span>
-            <h3 class="font-[family-name:var(--font-mono)] !text-[var(--text-code)] !text-lg !mt-0 !mb-2">{pkg.name}</h3>
-            <p class="!text-[var(--text-muted)] text-sm leading-relaxed flex-grow">{pkg.description}</p>
-            <div class="flex items-center gap-3 mt-2">
-              <Button href={pkg.docsUrl} variant="primary" class="!px-4 !py-2 !text-sm">
-                <i class="bi bi-book"></i> Docs<span class="sr-only"> for {pkg.name}</span>
-              </Button>
-              <Button href={pkg.githubUrl} variant="secondary" class="!px-4 !py-2 !text-sm" target="_blank">
-                <i class="bi bi-github"></i> GitHub<span class="sr-only"> repository for {pkg.name}</span>
-              </Button>
-            </div>
-          </article>
+    <div class="hx-bento mt-12">
+      <article data-reveal class="hx-glass hx-tilt hx-span-2 hx-row-2 flex flex-col p-7">
+        <i class="bi bi-diagram-3 hx-pop text-3xl text-[var(--color-primary)]" aria-hidden="true"></i>
+        <h3 class="hx-pop mt-5 text-2xl font-bold">Explicit dependency injection</h3>
+        <p class="mt-3 text-[var(--text-muted)]">Register services and their lifetimes in the application builder, without decorator metadata.</p>
+        <pre class="hx-pop-lg mt-auto overflow-x-auto rounded-xl border border-[var(--glass-border)] bg-[var(--bg-primary)]/70 p-4 text-xs leading-6 text-[var(--text-code)]"><code>services.addScoped(
+  'ORDER_SERVICE',
+  () =&gt; new OrderService()
+)</code></pre>
+      </article>
+      <article data-reveal class="hx-glass hx-tilt p-6">
+        <i class="bi bi-signpost-split hx-pop text-2xl text-[var(--color-primary)]" aria-hidden="true"></i>
+        <h3 class="hx-pop mt-4 text-lg font-semibold">CQRS</h3>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">Commands, queries and handlers keep use cases out of HTTP routes.</p>
+      </article>
+      <article data-reveal class="hx-glass hx-tilt p-6">
+        <i class="bi bi-shield-check hx-pop text-2xl text-[var(--color-primary)]" aria-hidden="true"></i>
+        <h3 class="hx-pop mt-4 text-lg font-semibold">Pipelines</h3>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">Validate every request once with a Zod schema per intent.</p>
+      </article>
+      <article data-reveal class="hx-glass hx-tilt p-6">
+        <i class="bi bi-check2-circle hx-pop text-2xl text-[var(--color-primary)]" aria-hidden="true"></i>
+        <h3 class="hx-pop mt-4 text-lg font-semibold">Result values</h3>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">Carry outcomes back to the controller without mixing in errors.</p>
+      </article>
+      <article data-reveal class="hx-glass hx-tilt p-6">
+        <i class="bi bi-broadcast hx-pop text-2xl text-[var(--color-primary)]" aria-hidden="true"></i>
+        <h3 class="hx-pop mt-4 text-lg font-semibold">Request context</h3>
+        <p class="mt-2 text-sm text-[var(--text-muted)]">AsyncLocalStorage carries identity to downstream work.</p>
+      </article>
+      <article data-reveal class="hx-glass hx-tilt hx-span-2 flex items-center gap-5 p-6">
+        <span class="hx-pop flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-[var(--glass-border)] text-2xl text-[var(--color-primary)]"><i class="bi bi-window" aria-hidden="true"></i></span>
+        <div>
+          <h3 class="text-lg font-semibold">Full-stack Vue integration</h3>
+          <p class="mt-1 text-sm text-[var(--text-muted)]">Use application composition, commands and queries in Vue.</p>
         </div>
-      ))}
-    </div>
-
-    <div class="mt-8 text-center">
-      <Button href="https://github.com/orgs/xeno-js/repositories" variant="primary" class="!px-4 !py-2 !text-sm" target="_blank">
-        Explore all repositories
-      </Button>
+      </article>
+      <article data-reveal class="hx-glass hx-tilt hx-span-2 p-6">
+        <div class="mb-3 flex items-center justify-between font-[family-name:var(--font-mono)] text-xs text-[var(--text-muted)]"><span>terminal</span><span>npm</span></div>
+        <pre class="hx-pop overflow-x-auto rounded-xl border border-[var(--glass-border)] bg-[var(--bg-primary)]/70 p-4 text-sm text-[var(--text-main)]"><code><span class="text-[var(--color-primary)]">$</span> npm install @xeno-js/core</code></pre>
+        <a href="/docs/getting_started/installation" class="hx-link mt-2">Open the installation guide <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+      </article>
     </div>
   </div>
 </section>

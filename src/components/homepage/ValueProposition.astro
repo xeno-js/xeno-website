@@ -1,109 +1,39 @@
 ---
-const points = [
-  {
-    id: "ioc",
-    icon: "bi-box-seam",
-    title: "Explicit dependency injection",
-    text: "Register dependencies in code without decorators or directory scanning. The registrations show how the application is composed.",
-  },
-  {
-    id: "cqrs",
-    icon: "bi-arrow-left-right",
-    title: "Commands, queries and pipelines",
-    text: "Use commands and queries for application operations. Pipelines run validation, logging, caching and resilience around handlers.",
-  },
-  {
-    id: "model",
-    icon: "bi-layers",
-    title: "Application patterns for Node.js and Vue",
-    text: "Use domain primitives, contracts, commands, queries, pipelines and explicit context across backend and Vue applications.",
-  },
+const problems = [
+  { icon: 'bi-signpost-split', label: 'Routes', title: 'Business logic in HTTP routes', text: 'Move use cases into commands, queries and handlers. Keep transport-specific code at the edge.' },
+  { icon: 'bi-diagram-3', label: 'Dependencies', title: 'Dependencies are hard to follow', text: 'Register services and their lifetimes explicitly in the application builder, without decorator metadata.' },
+  { icon: 'bi-shield-check', label: 'Validation', title: 'Validation repeated in handlers', text: 'Add a validation pipeline once and register a Zod schema for each request intent.' },
+  { icon: 'bi-bug', label: 'Errors', title: 'Errors mixed into business logic', text: 'Use Result values and exception handling to carry outcomes back to the controller.' },
 ];
+
 ---
-
-<section class="py-24 px-6">
-  <div class="max-w-[var(--container-max)] mx-auto">
-    <div data-reveal class="max-w-3xl mb-14">
-      <span class="eyebrow mb-5"><i class="bi bi-gem"></i> The core idea</span>
-      <h2 class="section-title !mt-5">
-        What Xeno.<span class="text-[var(--color-primary)]">JS</span> provides
-      </h2>
-      <p class="section-lead">
-        Xeno.JS provides dependency injection, CQRS, pipelines and request context for TypeScript applications. These building blocks help separate business logic from HTTP, databases and UI concerns while working with your existing stack.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {points.map((p, i) => (
-        <div class="perspective" data-reveal data-reveal-delay={i * 0.1}>
-          <article data-tilt="6" data-concept={p.id} class="pillar-card glass spotlight h-full p-8">
-            <span class="icon-chip mb-6">
-              <i class={`bi ${p.icon}`}></i>
-            </span>
-            <h3 class="!text-[var(--text-main)] !mt-0 !mb-3">{p.title}</h3>
-            <p class="!text-[var(--text-muted)] !m-0">{p.text}</p>
-          </article>
+<!-- Sticky scroll storytelling -->
+<section id="architecture" class="px-6 py-16 sm:py-24">
+  <div class="mx-auto grid max-w-[var(--container-max)] gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <div data-reveal>
+        <p class="hx-eyebrow mb-3">02 / Backend architecture</p>
+        <h2 class="hx-title">Give growing backend code room to change.</h2>
+        <p class="hx-lead mt-5">As a product grows, Xeno.JS helps teams separate application behavior from HTTP and infrastructure.</p>
+        <div class="hx-glass mt-8 hidden p-6 lg:block" aria-hidden="true">
+          <div class="font-[family-name:var(--font-mono)] text-6xl font-extrabold text-[var(--color-primary)]"><span data-step-current>01</span><span class="text-2xl text-[var(--text-muted)]"> / 04</span></div>
+          <div data-step-label class="mt-2 text-sm text-[var(--text-muted)]">Business logic in HTTP routes</div>
+          <div class="hx-progress mt-5"><span data-step-bar></span></div>
         </div>
+        <a href="/docs/getting_started/installation" class="hx-link mt-6">Start building with Xeno.JS <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="space-y-6 lg:space-y-[14vh] lg:pb-[10vh]">
+      {problems.map((item, index) => (
+        <article data-step data-step-title={item.title} data-active={index === 0 ? 'true' : 'false'} class="hx-step hx-glass hx-tilt p-7 sm:p-9">
+          <div class="flex items-center gap-4">
+            <span class="hx-pop flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--glass-border)] bg-[var(--accent-glow)] text-2xl text-[var(--color-primary)]"><i class={`bi ${item.icon}`} aria-hidden="true"></i></span>
+            <span class="font-[family-name:var(--font-mono)] text-xs uppercase text-[var(--color-primary)]">0{index + 1} / {item.label}</span>
+          </div>
+          <h3 class="hx-pop mt-6 text-2xl font-bold sm:text-3xl">{item.title}</h3>
+          <p class="mt-3 max-w-lg text-[var(--text-muted)]">{item.text}</p>
+        </article>
       ))}
     </div>
   </div>
 </section>
-
-<style>
-  .pillar-card {
-    transition: border-color 200ms ease;
-  }
-
-  .pillar-card .icon-chip {
-    transition:
-      transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 200ms ease,
-      background-color 200ms ease;
-  }
-
-  .pillar-card .icon-chip i {
-    display: inline-block;
-    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  /* 1. Zero-Magic IoC: leggera rotazione del chip come attivazione esplicita */
-  .pillar-card[data-concept="ioc"]:hover .icon-chip,
-  .pillar-card[data-concept="ioc"]:focus-within .icon-chip {
-    transform: translateY(-2px) rotate(-3deg);
-    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
-  }
-
-  /* 2. Native CQRS & Pipeline: micro-shift orizzontale sull'icona delle frecce */
-  .pillar-card[data-concept="cqrs"]:hover .icon-chip,
-  .pillar-card[data-concept="cqrs"]:focus-within .icon-chip {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
-  }
-
-  .pillar-card[data-concept="cqrs"]:hover .icon-chip i,
-  .pillar-card[data-concept="cqrs"]:focus-within .icon-chip i {
-    transform: translateX(2px);
-  }
-
-  /* 3. One Application Model: leggera espansione verticale del chip */
-  .pillar-card[data-concept="model"]:hover .icon-chip,
-  .pillar-card[data-concept="model"]:focus-within .icon-chip {
-    transform: translateY(-3px) scale(1.04);
-    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .pillar-card,
-    .pillar-card .icon-chip,
-    .pillar-card .icon-chip i {
-      transition: none;
-    }
-
-    .pillar-card:hover .icon-chip,
-    .pillar-card:focus-within .icon-chip,
-    .pillar-card:hover .icon-chip i,
-    .pillar-card:focus-within .icon-chip i {
-      transform: none;
-    }
-  }
-</style>

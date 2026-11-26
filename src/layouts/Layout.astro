@@ -2,14 +2,13 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-import 'aos/dist/aos.css';
-import AOS from 'aos';
-
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import '@fontsource/inter/800.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/600.css';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -41,34 +40,39 @@ const {
   title,
   description,
   image = { src: '/img/logo.png', alt: 'Xeno.JS Logo' },
-  canonicalURL = Astro.url.href,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
   type = 'website',
   keywords = ['TypeScript', 'Application Framework', 'Node.js', 'Domain-Driven Design', 'CQRS', 'Dependency Injection', 'Backend'],
   faqs = [],
   articleMeta
 } = Astro.props;
 
+const siteURL = new URL('/', Astro.site).href;
+const websiteId = `${siteURL}#website`;
+const organizationId = `${siteURL}#organization`;
+const applicationId = `${siteURL}#application`;
+
 // Costruzione dinamica del grafo JSON-LD in base al tipo di pagina
 const graphNodes: any[] = [
   {
     "@type": "WebSite",
-    "@id": "https://xeno-js.it/#website",
-    "url": "https://xeno-js.it",
+    "@id": websiteId,
+    "url": siteURL,
     "name": "Xeno.JS",
-    "description": description,
-    "inLanguage": "en-EN",
+    "description": "A TypeScript backend framework for Node.js applications.",
+    "inLanguage": "en",
     "publisher": {
-      "@id": "https://xeno-js.it/#organization"
+      "@id": organizationId
     }
   },
   {
     "@type": "Organization",
-    "@id": "https://xeno-js.it/#organization",
+    "@id": organizationId,
     "name": "Xeno.JS",
-    "url": "https://xeno-js.it",
+    "url": siteURL,
     "logo": {
       "@type": "ImageObject",
-      "url": new URL(image.src, Astro.site).href
+      "url": new URL('/img/logo.png', Astro.site).href
     },
     "sameAs": [
       "https://github.com/xeno-js/xeno-js"
@@ -77,21 +81,19 @@ const graphNodes: any[] = [
 ];
 
 // Se è la Homepage o una pagina applicativa generale
-if (type === 'website') {
+if (type === 'website' && Astro.url.pathname === '/') {
   graphNodes.push(
     {
       "@type": "SoftwareApplication",
-      "@id": "https://xeno-js.it/#application",
+      "@id": applicationId,
       "name": "Xeno.JS",
-      "operatingSystem": "Node.js, Browser",
       "applicationCategory": "DeveloperApplication",
-      "programmingLanguage": "TypeScript",
-      "softwareVersion": "1.0",
+      "runtimePlatform": "Node.js",
       "description": description,
       "url": canonicalURL,
       "keywords": keywords,
       "author": {
-        "@id": "https://xeno-js.it/#organization"
+        "@id": organizationId
       }
     },
     {
@@ -101,7 +103,7 @@ if (type === 'website') {
       "codeRepository": "https://github.com/xeno-js/xeno-js",
       "license": "https://opensource.org/licenses/MIT",
       "targetProduct": {
-        "@id": "https://xeno-js.it/#application"
+        "@id": applicationId
       }
     }
   );
@@ -115,13 +117,13 @@ if (type === 'article' && articleMeta) {
     "description": description,
     "url": canonicalURL,
     "datePublished": articleMeta.pubDate.toISOString(),
-    "inLanguage": "en-EN",
+    "inLanguage": "en",
     "author": {
       "@type": "Organization",
       "name": articleMeta.author || "Xeno.JS"
     },
     "publisher": {
-      "@id": "https://xeno-js.it/#organization"
+      "@id": organizationId
     },
     "keywords": keywords
   });
@@ -155,6 +157,12 @@ const currentPath = Astro.url.pathname;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script is:inline>
+      const savedTheme = localStorage.getItem('starlight-theme');
+      document.documentElement.dataset.theme = savedTheme === 'light' || savedTheme === 'dark'
+        ? savedTheme
+        : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     
@@ -172,7 +180,6 @@ const currentPath = Astro.url.pathname;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image.src, Astro.site).href} />
-    <meta property="og:locale" content="it_IT" />
 
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
@@ -184,6 +191,7 @@ const currentPath = Astro.url.pathname;
     <meta name="googlebot" content="index, follow" />
   </head>
   <body class="bg-[var(--bg-primary)] text-[var(--text-main)] min-h-screen flex flex-col font-[family-name:var(--font-sans)] antialiased selection:bg-[var(--color-primary)] selection:text-[var(--bg-primary)]">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[var(--bg-secondary)] focus:px-4 focus:py-2 focus:text-[var(--text-main)]">Skip to content</a>
     {/* Global Top Navbar */}
     <Navbar currentPath={currentPath} />
 
@@ -195,16 +203,5 @@ const currentPath = Astro.url.pathname;
     {/* Global Footer */}
     <Footer />
 
-    <script type="module">
-      import AOS from 'aos';
-
-      AOS.init({
-        duration: 700,
-        once: true,
-        offset: 80,
-        easing: 'ease-out-cubic',
-        disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      });
-    </script>
   </body>
 </html>

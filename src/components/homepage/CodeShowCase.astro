@@ -1,69 +1,59 @@
 ---
-const codeSnippet = `import { XenoAppBuilder, LOG_LEVEL, TOKENS } from '@xeno-js/core'
+const code = `import { XenoAppBuilder } from '@xeno-js/core'
+import type { XenoRegistry } from '@xeno-js/core'
+import { withPostgresql } from '@xeno-js/postgresql'
+import type { DbContext, DbTransaction } from '@xeno-js/postgresql'
 
-export const XenoApp = new XenoAppBuilder<MyRegistry>()
-   .addLogger([
-      withConsoleLogger((opts, config) => {
-        opts.isEnabled = config.getEnvironment() === 'development'
-        opts.level = LOG_LEVEL.DEBUG
-      })
-    ])
-    .addDb(withPostgresql((opts, config) => {
-      opts.connectionString = config.getOrThrow('DATABASE_URL')
-    }))
-   .addServices((srv) => {
-        srv.addTransient('MY_SERVICE', (c) => new MyService(c.resolve(TOKENS.LOGGER)))
-   })
+class OrderService {}
+interface AppRegistry extends XenoRegistry<DbContext, DbTransaction> {
+  ORDER_SERVICE: OrderService
+}
 
-await XenoApp.build()`;
+const builder = new XenoAppBuilder<AppRegistry>()
+  .addLogger()
+  .addDb(withPostgresql<AppRegistry>((options, config) => {
+    options.connectionString = config.getOrThrow('DATABASE_URL')
+  }))
+  .addPipeline()
+  .addServices((services) => {
+    services.addScoped('ORDER_SERVICE', () => new OrderService())
+  })
 
-const checks = [
-  "Explicit registrations",
-  "Singleton-to-scoped dependency checks",
-  "Compile-time contracts",
-  "Framework-independent domain",
+const app = await builder.build()`;
+
+const trace = [
+  { n: '01', label: 'Request context', icon: 'bi-broadcast', text: 'With middleware configured, request context and identity are available to downstream work through AsyncLocalStorage.' },
+  { n: '02', label: 'Mediator and validation', icon: 'bi-funnel', text: 'A controller can send a command through the mediator. A configured Zod pipeline validates it before the handler runs.' },
+  { n: '03', label: 'Result and response', icon: 'bi-check2-circle', text: 'The handler returns a Result. The controller maps the outcome to an HTTP response, such as 201 Created.' },
 ];
 ---
 
-<section class="py-24 px-6 relative overflow-hidden">
-  <div class="absolute top-1/2 right-0 w-[520px] h-[520px] rounded-full bg-[var(--color-primary)] opacity-[0.08] blur-[130px] pointer-events-none" aria-hidden="true"></div>
-
-  <div class="relative z-10 max-w-[var(--container-max)] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
-    <div data-reveal class="lg:col-span-5">
-      <span class="eyebrow mb-5"><i class="bi bi-code-slash"></i> Dependency injection</span>
-      <h2 class="section-title !mt-5">
-        Register dependencies <span class="text-[var(--color-primary)]">in code</span>.
-      </h2>
-      <p class="section-lead mb-8">
-        Register services with explicit lifetimes and typed contracts, without decorator metadata. During singleton construction, the container rejects scoped dependencies, including those reached through transient services.
-      </p>
-      <ul class="list-none p-0 m-0 space-y-3 font-medium">
-        {checks.map((c) => (
-          <li class="flex items-center gap-3">
-            <i class="bi bi-check2-circle text-[var(--color-primary)] text-lg"></i>{c}
+<!-- Code and request flow -->
+<section id="code" class="px-6 py-20 sm:py-28">
+  <div class="mx-auto grid max-w-[var(--container-max)] items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+    <div>
+      <div data-reveal>
+        <p class="hx-eyebrow mb-3">04 / Composition and execution</p>
+        <h2 class="hx-title">See what your application runs.</h2>
+        <p class="hx-lead mt-5">Compose services, logging, a database and the CQRS pipeline in code. The example uses the PostgreSQL integration and a configured <code>DATABASE_URL</code>.</p>
+      </div>
+      <ul class="m-0 mt-8 list-none space-y-5 p-0">
+        {trace.map((step) => (
+          <li data-reveal class="flex gap-4">
+            <span class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-primary)] bg-[var(--accent-glow)] text-[var(--color-primary)]"><i class={`bi ${step.icon}`} aria-hidden="true"></i></span>
+            <div>
+              <h3 class="font-[family-name:var(--font-mono)] text-sm font-semibold text-[var(--text-main)]">{step.n} / {step.label}</h3>
+              <p class="mt-1 text-sm text-[var(--text-muted)]">{step.text}</p>
+            </div>
           </li>
         ))}
       </ul>
+      <p data-reveal class="mt-6 text-xs text-[var(--text-muted)]">Illustrative flow. Middleware, validation and response status depend on your configuration.</p>
     </div>
-
-    <div data-reveal data-reveal-delay="0.15" class="lg:col-span-7 perspective">
-      <div data-tilt="3" data-base-x="2" data-base-y="-4" class="glass overflow-hidden">
-        <div class="flex items-center justify-between px-5 py-3.5 border-b border-[var(--glass-border)]">
-          <div class="flex gap-2" aria-hidden="true">
-            <span class="w-3 h-3 rounded-full bg-[var(--border-color-hover)]"></span>
-            <span class="w-3 h-3 rounded-full bg-[var(--border-color-hover)]"></span>
-            <span class="w-3 h-3 rounded-full bg-[var(--border-color-hover)]"></span>
-          </div>
-          <span class="flex items-center gap-2 text-xs font-mono text-[var(--text-muted)]">
-            <i class="bi bi-file-earmark-code text-[var(--color-primary)]"></i> src/main.ts
-          </span>
-          <span class="w-10"></span>
-        </div>
-        <pre class="m-0 p-6 overflow-x-auto font-[family-name:var(--font-mono)] text-xs sm:text-sm leading-relaxed text-[var(--text-main)]"><code>{codeSnippet}</code></pre>
-        <div class="px-5 py-2.5 border-t border-[var(--glass-border)] flex items-center justify-between text-[11px] font-mono text-[var(--text-muted)]">
-          <span class="flex items-center gap-1.5 text-[var(--color-primary)]"><i class="bi bi-check-circle-fill"></i> TypeScript strict</span>
-          <span>UTF-8</span>
-        </div>
+    <div data-reveal class="min-w-0 [perspective:1400px]">
+      <div class="md:overflow-visible overflow-y-hidden hx-glass hx-tilt min-w-0 !bg-[var(--bg-primary)]/80">
+        <div class="hx-pop flex items-center justify-between border-b border-[var(--glass-border)] px-6 py-4 font-[family-name:var(--font-mono)] text-xs text-[var(--text-muted)]"><span>src/bootstrap.ts</span><span>TypeScript</span></div>
+        <pre class="hx-pop-lg m-0 p-6 text-xs leading-6 text-[var(--text-main)] sm:text-sm" tabindex="0"><code>{code}</code></pre>
       </div>
     </div>
   </div>

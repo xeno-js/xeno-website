@@ -2,31 +2,18 @@
 import Button from '../ui/Button.astro';
 ---
 
-<section class="py-24 px-6 relative overflow-hidden">
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[560px] rounded-full bg-[var(--color-primary)] opacity-[0.1] blur-[140px] pointer-events-none" aria-hidden="true"></div>
-
-  <div class="relative z-10 max-w-[var(--container-max)] mx-auto perspective" data-reveal>
-    <div data-tilt="2" class="glass spotlight p-8 sm:p-12 lg:p-16 text-center flex flex-col items-center">
-      <span class="eyebrow mb-6"><i class="bi bi-heart-fill"></i> Support open source</span>
-      <h2 class="section-title max-w-3xl !mt-0">
-        Help keep <span class="text-[var(--color-primary)]">Xeno</span> independent and sustainable.
-      </h2>
-      <p class="section-lead max-w-2xl mb-10">
-        Xeno.JS is an independent, MIT-licensed open-source project. Your support helps maintain the core, documentation, tooling and packages.
-      </p>
-
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Button href="https://www.buymeacoffee.com/xenojs" variant="primary" class="w-full sm:w-auto px-8 py-3.5" target="_blank">
-          <i class="bi bi-cup-hot-fill"></i> Buy Me A Coffee
-        </Button>
-        <Button href="/contributing-guide" variant="secondary" class="w-full sm:w-auto px-8 py-3.5" target="_blank">
-          <i class="bi bi-star-fill text-[var(--color-primary)]"></i> Contributing
-        </Button>
+<!-- Open source and final call to action -->
+<section class="px-6 pb-24 pt-10 sm:pb-32">
+  <div data-reveal class="hx-glass relative mx-auto max-w-[var(--container-max)] overflow-hidden px-7 py-14 text-center sm:px-12 sm:py-20">
+    <div class="relative">
+      <p class="hx-eyebrow mb-4">06 / Built in the open</p>
+      <h2 class="hx-title mx-auto max-w-3xl">A clear foundation for your next product.</h2>
+      <p class="hx-lead mx-auto mt-5 max-w-xl">Xeno.JS is MIT-licensed. Explicit contracts and separate domain logic help you understand how the application fits together, from a first API to a growing team.</p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button href="/docs/getting_started/installation" variant="primary" class="min-h-12 px-8">Open the installation guide <i class="bi bi-arrow-up-right" aria-hidden="true"></i></Button>
+        <Button href="https://github.com/xeno-js/core" variant="secondary" class="min-h-12 px-6">Explore GitHub</Button>
       </div>
-
-      <p class="text-xs font-mono text-[var(--text-muted)] !mt-8 !mb-0">
-        Using Xeno.JS in production? Reach out at <a href="mailto:xeno-js@outlook.it" class="text-[var(--color-primary)] hover:underline">xeno-js@outlook.it</a>.
-      </p>
+      <div class="mt-4 flex flex-wrap justify-center gap-5 text-sm font-semibold"><a href="/contributing-guide" class="hx-link">Contribute</a><a href="/support-us" class="hx-link">Support the project</a></div>
     </div>
   </div>
 </section>

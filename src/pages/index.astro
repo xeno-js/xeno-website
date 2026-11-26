@@ -1,32 +1,38 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/homepage/Hero.astro';
+import HomeSections from '../components/homepage/HomeSections.astro';
+import MotionEffects from '../components/homepage/MotionEffects.astro';
 import PackageMarquee from '../components/homepage/PackageMarquee.astro';
+import Vision from '../components/homepage/Vision.astro';
 import ValueProposition from '../components/homepage/ValueProposition.astro';
+import '../styles/home.css';
 import Features from '../components/homepage/Features.astro';
 import CodeShowCase from '../components/homepage/CodeShowCase.astro';
-import MotionEffects from '../components/homepage/MotionEffects.astro';
-import SupportSection from '../components/homepage/SupportSection.astro';
-import Vision from '../components/homepage/Vision.astro';
 import WhenXenoFits from '../components/homepage/WhenXenoFits.astro';
-
-const currentPath = Astro.url.pathname;
+import SupportSection from '../components/homepage/SupportSection.astro';
 ---
 
 <Layout 
-  title="TypeScript Application Architecture Framework | Xeno.JS"
-  description="Build TypeScript and Node.js applications with explicit dependency injection, CQRS, DDD and pipelines. Use Xeno.JS with your existing HTTP framework."
+  title="TypeScript Backend Framework for Node.js | Xeno.JS"
+  description="Build structured TypeScript backends with Xeno.JS. Organize business logic with dependency injection, CQRS and pipelines, and choose your HTTP integration."
   canonicalURL={new URL('/', Astro.site).href}
   faqs={[]}
 >
+  <div class="hx-bg" aria-hidden="true">
+    <div class="hx-orb hx-orb-a"></div>
+    <div class="hx-orb hx-orb-b"></div>
+    <div class="hx-orb hx-orb-c"></div>
+  </div>
   <Hero />
   <PackageMarquee />
-  <WhenXenoFits />
+  <Vision /> 
   <ValueProposition />
-  <Features />
+  <Features /> 
   <CodeShowCase />
-  <Vision />
-  <SupportSection />
+  <WhenXenoFits />
+  <HomeSections />
+  <SupportSection /> 
   <MotionEffects />
 
 </Layout>

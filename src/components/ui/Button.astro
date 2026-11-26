@@ -8,7 +8,7 @@ interface Props {
 
 const { href, variant = 'primary', class: className = '', target } = Astro.props;
 
-const baseStyles = "rounded-full text-[length:var(--body-size)] font-medium transition-all duration-200 inline-flex items-center justify-center gap-2 px-4 py-2 cursor-pointer";
+const baseStyles = "rounded-full text-[length:var(--body-size)] font-medium transition-[color,background-color,border-color,transform] duration-200 inline-flex items-center justify-center gap-2 px-4 py-2 cursor-pointer";
 
 const variants = {
   /* Bottone Primario: Sfondo verde neon ad alto impatto con testo nero contrastante */

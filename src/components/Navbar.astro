@@ -17,13 +17,15 @@ const navItems = [
 ---
 
 <header class="fixed top-0 left-0 w-full z-50 bg-[var(--bg-primary)]/60 backdrop-blur-xl border-b border-[var(--glass-border)]">
-  <div class="max-w-[var(--container-max)] mx-auto px-6 h-16 flex items-center justify-between">
+  <div class="max-w-[var(--container-max)] mx-auto px-6 h-16 flex items-center justify-between gap-3">
     
     {/* Logo & Brand */}
     <NavLink href="/" class="flex items-center gap-2 group">
       <img 
         src="/img/logo.png" 
         alt="Xeno.JS Framework Logo" 
+        width="32"
+        height="32"
         class="w-8 h-8 object-contain transition-transform group-hover:scale-105" 
       />
       <span class="text-[var(--text-main)] font-[number:var(--h2-weight)] tracking-tight text-[length:var(--h3-size)] font-[family-name:var(--font-sans)]">
@@ -49,17 +51,24 @@ const navItems = [
         class="text-[var(--text-muted)] hover:text-[var(--color-primary)] transition-colors p-2 text-xl flex items-center"
         aria-label="GitHub Repository"
       >
-        <i class="bi bi-github"></i>
+        <i class="bi bi-github" aria-hidden="true"></i>
       </a>
     </div>
 
+    <button id="theme-toggle" type="button" class="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-secondary)] hover:text-[var(--text-main)] md:ml-0" aria-label="Switch color theme">
+      <i id="theme-icon" class="bi bi-sun text-xl" aria-hidden="true"></i>
+    </button>
+
     {/* Mobile Hamburger Toggle Button */}
-    <button 
+    <button
       id="mobile-menu-button" 
-      class="md:hidden text-[var(--text-main)] focus:outline-none p-2 rounded-[var(--border-radius)] hover:bg-[var(--bg-secondary)] transition-colors"
+      type="button"
+      class="md:hidden text-[var(--text-main)] p-2 rounded-[var(--border-radius)] hover:bg-[var(--bg-secondary)] transition-colors"
       aria-label="Toggle Navigation Menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
     >
-      <i id="menu-icon" class="bi bi-list text-2xl"></i>
+      <i id="menu-icon" class="bi bi-list text-2xl" aria-hidden="true"></i>
     </button>
 
   </div>
@@ -84,7 +93,7 @@ const navItems = [
           class="text-[var(--text-main)] hover:text-[var(--color-primary)] transition-colors text-xl p-2 bg-[var(--bg-secondary)] rounded-[var(--border-radius)] border border-[var(--border-color)]"
           aria-label="GitHub Repository"
         >
-          <i class="bi bi-github"></i>
+          <i class="bi bi-github" aria-hidden="true"></i>
         </a>
       </div>
     </nav>
@@ -93,16 +102,40 @@ const navItems = [
 
 {/* Spacer to prevent layout shift under fixed navbar */}
 <div class="h-16"></div>
+<noscript>
+  <style>#mobile-menu-button, #theme-toggle { display: none; }</style>
+  <nav aria-label="Mobile navigation" class="flex flex-wrap gap-4 border-b border-[var(--border-color)] bg-[var(--bg-primary)] px-6 py-4 md:hidden">
+    {navItems.map((item) => <a href={item.href} class="text-[var(--text-main)] underline">{item.label}</a>)}
+  </nav>
+</noscript>
 
 {/* Client-side script to handle mobile menu toggle state */}
 <script>
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
   const menuIcon = document.getElementById('menu-icon');
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+
+  const updateThemeButton = () => {
+    const isLight = document.documentElement.dataset.theme === 'light';
+    themeToggle?.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+    themeIcon?.classList.toggle('bi-moon', isLight);
+    themeIcon?.classList.toggle('bi-sun', !isLight);
+  };
+
+  updateThemeButton();
+  themeToggle?.addEventListener('click', () => {
+    const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('starlight-theme', theme);
+    updateThemeButton();
+  });
 
   if (menuButton && mobileMenu && menuIcon) {
     menuButton.addEventListener('click', () => {
       const isOpen = mobileMenu.classList.toggle('hidden');
+      menuButton.setAttribute('aria-expanded', String(!isOpen));
       
       // Toggle between hamburger list icon and close x icon
       if (!isOpen) {

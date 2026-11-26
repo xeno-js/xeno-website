@@ -1,0 +1,62 @@
+---
+const integrations = [
+  { name: 'Node.js', category: 'Runtime', href: '/docs/http/plugins/node', icon: 'nodejs' },
+  { name: 'Fastify', category: 'HTTP', href: '/docs/http/plugins/fastify', icon: 'fastify' },
+  { name: 'Vercel', category: 'Edge', href: '/docs/http/plugins/vercel', icon: 'vercel' },
+  { name: 'PostgreSQL', category: 'Data', href: '/docs/data/node-postgresql', icon: 'postgres' },
+  { name: 'SQLite', category: 'Data', href: '/docs/data/sqllite', icon: 'sqlite' },
+  { name: 'Redis', category: 'Cache', href: '/docs/cache/redis', icon: 'redis' },
+  { name: 'Supabase', category: 'Auth', href: '/docs/security/authentication/supabase', icon: 'supabase' },
+  { name: 'Pino', category: 'Logs', href: '/docs/application/logging/pino-logger', icon: 'pino' },
+  { name: 'Sentry', category: 'APM', href: '/docs/application/logging/sentry-node', icon: 'sentry' },
+  { name: 'Zod', category: 'Schema', href: '/docs/application/pipelines/validation', icon: 'zod' },
+];
+---
+
+<section class="px-6 pb-20 sm:pb-28" data-integrations-section>
+  <div class="mx-auto max-w-[var(--container-max)]">
+    <div class="flex items-baseline justify-between">
+      <h3 class="text-lg font-semibold tracking-tight">Integrations</h3>
+      <span class="text-xs text-neutral-500">Plug & play ecosystem</span>
+    </div>
+
+    <ul class="m-0 mt-5 flex list-none flex-wrap justify-center items-center gap-2.5 p-0">
+      {integrations.map((item, index) => (
+        <li 
+          class="integration-item" 
+          style={`--i: ${index};`}
+        >
+          <a 
+            href={item.href} 
+            class="hx-chip group inline-flex items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900/60 px-3.5 py-2 text-sm font-medium text-neutral-200 transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-600 hover:bg-neutral-800/90 hover:text-white hover:shadow-lg hover:shadow-black/40"
+          >
+            <!-- Segnaposto Icona SVG (sostituisci con i tuoi loghi SVG) -->
+            <span class="flex h-4 w-4 items-center justify-center text-neutral-400 transition-colors group-hover:text-white">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+              </svg>
+            </span>
+
+            <span>{item.name}</span>
+
+            <!-- Badge Categoria discreto -->
+            <span class="rounded bg-neutral-800/80 px-1.5 py-0.5 text-[10px] font-normal text-neutral-400 transition-colors group-hover:bg-neutral-700 group-hover:text-neutral-200">
+              {item.category}
+            </span>
+
+            <!-- Freccia diagonale che appare al hover -->
+            <svg 
+              class="h-3 w-3 -translate-x-1 text-neutral-500 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white group-hover:opacity-100" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

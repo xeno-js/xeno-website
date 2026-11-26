@@ -14,8 +14,8 @@ const documentationLinks: FooterLink[] = [
 ];
 
 const communityLinks: FooterLink[] = [
-  { label: "Contributing", href: "/docs/contributing-guide" },
-  { label: "Support", href: "/docs/support-us", external: true },
+  { label: "Contributing", href: "/contributing-guide" },
+  { label: "Support", href: "/support-us" },
 ];
 ---
 
@@ -33,6 +33,8 @@ const communityLinks: FooterLink[] = [
           <img
             src="/img/logo.png"
             alt="Xeno.JS Framework Logo"
+            width="28"
+            height="28"
             class="w-7 h-7 object-contain transition-transform group-hover:scale-105"
           />
           <span class="text-[var(--text-main)] font-[number:var(--h2-weight)] tracking-tight text-lg font-[family-name:var(--font-sans)]">
@@ -53,23 +55,23 @@ const communityLinks: FooterLink[] = [
             class="w-10 h-10 rounded-[var(--border-radius)] bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-all"
             aria-label="GitHub"
           >
-            <i class="bi bi-github text-lg"></i>
+            <i class="bi bi-github text-lg" aria-hidden="true"></i>
           </a>
           <a
             href="mailto:xeno-js@outlook.it"
             class="w-10 h-10 rounded-[var(--border-radius)] bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)]/40 transition-all"
-            aria-label="GMAIL"
+            aria-label="Email"
           >
-            <i class="bi bi-envelope text-lg"></i>
+            <i class="bi bi-envelope text-lg" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
       {/* Navigation Links: Documentation */}
       <div class="md:col-span-2 text-left">
-        <h4 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
+        <h2 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
           Documentation
-        </h4>
+        </h2>
         <ul class="flex flex-col gap-2.5 text-sm">
           {documentationLinks.map((link) => (
             <li>
@@ -86,9 +88,9 @@ const communityLinks: FooterLink[] = [
 
       {/* Navigation Links: Community */}
       <div class="md:col-span-2 text-left">
-        <h4 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
+        <h2 class="text-sm font-semibold text-[var(--text-main)] uppercase tracking-wider mb-4">
           Community
-        </h4>
+        </h2>
         <ul class="flex flex-col gap-2.5 text-sm">
           {communityLinks.map((link) => (
             <li>
@@ -122,7 +124,7 @@ const communityLinks: FooterLink[] = [
       </p>
       <div class="flex items-center gap-6">
         <span class="flex items-center gap-1.5 text-[var(--color-primary)] font-mono">
-          <span class="w-2 h-2 rounded-full bg-[var(--color-primary)] inline-block animate-pulse"></span>
+          <span class="w-2 h-2 rounded-full bg-[var(--color-primary)] inline-block"></span>
           Actively maintained and open-source
         </span>
       </div>
