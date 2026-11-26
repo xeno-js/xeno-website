@@ -1,6 +1,6 @@
 ---
 title: Creating Commands
-description: Learn how to create, validate, register, and execute Commands in Xeno.JS.
+description: Create, validate, register, and execute Xeno.JS CQRS commands, and invalidate cached query results after successful writes.
 keywords:
 - Xeno.JS commands
 - TypeScript commands
@@ -8,6 +8,8 @@ keywords:
 - Xeno.JS CQRS
 - command validation
 - command handlers
+- command cache invalidation
+- query cache
 tags:
 - application
 - cqrs
@@ -28,6 +30,8 @@ faqs:
   answer: Yes. Add the withZodValidation plugin to addPipeline and register a schema under the Command intent.
 - question: Can Commands use idempotency or concurrency handling?
   answer: Yes. Add withIdempotency or withConcurrency to addPipeline to configure the Command pipeline.
+- question: How can a Command invalidate cached query results?
+  answer: Enable withQueryCaching() and set cacheInvalidation keys or patterns on the Command. Use the actual stored cache keys, including their context.
 ---
 
 ## Introduction
@@ -46,11 +50,11 @@ A Command consists of:
 
 You need:
 
-* an `XenoAppBuilder`;
-* the CQRS pipeline enabled with `addPipeline()`;
-* a Command class;
-* a Handler registered with the Command intent;
-* execution within an active service scope (or use of `runInScope()` outside an existing request).
+- an `XenoAppBuilder`;
+- the CQRS pipeline enabled with `addPipeline()`;
+- a Command class;
+- a Handler registered with the Command intent;
+- execution within an active service scope (or use of `runInScope()` outside an existing request).
 
 If you want validation, you also need a Zod schema.
 
@@ -59,7 +63,7 @@ If you want validation, you also need a Zod schema.
 `addPipeline()` registers the CQRS infrastructure used to execute Commands and Queries.
 
 ```ts
-import { XenoAppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 
 const app = new XenoAppBuilder()
   .addPipeline()
@@ -76,7 +80,7 @@ Pass pipeline plugins to `addPipeline()` to enable optional behaviors such as va
 Extend the `Command` class and pass the Command intent to `super()`.
 
 ```ts
-import { Command } from '@xeno-js/shared'
+import { Command } from '@xeno-js/core'
 
 export class CreateUserCommand extends Command<User> {
   constructor(
@@ -94,14 +98,15 @@ The `Command` base class automatically sets:
 command.type === REQUEST_TYPE.COMMAND
 ```
 
-Define the data required by the application operation. The optional second constructor argument can also declare cache keys or patterns to invalidate after a successful Command, when query caching is enabled.
+Define the data required by the application operation. The optional second constructor argument can also declare cache keys or patterns to invalidate after a successful Command, when query caching is enabled. These must match the stored keys, including their context:
 
 ```ts
 super('CreateUserCommand', {
-  keys: ['users:list'],
-  patterns: ['user:*'],
+  keys: ['users:list:public'],
 })
 ```
+
+This key matches a query whose logical key is `users:list`, whose `isUserScoped` is `false`, and whose active identity has no tenant. For tenant or user-scoped keys, use the configured key builder as described in [Cache invalidation for Commands](#add-cache-invalidation-to-a-command).
 
 The `intent` identifies the Command and is used to resolve its Handler and any intent-specific pipeline configuration.
 
@@ -158,7 +163,7 @@ If the Command accepts external input, add a validation plugin to `addPipeline()
 First enable validation:
 
 ```ts
-import { XenoAppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { withZodValidation } from '@xeno-js/zod'
 
 const app = new XenoAppBuilder().addPipeline(
@@ -176,7 +181,7 @@ For example:
 
 ```ts
 import { z } from 'zod'
-import { XenoAppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { withZodValidation } from '@xeno-js/zod'
 
 const createUserSchema = z.object({
@@ -235,7 +240,7 @@ export const createUserSchema = z.object({
 Then register it during application bootstrap:
 
 ```ts
-import { XenoAppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { withZodValidation } from '@xeno-js/zod'
 
 import { createUserSchema } from './application/users/create-user.schema'
@@ -274,7 +279,7 @@ CreateUserCommand
 A Handler extends `BaseHandler` and implements `executeAsync()`.
 
 ```ts
-import { BaseHandler } from 'xeno-js'
+import { BaseHandler } from '@xeno-js/core'
 import { Result, type ResultType } from '@xeno-js/shared'
 
 import type { CreateUserCommand, User } from './create-user.command'
@@ -306,7 +311,7 @@ See [Creating Handlers](./handler) for the complete Handler configuration and de
 Register the Handler in the service container using the Command intent. `BaseHandler` requires a user-context factory; the context module provides it under `TOKENS.USER_CONTEXT_FACTORY`.
 
 ```ts
-import { XenoAppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { TOKENS } from '@xeno-js/shared'
 
 import { CreateUserHandler } from './application/users/create-user.handler'
@@ -469,7 +474,7 @@ src/
 ```ts
 // application/users/create-user.command.ts
 
-import { Command } from '@xeno-js/shared'
+import { Command } from '@xeno-js/core'
 
 export interface User {
   id: string
@@ -507,7 +512,7 @@ export const createUserSchema = z.object({
 ```ts
 // application/users/create-user.handler.ts
 
-import { BaseHandler } from 'xeno-js'
+import { BaseHandler } from '@xeno-js/core'
 import { Result, type ResultType } from '@xeno-js/shared'
 
 import type { CreateUserCommand, User } from './create-user.command'
@@ -535,7 +540,7 @@ export class CreateUserHandler extends BaseHandler<
 ```ts
 // bootstrap.ts
 
-import { XenoAppBuilder } from 'xeno-js'
+import { XenoAppBuilder } from '@xeno-js/core'
 import { TOKENS } from '@xeno-js/shared'
 import { withZodValidation } from '@xeno-js/zod'
 
@@ -586,6 +591,54 @@ The same intent connects the Command to its Handler and to its validation schema
 
 ---
 
+## Add cache invalidation to a Command
+
+When a Command changes data used by a cached Query, declare the affected stored keys in `cacheInvalidation`. Enable the behavior with `withQueryCaching()`:
+
+```ts
+import { XenoAppBuilder, withQueryCaching } from '@xeno-js/core'
+
+const application = await new XenoAppBuilder()
+  .addPipeline(withQueryCaching())
+  .build()
+```
+
+Add your Handler registrations before building the application. If no cache is registered, Xeno.JS configures the default in-memory cache. `addCache()` alone does not enable command invalidation.
+
+The optional `ICommand.cacheInvalidation` property accepts `keys?: string[]` and `patterns?: string[]`. When extending `Command`, pass that object as the second argument to `super()`:
+
+```ts
+import { Command } from '@xeno-js/core'
+import type { ICacheKeyBuilder } from '@xeno-js/core'
+
+interface User {
+  id: string
+  name: string
+}
+
+export class UpdateUserCommand extends Command<User> {
+  constructor(
+    public readonly userId: string,
+    public readonly name: string,
+    keyBuilder: ICacheKeyBuilder,
+  ) {
+    super('UpdateUserCommand', {
+      keys: [keyBuilder.buildContextualKey(`user:${userId}`)],
+    })
+  }
+}
+```
+
+For user ID `42`, this key matches a Query with `cacheKey: 'user:42'` and `isUserScoped: false`, provided the Query and Command use the same tenant context. Resolve the key builder through `TOKENS.CACHE_KEY_BUILDER` while the appropriate identity is active, then pass it to the Command constructor. Account for identity enrichment that may change the context later. For a user-scoped Query, use `buildUserScopedKey()` with the matching identity instead.
+
+The pipeline passes declared keys and patterns directly to the cache provider. It does not add tenant or user context automatically. A key for the current identity does not invalidate other users' entries; list and user-scoped caches may need additional, carefully scoped keys or patterns.
+
+The pipeline attempts invalidation after the downstream Command execution returns a successful `Result`. Failed Commands and thrown errors do not trigger it. If a cache removal fails, Xeno.JS logs a warning, stops the remaining removals, and returns the successful Command result. Invalidation is not atomic with the write, so plan for stale data and concurrent reads.
+
+See [Command Cache Invalidation Pipeline](/docs/application/pipelines/cache-invalidation) for an example with a Query, scoped keys, pattern behavior, and troubleshooting.
+
+---
+
 ## Add idempotency to a Command
 
 Idempotency is a Command-specific pipeline feature.
@@ -593,7 +646,7 @@ Idempotency is a Command-specific pipeline feature.
 Add the `withIdempotency` plugin to the Command pipeline:
 
 ```ts
-import { XenoAppBuilder, withIdempotency } from 'xeno-js'
+import { XenoAppBuilder, withIdempotency } from '@xeno-js/core'
 
 const app = new XenoAppBuilder()
   .addPipeline(withIdempotency((options) => {
@@ -615,7 +668,7 @@ See [Idempotency](../pipelines/idempotency) for the complete configuration and b
 Concurrency retry handling is also Command-specific.
 
 ```ts
-import { XenoAppBuilder, withConcurrency } from 'xeno-js'
+import { XenoAppBuilder, withConcurrency } from '@xeno-js/core'
 
 const app = new XenoAppBuilder()
   .addPipeline(withConcurrency((options) => {
@@ -637,12 +690,13 @@ See [Concurrency](../pipelines/concurrency) for the complete configuration and r
 
 Commands can also use the common CQRS pipeline features:
 
-* [Validation](../pipelines/validation)
-* [Exception handling](../pipelines/exception)
-* [Logging](../pipelines/logging)
-* [Performance tracking](../pipelines/performance)
-* [Idempotency](../pipelines/idempotency)
-* [Concurrency](../pipelines/concurrency)
+- [Validation](../pipelines/validation)
+- [Exception handling](../pipelines/exception)
+- [Logging](../pipelines/logging)
+- [Performance tracking](../pipelines/performance)
+- [Idempotency](../pipelines/idempotency)
+- [Concurrency](../pipelines/concurrency)
+- [Command Cache Invalidation](/docs/application/pipelines/cache-invalidation)
 
 Add the corresponding pipeline plugins to `addPipeline()` where required. `addPipeline()` configures the CQRS module and does not take a configuration callback.
 
@@ -706,6 +760,10 @@ must match:
 super('CreateUserCommand')
 ```
 
+### Cached Query results remain stale
+
+Check that `withQueryCaching()` is enabled, the Command runs through the mediator and returns a successful `Result`, and the declared keys match the actual stored keys. Check cache warnings and ensure the declared patterns are supported by the provider. See [Command Cache Invalidation](/docs/application/pipelines/cache-invalidation) for tenant and user key formats.
+
 ### The Handler is not receiving the expected data
 
 The Command class defines the data passed to the Handler:
@@ -738,16 +796,17 @@ If validation is enabled, remember that the schema validates the request object 
 
 ## Related documentation
 
-* [CQRS Overview](./overview)
-* [Creating Queries](./query)
-* [Creating Handlers](./handler)
-* [Validation](../pipelines/validation)
-* [Exception Handling](../pipelines/exception)
-* [Logging](../pipelines/logging)
-* [Performance Tracking](../pipelines/performance)
-* [Idempotency](../pipelines/idempotency)
-* [Concurrency](../pipelines/concurrency)
-* [Dependency Injection](../../fundamentals/dependency-injection)
+- [CQRS Overview](./overview)
+- [Creating Queries](./query)
+- [Creating Handlers](./handler)
+- [Validation](../pipelines/validation)
+- [Exception Handling](../pipelines/exception)
+- [Logging](../pipelines/logging)
+- [Performance Tracking](../pipelines/performance)
+- [Idempotency](../pipelines/idempotency)
+- [Concurrency](../pipelines/concurrency)
+- [Command Cache Invalidation](/docs/application/pipelines/cache-invalidation)
+- [Dependency Injection](../../fundamentals/dependency-injection)
 
 ---
 

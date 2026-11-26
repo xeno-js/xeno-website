@@ -91,6 +91,7 @@ export default defineConfig({
                 { label: 'Concurrency Pipeline', link: '/docs/application/pipelines/concurrency' },
                 { label: 'Idempotency Pipeline', link: '/docs/application/pipelines/idempotency' },
                 { label: 'Caching Pipeline', link: '/docs/application/pipelines/caching' },
+                { label: 'Cache Invalidation Pipeline', link: '/docs/application/pipelines/cache-invalidation' },
               ]
             },
             {
@@ -111,6 +112,7 @@ export default defineConfig({
                 { label: 'Overview', link: '/docs/application/logging/overview' },
                 { label: 'Pino Logger', link: '/docs/application/logging/pino-logger' },
                 { label: 'Sentry Node', link: '/docs/application/logging/sentry-node' },
+                { label: 'Sentry Vue', link: '/docs/application/logging/sentry-vue' },
                 { label: 'Custom Logger', link: '/docs/application/logging/custom-logger' },
               ]
             },
@@ -124,6 +126,7 @@ export default defineConfig({
             { label: 'Node PostgreSQL', link: '/docs/data/node-postgresql' },
             { label: 'SQLite', link: '/docs/data/sqllite' },
             { label: 'Unit of Work', link: '/docs/data/unit-of-work' },
+            { label: 'Transactional Outbox', link: '/docs/data/outbox' },
             { label: 'Db Schema', link: '/docs/data/db-schema' },
             {
               label: 'Repositories',
@@ -166,6 +169,7 @@ export default defineConfig({
           collapsed: true,
           items: [
             { label: 'Server HTTP', link: '/docs/http/server' },
+            { label: 'HTTP Client', link: '/docs/http/client' },
             { label: 'Routes', link: '/docs/http/routes' },
             { label: 'Controller', link: '/docs/http/controller' },
             { label: 'Api Response Dto', link: '/docs/http/api-response' },
@@ -177,6 +181,23 @@ export default defineConfig({
                 { label: 'Vercel', link: '/docs/http/plugins/vercel' }, 
               ], 
             }
+          ]
+        },
+        {
+          label: 'Utilities',
+          collapsed: true,
+          items: [
+            { label: 'Overview', link: '/docs/utils/overview' },
+            { label: 'DateHelper', link: '/docs/utils/date' },
+            { label: 'Enumerable', link: '/docs/utils/enumerable' },
+            { label: 'Guards', link: '/docs/utils/guards' },
+            { label: 'GuidHelper', link: '/docs/utils/guid' },
+            { label: 'HttpHelper', link: '/docs/utils/http' },
+            { label: 'MathHelper', link: '/docs/utils/math' },
+            { label: 'PromiseHelper', link: '/docs/utils/promise' },
+            { label: 'Route Helpers', link: '/docs/utils/route' },
+            { label: 'SanitizeHelper', link: '/docs/utils/sanitize' },
+            { label: 'StringHelper', link: '/docs/utils/string' },
           ]
         },
         {

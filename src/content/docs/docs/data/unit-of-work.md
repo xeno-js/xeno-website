@@ -72,7 +72,7 @@ Before using Unit of Work:
 1. Configure a database plugin with `XenoAppBuilder.addDb()`.
 2. Build the application.
 3. Execute the transactional operation inside an active service scope.
-4. Resolve `UNIT_OF_WORK` from that scope.
+4. Resolve `unitOfWork` from that scope.
 
 For provider-specific configuration, see:
 
@@ -116,7 +116,7 @@ The provider configuration belongs in application bootstrap. Unit of Work does n
 
 ## Build the Application
 
-Build the application before resolving `UNIT_OF_WORK`:
+Build the application before resolving `unitOfWork`:
 
 ```ts
 const application = await app.build()
@@ -124,17 +124,17 @@ const application = await app.build()
 
 `build()` returns the runtime application. Resolve scoped services through its active scope.
 
-`UNIT_OF_WORK` is a scoped service, so it must be resolved from an active scope.
+`unitOfWork` is a scoped service, so it must be resolved from an active scope.
 
 ## Resolve Unit of Work
 
-Use `runInScope()` to resolve `UNIT_OF_WORK` for an operation:
+Use `runInScope()` to resolve `unitOfWork` for an operation:
 
 ```ts
 const application = await app.build()
 
 await application.runInScope(async (services) => {
-  const unitOfWork = services.UNIT_OF_WORK
+  const unitOfWork = services.unitOfWork
   // transactional work
 })
 ```
@@ -177,7 +177,7 @@ await unitOfWork.runInTransaction(
 )
 ```
 
-The Outbox argument is optional. Without an aggregate argument, `runInTransaction(callback)` executes the ordinary database transaction. See [Node PostgreSQL](./node-postgresql) and [SQLite](./sqlite) for provider-specific Outbox configuration.
+The Outbox argument is optional. Without an aggregate argument, `runInTransaction(callback)` executes the ordinary database transaction. See [Transactional Outbox](/docs/data/outbox) for configuration, delivery limits, and recovery considerations.
 
 ## Perform Multiple Data Operations
 
@@ -316,7 +316,7 @@ app.addDb(withPostgresql((options) => {
 const application = await app.build()
 
 await application.runInScope(async (services) => {
-  return services.UNIT_OF_WORK.runInTransaction(async (tx) => {
+  return services.unitOfWork.runInTransaction(async (tx) => {
     return tx.execute(sql`select 1`)
   })
 })
@@ -397,7 +397,7 @@ Example:
 const application = await app.build()
 
 await application.runInScope(async (services) => {
-  const unitOfWork = services.UNIT_OF_WORK
+  const unitOfWork = services.unitOfWork
 })
 ```
 
@@ -411,14 +411,14 @@ Do not do this:
 const application = await app.build()
 
 // Do not resolve UNIT_OF_WORK from the root application services.
-application.getServices().UNIT_OF_WORK
+application.getServices().unitOfWork
 ```
 
 Resolve it inside a scoped operation:
 
 ```ts
 await application.runInScope(async (services) => {
-  const unitOfWork = services.UNIT_OF_WORK
+  const unitOfWork = services.unitOfWork
 })
 ```
 

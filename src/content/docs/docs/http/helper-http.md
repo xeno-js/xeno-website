@@ -47,6 +47,8 @@ These APIs are available from `@xeno-js/core`. The route and HTTP utilities
 and `AppError` are also exported by `@xeno-js/shared`.
 Helpers prepare values; they do not replace runtime validation,
 authentication, authorization, or middleware configuration.
+For the full utility references, see [HttpHelper](/docs/utils/http) and
+[Route Helpers](/docs/utils/route).
 
 ## Use helpers in an application
 

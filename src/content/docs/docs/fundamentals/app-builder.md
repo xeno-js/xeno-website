@@ -405,13 +405,15 @@ The setup callback configures the core logger settings, including:
 
 `addLogger()` also accepts one logger plugin or an array of logger plugins. Provider-specific options belong to those plugins; the callback above only configures the core logger settings.
 
-See the observability documentation for provider-specific configuration.
+See [Logging Overview](/docs/application/logging/overview) and [Sentry Vue](/docs/application/logging/sentry-vue) for provider-specific configuration.
 
 ## Configure HTTP Clients
 
 Use `addHttpClient()` to register HTTP clients. It accepts an HTTP plugin or a setup callback. The callback receives a `HttpConfig` whose `clients` entries contain a name, an `IHttpClient` factory, and an optional resilience factory.
 
 HTTP clients are infrastructure dependencies; registering an HTTP client does not configure an inbound server.
+
+See [HTTP Client and Resilience](/docs/http/client) for Axios and custom client configuration, resolution, and resilience policies.
 
 ## Configure the HTTP Server
 
@@ -599,7 +601,7 @@ The builder and its internal service container have different responsibilities:
 
 | Component          | Responsibility                            |
 | ------------------ | ----------------------------------------- |
-| `XenoAppBuilder`       | Compose and bootstrap the application     |
+| `XenoAppBuilder`   | Compose and bootstrap the application     |
 | `ServiceContainer` | Register and resolve runtime dependencies |
 
 Use `XenoAppBuilder` during application composition:

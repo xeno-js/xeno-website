@@ -41,7 +41,7 @@ faqs:
 - question: Is the client IP logged directly?
   answer: No. The client IP is passed through Xeno.JS IP masking before it is included in the safe logging context.
 - question: Does Sentry receive INFO and DEBUG logs?
-  answer: No. The Xeno.JS Sentry provider only sends WARN and ERROR events after the configured minimum level is applied.
+  answer: The Node provider forwards WARN and ERROR only. The Vue provider can also forward INFO and DEBUG when both logger thresholds allow them.
 - question: Where does Xeno.JS use the logger automatically?
   answer: Xeno.JS uses ILogger in the CQRS logging pipeline and in other infrastructure components that emit diagnostic, warning, or error messages.
 ---
@@ -55,6 +55,7 @@ You can use:
 - the built-in Console logger;
 - Pino;
 - Sentry Node;
+- Sentry Vue;
 - one or more custom logger clients;
 - any combination of the providers above.
 
@@ -468,7 +469,7 @@ See [Pino Logger](./pino-logger) for Pino-specific configuration.
 
 ## Sentry Behavior
 
-The Xeno.JS Sentry provider is intended for warning and error events.
+The Xeno.JS Sentry Node provider is intended for warning and error events.
 
 It applies the configured minimum level first.
 
@@ -496,6 +497,7 @@ app.addLogger(withSentryNodeLogger((options, config) => {
 The Sentry configuration requires a DSN.
 
 See [Sentry Node](./sentry-node) for the complete Sentry configuration and warning/error behavior.
+For browser applications, see [Sentry Vue](/docs/application/logging/sentry-vue), which supports configurable provider log levels and browser tracing.
 
 ## Where Xeno.JS Uses the Logger
 

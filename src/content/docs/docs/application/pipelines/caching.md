@@ -49,6 +49,8 @@ The built-in caching behavior:
 5. stores successful query results using the configured TTL.
 
 Query result caching runs in the **Query pipeline**. When `withQueryCaching()` is enabled, Xeno.JS also adds a command pipeline behavior that invalidates cache entries declared by successful commands.
+The invalidation keys must match the stored cache keys, including their context.
+See [Command Cache Invalidation](/docs/application/pipelines/cache-invalidation) for key construction, patterns, and failure handling.
 
 If you first need to create a Query, see [Create a Query](../cqrs/query).
 
