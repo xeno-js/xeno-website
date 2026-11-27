@@ -47,6 +47,9 @@ Use this section when you need to:
 - enable query processing features such as caching;
 - handle exceptions consistently.
 
+For operation outcomes and application errors, see
+[Result](/docs/application/result) and [AppError](/docs/application/app-error).
+
 ## Before you start
 
 Application features are composed through `XenoAppBuilder`. Pass pipeline plugins to `addPipeline()` to configure the corresponding cross-cutting behavior.

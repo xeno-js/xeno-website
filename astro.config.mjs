@@ -79,6 +79,8 @@ export default defineConfig({
           collapsed: true,
           items: [
             { label: 'Overview', link: '/docs/application/overview' },
+            { label: 'Result', link: '/docs/application/result' },
+            { label: 'AppError', link: '/docs/application/app-error' },
             {
               label: 'Pipelines',
               collapsed: false,
