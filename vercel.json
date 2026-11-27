@@ -1,0 +1,154 @@
+{
+    "redirects": [
+        {
+            "source": "/docs/core/loggers/sentry-logger",
+            "destination": "https://www.xeno-js.it/docs/application/logging/sentry-node",
+            "permanent": true
+        },
+        {
+            "source": "/docs/core/loggers/sentry-logger/",
+            "destination": "https://www.xeno-js.it/docs/application/logging/sentry-node",
+            "permanent": true
+        },
+        {
+            "source": "/fundamentals/app-builder",
+            "destination": "https://www.xeno-js.it/docs/fundamentals/app-builder",
+            "permanent": true
+        },
+        {
+            "source": "/introduction",
+            "destination": "https://www.xeno-js.it/docs/introduction",
+            "permanent": true
+        },
+        {
+            "source": "/loggers/sentry-logger",
+            "destination": "https://www.xeno-js.it/docs/application/logging/sentry-node",
+            "permanent": true
+        },
+        {
+            "source": "/docs/contributing-guide",
+            "destination": "https://www.xeno-js.it/contributing-guide/",
+            "permanent": true
+        },
+        {
+            "source": "/utils/date-utils",
+            "destination": "https://www.xeno-js.it/docs/utils/date",
+            "permanent": true
+        },
+        {
+            "source": "/database/sql-lite",
+            "destination": "https://www.xeno-js.it/docs/data/sqllite",
+            "permanent": true
+        },
+        {
+            "source": "/cqrs/overview",
+            "destination": "https://www.xeno-js.it/docs/application/cqrs/overview",
+            "permanent": true
+        },
+        {
+            "source": "/security/authentication",
+            "destination": "https://www.xeno-js.it/docs/security/authentication/overview",
+            "permanent": true
+        },
+        {
+            "source": "/loggers/pino-logger",
+            "destination": "https://www.xeno-js.it/docs/application/logging/pino-logger",
+            "permanent": true
+        },
+        {
+            "source": "/cqrs/performance-pipeline",
+            "destination": "https://www.xeno-js.it/docs/application/pipelines/performance",
+            "permanent": true
+        },
+        {
+            "source": "/docs/shared/utils/overview",
+            "destination": "https://www.xeno-js.it/docs/utils/overview",
+            "permanent": true
+        },
+        {
+            "source": "/docs/shared/utils/overview/",
+            "destination": "https://www.xeno-js.it/docs/utils/overview",
+            "permanent": true
+        },
+        {
+            "source": "/cache/redis",
+            "destination": "https://www.xeno-js.it/docs/cache/redis",
+            "permanent": true
+        },
+        {
+            "source": "/docs/core/middlewares/allow-method-middleware",
+            "destination": "https://www.xeno-js.it/docs/security/middlewares/allow-method",
+            "permanent": true
+        },
+        {
+            "source": "/docs/core/middlewares/allow-method-middleware/",
+            "destination": "https://www.xeno-js.it/docs/security/middlewares/allow-method",
+            "permanent": true
+        },
+        {
+            "source": "/cqrs/logging-pipeline",
+            "destination": "https://www.xeno-js.it/docs/application/pipelines/logging",
+            "permanent": true
+        },
+        {
+            "source": "/cqrs/validation-pipeline",
+            "destination": "https://www.xeno-js.it/docs/application/pipelines/validation",
+            "permanent": true
+        },
+        {
+            "source": "/core/cqrs/validation-pipeline",
+            "destination": "https://www.xeno-js.it/docs/application/pipelines/validation",
+            "permanent": true
+        },
+        {
+            "source": "/core/security/custom-authentication",
+            "destination": "https://www.xeno-js.it/docs/security/authentication/custom",
+            "permanent": true
+        },
+        {
+            "source": "/docs/data/sqlite",
+            "destination": "https://www.xeno-js.it/docs/data/sqllite",
+            "permanent": true
+        },
+        {
+            "source": "/vue/security/supabase-auth",
+            "destination": "https://www.xeno-js.it/docs/security/authentication/supabase",
+            "permanent": true
+        },
+        {
+            "source": "/cli/generate-cqrs",
+            "destination": "https://www.xeno-js.it/docs/cli/generate-cqrs",
+            "permanent": true
+        },
+        {
+            "source": "/cli/new-project",
+            "destination": "https://www.xeno-js.it/docs/cli/new-project",
+            "permanent": true
+        },
+        {
+            "source": "/vue/observability/sentry-logger",
+            "destination": "https://www.xeno-js.it/docs/application/logging/sentry-node",
+            "permanent": true
+        },
+        {
+            "source": "/fundamentals/service-container",
+            "destination": "https://www.xeno-js.it/docs/dependency-injection/service-container",
+            "permanent": true
+        },
+        {
+            "source": "/docs/getting-started/installation",
+            "destination": "https://www.xeno-js.it/docs/getting_started/installation",
+            "permanent": true
+        },
+        {
+            "source": "/core/fundamentals/middleware",
+            "destination": "https://www.xeno-js.it/docs/security/middlewares/overview",
+            "permanent": true
+        },
+        {
+            "source": "/cli/project-structure",
+            "destination": "https://www.xeno-js.it/docs/getting_started/project-structure",
+            "permanent": true
+        }
+    ]
+}
