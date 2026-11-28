@@ -117,6 +117,7 @@ if (type === 'article' && articleMeta) {
     "description": description,
     "url": canonicalURL,
     "datePublished": articleMeta.pubDate.toISOString(),
+    "image": new URL(image?.src ?? '/img/logo.png', Astro.site).href,
     "inLanguage": "en",
     "author": {
       "@type": "Organization",
@@ -181,11 +182,11 @@ const currentPath = Astro.url.pathname;
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image.src, Astro.site).href} />
 
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image.src, Astro.site).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image.src, Astro.site).href} />
 
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />

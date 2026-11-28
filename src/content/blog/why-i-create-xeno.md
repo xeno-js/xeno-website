@@ -1,6 +1,6 @@
 ---
 title: "Why I Created Xeno.JS: Architectural Rigor and Zero Infrastructure Constraints"
-description: "Discover why Xeno.JS was created to solve technical debt and infrastructure lock-in in modern TypeScript applications, combining clean architecture with runtime-agnostic flexibility."
+description: "Why Xeno.JS exists: clean architecture and explicit dependency injection, with runtime-agnostic code that runs on Node.js or edge functions without lock-in."
 keywords: "Xeno.JS, TypeScript framework, clean architecture, dependency injection, edge functions, backend development, open source"
 tags: ["TypeScript", "Architecture", "Open Source", "Backend", "Web Development"]
 canonical: "https://www.xeno-js.it/blog/why-i-create-xeno"

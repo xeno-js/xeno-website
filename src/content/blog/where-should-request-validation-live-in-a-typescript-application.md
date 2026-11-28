@@ -2,7 +2,7 @@
 pubDate: 2026-10-07
 author: "Xeno.JS"
 title: "Where Should Request Validation Live in a TypeScript Application?"
-description: "Where should request validation live in a TypeScript application? Explore why validation belongs at the application boundary, how pipelines separate validation from HTTP concerns, and how Xeno.JS implements this approach."
+description: "Where should request validation live in a TypeScript application? At the application boundary, in a pipeline before the handler. See how Xeno.JS does it."
 keywords: "TypeScript validation, request validation, application architecture, validation pipeline, CQRS, mediator pattern, application layer, HTTP validation, Zod, Xeno.JS"
 tags:
   - TypeScript
@@ -22,7 +22,7 @@ faqs:
     answer: "A validation pipeline runs validation before the command handler and keeps cross-cutting application concerns separate from the business logic of the handler."
   - question: "How does Xeno.JS handle application validation?"
     answer: "Xeno.JS supports application pipelines where validation can be composed before command execution, allowing validation to remain in the application layer rather than being tied to a specific HTTP framework."
-canonical: "https://www.xeno-js.it/blog/where-should-request-validation-live-in-a-typescript-application/"
+canonical: "https://www.xeno-js.it/blog/where-should-request-validation-live-in-a-typescript-application"
 ---
 
 ## Where Should Validation Live in a TypeScript Application?

@@ -76,7 +76,58 @@ p { line-height: 1.65; }
 code, pre { font-family: var(--font-mono); }
 :focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
 }
+@layer components {
+  .reveal {
+    animation: reveal-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+
+  .card-interactive {
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card-interactive:hover,
+  .card-interactive:focus-within {
+    transform: translateY(-3px);
+    border-color: var(--color-primary);
+    box-shadow: var(--glass-shadow);
+  }
+  .card-interactive:active { transform: translateY(-1px) scale(0.995); }
+
+  .arrow-nudge { transition: transform 0.2s ease; }
+  .group:hover .arrow-nudge,
+  .group:focus-within .arrow-nudge { transform: translateX(4px); }
+
+  .link-sweep {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 0.3s ease;
+  }
+  .link-sweep:hover,
+  .link-sweep:focus-visible { background-size: 100% 1px; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .card-interactive:hover .chip { border-color: var(--color-primary); color: var(--color-primary); }
+}
+
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  .card-interactive:hover, .card-interactive:focus-within { transform: none; }
 }

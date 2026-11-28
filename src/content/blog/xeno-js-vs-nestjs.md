@@ -1,6 +1,6 @@
 ---
 title: "Xeno.JS vs NestJS: Different Approaches to TypeScript Application Architecture"
-description: "Looking for a NestJS alternative? Compare Xeno.JS and NestJS for TypeScript application architecture, dependency injection, CQRS, pipelines, HTTP, and transport independence."
+description: "Looking for a NestJS alternative? Compare Xeno.JS and NestJS on DI, CQRS, pipelines, HTTP and transport independence for TypeScript architecture."
 keywords: "Xeno.JS vs NestJS, NestJS alternative, TypeScript application architecture, TypeScript backend architecture, TypeScript dependency injection, CQRS TypeScript, TypeScript CQRS, Node.js application architecture, DDD TypeScript, NestJS architecture"
 canonical: "https://www.xeno-js.it/blog/xeno-js-vs-nestjs"
 category: "Software Architecture"

@@ -22,14 +22,20 @@ const posts = (await getCollection('blog')).sort(
 
     <!-- Lista degli articoli -->
     <div class="grid gap-6">
-      {posts.map((post) => {
+      {posts.map((post, index) => {
         // Tronca la descrizione a circa 150 caratteri aggiungendo i puntini di sospensione
         const truncatedDesc = post.data.description.length > 150 
           ? `${post.data.description.substring(0, 150)}...` 
           : post.data.description;
+        const tags = post.data.keywords
+          ? post.data.keywords.split(',').map((k) => k.trim()).filter(Boolean).slice(0, 3)
+          : [];
 
         return (
-          <article class="p-6 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:border-[var(--color-primary)] transition-all duration-200 group">
+          <article
+            class="reveal card-interactive p-6 rounded-[var(--border-radius)] bg-[var(--bg-secondary)] border border-[var(--border-color)] group"
+            style={`--i: ${index}`}
+          >
             <div class="flex items-center gap-3 text-xs text-[var(--text-muted)] mb-3">
               <time datetime={post.data.pubDate.toISOString()}>
                 {post.data.pubDate.toLocaleDateString('it-IT', { 
@@ -42,7 +48,7 @@ const posts = (await getCollection('blog')).sort(
               <span>{post.data.author}</span>
             </div>
 
-            <a href={`/blog/${post.id}`} class="block">
+            <a href={`/blog/${post.id}`} class="block outline-none">
               <h2 class="text-2xl font-bold group-hover:text-[var(--color-primary)] transition-colors mb-2">
                 {post.data.title}
               </h2>
@@ -52,11 +58,17 @@ const posts = (await getCollection('blog')).sort(
               {truncatedDesc}
             </p>
 
-            <a 
-              href={`/blog/${post.id}`} 
-              class="inline-flex items-center text-sm font-semibold text-[var(--color-primary)] hover:underline gap-1"
+            {tags.length > 0 && (
+              <ul class="flex flex-wrap gap-2 mb-4" aria-label="Tag">
+                {tags.map((tag) => <li class="chip">{tag}</li>)}
+              </ul>
+            )}
+
+            <a
+              href={`/blog/${post.id}`}
+              class="link-sweep inline-flex items-center text-sm font-semibold text-[var(--color-primary)] gap-1"
             >
-              Read more <i class="bi bi-arrow-right"></i>
+              Read more <i class="bi bi-arrow-right arrow-nudge" aria-hidden="true"></i>
             </a>
           </article>
         );

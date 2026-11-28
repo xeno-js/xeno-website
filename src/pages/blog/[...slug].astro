@@ -35,17 +35,36 @@ const postImage = typeof post.data.image === 'string'
   faqs={post.data.faqs}
   canonicalURL={post.data.canonical}
 >
+  <div id="reading-progress" class="fixed top-0 left-0 h-[3px] w-full origin-left scale-x-0 bg-[var(--color-primary)] z-50" aria-hidden="true"></div>
+
   <section id="blog-post" class="max-w-7xl mx-auto px-6 py-12">
+    <a href="/blog" class="link-sweep reveal inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--color-primary)] mb-6">
+      <i class="bi bi-arrow-left" aria-hidden="true"></i> Tutti gli articoli
+    </a>
     <article class="prose prose-invert max-w-none">
-      <header class="mb-8 border-b border-[var(--border-color)] pb-6">
-        <h1 class="text-[var(--color-primary)]">{post.data.title}</h1>
-        <time class="text-sm text-[var(--color-primary)]">
+      <header class="reveal mb-8 border-b border-[var(--border-color)] pb-6" style="--i: 1">
+        <time class="text-sm text-[var(--color-primary)]" datetime={post.data.pubDate.toISOString()}>
           {post.data.pubDate.toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' })}
         </time>
+        <h1 class="text-[var(--color-primary)] mt-2">{post.data.title}</h1>
       </header>
-      <Content />
+      <div class="reveal" style="--i: 2">
+        <Content />
+      </div>
     </article>
   </section>
+
+  <script>
+    const bar = document.getElementById('reading-progress');
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? window.scrollY / max : 0;
+      bar?.style.setProperty('transform', `scaleX(${Math.min(1, Math.max(0, ratio))})`);
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  </script>
 </Layout>
 
 <style is:global>
