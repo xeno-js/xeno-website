@@ -3,12 +3,9 @@ title: "Xeno.JS Benchmarks on Node.js 24: Comparing with NestJS and node:http"
 published: true
 description: "Real Xeno.JS benchmark results on Node.js 24 against NestJS and node:http, covering explicit DI, CQRS and Zod. Measured numbers, not marketing claims."
 tags: [typescript, nodejs, benchmarks, architecture]
-pubDate: 2026-09-26
+pubDate: 2026-11-28
 keywords: xeno.js, node.js, nestjs, benchmarks, typescript
 canonical: "https://www.xeno-js.it/blog/xeno-js-benchmarks"
-# cover_image: https://direct_url_to_image.jpg
-# Use a ratio of 100:42 for best results.
-# published_at: 2026-09-26 23:38 +0000
 ---
 
 When you introduce a new TypeScript framework with explicit Dependency Injection, per-request scopes, and CQRS pipelines, developers always ask the same first question: how much does this architecture cost in performance?
